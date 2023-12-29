@@ -205,6 +205,8 @@ function loadpost(p) {
                 var fileExtension = baseURL.split('.').pop().toLowerCase();
                 var embeddedElement;
 
+              
+
                 if (['png', 'jpg', 'jpeg', 'gif'].includes(fileExtension)) {
                     var imgElement = document.createElement("img");
                     imgElement.setAttribute("src", baseURL);
@@ -223,6 +225,22 @@ function loadpost(p) {
                     embeddedElement.setAttribute("controls", "controls");
                     embeddedElement.setAttribute("style", "max-width: 300px;");
                     embeddedElement.classList.add("embed");
+                }
+
+                var youtubeRegex = /^(https?:\/\/)?(www\.)?(youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
+                if (youtubeRegex.test(link)) {
+                    var match = link.match(youtubeRegex);
+                    var videoId = match[4];
+
+                    embeddedElement = document.createElement("iframe");
+                    embeddedElement.setAttribute("width", "560");
+                    embeddedElement.setAttribute("height", "315");
+                    embeddedElement.setAttribute("class", "embed");
+                    embeddedElement.setAttribute("src", "https://www.youtube.com/embed/" + videoId);
+                    embeddedElement.setAttribute("title", "YouTube video player");
+                    embeddedElement.setAttribute("frameborder", "0");
+                    embeddedElement.setAttribute("allow", "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share");
+                    embeddedElement.setAttribute("allowfullscreen", "");
                 }
 
                 if (embeddedElement) {
