@@ -168,8 +168,9 @@ function loadpost(p) {
 
 
         var textContent = escapedInput
-            .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-            .replace(/\*([^*]+)\*/g, '<em>$1</em>')
+            .replace(/\*\*\*\*(.*?[^\*])\*\*\*\*/g, '$1')
+            .replace(/\*\*(.*?[^\*])\*\*/g, '<strong>$1</strong>')
+            .replace(/\*(.*?[^\*])\*/g, '<em>$1</em>')
             .replace(/```([\s\S]*?)```/g, '<code>$1</code>')
             .replace(/``([^`]+)``/g, '<code>$1</code>')
             .replace(/^# (.*?$)/gm, '<h1>$1</h1>')
