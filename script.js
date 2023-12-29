@@ -167,7 +167,7 @@ function loadpost(p) {
             .replace(/'/g, '&#39;');
 
 
-        var textContent = escapedInput
+            var textContent = escapedInput
             .replace(/\*\*\*\*(.*?[^\*])\*\*\*\*/g, '$1')
             .replace(/\*\*(.*?[^\*])\*\*/g, '<strong>$1</strong>')
             .replace(/\*(.*?[^\*])\*/g, '<em>$1</em>')
@@ -178,9 +178,8 @@ function loadpost(p) {
             .replace(/^### (.*?$)/gm, '<h3>$1</h3>')
             .replace(/^&gt; (.*?$)/gm, '<blockquote>$1</blockquote>')
             .replace(/~~([\s\S]*?)~~/g, '<del>$1</del>')
-            .replace(/\*\*\*\*(.*?[^\*])\*\*\*\*/g, '$1')
             .replace(/(?:https?|ftp):\/\/[^\s(){}[\]]+/g, function(url) {
-                return `<a href="${url}" target="_blank">${url}</a>`;
+                return `<a href="${url.replace(/<\/?blockquote>/g, '')}" target="_blank">${url}</a>`;
             });
 
         postContentText.innerHTML = textContent;
