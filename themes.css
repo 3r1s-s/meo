@@ -1,0 +1,25 @@
+.dark-theme {
+    --background-color: #1a1b1e;
+    --color: #f5f8fb;
+    --accent-color: #3a3d43;
+    --hov-accent-color: #323439;
+    --hov-color: #4a4d56;
+    --link-color: #00abd2;
+    --attachment-background-color: #1b1e49;
+    --attachment-color: #a0a4d1;
+    --button-color: #a5abb3;
+    --hov-button-color: #f5f8fb;
+}
+
+.light-theme {
+    --background-color: #fff;
+    --color: #383a41;
+    --accent-color: #dbe0e8;
+    --hov-accent-color: #e7eaee;
+    --hov-color: #d2d6dd;
+    --link-color: #8066b3;
+    --attachment-background-color: #bcc4ec;
+    --attachment-color: #23296f;
+    --button-color: #a5abb3;
+    --hov-button-color: #383a41;
+}

@@ -1,0 +1,224 @@
+html {
+    background-color: var(--background-color);
+    color: var(--color);
+    font-family: Whitney;
+}
+
+body {
+    margin: 0;
+}
+
+input {
+    background-color: var(--accent-color);
+    color: var(--color);
+    border: none;
+    border-radius: 5px;
+    outline: none;
+    font-family: Roboto;
+    font-weight: 400;
+}
+
+select {
+    background-color: var(--accent-color);
+    color: var(--color);
+    border: none;
+    border-radius: 5px;
+    outline: none;
+    font-family: Roboto;
+    font-weight: 400;
+    padding: 1em;
+}
+
+h3 {
+    margin: 10px 0 10px 0;
+}
+
+a {
+    color: var(--link-color);
+    text-decoration: none;
+}
+
+a:hover {
+    color: var(--link-color);
+    text-decoration: underline;
+}
+
+code {
+    background-color: #00000020;
+}
+
+i {
+    font-size: 13px;
+    font-weight: normal;
+    margin-left: 5px;
+}
+
+blockquote {
+    border-left: 5px solid var(--color);
+    padding: 1px 1px 1px 10px;
+    margin: 0 0 0 5px;
+}
+
+.text:focus {
+    background-color: var(--hov-color);
+}
+
+.button:hover, .button:focus {
+    background-color: var(--hov-color);
+}
+
+bridge {
+    background-color: #4d97ff;
+    border-radius: 25px;
+    font-size: 12px;
+    margin-left: 5px;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-bottom: 1px;
+    font-weight: bold;
+    color: #fff;
+}
+
+.embed {
+    border-radius: 5px;
+}
+
+.info {
+    margin-left: 5px;
+}
+
+#page {
+    display: flex;
+    justify-content: center;
+}
+
+.posts {
+    margin: 5px;
+}
+
+.login {
+    display: flex;
+    flex-direction: column;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 500px;
+}
+
+.login-input {
+    padding: 1em;
+    margin-bottom: .2cm;
+}
+
+.message-container {
+    display: flex;
+    position: sticky;
+    top: 0;
+    background-color: var(--background-color);
+    z-index: 1;
+}
+
+.message-input {
+    padding: 1em;
+    flex: 0.9;
+    margin: 5px;
+}
+
+.message-send {
+    flex: 0.1;
+    margin: 5px;
+}
+
+.post {
+    background-color: var(--accent-color);
+    /*border-radius: 32px;
+    padding: 20px;*/
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 10px;
+    word-wrap: anywhere;
+}
+
+.post:hover {
+    background-color: var(--hov-accent-color);
+}
+
+.post:hover .buttonContainer {
+    background-color: var(--hov-accent-color);
+    display: block;
+}
+
+.buttonContainer {
+    display: none;
+    float: right;
+}
+
+.toolbarContainer {
+    display: flex;
+}
+
+.toolButton {
+    padding: 2px;
+    margin: 2px;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    width: 25px;
+    height: 25px;
+    color: var(--button-color);
+  }
+
+  .toolButton:hover {
+      cursor: pointer;
+      color: var(--hov-button-color);
+  }
+
+  .link {
+    color: var(--color);
+    background-color: var(--link-color);
+    text-decoration: none;
+    font-weight: bold;
+}
+
+#main {
+    flex: 1;
+    max-width: 800px;
+}
+
+.side {
+    flex: 0.5;
+    display: flex;  
+    max-width: 300px;
+    height: 100vh;
+    position: sticky;
+    top: 0;
+}
+
+.navigation {
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    align-items: baseline;
+    height: 100%;
+    width: 100%;
+}
+
+.navigation-button {
+    padding: 1em;
+    /*border-radius: 100rem;*/
+    margin-bottom: 10px;
+}
+
+.attachment {
+    color: var(--attachment-color);
+    background-color: var(--attachment-background-color);
+    border-radius: 5px;
+    text-decoration: none;
+    padding: 1px 5px 1px 5px;
+    transition: all 0.05s ease;
+}
+
+.attachment:hover {
+    color: #fff;
+    background-color: #5865f2;
+    text-decoration: none;
+}
