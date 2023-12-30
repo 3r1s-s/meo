@@ -18,6 +18,16 @@ input {
     font-weight: 400;
 }
 
+button {
+    background-color: var(--accent-color);
+    color: var(--color);
+    border: none;
+    border-radius: 5px;
+    outline: none;
+    font-family: Roboto;
+    font-weight: 400;
+}
+
 select {
     background-color: var(--accent-color);
     color: var(--color);
@@ -59,14 +69,6 @@ blockquote {
     margin: 0 0 0 5px;
 }
 
-.text:focus {
-    background-color: var(--hov-color);
-}
-
-.button:hover, .button:focus {
-    background-color: var(--hov-color);
-}
-
 bridge {
     background-color: #4d97ff;
     border-radius: 25px;
@@ -77,6 +79,14 @@ bridge {
     padding-bottom: 1px;
     font-weight: bold;
     color: #fff;
+}
+
+.text:focus {
+    background-color: var(--hov-color);
+}
+
+.button:hover, .button:focus {
+    background-color: var(--hov-color);
 }
 
 .embed {
@@ -97,7 +107,7 @@ bridge {
     margin-top: 200px;
 }
 
-.posts {
+.posts, .settings, .login {
     margin: 5px;
 }
 
@@ -135,8 +145,6 @@ bridge {
 
 .post {
     background-color: var(--accent-color);
-    /*border-radius: 32px;
-    padding: 20px;*/
     border-radius: 5px;
     padding: 10px;
     margin-bottom: 10px;
@@ -172,12 +180,12 @@ bridge {
     color: var(--button-color);
   }
 
-  .toolButton:hover {
-      cursor: pointer;
-      color: var(--hov-button-color);
-  }
+.toolButton:hover {
+    cursor: pointer;
+    color: var(--hov-button-color);
+}
 
-  .link {
+.link {
     color: var(--color);
     background-color: var(--link-color);
     text-decoration: none;
@@ -196,14 +204,6 @@ bridge {
     height: 100vh;
     position: sticky;
     top: 0;
-}
-
-@media screen and (max-width: 480px) {
-    
-    .side {
-        display: none;
-    }
-
 }
 
 .navigation {
@@ -234,4 +234,39 @@ bridge {
     color: #fff;
     background-color: #5865f2;
     text-decoration: none;
+}
+
+@media screen and (max-width: 480px) {
+    
+    #page {
+        justify-content: normal;
+        overflow-x: scroll;
+        overflow-y: hidden;
+        grid-template-rows: 1;
+        -ms-scroll-snap-type: x mandatory;
+        scroll-snap-type: x mandatory;
+        scrollbar-width: none;
+        scrollbar-color: transparent;
+
+    }
+
+    .side {
+        flex: none;
+        width: 100vw;
+        scroll-snap-align: center;
+
+    }
+    
+    #main {
+        flex: none;
+        width: 100vw;
+        scroll-snap-align: center;
+    }
+    
+    .navigation {
+        width: 50vw;
+        margin-left: 10px;
+        align-items: normal;
+    }
+
 }
