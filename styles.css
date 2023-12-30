@@ -250,6 +250,12 @@ bridge {
 
     }
 
+    #page::-webkit-scrollbar {
+        -webkit-appearance: none; 
+        width: 0;
+        height: 0;
+    }
+
     .side {
         flex: none;
         width: 100vw;
