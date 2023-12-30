@@ -92,6 +92,11 @@ bridge {
     justify-content: center;
 }
 
+.footer {
+    text-align: center;
+    margin-top: 200px;
+}
+
 .posts {
     margin: 5px;
 }
@@ -191,6 +196,14 @@ bridge {
     height: 100vh;
     position: sticky;
     top: 0;
+}
+
+@media screen and (max-width: 480px) {
+    
+    .side {
+        display: none;
+    }
+
 }
 
 .navigation {
