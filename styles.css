@@ -82,8 +82,8 @@ bridge {
 }
 
 .launch {
-    background: linear-gradient(0deg, rgba(48,124,231,1) 0%, rgba(88,204,254,1) 100%);
-    height: 100%;
+    background: none;
+    height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -188,9 +188,9 @@ bridge {
     color: var(--button-color);
   }
 
-.toolButton:hover {
-    cursor: pointer;
-    color: var(--hov-button-color);
+  .toolButton:hover {
+      cursor: pointer;
+      color: var(--hov-button-color);
 }
 
 .link {
@@ -203,6 +203,8 @@ bridge {
 #main {
     flex: 1;
     max-width: 800px;
+    overflow: none;
+    height: auto;
 }
 
 .side {
@@ -255,9 +257,9 @@ bridge {
         scroll-snap-type: x mandatory;
         scrollbar-width: none;
         scrollbar-color: transparent;
-
+        
     }
-
+    
     #page::-webkit-scrollbar {
         -webkit-appearance: none; 
         width: 0;
@@ -268,13 +270,15 @@ bridge {
         flex: none;
         width: 100vw;
         scroll-snap-align: center;
-
+        
     }
     
     #main {
         flex: none;
         width: 100vw;
         scroll-snap-align: center;
+        overflow: scroll;
+        height: 100vh;
     }
     
     .navigation {
@@ -283,4 +287,12 @@ bridge {
         align-items: normal;
     }
 
+    .launch {
+        background: linear-gradient(0deg, rgba(48,124,231,1) 0%, rgba(88,204,254,1) 100%);
+    }
+
+}
+
+.hidden {
+    display: none;
 }
