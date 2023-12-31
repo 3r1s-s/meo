@@ -81,6 +81,14 @@ bridge {
     color: #fff;
 }
 
+.launch {
+    background: linear-gradient(0deg, rgba(48,124,231,1) 0%, rgba(88,204,254,1) 100%);
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .text:focus {
     background-color: var(--hov-color);
 }
