@@ -175,6 +175,7 @@ bridge {
 
 .toolbarContainer {
     display: flex;
+    flex-direction: row;
 }
 
 .toolButton {
@@ -291,6 +292,9 @@ bridge {
         background: linear-gradient(0deg, rgba(48,124,231,1) 0%, rgba(88,204,254,1) 100%);
     }
 
+    .toolbarContainer {
+        flex-direction: column;
+    }
 }
 
 .hidden {
