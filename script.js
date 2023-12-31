@@ -45,7 +45,7 @@ function main() {
             console.log("OUT: " + JSON.stringify(data));
 
             var pageContainer = document.getElementById("main");
-            pageContainer.innerHTML = "<div class='login'><h1>meo</h1><input type='text' id='userinput' placeholder='Username' class='login-input text'><input type='password' id='passinput' placeholder='Password' class='login-input text'><input type='button' id='submit' value='Log in' class='login-input button' onclick='dowizard()'> <input type='button' id='submit' value='Sign up' class='login-input button' onclick='doswizard()'><small>This client was made by eri :></small><small>Thanks for some of the code melt!</small><div id='msgs'></div></div><div class='footer'><img width='25px' src='images/meo96.png'></div>";
+            pageContainer.innerHTML = "<div class='settings'><div class='login'><h1>meo</h1><input type='text' id='userinput' placeholder='Username' class='login-input text'><input type='password' id='passinput' placeholder='Password' class='login-input text'><input type='button' id='submit' value='Log in' class='login-input button' onclick='dowizard()'> <input type='button' id='submit' value='Sign up' class='login-input button' onclick='doswizard()'><small>This client was made by eri :></small><small>Thanks for some of the code melt!</small><div id='msgs'></div></div><div class='footer'><img width='25px' src='images/meo96.png'></div></div>";
             if (localStorage.getItem("token") != undefined && localStorage.getItem("uname") != undefined) {
                 document.getElementById("userinput").value = localStorage.getItem("uname");
                 document.getElementById("passinput").value = localStorage.getItem("token");
