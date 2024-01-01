@@ -408,18 +408,45 @@ function loadstgs() {
     document.getElementById("msgs").innerHTML = "";
     document.getElementById("nav").innerHTML = "";
     var pageContainer = document.getElementById("main");
-    pageContainer.innerHTML = "<div class='settings'><h1>Settings</h1><div class='msgs'></div><h2>Theme</h2><div id='ex' class='post'><div class='buttonContainer'><div class='toolbarContainer'><div class='toolButton'><svg viewBox='0 0 20 20' fill='currentColor' aria-hidden='true' width='18' height='18'><path d='M12.9297 3.25007C12.7343 3.05261 12.4154 3.05226 12.2196 3.24928L11.5746 3.89824C11.3811 4.09297 11.3808 4.40733 11.5739 4.60245L16.5685 9.64824C16.7614 9.84309 16.7614 10.1569 16.5685 10.3517L11.5739 15.3975C11.3808 15.5927 11.3811 15.907 11.5746 16.1017L12.2196 16.7507C12.4154 16.9477 12.7343 16.9474 12.9297 16.7499L19.2604 10.3517C19.4532 10.1568 19.4532 9.84314 19.2604 9.64832L12.9297 3.25007Z'></path><path d='M8.42616 4.60245C8.6193 4.40733 8.61898 4.09297 8.42545 3.89824L7.78047 3.24928C7.58466 3.05226 7.26578 3.05261 7.07041 3.25007L0.739669 9.64832C0.5469 9.84314 0.546901 10.1568 0.739669 10.3517L7.07041 16.7499C7.26578 16.9474 7.58465 16.9477 7.78047 16.7507L8.42545 16.1017C8.61898 15.907 8.6193 15.5927 8.42616 15.3975L3.43155 10.3517C3.23869 10.1569 3.23869 9.84309 3.43155 9.64824L8.42616 4.60245Z'></path></svg></div><div class='toolButton'><svg class='icon_d1ac81' width='24' height='24' viewBox='0 0 24 24'><path d='M10 8.26667V4L3 11.4667L10 18.9333V14.56C15 14.56 18.5 16.2667 21 20C20 14.6667 17 9.33333 10 8.26667Z' fill='currentColor'></path></svg></div></div></div><h3>Username</h3><p>This is example text <a href='https://example.com' target='_blank'>https://example.com</a>... <a href='https://gnaw.pages.dev/images/car.jpg' target='_blank' class='attachment'>attachment</a></p><a href='https://gnaw.pages.dev/images/car.jpg' target='_blank'><img src='https://gnaw.pages.dev/images/car.jpg' class='embed' width='300px'></img></a></div><label for='themeDropdown' style='display:none;'>Select Theme:</label><select id='themeDropdown' onchange='changeTheme()' value=''><option value='dark'>Dark Theme</option><option value='light'>Light Theme</option></select><hr><input type='button' class='navigation-button button' id='submit' value='Go Home' onclick='loadhome()'></div>";
-    var sideDiv = document.querySelectorAll(".side");
+pageContainer.innerHTML = "<div class='settings'><h1>Settings</h1><div class='msgs'></div><h2>Theme</h2><div id='ex' class='post'><div class='buttonContainer'><div class='toolbarContainer'><div class='toolButton'><svg viewBox='0 0 20 20' fill='currentColor' aria-hidden='true' width='18' height='18'><path d='M12.9297 3.25007C12.7343 3.05261 12.4154 3.05226 12.2196 3.24928L11.5746 3.89824C11.3811 4.09297 11.3808 4.40733 11.5739 4.60245L16.5685 9.64824C16.7614 9.84309 16.7614 10.1569 16.5685 10.3517L11.5739 15.3975C11.3808 15.5927 11.3811 15.907 11.5746 16.1017L12.2196 16.7507C12.4154 16.9477 12.7343 16.9474 12.9297 16.7499L19.2604 10.3517C19.4532 10.1568 19.4532 9.84314 19.2604 9.64832L12.9297 3.25007Z'></path><path d='M8.42616 4.60245C8.6193 4.40733 8.61898 4.09297 8.42545 3.89824L7.78047 3.24928C7.58466 3.05226 7.26578 3.05261 7.07041 3.25007L0.739669 9.64832C0.5469 9.84314 0.546901 10.1568 0.739669 10.3517L7.07041 16.7499C7.26578 16.9474 7.58465 16.9477 7.78047 16.7507L8.42545 16.1017C8.61898 15.907 8.6193 15.5927 8.42616 15.3975L3.43155 10.3517C3.23869 10.1569 3.23869 9.84309 3.43155 9.64824L8.42616 4.60245Z'></path></svg></div><div class='toolButton'><svg class='icon_d1ac81' width='24' height='24' viewBox='0 0 24 24'><path d='M10 8.26667V4L3 11.4667L10 18.9333V14.56C15 14.56 18.5 16.2667 21 20C20 14.6667 17 9.33333 10 8.26667Z' fill='currentColor'></path></svg></div></div></div><h3>Username</h3><p>This is example text <a href='https://example.com' target='_blank'>https://example.com</a>... <a href='https://gnaw.pages.dev/images/car.jpg' target='_blank' class='attachment'>attachment</a></p><a href='https://gnaw.pages.dev/images/car.jpg' target='_blank'><img src='https://gnaw.pages.dev/images/car.jpg' class='embed' width='300px'></img></a></div><div class='theme-buttons'><button onclick='changeTheme(\"light\", this)' class='theme-button light-button'>Light Theme</button><button onclick='changeTheme(\"dark\", this)' class='theme-button dark-button'>Dark Theme</button></div><hr><input type='button' class='navigation-button button' id='submit' value='Go Home' onclick='loadhome()'></div>";    var sideDiv = document.querySelectorAll(".side");
     sideDiv.forEach(function(sideDiv) {
       sideDiv.classList.add("hidden");
   });
+
+  const selectedTheme = localStorage.getItem("theme");
+
+  // Add "selected" class to the button of the current theme
+  const themeButtons = document.querySelectorAll('.theme-button');
+  themeButtons.forEach((btn) => {
+      if (btn.textContent.toLowerCase().includes(selectedTheme)) {
+          btn.classList.add('selected');
+      }
+  });
 }
 
-function changeTheme() {
-    const selectedTheme = document.getElementById("themeDropdown").value;
-    document.documentElement.className = selectedTheme + "-theme";
-    localStorage.setItem("theme", selectedTheme);
+function changeTheme(theme, button) {
+  const selectedTheme = theme;
+  document.documentElement.className = selectedTheme + "-theme";
+  localStorage.setItem("theme", selectedTheme);
+
+  // Get the meta tag
+  const themeColorMetaTag = document.querySelector('meta[name="theme-color"]');
+
+  // Update the theme-color based on the selected theme
+  if (selectedTheme === 'dark') {
+      themeColorMetaTag.setAttribute('content', '#1a1b1e');
+  } else {
+      themeColorMetaTag.setAttribute('content', '#ffffff');
+  }
+
+  // Remove "selected" class from all theme buttons
+  const themeButtons = document.querySelectorAll('.theme-button');
+  themeButtons.forEach((btn) => btn.classList.remove('selected'));
+
+  // Add "selected" class to the clicked button
+  button.classList.add('selected');
 }
+
 
 function ping() {
     webSocket.send(JSON.stringify({

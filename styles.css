@@ -247,6 +247,35 @@ bridge {
     text-decoration: none;
 }
 
+.theme-buttons {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.theme-button {
+    width: 5em;
+    height: 5em;
+    border-radius: 100%;
+    margin: 5px;
+}
+
+.dark-button {
+    background: #1a1b1e;
+    color: #f5f8fb;
+    border: 1px solid #f5f8fb;
+}
+
+.light-button {
+    background: #fff;
+    color: #383a41;
+    border: 1px solid #383a41;
+}
+
+.selected {
+    border: 3px solid #5865f2;
+}
+
 @media screen and (max-width: 480px) {
     
     #page {
@@ -291,7 +320,7 @@ bridge {
     }
 
     .launch {
-        background: linear-gradient(0deg, rgba(48,124,231,1) 0%, rgba(88,204,254,1) 100%);
+        background: linear-gradient(180deg, rgb(48, 124, 231) 0%, rgb(88, 204, 254) 100%);
     }
 
     .buttonContainer {
