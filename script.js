@@ -302,6 +302,11 @@ function loadTheme() {
     if (theme) {
         document.documentElement.classList.add(theme + "-theme");
     }
+
+    const metaThemeColor = document.querySelector("meta[name=theme-color]");
+    if (metaThemeColor) {
+        metaThemeColor.setAttribute("content", theme === "dark" ? "#1a1b1e" : "#ffffff");
+    }
 }
 
 function dowizard() {
