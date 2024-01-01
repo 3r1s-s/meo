@@ -258,6 +258,7 @@ bridge {
         scroll-snap-type: x mandatory;
         scrollbar-width: none;
         scrollbar-color: transparent;
+        -ms-overflow-style: -ms-autohiding-scrollbar;
         
     }
     
@@ -265,6 +266,7 @@ bridge {
         -webkit-appearance: none; 
         width: 0;
         height: 0;
+        display: none;
     }
 
     .side {
@@ -290,6 +292,11 @@ bridge {
 
     .launch {
         background: linear-gradient(0deg, rgba(48,124,231,1) 0%, rgba(88,204,254,1) 100%);
+    }
+
+    .buttonContainer {
+        display: block;
+        float: right;
     }
 
     .toolbarContainer {
