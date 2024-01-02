@@ -317,6 +317,7 @@ bridge {
         width: 50vw;
         margin-left: 10px;
         align-items: normal;
+        height: calc(100vh - 50px);
     }
 
     .launch {

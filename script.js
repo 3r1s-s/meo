@@ -162,16 +162,37 @@ function loadpost(p) {
                 asplc += splc[i] + "\n\n";
             }
         }
+       
+        const timestampRegex = /<t:(\d+):(t|R|T|d|D|f|F)>/g;
 
-        var escapedInput = asplc
-            .replace(/&/g, '&amp;')
-            .replace(/</g, '&lt;')
-            .replace(/>/g, '&gt;')
-            .replace(/"/g, '&quot;')
-            .replace(/'/g, '&#39;');
-
-
-            var textContent = escapedInput
+        var escapedInput = asplc.replace(timestampRegex, (match, timestamp, format) => {
+            const date = new Date(parseInt(timestamp) * 1000);
+            switch (format) {
+                case 't':
+                    return date.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
+                case 'R':
+                    return formatTime(date.getTime());
+                case 'T':
+                    return date.toLocaleTimeString('en-US');
+                case 'd':
+                    return date.toLocaleDateString('en-US');
+                case 'D':
+                    return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+                case 'f':
+                    return date.toLocaleString('en-US', { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', hour12: true });
+                case 'F':
+                    return date.toLocaleString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', hour12: true });
+                default:
+                    return match;
+            }
+        })
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+        
+        var textContent = escapedInput
             .replace(/\*\*\*\*(.*?[^\*])\*\*\*\*/g, '$1')
             .replace(/\*\*(.*?[^\*])\*\*/g, '<strong>$1</strong>')
             .replace(/\*(.*?[^\*])\*/g, '<em>$1</em>')
@@ -185,6 +206,7 @@ function loadpost(p) {
             .replace(/(?:https?|ftp):\/\/[^\s(){}[\]]+/g, function(url) {
                 return `<a href="${url.replace(/<\/?blockquote>/g, '')}" target="_blank">${url}</a>`;
             });
+        
 
         postContentText.innerHTML = textContent;
 
@@ -253,7 +275,7 @@ function loadpost(p) {
                         var embeddedElement = document.createElement("iframe");
                         embeddedElement.setAttribute("style", "border-radius: 12px");
                         embeddedElement.setAttribute("src", `https://open.spotify.com/embed/track/${trackId}?utm_source=generator`);
-                        embeddedElement.setAttribute("width", "400px");
+                        embeddedElement.setAttribute("width", "100%");
                         embeddedElement.setAttribute("height", "80px");
                         embeddedElement.setAttribute("frameBorder", "0");
                         embeddedElement.setAttribute("allowfullscreen", "");
@@ -280,6 +302,7 @@ function loadpost(p) {
         pageContainer.appendChild(postContainer);
     }
 }
+
 
 function goToAPI() {
     var postId = event.target.closest('.post').id;
@@ -413,14 +436,12 @@ function loadstgs() {
     document.getElementById("msgs").innerHTML = "";
     document.getElementById("nav").innerHTML = "";
     var pageContainer = document.getElementById("main");
-pageContainer.innerHTML = "<div class='settings'><h1>Settings</h1><div class='msgs'></div><h2>Theme</h2><div id='ex' class='post'><div class='buttonContainer'><div class='toolbarContainer'><div class='toolButton'><svg viewBox='0 0 20 20' fill='currentColor' aria-hidden='true' width='18' height='18'><path d='M12.9297 3.25007C12.7343 3.05261 12.4154 3.05226 12.2196 3.24928L11.5746 3.89824C11.3811 4.09297 11.3808 4.40733 11.5739 4.60245L16.5685 9.64824C16.7614 9.84309 16.7614 10.1569 16.5685 10.3517L11.5739 15.3975C11.3808 15.5927 11.3811 15.907 11.5746 16.1017L12.2196 16.7507C12.4154 16.9477 12.7343 16.9474 12.9297 16.7499L19.2604 10.3517C19.4532 10.1568 19.4532 9.84314 19.2604 9.64832L12.9297 3.25007Z'></path><path d='M8.42616 4.60245C8.6193 4.40733 8.61898 4.09297 8.42545 3.89824L7.78047 3.24928C7.58466 3.05226 7.26578 3.05261 7.07041 3.25007L0.739669 9.64832C0.5469 9.84314 0.546901 10.1568 0.739669 10.3517L7.07041 16.7499C7.26578 16.9474 7.58465 16.9477 7.78047 16.7507L8.42545 16.1017C8.61898 15.907 8.6193 15.5927 8.42616 15.3975L3.43155 10.3517C3.23869 10.1569 3.23869 9.84309 3.43155 9.64824L8.42616 4.60245Z'></path></svg></div><div class='toolButton'><svg class='icon_d1ac81' width='24' height='24' viewBox='0 0 24 24'><path d='M10 8.26667V4L3 11.4667L10 18.9333V14.56C15 14.56 18.5 16.2667 21 20C20 14.6667 17 9.33333 10 8.26667Z' fill='currentColor'></path></svg></div></div></div><h3>Username</h3><p>This is example text <a href='https://example.com' target='_blank'>https://example.com</a>... <a href='https://gnaw.pages.dev/images/car.jpg' target='_blank' class='attachment'>attachment</a></p><a href='https://gnaw.pages.dev/images/car.jpg' target='_blank'><img src='https://gnaw.pages.dev/images/car.jpg' class='embed' width='300px'></img></a></div><div class='theme-buttons'><button onclick='changeTheme(\"light\", this)' class='theme-button light-button'>Light Theme</button><button onclick='changeTheme(\"dark\", this)' class='theme-button dark-button'>Dark Theme</button></div><hr><input type='button' class='navigation-button button' id='submit' value='Go Home' onclick='loadhome()'></div>";    var sideDiv = document.querySelectorAll(".side");
+pageContainer.innerHTML = "<div class='settings'><h1>Settings</h1><div class='msgs'></div><h2>Theme</h2><div id='ex' class='post'><div class='buttonContainer'><div class='toolbarContainer'><div class='toolButton'><svg viewBox='0 0 20 20' fill='currentColor' aria-hidden='true' width='18' height='18'><path d='M12.9297 3.25007C12.7343 3.05261 12.4154 3.05226 12.2196 3.24928L11.5746 3.89824C11.3811 4.09297 11.3808 4.40733 11.5739 4.60245L16.5685 9.64824C16.7614 9.84309 16.7614 10.1569 16.5685 10.3517L11.5739 15.3975C11.3808 15.5927 11.3811 15.907 11.5746 16.1017L12.2196 16.7507C12.4154 16.9477 12.7343 16.9474 12.9297 16.7499L19.2604 10.3517C19.4532 10.1568 19.4532 9.84314 19.2604 9.64832L12.9297 3.25007Z'></path><path d='M8.42616 4.60245C8.6193 4.40733 8.61898 4.09297 8.42545 3.89824L7.78047 3.24928C7.58466 3.05226 7.26578 3.05261 7.07041 3.25007L0.739669 9.64832C0.5469 9.84314 0.546901 10.1568 0.739669 10.3517L7.07041 16.7499C7.26578 16.9474 7.58465 16.9477 7.78047 16.7507L8.42545 16.1017C8.61898 15.907 8.6193 15.5927 8.42616 15.3975L3.43155 10.3517C3.23869 10.1569 3.23869 9.84309 3.43155 9.64824L8.42616 4.60245Z'></path></svg></div><div class='toolButton'><svg class='icon_d1ac81' width='24' height='24' viewBox='0 0 24 24'><path d='M10 8.26667V4L3 11.4667L10 18.9333V14.56C15 14.56 18.5 16.2667 21 20C20 14.6667 17 9.33333 10 8.26667Z' fill='currentColor'></path></svg></div></div></div><h3>Username</h3><p>This is example text <a href='https://example.com' target='_blank'>https://example.com</a></div><div class='theme-buttons'><button onclick='changeTheme(\"light\", this)' class='theme-button light-button'>Light Theme</button><button onclick='changeTheme(\"dark\", this)' class='theme-button dark-button'>Dark Theme</button></div><hr><input type='button' class='navigation-button button' id='submit' value='Go Home' onclick='loadhome()'></div>";    var sideDiv = document.querySelectorAll(".side");
     sideDiv.forEach(function(sideDiv) {
       sideDiv.classList.add("hidden");
   });
 
   const selectedTheme = localStorage.getItem("theme");
-
-  // Add "selected" class to the button of the current theme
   const themeButtons = document.querySelectorAll('.theme-button');
   themeButtons.forEach((btn) => {
       if (btn.textContent.toLowerCase().includes(selectedTheme)) {
@@ -433,24 +454,44 @@ function changeTheme(theme, button) {
   const selectedTheme = theme;
   document.documentElement.className = selectedTheme + "-theme";
   localStorage.setItem("theme", selectedTheme);
-
-  // Get the meta tag
   const themeColorMetaTag = document.querySelector('meta[name="theme-color"]');
-
-  // Update the theme-color based on the selected theme
   if (selectedTheme === 'dark') {
       themeColorMetaTag.setAttribute('content', '#1a1b1e');
   } else {
       themeColorMetaTag.setAttribute('content', '#ffffff');
   }
 
-  // Remove "selected" class from all theme buttons
   const themeButtons = document.querySelectorAll('.theme-button');
   themeButtons.forEach((btn) => btn.classList.remove('selected'));
-
-  // Add "selected" class to the clicked button
   button.classList.add('selected');
 }
+
+function formatTime(timestamp) {
+    const now = new Date();
+    const timeDiff = now.getTime() - timestamp;
+    const seconds = Math.floor(timeDiff / 1000);
+
+    if (seconds < 60) {
+        return seconds + (seconds === 1 ? ' second ago' : ' seconds ago');
+    }
+
+    const minutes = Math.floor(seconds / 60);
+
+    if (minutes < 60) {
+        return minutes + (minutes === 1 ? ' minute ago' : ' minutes ago');
+    }
+
+    const hours = Math.floor(minutes / 60);
+
+    if (hours < 24) {
+        return hours + (hours === 1 ? ' hour ago' : ' hours ago');
+    }
+
+    const days = Math.floor(hours / 24);
+
+    return days + (days === 1 ? ' day ago' : ' days ago');
+}
+
 
 
 function ping() {
