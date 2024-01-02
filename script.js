@@ -396,7 +396,7 @@ function dopostwizard() {
 function loadhome() {
     page = "home";
     var pageContainer = document.getElementById("main");
-    pageContainer.innerHTML = "<div class='info'><h1>Home</h1><p id='info'></p></div><div class='message-container'><input type='text' class='message-input text' id='msg' autocomplete='false' placeholder='Whats on your mind?'><button class='message-send button' id='submit' value='Post!' onclick='dopostwizard()'><svg aria-hidden='true' role='img' class='sendIcon__461ff' width='16' height='16' viewBox='0 0 16 16'><path d='M8.2738 8.49222L1.99997 9.09877L0.349029 14.3788C0.250591 14.691 0.347154 15.0322 0.595581 15.246C0.843069 15.4597 1.19464 15.5047 1.48903 15.3613L15.2384 8.7032C15.5075 8.57195 15.6781 8.29914 15.6781 8.00007C15.6781 7.70101 15.5074 7.4282 15.2384 7.29694L1.49839 0.634063C1.20401 0.490625 0.852453 0.535625 0.604941 0.749376C0.356493 0.963128 0.259941 1.30344 0.358389 1.61563L2.00932 6.89563L8.27093 7.50312C8.52405 7.52843 8.71718 7.74125 8.71718 7.99531C8.71718 8.24938 8.52406 8.46218 8.27093 8.4875L8.2738 8.49222Z' fill='currentColor'></path></svg></button></div><div id='msgs' class='posts'></div>";
+    pageContainer.innerHTML = `<div class='info'><h1>Home</h1><p id='info'></p></div><div class='message-container'><input type='text' class='message-input text' id='msg' autocomplete='false' placeholder='Whats on your mind?'><button class='message-send button' id='submit' value='Post!' onclick='dopostwizard()'><svg aria-hidden='true' role='img' class='sendIcon__461ff' width='16' height='16' viewBox='0 0 16 16'><path d='M8.2738 8.49222L1.99997 9.09877L0.349029 14.3788C0.250591 14.691 0.347154 15.0322 0.595581 15.246C0.843069 15.4597 1.19464 15.5047 1.48903 15.3613L15.2384 8.7032C15.5075 8.57195 15.6781 8.29914 15.6781 8.00007C15.6781 7.70101 15.5074 7.4282 15.2384 7.29694L1.49839 0.634063C1.20401 0.490625 0.852453 0.535625 0.604941 0.749376C0.356493 0.963128 0.259941 1.30344 0.358389 1.61563L2.00932 6.89563L8.27093 7.50312C8.52405 7.52843 8.71718 7.74125 8.71718 7.99531C8.71718 8.24938 8.52406 8.46218 8.27093 8.4875L8.2738 8.49222Z' fill='currentColor'></path></svg></button></div><div id='msgs' class='posts'></div>`;
     var pageContainer = document.getElementById("nav");
     pageContainer.innerHTML = "<div class='navigation'><input type='button' class='navigation-button button' id='submit' value='Settings' onclick='loadstgs()'><input type='button' class='navigation-button button' id='submit' value='Logout' onclick='logout(false)'></div>";
     var psbox = document.getElementById("msg");
@@ -436,7 +436,53 @@ function loadstgs() {
     document.getElementById("msgs").innerHTML = "";
     document.getElementById("nav").innerHTML = "";
     var pageContainer = document.getElementById("main");
-pageContainer.innerHTML = "<div class='settings'><h1>Settings</h1><div class='msgs'></div><h2>Theme</h2><div id='ex' class='post'><div class='buttonContainer'><div class='toolbarContainer'><div class='toolButton'><svg viewBox='0 0 20 20' fill='currentColor' aria-hidden='true' width='18' height='18'><path d='M12.9297 3.25007C12.7343 3.05261 12.4154 3.05226 12.2196 3.24928L11.5746 3.89824C11.3811 4.09297 11.3808 4.40733 11.5739 4.60245L16.5685 9.64824C16.7614 9.84309 16.7614 10.1569 16.5685 10.3517L11.5739 15.3975C11.3808 15.5927 11.3811 15.907 11.5746 16.1017L12.2196 16.7507C12.4154 16.9477 12.7343 16.9474 12.9297 16.7499L19.2604 10.3517C19.4532 10.1568 19.4532 9.84314 19.2604 9.64832L12.9297 3.25007Z'></path><path d='M8.42616 4.60245C8.6193 4.40733 8.61898 4.09297 8.42545 3.89824L7.78047 3.24928C7.58466 3.05226 7.26578 3.05261 7.07041 3.25007L0.739669 9.64832C0.5469 9.84314 0.546901 10.1568 0.739669 10.3517L7.07041 16.7499C7.26578 16.9474 7.58465 16.9477 7.78047 16.7507L8.42545 16.1017C8.61898 15.907 8.6193 15.5927 8.42616 15.3975L3.43155 10.3517C3.23869 10.1569 3.23869 9.84309 3.43155 9.64824L8.42616 4.60245Z'></path></svg></div><div class='toolButton'><svg class='icon_d1ac81' width='24' height='24' viewBox='0 0 24 24'><path d='M10 8.26667V4L3 11.4667L10 18.9333V14.56C15 14.56 18.5 16.2667 21 20C20 14.6667 17 9.33333 10 8.26667Z' fill='currentColor'></path></svg></div></div></div><h3>Username</h3><p>This is example text <a href='https://example.com' target='_blank'>https://example.com</a></div><div class='theme-buttons'><button onclick='changeTheme(\"light\", this)' class='theme-button light-button'>Light Theme</button><button onclick='changeTheme(\"dark\", this)' class='theme-button dark-button'>Dark Theme</button></div><hr><input type='button' class='navigation-button button' id='submit' value='Go Home' onclick='loadhome()'></div>";    var sideDiv = document.querySelectorAll(".side");
+    var settingsContent = `
+    <div class="settings">
+        <h1>Settings</h1>
+        <div class="msgs"></div>
+            <h2>Theme</h2>
+            <div id="ex" class="post">
+                <div class="buttonContainer">
+                    <div class="toolbarContainer">
+                        <div class="toolButton">
+                            <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" width="18" height="18">
+                                <path d="M12.9297 3.25007C12.7343 3.05261 12.4154 3.05226 12.2196 3.24928L11.5746 3.89824C11.3811 4.09297 11.3808 4.40733 11.5739 4.60245L16.5685 9.64824C16.7614 9.84309 16.7614 10.1569 16.5685 10.3517L11.5739 15.3975C11.3808 15.5927 11.3811 15.907 11.5746 16.1017L12.2196 16.7507C12.4154 16.9477 12.7343 16.9474 12.9297 16.7499L19.2604 10.3517C19.4532 10.1568 19.4532 9.84314 19.2604 9.64832L12.9297 3.25007Z"></path>
+                                <path d="M8.42616 4.60245C8.6193 4.40733 8.61898 4.09297 8.42545 3.89824L7.78047 3.24928C7.58466 3.05226 7.26578 3.05261 7.07041 3.25007L0.739669 9.64832C0.5469 9.84314 0.546901 10.1568 0.739669 10.3517L7.07041 16.7499C7.26578 16.9474 7.58465 16.9477 7.78047 16.7507L8.42545 16.1017C8.61898 15.907 8.6193 15.5927 8.42616 15.3975L3.43155 10.3517C3.23869 10.1569 3.23869 9.84309 3.43155 9.64824L8.42616 4.60245Z"></path>
+                            </svg>
+                        </div>
+                        <div class="toolButton">
+                        <svg class="icon_d1ac81" width="24" height="24" viewBox="0 0 24 24">
+                            <path d="M10 8.26667V4L3 11.4667L10 18.9333V14.56C15 14.56 18.5 16.2667 21 20C20 14.6667 17 9.33333 10 8.26667Z" fill="currentColor">
+                            </path>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        <h3>Username</h3>
+        <p>
+            This is example text 
+            <a href="https://example.com" target="_blank">https://example.com</a>
+        </p>
+        </div>
+    <div class="theme-buttons">
+    <button onclick='changeTheme(\"light\", this)' class='theme-button light-button'>Light Theme</button>
+    <button onclick='changeTheme(\"dark\", this)' class='theme-button dark-button'>Dark Theme</button>
+        </div>
+    <br>
+    <h2>Icons</h2>
+    <div class="icons">
+        <button class="icon-button"><img class="icon" src="images/icons/Blue Gradient.png/" width="64px"></button>
+        <button class="icon-button"><img class="icon" src="images/icons/Blue Solid.png/" width="64px"></button>
+        <button class="icon-button"><img class="icon" src="images/icons/Enceladus.png/" width="64px"></button>
+        <button class="icon-button"><img class="icon" src="images/icons/Mars.png/" width="64px"></button>
+        <button class="icon-button"><img class="icon" src="images/icons/Orange Gradient.png/" width="64px"></button>
+        <button class="icon-button"><img class="icon" src="images/icons/Orange Solid.png/" width="64px"></button>
+    </div>
+    <hr>
+    <input type="button" class="navigation-button button" id="submit" value="Go Home" onclick="loadhome()"></div>`;
+    
+    pageContainer.innerHTML = settingsContent;
+    var sideDiv = document.querySelectorAll(".side");
     sideDiv.forEach(function(sideDiv) {
       sideDiv.classList.add("hidden");
   });
@@ -448,6 +494,34 @@ pageContainer.innerHTML = "<div class='settings'><h1>Settings</h1><div class='ms
           btn.classList.add('selected');
       }
   });
+
+    const iconButtons = document.querySelectorAll('.icon-button');
+    iconButtons.forEach((button, index) => {
+        button.addEventListener('click', () => changeIcon(index));
+    });
+
+    // Check if there's a stored icon index
+    const storedIconIndex = localStorage.getItem('selectedIcon');
+    if (storedIconIndex !== null) {
+        changeIcon(parseInt(storedIconIndex, 10)); // Load the stored icon
+    }
+}
+
+function changeIcon(index) {
+    const icons = [
+        'Blue Gradient.png',
+        'Blue Solid.png',
+        'Enceladus.png',
+        'Mars.png',
+        'Orange Gradient.png',
+        'Orange Solid.png'
+    ];
+
+    const iconLink = document.querySelector('link[rel="apple-touch-icon"]');
+    if (iconLink) {
+        iconLink.href = `images/icons/${icons[index]}`;
+        localStorage.setItem('selectedIcon', index); // Store the selected icon index
+    }
 }
 
 function changeTheme(theme, button) {

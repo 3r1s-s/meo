@@ -276,6 +276,23 @@ bridge {
     border: 3px solid #5865f2;
 }
 
+.icon {
+  border-radius: 15px;
+}
+
+.icons {
+  display: flex;
+  flex-flow: wrap;
+  align-items: center;
+  justify-content: center;
+  overflow: scroll;
+}
+
+.icon-button {
+    margin: 10px;
+    background: transparent;
+  }
+
 @media screen and (max-width: 480px) {
     
     #page {
@@ -311,6 +328,10 @@ bridge {
         scroll-snap-align: center;
         overflow: scroll;
         height: 100vh;
+    }
+
+    #msgs {
+        margin-bottom: 60px;
     }
     
     .navigation {
