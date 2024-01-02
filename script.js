@@ -471,12 +471,12 @@ function loadstgs() {
     <br>
     <h2>Icons</h2>
     <div class="icons">
-        <button class="icon-button"><img class="icon" src="images/Blue Gradient.png/" width="64px"></button>
-        <button class="icon-button"><img class="icon" src="images/Blue Solid.png/" width="64px"></button>
-        <button class="icon-button"><img class="icon" src="images/Enceladus.png/" width="64px"></button>
-        <button class="icon-button"><img class="icon" src="images/Mars.png/" width="64px"></button>
-        <button class="icon-button"><img class="icon" src="images/Orange Gradient.png/" width="64px"></button>
-        <button class="icon-button"><img class="icon" src="images/Orange Solid.png/" width="64px"></button>
+        <button class="icon-button"><img class="icon" src="images/Blue Gradient.png" width="64px"></button>
+        <button class="icon-button"><img class="icon" src="images/Blue Solid.png" width="64px"></button>
+        <button class="icon-button"><img class="icon" src="images/Enceladus.png" width="64px"></button>
+        <button class="icon-button"><img class="icon" src="images/Mars.png" width="64px"></button>
+        <button class="icon-button"><img class="icon" src="images/Orange Gradient.png" width="64px"></button>
+        <button class="icon-button"><img class="icon" src="images/Orange Solid.png" width="64px"></button>
     </div>
     <hr>
     <input type="button" class="navigation-button button" id="submit" value="Go Home" onclick="loadhome()"></div>`;
