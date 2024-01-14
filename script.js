@@ -311,7 +311,39 @@ function loadpost(p) {
                         scriptTag.setAttribute('src', 'embed.js');
                         postContainer.appendChild(scriptTag);
                     }
+                } else if (link.includes('turbowarp.org') || link.includes('scratch.mit.edu') || link.includes('gnaw.pages.dev')) {
+                    var projectId;
+                
+                    if (link.includes('turbowarp.org')) {
+                        projectId = link.split('/').pop();
+                    } else if (link.includes('scratch.mit.edu')) {
+                        var scratchRegex = /projects\/(\d+)/;
+                        var scratchMatch = link.match(scratchRegex);
+                        projectId = scratchMatch ? scratchMatch[1] : null;
+                    } else if (link.includes('gnaw.pages.dev')) {
+                        var gnawRegex = /project=(\d+)$/;
+                        var gnawMatch = link.match(gnawRegex);
+                        projectId = gnawMatch ? gnawMatch[1] : null;
+                    }
+                
+                    console.log('Link:', link);
+                    console.log('projectId:', projectId);
+                
+                    if (projectId) {
+                        var embeddedElement = document.createElement('iframe');
+                        embeddedElement.src = 'https://turbowarp.org/' + projectId + '/embed/';
+                        embeddedElement.setAttribute('width', '380px');
+                        embeddedElement.setAttribute('height', '320px');
+                        embeddedElement.setAttribute('frameborder', '0');
+                
+                        embeddedElement.classList.add('embed');
+                
+                        postContainer.appendChild(embeddedElement);
+                    } else {
+                        console.log('projectId is falsy.');
+                    }
                 }
+                
 
                 if (embeddedElement) {
                     postContainer.appendChild(embeddedElement);
@@ -491,8 +523,12 @@ function loadstgs() {
         </p>
         </div>
     <div class="theme-buttons">
-    <button onclick='changeTheme(\"light\", this)' class='theme-button light-button'>Light Theme</button>
-    <button onclick='changeTheme(\"dark\", this)' class='theme-button dark-button'>Dark Theme</button>
+    <button onclick='changeTheme(\"light\", this)' class='theme-button light-button'>Light</button>
+    <button onclick='changeTheme(\"cosmic\", this)' class='theme-button cosmic-button'>Cosmic Latte</button>
+    <button onclick='changeTheme(\"dark\", this)' class='theme-button dark-button'>Dark</button>
+    <button onclick='changeTheme(\"blurple\", this)' class='theme-button blurple-button'>Blurple</button>
+    <button onclick='changeTheme(\"flamingo\", this)' class='theme-button flamingo-button'>Flamingo</button>
+    <button onclick='changeTheme(\"amoled\", this)' class='theme-button amoled-button'>Amoled</button>
         </div>
     <br>
     <h2>Icons</h2>
@@ -512,7 +548,6 @@ function loadstgs() {
     sideDiv.forEach(function(sideDiv) {
       sideDiv.classList.add("hidden");
   });
-
   const selectedTheme = localStorage.getItem("theme");
   const themeButtons = document.querySelectorAll('.theme-button');
   themeButtons.forEach((btn) => {
@@ -520,16 +555,13 @@ function loadstgs() {
           btn.classList.add('selected');
       }
   });
-
     const iconButtons = document.querySelectorAll('.icon-button');
     iconButtons.forEach((button, index) => {
         button.addEventListener('click', () => changeIcon(index));
     });
-
-    // Check if there's a stored icon index
     const storedIconIndex = localStorage.getItem('selectedIcon');
     if (storedIconIndex !== null) {
-        changeIcon(parseInt(storedIconIndex, 10)); // Load the stored icon
+        changeIcon(parseInt(storedIconIndex, 10));
     }
 }
 
@@ -546,25 +578,28 @@ function changeIcon(index) {
     const iconLink = document.querySelector('link[rel="apple-touch-icon"]');
     if (iconLink) {
         iconLink.href = `images/${icons[index]}`;
-        localStorage.setItem('selectedIcon', index); // Store the selected icon index
+        localStorage.setItem('selectedIcon', index);
     }
 }
 
 function changeTheme(theme, button) {
-  const selectedTheme = theme;
-  document.documentElement.className = selectedTheme + "-theme";
-  localStorage.setItem("theme", selectedTheme);
-  const themeColorMetaTag = document.querySelector('meta[name="theme-color"]');
-  if (selectedTheme === 'dark') {
-      themeColorMetaTag.setAttribute('content', '#1a1b1e');
-  } else {
-      themeColorMetaTag.setAttribute('content', '#ffffff');
-  }
+    const selectedTheme = theme;
+  
+    const previousTheme = localStorage.getItem("theme");
+    if (previousTheme) {
+      document.documentElement.classList.remove(previousTheme + "-theme");
+    }
+    document.documentElement.classList.add(selectedTheme + "-theme");
+    localStorage.setItem("theme", selectedTheme);
 
-  const themeButtons = document.querySelectorAll('.theme-button');
-  themeButtons.forEach((btn) => btn.classList.remove('selected'));
-  button.classList.add('selected');
-}
+    const themeColorMetaTag = document.querySelector('meta[name="theme-color"]');
+    themeColorMetaTag.setAttribute('content', selectedTheme === 'dark' ? '#1a1b1e' : '#ffffff');
+
+    const themeButtons = document.querySelectorAll('.theme-button');
+    themeButtons.forEach((btn) => btn.classList.remove('selected'));
+    button.classList.add('selected');
+  }
+  
 
 function formatTime(timestamp) {
     const now = new Date();

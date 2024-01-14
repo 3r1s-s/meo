@@ -263,13 +263,37 @@ bridge {
 .dark-button {
     background: #1a1b1e;
     color: #f5f8fb;
-    border: 1px solid #f5f8fb;
+    border: 1px solid var(--background-color);
 }
 
 .light-button {
     background: #fff;
     color: #383a41;
-    border: 1px solid #383a41;
+    border: 1px solid var(--background-color);
+}
+
+.cosmic-button {
+    background: #fff8e7;
+    color: #413f38;
+    border: 1px solid var(--background-color);
+}
+
+.blurple-button {
+    background: #15141a;
+    color: #f5f8fb;
+    border: 1px solid var(--background-color);
+}
+
+.flamingo-button {
+    background: #0c0303;
+    color: #f5f8fb;
+    border: 1px solid var(--background-color);
+}
+
+.amoled-button {
+    background: #000;
+    color: #f5f8fb;
+    border: 1px solid var(--background-color);
 }
 
 .selected {

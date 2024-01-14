@@ -24,6 +24,32 @@
     --hov-button-color: #f6f5fb;
 }
 
+.flamingo-theme {
+    --background-color: #0c0303;
+    --color: #f5f8fb;
+    --accent-color: #200a0f;
+    --hov-accent-color: #250c12;
+    --hov-color: #3a121c;
+    --link-color: #00abd2;
+    --attachment-background-color: #1b1e49;
+    --attachment-color: #a0a4d1;
+    --button-color: #7a2c3f;
+    --hov-button-color: #f6f5fb;
+}
+
+.amoled-theme {
+    --background-color: #000;
+    --color: #f5f8fb;
+    --accent-color: #040404;
+    --hov-accent-color: #0f0f0f;
+    --hov-color: #0f0f0f;
+    --link-color: #00abd2;
+    --attachment-background-color: #1b1e49;
+    --attachment-color: #a0a4d1;
+    --button-color: #0f0f0f;
+    --hov-button-color: #f6f5fb;
+}
+
 .light-theme {
     --background-color: #fff;
     --color: #383a41;
@@ -35,4 +61,17 @@
     --attachment-color: #23296f;
     --button-color: #676d7a;
     --hov-button-color: #383a41;
+}
+
+.cosmic-theme {
+    --background-color: #fff8e7;
+    --color: #413f38;
+    --accent-color: #f1ead9;
+    --hov-accent-color: #e3ddcd;
+    --hov-color: #e6ddc9;
+    --link-color: #8066b3;
+    --attachment-background-color: #bcc4ec;
+    --attachment-color: #23296f;
+    --button-color: #8f8b7c;
+    --hov-button-color: #413f38;
 }
