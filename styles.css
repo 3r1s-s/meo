@@ -251,6 +251,7 @@ bridge {
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-flow: wrap;
 }
 
 .theme-button {

@@ -238,7 +238,7 @@ function loadpost(p) {
                 if (['png', 'jpg', 'jpeg', 'gif'].includes(fileExtension)) {
                     var imgElement = document.createElement("img");
                     imgElement.setAttribute("src", baseURL);
-                    imgElement.setAttribute("style", "max-width: 300px;");
+                    imgElement.setAttribute("style", "max-width: 300px; width: 100%;");
                     imgElement.classList.add("embed");
 
                     var imgLink = document.createElement("a");
@@ -332,7 +332,7 @@ function loadpost(p) {
                     if (projectId) {
                         var embeddedElement = document.createElement('iframe');
                         embeddedElement.src = 'https://turbowarp.org/' + projectId + '/embed/';
-                        embeddedElement.setAttribute('width', '380px');
+                        embeddedElement.setAttribute('style', 'width: 100%; max-width: 380px;');
                         embeddedElement.setAttribute('height', '320px');
                         embeddedElement.setAttribute('frameborder', '0');
                 
