@@ -213,12 +213,15 @@ function loadpost(p) {
         postContentText.querySelectorAll('p a').forEach(link => {
             const url = link.getAttribute('href');
             const fileExtension = url.split('.').pop().toLowerCase();
-
-            if (['png', 'jpg', 'jpeg', 'gif', 'mp4', 'webm', 'mov'].includes(fileExtension)) {
+            const fileDomain = url.includes('tenor.com/view');
+        
+            if ((['png', 'jpg', 'jpeg', 'gif', 'mp4', 'webm', 'mov'].includes(fileExtension)) || fileDomain) {
                 link.classList.add('attachment');
                 link.innerHTML = '<svg class="icon_ecf39b icon__13ad2" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"><path fill="currentColor" d="M10.57 4.01a6.97 6.97 0 0 1 9.86 0l.54.55a6.99 6.99 0 0 1 0 9.88l-7.26 7.27a1 1 0 0 1-1.42-1.42l7.27-7.26a4.99 4.99 0 0 0 0-7.06L19 5.43a4.97 4.97 0 0 0-7.02 0l-8.02 8.02a3.24 3.24 0 1 0 4.58 4.58l6.24-6.24a1.12 1.12 0 0 0-1.58-1.58l-3.5 3.5a1 1 0 0 1-1.42-1.42l3.5-3.5a3.12 3.12 0 1 1 4.42 4.42l-6.24 6.24a5.24 5.24 0 0 1-7.42-7.42l8.02-8.02Z" class=""></path></svg><span> attachments</span>';
             }
         });
+        
+        
 
         postContainer.appendChild(postContentText);
 
@@ -284,6 +287,29 @@ function loadpost(p) {
                 
                         embeddedElement.classList.add("embed");
 
+                    }
+                } else if (link.includes('tenor.com')) {
+                    var tenorRegex = /\d+$/;
+                    var tenorMatch = link.match(tenorRegex);
+                    var postId = tenorMatch ? tenorMatch[0] : null;
+                
+                    if (postId) {
+
+                        var embeddedElement = document.createElement('div');
+                        embeddedElement.className = 'tenor-gif-embed';
+                        embeddedElement.setAttribute('data-postid', postId);
+                        embeddedElement.setAttribute('data-share-method', 'host');
+                        embeddedElement.setAttribute('data-width', '400px');
+                        embeddedElement.setAttribute('data-height', '400px');
+
+
+                        embeddedElement.classList.add("embed");
+
+                        postContainer.appendChild(embeddedElement);
+                        var scriptTag = document.createElement('script');
+                        scriptTag.setAttribute('type', 'text/javascript');
+                        scriptTag.setAttribute('src', 'embed.js');
+                        postContainer.appendChild(scriptTag);
                     }
                 }
 

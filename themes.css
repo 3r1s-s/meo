@@ -11,6 +11,19 @@
     --hov-button-color: #f5f8fb;
 }
 
+.blurple-theme {
+    --background-color: #15141a;
+    --color: #f5f8fb;
+    --accent-color: #24222f;
+    --hov-accent-color: #2e2b3a;
+    --hov-color: #2e2b3a;
+    --link-color: #00abd2;
+    --attachment-background-color: #1b1e49;
+    --attachment-color: #a0a4d1;
+    --button-color: #a6a5b3;
+    --hov-button-color: #f6f5fb;
+}
+
 .light-theme {
     --background-color: #fff;
     --color: #383a41;

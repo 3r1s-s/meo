@@ -358,3 +358,7 @@ bridge {
 .hidden {
     display: none;
 }
+
+#header {
+    display: none !important;
+}
