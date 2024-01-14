@@ -301,6 +301,7 @@ function loadpost(p) {
                         embeddedElement.setAttribute('data-share-method', 'host');
                         embeddedElement.setAttribute('data-width', '400px');
                         embeddedElement.setAttribute('data-height', '400px');
+                        embeddedElement.setAttribute('data-border-radius', '5px');
 
 
                         embeddedElement.classList.add("embed");
