@@ -593,12 +593,12 @@ function changeTheme(theme, button) {
     localStorage.setItem("theme", selectedTheme);
 
     const themeColorMetaTag = document.querySelector('meta[name="theme-color"]');
-    themeColorMetaTag.setAttribute('content', selectedTheme === 'dark' ? '#1a1b1e' : '#ffffff');
+    themeColorMetaTag.setAttribute('content', getComputedStyle(document.documentElement).getPropertyValue('--background-color'));
 
     const themeButtons = document.querySelectorAll('.theme-button');
     themeButtons.forEach((btn) => btn.classList.remove('selected'));
     button.classList.add('selected');
-  }
+}
   
 
 function formatTime(timestamp) {
