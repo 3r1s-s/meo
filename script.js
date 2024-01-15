@@ -540,10 +540,12 @@ function loadstgs() {
         <button class="icon-button"><img class="icon" src="images/Mars.png" width="64px"></button>
         <button class="icon-button"><img class="icon" src="images/Orange Gradient.png" width="64px"></button>
         <button class="icon-button"><img class="icon" src="images/Orange Solid.png" width="64px"></button>
+
         <button class="icon-button"><img class="icon" src="images/Meower iOS Stripe.png" width="64px"></button>
         <button class="icon-button"><img class="icon" src="images/Meower iOS.png" width="64px"></button>
         <button class="icon-button"><img class="icon" src="images/Revolt.png" width="64px"></button>
         <button class="icon-button"><img class="icon" src="images/Flamingo.png" width="64px"></button>
+        <button class="icon-button"><img class="icon" src="images/Blurple.png" width="64px"></button>
     </div>
     <hr>
     <input type="button" class="navigation-button button" id="submit" value="Go Home" onclick="loadhome()"></div>`;
@@ -577,7 +579,12 @@ function changeIcon(index) {
         'Enceladus.png',
         'Mars.png',
         'Orange Gradient.png',
-        'Orange Solid.png'
+        'Orange Solid.png',
+        'Meower iOS Stripe.png',
+        'Meower iOS.png',
+        'Revolt.png',
+        'Flamingo.png',
+        'Blurple.png'
     ];
 
     const iconLink = document.querySelector('link[rel="apple-touch-icon"]');
