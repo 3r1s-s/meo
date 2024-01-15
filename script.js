@@ -299,9 +299,9 @@ function loadpost(p) {
                         embeddedElement.className = 'tenor-gif-embed';
                         embeddedElement.setAttribute('data-postid', postId);
                         embeddedElement.setAttribute('data-share-method', 'host');
-                        embeddedElement.setAttribute('data-width', '400px');
-                        embeddedElement.setAttribute('data-height', '400px');
-                        embeddedElement.setAttribute('data-style', 'border-radius: 5px');
+                        embeddedElement.setAttribute('data-width', '100%');
+                        embeddedElement.setAttribute('data-height', '100%');
+                        embeddedElement.setAttribute('data-style', 'border-radius: 5px; max-width: 400px; aspect-ratio: 1 / 1; max-height: 400px;');
 
                         embeddedElement.classList.add("embed");
 
@@ -573,6 +573,7 @@ function loadstgs() {
 }
 
 function changeIcon(index) {
+
     const icons = [
         'Blue Gradient.png',
         'Blue Solid.png',
