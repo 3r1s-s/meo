@@ -93,11 +93,19 @@ function main() {
             var iul = sentdata.val;
             sul = iul.trim().split(";");
             lul = sul.length - 1;
-            sul = sul.slice(0, -1).join(", ") + (sul.length > 1 ? ", " : "") + sul.slice(-1);
+            
+            if (sul.length > 1) {
+                sul = sul.slice(0, -2).join(", ") + (sul.length > 2 ? ", " : "") + sul.slice(-2).join(".");
+            } else {
+                sul = sul[0];
+            }
+        
             if (page == "home") {
                 document.getElementById("info").innerText = lul + " users online (" + sul + ")";
             }
         }
+        
+        
     };
     document.addEventListener("keydown", function(event) {
         if (event.key === "Enter") {
