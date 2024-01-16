@@ -31,23 +31,8 @@ if (!false) {
           iframe.setAttribute('allowfullscreen','true');
           iframe.setAttribute('scrolling','no');
           var root;
-          if (e.hasAttribute('data-height')) {
-            iframe.setAttribute('width',e.getAttribute('data-width'));
-            iframe.setAttribute('height',e.getAttribute('data-height'));
+            iframe.setAttribute('style',e.getAttribute('data-style'));
             root = iframe;
-          } else {
-            var framewrapper = document.createElement('div')
-            var aspect = e.getAttribute('data-aspect-ratio') || 1.33;
-            e.setAttribute('style',
-              'width:' + e.getAttribute('data-width') + ';' +
-              'position:relative;');
-            framewrapper.setAttribute('style',
-              'padding-top:' + (1/aspect)*100 + '%;');
-            iframe.setAttribute('style',
-              'position:absolute;top:0;left:0;width:100%;height:100%;')
-            framewrapper.appendChild(iframe);
-            root = framewrapper;
-          }
           var url = embedurl + embedSubPath;
           var sharemethod = (
             e.getAttribute('data-share-method') || 'tenor');
