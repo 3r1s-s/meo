@@ -540,7 +540,7 @@ function loadstgs() {
     <button onclick='changeTheme(\"light\", this)' class='theme-button light-button'>Light</button>
     <button onclick='changeTheme(\"cosmic\", this)' class='theme-button cosmic-button'>Cosmic Latte</button>
     <button onclick='changeTheme(\"dark\", this)' class='theme-button dark-button'>Dark</button>
-    <button onclick='changeTheme(\"old\", this)' class='theme-button old-button'>Old</button>
+    <button onclick='changeTheme(\"blurple\", this)' class='theme-button blurple-button'>Blurple</button>
     <button onclick='changeTheme(\"flamingo\", this)' class='theme-button flamingo-button'>Flamingo</button>
     <button onclick='changeTheme(\"amoled\", this)' class='theme-button amoled-button'>Amoled</button>
         </div>

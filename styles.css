@@ -263,12 +263,6 @@ bridge {
 }
 
 .dark-button {
-    background: #1b1a1e;
-    color: #f5f8fb;
-    border: 1px solid var(--background-color);
-}
-
-.old-button {
     background: #1a1b1e;
     color: #f5f8fb;
     border: 1px solid var(--background-color);
