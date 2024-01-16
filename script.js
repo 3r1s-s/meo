@@ -206,6 +206,12 @@ function loadpost(p) {
             .replace(/(?:https?|ftp):\/\/[^\s(){}[\]]+/g, function(url) {
                 return `<a href="${url.replace(/<\/?blockquote>/g, '')}" target="_blank">${url}</a>`;
             });
+
+            var isOnlyEmojis = /^\p{Emoji}+$/u.test(content);
+
+            if (isOnlyEmojis) {
+                postContentText.classList.add("big");
+            }
         
 
         postContentText.innerHTML = textContent;

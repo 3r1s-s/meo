@@ -317,7 +317,13 @@ bridge {
 .icon-button {
     margin: 10px;
     background: transparent;
-  }
+}
+
+.big {
+    font-size: 48px;
+    margin-top: 16px;
+    margin-bottom: 16px;
+}
 
 @media screen and (max-width: 480px) {
     
