@@ -243,8 +243,8 @@ bridge {
 }
 
 .attachment:hover {
-    color: var(--color);
-    background-color: #7236f9;
+    color: var(--attachment-color-hover);
+    background-color: var(--attachment-background-color-hover);
     text-decoration: none;
 }
 

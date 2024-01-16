@@ -7,6 +7,8 @@
     --link-color: #00abd2;
     --attachment-background-color: #351a76;
     --attachment-color: #b8afe5;
+    --attachment-background-color-hover: #7236f9;
+    --attachment-color-hover: #fefefe;
     --button-color: #a5abb3;
     --hov-button-color: #fefefe;
 }
@@ -20,6 +22,8 @@
     --link-color: #00abd2;
     --attachment-background-color: #1b1e49;
     --attachment-color: #a0a4d1;
+    --attachment-background-color-hover: #5865f2;
+    --attachment-color-hover: #fefefe;
     --button-color: #9792a9;
     --hov-button-color: #f6f5fb;
 }
@@ -33,6 +37,8 @@
     --link-color: #00abd2;
     --attachment-background-color: #1b1e49;
     --attachment-color: #a0a4d1;
+    --attachment-background-color-hover: #7236f9;
+    --attachment-color-hover: #fefefe;
     --button-color: #7a2c3f;
     --hov-button-color: #f6f5fb;
 }
@@ -46,19 +52,23 @@
     --link-color: #00abd2;
     --attachment-background-color: #1b1e49;
     --attachment-color: #a0a4d1;
+    --attachment-background-color-hover: #7236f9;
+    --attachment-color-hover: #fefefe;
     --button-color: #0f0f0f;
     --hov-button-color: #f6f5fb;
 }
 
 .light-theme {
-    --background-color: #fff;
+    --background-color: #fefefe;
     --color: #383a41;
     --accent-color: #dbe0e8;
     --hov-accent-color: #e7eaee;
     --hov-color: #d2d6dd;
-    --link-color: #8066b3;
-    --attachment-background-color: #bcc4ec;
-    --attachment-color: #23296f;
+    --link-color: #5023b6;
+    --attachment-background-color: #c5affc;
+    --attachment-color: #351a76;
+    --attachment-background-color-hover: #7236f9;
+    --attachment-color-hover: #fefefe;
     --button-color: #676d7a;
     --hov-button-color: #383a41;
 }
@@ -70,8 +80,10 @@
     --hov-accent-color: #e3ddcd;
     --hov-color: #e6ddc9;
     --link-color: #ad8335;
-    --attachment-background-color: #bcc4ec;
-    --attachment-color: #23296f;
+    --attachment-background-color: #e7d092;
+    --attachment-color: #9d7222;
+    --attachment-background-color-hover: #ad8335;
+    --attachment-color-hover: #fefefe;
     --button-color: #8f8b7c;
     --hov-button-color: #413f38;
 }
