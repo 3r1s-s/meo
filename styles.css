@@ -244,7 +244,7 @@ bridge {
 
 .attachment:hover {
     color: #fff;
-    background-color: #5865f2;
+    background-color: #7236f9;
     text-decoration: none;
 }
 
@@ -263,6 +263,12 @@ bridge {
 }
 
 .dark-button {
+    background: #1b1a1e;
+    color: #f5f8fb;
+    border: 1px solid var(--background-color);
+}
+
+.old-button {
     background: #1a1b1e;
     color: #f5f8fb;
     border: 1px solid var(--background-color);
@@ -299,7 +305,7 @@ bridge {
 }
 
 .selected {
-    border: 3px solid #5865f2;
+    border: 3px solid #7236f9;
 }
 
 .icon {
@@ -374,7 +380,7 @@ bridge {
     }
 
     .launch {
-        background: linear-gradient(180deg, rgb(48, 124, 231) 0%, rgb(88, 204, 254) 100%);
+        background: #7236f9;
     }
 
     .buttonContainer {
