@@ -216,6 +216,7 @@ bridge {
     height: 100vh;
     position: sticky;
     top: 0;
+    margin: 0 10px 0 10px;
 }
 
 .navigation {
