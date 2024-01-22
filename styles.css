@@ -233,7 +233,25 @@ bridge {
     margin-bottom: 10px;
     padding: 1em 3em 1em 3em;
 }
+/*
+.navigation {
+    display: flex;
+    flex-direction: column;
+    align-items: baseline;
+    height: calc(100% - 10px);
+    width: 100%;
+    margin: 5px;
+}
 
+.navigation-button {
+    border-radius: 100rem;
+    margin-bottom: 5px;
+    padding: 1em 3em 1em 3em;
+    margin-top: 5px;
+    width: 50%;
+}
+possible future styling
+*/
 .attachment {
     color: var(--attachment-color);
     background-color: var(--attachment-background-color);
