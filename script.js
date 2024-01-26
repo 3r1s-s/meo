@@ -365,7 +365,7 @@ function reply(event) {
         var username = postContainer.querySelector('#username').innerText;
         var paragraphText = postContainer.querySelector('p').innerText.split(' ').slice(0, 3).join(' ');
         var postId = postContainer.id;
-        document.getElementById('msg').value = `@${username} "${paragraphText}" (${postId})\n`;
+        document.getElementById('msg').value = `@${username} "${paragraphText}..." (${postId})\n`;
         document.getElementById('msg').focus();
         autoResize();
     }
