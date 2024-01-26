@@ -157,6 +157,7 @@ bridge {
     padding: 1em;
     flex: 0.9;
     margin: 5px;
+    overflow-y: hidden;
 }
 
 .message-send {
