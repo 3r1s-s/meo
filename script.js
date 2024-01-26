@@ -363,10 +363,14 @@ function reply(event) {
     var postContainer = event.target.closest('.post');
     if (postContainer) {
         var username = postContainer.querySelector('#username').innerText;
-        document.getElementById('msg').value = `@${username} `;
+        var paragraphText = postContainer.querySelector('p').innerText.split(' ').slice(0, 3).join(' ');
+        var postId = postContainer.id;
+        document.getElementById('msg').value = `@${username} "${paragraphText}" (${postId})\n`;
         document.getElementById('msg').focus();
+        autoResize();
     }
 }
+
 
 function loadTheme() {
     const theme = localStorage.getItem("theme");
