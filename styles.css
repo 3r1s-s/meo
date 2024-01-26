@@ -70,6 +70,18 @@ blockquote {
     margin: 0 0 0 5px;
 }
 
+textarea {
+    background-color: var(--accent-color);
+    color: var(--color);
+    border: none;
+    border-radius: 5px;
+    outline: none;
+    font-family: Roboto;
+    font-weight: 400;
+    font-size: 0.813em;
+    resize: none;
+}
+
 bridge {
     background-color: #7236f9;
     border-radius: 25px;
