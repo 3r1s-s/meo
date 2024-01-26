@@ -375,11 +375,16 @@ function loadTheme() {
         document.documentElement.classList.add(theme + "-theme");
     }
 
+    const rootStyles = window.getComputedStyle(document.documentElement);
+    const rootBackgroundColor = rootStyles.getPropertyValue('--background-color');
+
     const metaThemeColor = document.querySelector("meta[name=theme-color]");
     if (metaThemeColor) {
-        metaThemeColor.setAttribute("content", theme === "dark" ? "#1a1b1e" : "#ffffff");
+        metaThemeColor.setAttribute("content", rootBackgroundColor);
     }
 }
+
+
 
 function dowizard() {
     console.log(document.getElementById('userinput').value);
