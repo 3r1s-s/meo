@@ -177,37 +177,32 @@ function loadpost(p) {
         .replace(/>/g, '&gt;')
         .replace(/"/g, '&quot;')
         .replace(/'/g, '&#39;');
-        
-        var textContent = escapedInput
-            .replace(/\*\*\*\*(.*?[^\*])\*\*\*\*/g, '$1')
-            .replace(/\*\*(.*?[^\*])\*\*/g, '<strong>$1</strong>')
-            .replace(/\*(.*?[^\*])\*/g, '<em>$1</em>')
-            .replace(/```([\s\S]*?)```/g, '<code>$1</code>')
-            .replace(/``([^`]+)``/g, '<code>$1</code>')
-            .replace(/^# (.*?$)/gm, '<h1>$1</h1>')
-            .replace(/^## (.*?$)/gm, '<h2>$1</h2>')
-            .replace(/^### (.*?$)/gm, '<h3>$1</h3>')
-            .replace(/^&gt; (.*?$)/gm, '<blockquote>$1</blockquote>')
-            .replace(/~~([\s\S]*?)~~/g, '<del>$1</del>')
-            .replace(/(?:https?|ftp):\/\/[^\s(){}[\]]+/g, function(url) {
-                return `<a href="${url.replace(/<\/?blockquote>/g, '')}" target="_blank">${url}</a>`;
-            })
-           
-            var textContent = escapedInput
-            .replace(/&lt;:(\w+):(\d+)&gt;/g, '<img src="https://cdn.discordapp.com/emojis/$2.webp?size=96&quality=lossless" alt="$1" width="16px" class="emoji">')
-            .replace(/&lt;a:(\w+):(\d+)&gt;/g, '<img src="https://cdn.discordapp.com/emojis/$2.gif?size=96&quality=lossless" alt="$1" width="16px" class="emoji">') 
-            
-            .replace(/\n/g, '<br>');
-            
-
-            
-            var isEmoji = /^[\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{1F700}-\u{1F77F}\u{1F780}-\u{1F7FF}\u{1F800}-\u{1F8FF}\u{1F900}-\u{1F9FF}\u{1FA00}-\u{1FA6F}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]+$/u.test(content);
-
-            if (isEmoji) {
-                postContentText.classList.add("big");
-            }
-            
-        postContentText.innerHTML = textContent;
+    
+    var textContent = escapedInput
+        .replace(/\*\*\*\*(.*?[^\*])\*\*\*\*/g, '$1')
+        .replace(/\*\*(.*?[^\*])\*\*/g, '<strong>$1</strong>')
+        .replace(/\*(.*?[^\*])\*/g, '<em>$1</em>')
+        .replace(/```([\s\S]*?)```/g, '<code>$1</code>')
+        .replace(/``([^`]+)``/g, '<code>$1</code>')
+        .replace(/^# (.*?$)/gm, '<h1>$1</h1>')
+        .replace(/^## (.*?$)/gm, '<h2>$1</h2>')
+        .replace(/^### (.*?$)/gm, '<h3>$1</h3>')
+        .replace(/^&gt; (.*?$)/gm, '<blockquote>$1</blockquote>')
+        .replace(/~~([\s\S]*?)~~/g, '<del>$1</del>')
+        .replace(/(?:https?|ftp):\/\/[^\s(){}[\]]+/g, function (url) {
+            return `<a href="${url.replace(/<\/?blockquote>/g, '')}" target="_blank">${url}</a>`;
+        })
+        .replace(/&lt;:(\w+):(\d+)&gt;/g, '<img src="https://cdn.discordapp.com/emojis/$2.webp?size=96&quality=lossless" alt="$1" width="16px" class="emoji">')
+        .replace(/&lt;a:(\w+):(\d+)&gt;/g, '<img src="https://cdn.discordapp.com/emojis/$2.gif?size=96&quality=lossless" alt="$1" width="16px" class="emoji">')
+        .replace(/\n/g, '<br>');
+    
+    var isEmoji = /^[\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{1F700}-\u{1F77F}\u{1F780}-\u{1F7FF}\u{1F800}-\u{1F8FF}\u{1F900}-\u{1F9FF}\u{1FA00}-\u{1FA6F}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]+$/u.test(content);
+    
+    if (isEmoji) {
+        postContentText.classList.add("big");
+    }
+    
+    postContentText.innerHTML = textContent;
 
         postContentText.querySelectorAll('p a').forEach(link => {
             const url = link.getAttribute('href');
