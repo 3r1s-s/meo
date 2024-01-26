@@ -358,19 +358,23 @@ function goToAPI() {
     window.open(`https://api.meower.org/posts?id=${postId}`, '_blank');
 }
 
-
 function reply(event) {
     var postContainer = event.target.closest('.post');
     if (postContainer) {
         var username = postContainer.querySelector('#username').innerText;
-        var paragraphText = postContainer.querySelector('p').innerText.split(' ').slice(0, 3).join(' ');
+        var paragraphText = postContainer.querySelector('p').innerText
+            .replace(/\n/g, ' ')
+            .replace(/@\w+/g, '')
+            .split(' ')
+            .slice(0, 6)
+            .join(' ');
+
         var postId = postContainer.id;
         document.getElementById('msg').value = `@${username} "${paragraphText}..." (${postId})\n`;
         document.getElementById('msg').focus();
         autoResize();
     }
 }
-
 
 function loadTheme() {
     const theme = localStorage.getItem("theme");
@@ -427,7 +431,6 @@ function doswizard() {
 function dopostwizard() {
     var message = document.getElementById('msg').value;
 
-    // Check if the message is blank or contains only spaces and newlines
     if (!message.trim()) {
         console.log("The message is blank.");
         return;
@@ -461,6 +464,7 @@ function dopostwizard() {
 
     // Clear the message input after posting
     document.getElementById('msg').value = "";
+    autoResize();
 }
 
 
