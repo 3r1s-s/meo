@@ -45,12 +45,12 @@ h3 {
 }
 
 a {
-    color: var(--blue);
+    color: var(--link-color);
     text-decoration: none;
 }
 
 a:hover {
-    color: var(--blue);
+    color: var(--link-color);
     text-decoration: underline;
 }
 
