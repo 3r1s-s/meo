@@ -4,13 +4,16 @@
     --accent-color: #3a3d43;
     --hov-accent-color: #323439;
     --hov-color: #4a4d56;
-    --link-color: #00abd2;
-    --attachment-background-color: #513593;
+    --attachment-background-color: #3c286b;
     --attachment-color: #b190fe;
     --attachment-background-color-hover: #b190fe;
     --attachment-color-hover: #fefefe;
     --button-color: #a5abb3;
     --hov-button-color: #fefefe;
+    --blue: #00abd2;
+    --green: #32E875;
+    --red: #cc2936;
+    --magenta: #F04290;
 }
 
 .light-theme {
