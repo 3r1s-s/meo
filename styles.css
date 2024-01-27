@@ -83,7 +83,7 @@ textarea {
 }
 
 bridge {
-    background-color: #7236f9;
+    background-color: #714cc8;
     border-radius: 25px;
     font-size: 12px;
     margin-left: 5px;
@@ -130,6 +130,7 @@ bridge {
 
 .posts, .settings, .login {
     margin: 5px;
+    /*border: 1px solid var(--accent-color);*/
 }
 
 .login {
@@ -171,6 +172,7 @@ bridge {
     padding: 10px;
     margin-bottom: 10px;
     word-wrap: anywhere;
+    /*border: 1px solid var(--accent-color);*/
 }
 
 .post:hover {

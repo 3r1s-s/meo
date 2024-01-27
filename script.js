@@ -240,7 +240,7 @@ function loadpost(p) {
                     imgLink.appendChild(imgElement);
 
                     embeddedElement = imgLink;
-                } else if (['mp4', 'webm', 'mov'].includes(fileExtension)) {
+                } else if (['mp4', 'webm', 'mov', 'mp3', 'wav', 'ogg'].includes(fileExtension)) {
                     embeddedElement = document.createElement("video");
                     embeddedElement.setAttribute("src", baseURL);
                     embeddedElement.setAttribute("controls", "controls");
