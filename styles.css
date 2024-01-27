@@ -333,7 +333,7 @@ possible future styling
 }
 
 .selected {
-    border: 3px solid #7236f9;
+    border: 3px solid var(--accent-color);
 }
 
 .icon {
@@ -408,7 +408,7 @@ possible future styling
     }
 
     .launch {
-        background: #7236f9;
+        background: #b190fe;
     }
 
     .buttonContainer {
