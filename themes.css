@@ -13,6 +13,21 @@
     --hov-button-color: #fefefe;
 }
 
+.light-theme {
+    --background-color: #fefefe;
+    --color: #383a41;
+    --accent-color: #dbe0e8;
+    --hov-accent-color: #e7eaee;
+    --hov-color: #d2d6dd;
+    --link-color: #5023b6;
+    --attachment-background-color: #d4c1ff;
+    --attachment-color: #513593;
+    --attachment-background-color-hover: #b190fe;
+    --attachment-color-hover: #fefefe;
+    --button-color: #676d7a;
+    --hov-button-color: #383a41;
+}
+
 .blurple-theme {
     --background-color: #15141a;
     --color: #f5f8fb;
@@ -58,20 +73,6 @@
     --hov-button-color: #fefefe;
 }
 
-.light-theme {
-    --background-color: #fefefe;
-    --color: #383a41;
-    --accent-color: #dbe0e8;
-    --hov-accent-color: #e7eaee;
-    --hov-color: #d2d6dd;
-    --link-color: #5023b6;
-    --attachment-background-color: #c5affc;
-    --attachment-color: #351a76;
-    --attachment-background-color-hover: #7236f9;
-    --attachment-color-hover: #fefefe;
-    --button-color: #676d7a;
-    --hov-button-color: #383a41;
-}
 
 .cosmic-theme {
     --background-color: #fff8e7;
