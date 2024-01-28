@@ -1,0 +1,10 @@
+[
+    {
+      "name": "Meo Glass",
+      "creator": "JoshAtticus",
+      "description": "Your plugin description here",
+      "enabled": false,
+      "script": "plugins/glass.js"
+    }
+  ]
+  
