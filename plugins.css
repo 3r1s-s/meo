@@ -8,5 +8,20 @@
     padding: 10px;
     margin: 5px;
     word-wrap: anywhere;
+}
 
+.customplugin {
+    margin: 5px;
+    display: flex;
+    flex-direction: column;
+}
+
+.cstpgtxt {
+    resize: both;
+}
+
+.cstpgbt {
+    padding: 1em;
+    margin-top: 5px;
+    max-width: 100px;
 }

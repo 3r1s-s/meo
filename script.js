@@ -553,6 +553,12 @@ async function loadplugins() {
     });
 
     settingsContent += `
+        </div>
+            <h1>Custom Plugin</h1>
+            <h3>Caution: can be very dangerous</h3>
+            <div class='customplugin'>
+                <textarea class="cstpgtxt" id='customplugininput' placeholder="// you put stuff here"></textarea>
+                <input class='cstpgbt' type='button' value='Run' onclick="customplugin()">
             </div>
         </div>
     `;
@@ -598,6 +604,19 @@ async function loadsavedplugins() {
             loadpluginscript(plugin.script);
         }
     });
+}
+
+function customplugin() {
+    const customplugininput = document.getElementById("customplugininput").value;
+    if (customplugininput.trim() !== "") {
+        try {
+            const script = document.createElement('script');
+            script.textContent = customplugininput;
+            document.head.appendChild(script);
+        } catch (error) {
+            console.error('Something happened:', error);
+        }
+    }
 }
 
   
