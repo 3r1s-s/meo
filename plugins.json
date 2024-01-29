@@ -5,6 +5,13 @@
       "description": "Your plugin description here",
       "enabled": false,
       "script": "plugins/glass.js"
+    },
+    {
+      "name": "Unexpected End",
+      "creator": "Bloctans",
+      "description": "unexpected end of JSON input",
+      "enabled": false,
+      "script": "plugins/unexpectedend.js"
     }
   ]
   
