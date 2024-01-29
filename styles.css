@@ -61,7 +61,6 @@ code {
 i {
     font-size: 13px;
     font-weight: normal;
-    margin-left: 5px;
 }
 
 blockquote {
@@ -208,6 +207,10 @@ bridge {
   .toolButton:hover {
       cursor: pointer;
       color: var(--hov-button-color);
+}
+
+.date {
+    margin-left: 5px;
 }
 
 .link {
@@ -357,6 +360,14 @@ possible future styling
     font-size: 48px;
     margin-top: 16px;
     margin-bottom: 16px;
+}
+
+.nav-top {
+    position: absolute;
+    top: 0;
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
 }
 
 @media screen and (max-width: 480px) {

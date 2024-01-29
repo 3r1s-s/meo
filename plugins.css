@@ -1,0 +1,12 @@
+.plugins {
+    display: flex;
+}
+
+.plugin {
+    background-color: var(--accent-color);
+    border-radius: 5px;
+    padding: 10px;
+    margin: 5px;
+    word-wrap: anywhere;
+
+}
