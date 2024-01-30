@@ -130,7 +130,10 @@ function loadpost(p) {
         var content = parts.slice(1).join(': ');
         var rawsplit = rcon.split(": ");
     } else {
-        var content = p.p;
+        var storedsettings = settingsstuff();
+        var swearfilterenabled = storedsettings.swearfilter;
+        
+        var content = swearfilterenabled && p.unfiltered_p ? p.unfiltered_p : p.p;
         var user = p.u;
     }
 
@@ -259,20 +262,21 @@ function loadpost(p) {
                     embeddedElement = document.createElement("iframe");
                     embeddedElement.setAttribute("width", "100%");
                     embeddedElement.setAttribute("height", "315");
+                    embeddedElement.setAttribute("style", "max-width:500px;");
                     embeddedElement.setAttribute("class", "embed");
                     embeddedElement.setAttribute("src", "https://www.youtube.com/embed/" + videoId);
                     embeddedElement.setAttribute("title", "YouTube video player");
                     embeddedElement.setAttribute("frameborder", "0");
                     embeddedElement.setAttribute("allow", "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share");
                     embeddedElement.setAttribute("allowfullscreen", "");
-                  } else if (link.includes('open.spotify.com')) {
+                } else if (link.includes('open.spotify.com')) {
                     var spotifyRegex = /track\/([a-zA-Z0-9]+)/;
                     var match = link.match(spotifyRegex);
                     if (match) {
                         var trackId = match[1];
-                
+                        
                         var embeddedElement = document.createElement("iframe");
-                        embeddedElement.setAttribute("style", "border-radius: 12px");
+                        embeddedElement.setAttribute("style", "border-radius: 12px;max-width:500px;");
                         embeddedElement.setAttribute("src", `https://open.spotify.com/embed/track/${trackId}?utm_source=generator`);
                         embeddedElement.setAttribute("width", "100%");
                         embeddedElement.setAttribute("height", "80px");
@@ -365,15 +369,9 @@ function reply(event) {
     var postContainer = event.target.closest('.post');
     if (postContainer) {
         var username = postContainer.querySelector('#username').innerText;
-        var paragraphText = postContainer.querySelector('p').innerText
-            .replace(/\n/g, ' ')
-            .replace(/@\w+/g, '')
-            .split(' ')
-            .slice(0, 6)
-            .join(' ');
 
         var postId = postContainer.id;
-        document.getElementById('msg').value = `@${username} "${paragraphText}..." (${postId})\n`;
+        document.getElementById('msg').value = `@${username} "" (${postId})\n`;
         document.getElementById('msg').focus();
         autoresize();
     }
@@ -394,8 +392,6 @@ function loadtheme() {
         metaThemeColor.setAttribute("content", rootBackgroundColor);
     }
 }
-
-
 
 function dowizard() {
     console.log(document.getElementById('userinput').value);
@@ -469,7 +465,6 @@ function dopostwizard() {
     autoresize();
 }
 
-
 function loadhome() {
     page = "home";
     var pageContainer = document.getElementById("main");
@@ -514,6 +509,7 @@ function loadstgs() {
     navContainer.innerHTML = `
     <div class='navigation'>
     <div class='nav-top'>
+    <input type='button' class='navigation-button button' id='submit' value='General' onclick='loadgeneral()'>
     <input type='button' class='navigation-button button' id='submit' value='Appearance' onclick='loadappearance()'>
     <input type='button' class='navigation-button button' id='submit' value='Plugins' onclick='loadplugins()'>
     </div>
@@ -521,7 +517,33 @@ function loadstgs() {
     </div>
     `;
 
-    loadappearance();
+    loadgeneral();
+}
+
+function loadgeneral() {
+    var pageContainer = document.getElementById("main");
+    var settingsContent = `
+        <div class="settings">
+            <h1>General</h1>
+            <div class="msgs"></div>
+            <label>
+            Disable swear filter
+            <input type="checkbox" id="swearfilter">
+            </label>
+            `;
+
+            pageContainer.innerHTML = settingsContent;
+
+            var swftcheckbox = document.getElementById("swearfilter");
+        
+            swftcheckbox.addEventListener("change", function () {
+                localStorage.setItem('settings', JSON.stringify({ swearfilter: swftcheckbox.checked }));
+            });
+        
+            var storedsettings = JSON.parse(localStorage.getItem('settings')) || {};
+            var swearfiltersetting = storedsettings.swearfilter || false;
+        
+            swftcheckbox.checked = swearfiltersetting;
 }
 
 async function loadplugins() {
@@ -619,8 +641,6 @@ function customplugin() {
     }
 }
 
-  
-  
 function loadappearance() {
     var pageContainer = document.getElementById("main");
     var settingsContent = `
@@ -732,6 +752,19 @@ function changetheme(theme, button) {
     const themeButtons = document.querySelectorAll('.theme-button');
     themeButtons.forEach((btn) => btn.classList.remove('selected'));
     button.classList.add('selected');
+}
+
+function settingsstuff() {
+    const storedsettings = localStorage.getItem('settings');
+    if (!storedsettings) {
+        const defaultSettings = {
+            swearfilter: false,
+        };
+        localStorage.setItem('settings', JSON.stringify(defaultSettings));
+        return defaultSettings;
+    }
+
+    return JSON.parse(storedsettings);
 }
   
 
