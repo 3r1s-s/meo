@@ -168,15 +168,12 @@ function loadpost(p) {
     var match = replyregex.exec(content);
     if (match) {
         var replyid = match[3];
-        console.log(document.getElementById(replyid));
-        console.log(replyid);
-        console.log(postContainer);
         var pageContainer = document.getElementById("msgs");
         if (pageContainer.firstChild) {
-            console.log("fake2");
+//fake 2
             pageContainer.insertBefore(postContainer, pageContainer.firstChild);
         } else {
-            console.log("fake");
+// fake
             pageContainer.appendChild(postContainer);
         }
 
