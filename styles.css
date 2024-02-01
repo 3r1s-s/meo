@@ -132,6 +132,13 @@ bridge {
     /*border: 1px solid var(--accent-color);*/
 }
 
+.reply {
+    margin: 5px;
+    border: 1px solid var(--hov-accent-color);
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
 .login {
     display: flex;
     flex-direction: column;

@@ -1,5 +1,4 @@
-const devel = false
-var killme = false;
+var end = false;
 var page = "login";
 var sidediv = document.querySelectorAll(".side");
     sidediv.forEach(function(sidediv) {
@@ -75,11 +74,7 @@ function main() {
             if (loggedin == true && page == "home") {
                 loadpost(sentdata.val);
             }
-        } else if (sentdata.val.post_origin == "livechat") {
-            if (loggedin == true && page == "home" && devel) {
-                loadpost(sentdata.val);
-            }
-        } else if (killme) {
+        } else if (end) {
             return 0;
         } else if (sentdata.val.mode == "update_post") {
             console.log("Got update post for " + sentdata.val.payload._id);
@@ -128,15 +123,15 @@ function loadpost(p) {
         var parts = rcon.split(': ');
         var user = parts[0];
         var content = parts.slice(1).join(': ');
-        var rawsplit = rcon.split(": ");
     } else {
         var storedsettings = settingsstuff();
         var swearfilterenabled = storedsettings.swearfilter;
-        
         var content = swearfilterenabled && p.unfiltered_p ? p.unfiltered_p : p.p;
+        
+
         var user = p.u;
     }
-
+    
     var postContainer = document.createElement("div");
     postContainer.id = p._id;
     postContainer.classList.add("post");
@@ -169,6 +164,29 @@ function loadpost(p) {
 
     postContainer.appendChild(postContent);
 
+    var replyregex = /@(\w+)\s+"([^"]*)"\s+\(([^)]+)\)/g;
+    var match = replyregex.exec(content);
+    if (match) {
+        var replyid = match[3];
+        console.log(document.getElementById(replyid));
+        console.log(replyid);
+        console.log(postContainer);
+        var pageContainer = document.getElementById("msgs");
+        if (pageContainer.firstChild) {
+            console.log("fake2");
+            pageContainer.insertBefore(postContainer, pageContainer.firstChild);
+        } else {
+            console.log("fake");
+            pageContainer.appendChild(postContainer);
+        }
+
+        loadreply(replyid).then(replycontainer => {
+            postContainer.insertBefore(replycontainer, postContainer.lastChild);
+        });
+    
+        content = content.replace(match[0], '').trim();
+    }
+
     var postContentText = document.createElement("p");
     
     blist = ["", " ", "# ", "## ", "### ", "#### ", "##### ", "###### ", "\n"];
@@ -176,38 +194,38 @@ function loadpost(p) {
         var asplc = content;
         
         
-        var escapedInput = asplc
+        var escapedinput = asplc
         .replace(/&/g, '&amp;')
         .replace(/</g, '&lt;')
         .replace(/>/g, '&gt;')
         .replace(/"/g, '&quot;')
         .replace(/'/g, '&#39;');
     
-    var textContent = escapedInput
-        .replace(/\*\*\*\*(.*?[^\*])\*\*\*\*/g, '$1')
-        .replace(/\*\*(.*?[^\*])\*\*/g, '<strong>$1</strong>')
-        .replace(/\*(.*?[^\*])\*/g, '<em>$1</em>')
-        .replace(/```([\s\S]*?)```/g, '<code>$1</code>')
-        .replace(/``([^`]+)``/g, '<code>$1</code>')
-        .replace(/^# (.*?$)/gm, '<h1>$1</h1>')
-        .replace(/^## (.*?$)/gm, '<h2>$1</h2>')
-        .replace(/^### (.*?$)/gm, '<h3>$1</h3>')
-        .replace(/^&gt; (.*?$)/gm, '<blockquote>$1</blockquote>')
-        .replace(/~~([\s\S]*?)~~/g, '<del>$1</del>')
-        .replace(/(?:https?|ftp):\/\/[^\s(){}[\]]+/g, function (url) {
-            return `<a href="${url.replace(/<\/?blockquote>/g, '')}" target="_blank">${url}</a>`;
-        })
-        .replace(/&lt;:(\w+):(\d+)&gt;/g, '<img src="https://cdn.discordapp.com/emojis/$2.webp?size=96&quality=lossless" alt="$1" width="16px" class="emoji">')
-        .replace(/&lt;a:(\w+):(\d+)&gt;/g, '<img src="https://cdn.discordapp.com/emojis/$2.gif?size=96&quality=lossless" alt="$1" width="16px" class="emoji">')
-        .replace(/\n/g, '<br>');
+        var textContent = escapedinput
+            .replace(/\*\*\*\*(.*?[^\*])\*\*\*\*/g, '$1')
+            .replace(/\*\*(.*?[^\*])\*\*/g, '<strong>$1</strong>')
+            .replace(/\*(.*?[^\*])\*/g, '<em>$1</em>')
+            .replace(/```([\s\S]*?)```/g, '<code>$1</code>')
+            .replace(/``([^`]+)``/g, '<code>$1</code>')
+            .replace(/^# (.*?$)/gm, '<h1>$1</h1>')
+            .replace(/^## (.*?$)/gm, '<h2>$1</h2>')
+            .replace(/^### (.*?$)/gm, '<h3>$1</h3>')
+            .replace(/^&gt; (.*?$)/gm, '<blockquote>$1</blockquote>')
+            .replace(/~~([\s\S]*?)~~/g, '<del>$1</del>')
+            .replace(/(?:https?|ftp):\/\/[^\s(){}[\]]+/g, function (url) {
+                return `<a href="${url.replace(/<\/?blockquote>/g, '')}" target="_blank">${url}</a>`;
+            })
+            .replace(/&lt;:(\w+):(\d+)&gt;/g, '<img src="https://cdn.discordapp.com/emojis/$2.webp?size=96&quality=lossless" alt="$1" width="16px" class="emoji">')
+            .replace(/&lt;a:(\w+):(\d+)&gt;/g, '<img src="https://cdn.discordapp.com/emojis/$2.gif?size=96&quality=lossless" alt="$1" width="16px" class="emoji">')
+            .replace(/\n/g, '<br>');
+        
+        var isEmoji = /^[\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{1F700}-\u{1F77F}\u{1F780}-\u{1F7FF}\u{1F800}-\u{1F8FF}\u{1F900}-\u{1F9FF}\u{1FA00}-\u{1FA6F}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]+$/u.test(content);
+        
+        if (isEmoji) {
+            postContentText.classList.add("big");
+        }
     
-    var isEmoji = /^[\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{1F700}-\u{1F77F}\u{1F780}-\u{1F7FF}\u{1F800}-\u{1F8FF}\u{1F900}-\u{1F9FF}\u{1FA00}-\u{1FA6F}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]+$/u.test(content);
-    
-    if (isEmoji) {
-        postContentText.classList.add("big");
-    }
-    
-    postContentText.innerHTML = textContent;
+        postContentText.innerHTML = textContent;
 
         postContentText.querySelectorAll('p a').forEach(link => {
             const url = link.getAttribute('href');
@@ -219,8 +237,6 @@ function loadpost(p) {
                 link.innerHTML = '<svg class="icon_ecf39b icon__13ad2" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"><path fill="currentColor" d="M10.57 4.01a6.97 6.97 0 0 1 9.86 0l.54.55a6.99 6.99 0 0 1 0 9.88l-7.26 7.27a1 1 0 0 1-1.42-1.42l7.27-7.26a4.99 4.99 0 0 0 0-7.06L19 5.43a4.97 4.97 0 0 0-7.02 0l-8.02 8.02a3.24 3.24 0 1 0 4.58 4.58l6.24-6.24a1.12 1.12 0 0 0-1.58-1.58l-3.5 3.5a1 1 0 0 1-1.42-1.42l3.5-3.5a3.12 3.12 0 1 1 4.42 4.42l-6.24 6.24a5.24 5.24 0 0 1-7.42-7.42l8.02-8.02Z" class=""></path></svg><span> attachments</span>';
             }
         });
-        
-        
 
         postContainer.appendChild(postContentText);
 
@@ -350,7 +366,6 @@ function loadpost(p) {
         }
     }
 
-
     var pageContainer = document.getElementById("msgs");
     if (pageContainer.firstChild) {
         pageContainer.insertBefore(postContainer, pageContainer.firstChild);
@@ -359,17 +374,28 @@ function loadpost(p) {
     }
 }
 
+async function loadreply(replyid) {
+    try {
+        const replyresp = await fetch(`https://api.meower.org/posts?id=${replyid}`);
+        const replydata = await replyresp.json();
 
-function gotoapi() {
-    var postId = event.target.closest('.post').id;
-    window.open(`https://api.meower.org/posts?id=${postId}`, '_blank');
+        const replycontainer = document.createElement("div");
+        replycontainer.classList.add("reply");
+        replycontainer.innerHTML = `<p style='font-weight:bold;margin: 10px 0 10px 0;'>${replydata.u}: </p><p>${replydata.p}</p>`;
+
+        return replycontainer;
+    } catch (error) {
+        console.error("Error fetching reply:", error);
+        return document.createElement("p");
+    }
 }
+
 
 function reply(event) {
     var postContainer = event.target.closest('.post');
     if (postContainer) {
         var username = postContainer.querySelector('#username').innerText;
-
+        
         var postId = postContainer.id;
         document.getElementById('msg').value = `@${username} "" (${postId})\n`;
         document.getElementById('msg').focus();
@@ -379,18 +405,23 @@ function reply(event) {
 
 function loadtheme() {
     const theme = localStorage.getItem("theme");
-
+    
     if (theme) {
         document.documentElement.classList.add(theme + "-theme");
     }
-
+    
     const rootStyles = window.getComputedStyle(document.documentElement);
     const rootBackgroundColor = rootStyles.getPropertyValue('--background-color');
-
+    
     const metaThemeColor = document.querySelector("meta[name=theme-color]");
     if (metaThemeColor) {
         metaThemeColor.setAttribute("content", rootBackgroundColor);
     }
+}
+
+function gotoapi() {
+    var postId = event.target.closest('.post').id;
+    window.open(`https://api.meower.org/posts?id=${postId}`, '_blank');
 }
 
 function dowizard() {
@@ -437,26 +468,13 @@ function dopostwizard() {
 
     console.log("USER POSTED: " + message);
 
-    if (devel) {
-        var data = {
-            cmd: "direct",
-            val: {
-                cmd: "post_chat",
-                val: {
-                    chatid: "livechat",
-                    "p": message
-                }
-            }
-        };
-    } else {
-        var data = {
-            cmd: "direct",
-            val: {
-                cmd: "post_home",
-                val: message
-            }
-        };
-    }
+    var data = {
+        cmd: "direct",
+        val: {
+            cmd: "post_home",
+            val: message
+        }
+    };
 
     webSocket.send(JSON.stringify(data));
     console.log("OUT: " + JSON.stringify(data));
@@ -468,19 +486,19 @@ function dopostwizard() {
 function loadhome() {
     page = "home";
     var pageContainer = document.getElementById("main");
-    pageContainer.innerHTML = `<div class='info'><h1>Home</h1><p id='info'></p></div><div class='message-container'><textarea type='text' oninput="autoresize()" class='message-input text' id='msg' rows='1' autocomplete='false' placeholder='What&apos;s on your mind?'></textarea><button class='message-send button' id='submit' value='Post!' onclick='dopostwizard()'><svg aria-hidden='true' role='img' class='sendIcon__461ff' width='16' height='16' viewBox='0 0 16 16'><path d='M8.2738 8.49222L1.99997 9.09877L0.349029 14.3788C0.250591 14.691 0.347154 15.0322 0.595581 15.246C0.843069 15.4597 1.19464 15.5047 1.48903 15.3613L15.2384 8.7032C15.5075 8.57195 15.6781 8.29914 15.6781 8.00007C15.6781 7.70101 15.5074 7.4282 15.2384 7.29694L1.49839 0.634063C1.20401 0.490625 0.852453 0.535625 0.604941 0.749376C0.356493 0.963128 0.259941 1.30344 0.358389 1.61563L2.00932 6.89563L8.27093 7.50312C8.52405 7.52843 8.71718 7.74125 8.71718 7.99531C8.71718 8.24938 8.52406 8.46218 8.27093 8.4875L8.2738 8.49222Z' fill='currentColor'></path></svg></button></div><div id='msgs' class='posts'></div>`;
+    pageContainer.innerHTML = `<div class='info'><h1>Home</h1><p id='info'></p></div><div class='message-container'><textarea type='text' oninput="autoresize()" class='message-input text' id='msg' rows='1' autocomplete='false' placeholder='What&apos;s on your mind?'></textarea><button class='message-send button' id='submit' value='Post!' onclick='dopostwizard()'><svg role='img' width='16' height='16' viewBox='0 0 16 16'><path d='M8.2738 8.49222L1.99997 9.09877L0.349029 14.3788C0.250591 14.691 0.347154 15.0322 0.595581 15.246C0.843069 15.4597 1.19464 15.5047 1.48903 15.3613L15.2384 8.7032C15.5075 8.57195 15.6781 8.29914 15.6781 8.00007C15.6781 7.70101 15.5074 7.4282 15.2384 7.29694L1.49839 0.634063C1.20401 0.490625 0.852453 0.535625 0.604941 0.749376C0.356493 0.963128 0.259941 1.30344 0.358389 1.61563L2.00932 6.89563L8.27093 7.50312C8.52405 7.52843 8.71718 7.74125 8.71718 7.99531C8.71718 8.24938 8.52406 8.46218 8.27093 8.4875L8.2738 8.49222Z' fill='currentColor'></path></svg></button></div><div id='msgs' class='posts'></div>`;
     var pageContainer = document.getElementById("nav");
     pageContainer.innerHTML = "<div class='navigation'><input type='button' class='navigation-button button' id='submit' value='Settings' onclick='loadstgs()'><input type='button' class='navigation-button button' id='submit' value='Logout' onclick='logout(false)'></div>";
     document.getElementById("info").innerText = lul + " users online (" + sul + ")";
     const xhttp = new XMLHttpRequest();
     xhttp.open("GET", "https://api.meower.org/home?autoget");
-    xhttp.onload = () => {
+    xhttp.onload = async () => {
         var c = JSON.parse(xhttp.response);
         var i = 24;
         while (i != 0) {
             i -= 1;
             console.log("Loading post: " + i.toString());
-            loadpost(c["autoget"][i]);
+            await loadpost(c["autoget"][i]);
         }
     };
     xhttp.send();
@@ -490,15 +508,72 @@ function loadhome() {
   });
 }
 
+function loadchat(chatId) {
+    page = "chat";
+
+    const xhttp = new XMLHttpRequest();
+    const chaturl = `https://api.meower.org/chats/${chatId}`;
+    const posturl = `https://api.meower.org/posts/${chatId}?autoget`;
+
+    xhttp.open("GET", chaturl);
+    xhttp.setRequestHeader("token", localStorage.getItem('token'));
+    xhttp.onload = () => {
+        const data = JSON.parse(xhttp.response);
+        const nickname = data.nickname;
+
+        const mainContainer = document.getElementById("main");
+        mainContainer.innerHTML = `
+            <div class='info'>
+                <h1>${nickname}</h1>
+                <p id='info'></p>
+            </div>
+            <div class='message-container'>
+                <textarea type='text' oninput="autoresize()" class='message-input text' id='msg' rows='1' autocomplete='false' placeholder='What&apos;s on your mind?'></textarea>
+                <button class='message-send button' id='submit' value='Post!' onclick='dopostwizard()'>
+                <svg aria-hidden='true' role='img' class='sendIcon__461ff' width='16' height='16' viewBox='0 0 16 16'><path d='M8.2738 8.49222L1.99997 9.09877L0.349029 14.3788C0.250591 14.691 0.347154 15.0322 0.595581 15.246C0.843069 15.4597 1.19464 15.5047 1.48903 15.3613L15.2384 8.7032C15.5075 8.57195 15.6781 8.29914 15.6781 8.00007C15.6781 7.70101 15.5074 7.4282 15.2384 7.29694L1.49839 0.634063C1.20401 0.490625 0.852453 0.535625 0.604941 0.749376C0.356493 0.963128 0.259941 1.30344 0.358389 1.61563L2.00932 6.89563L8.27093 7.50312C8.52405 7.52843 8.71718 7.74125 8.71718 7.99531C8.71718 8.24938 8.52406 8.46218 8.27093 8.4875L8.2738 8.49222Z' fill='currentColor'></path></svg>
+                </button>
+            </div>
+            <div id='msgs' class='posts'></div>
+        `;
+
+        const navContainer = document.getElementById("nav");
+        navContainer.innerHTML = `
+            <div class='navigation'>
+                <input type='button' class='navigation-button button' id='submit' value='Settings' onclick='loadstgs()'>
+                <input type='button' class='navigation-button button' id='submit' value='Logout' onclick='logout(false)'>
+            </div>
+        `;
+
+        const sidedivs = document.querySelectorAll(".side");
+        sidedivs.forEach(sidediv => sidediv.classList.remove("hidden"));
+
+        const xhttpPosts = new XMLHttpRequest();
+        xhttpPosts.open("GET", posturl);
+        xhttpPosts.setRequestHeader("token", localStorage.getItem('token'));
+        xhttpPosts.onload = () => {
+            const postsData = JSON.parse(xhttpPosts.response);
+            const postsarray = postsData.autoget || [];
+
+            postsarray.reverse();
+
+            postsarray.forEach(postId => {
+                loadpost(postId);
+            });
+        };
+        xhttpPosts.send();
+    };
+    xhttp.send();
+}
+
 function logout(iskl) {
     if (iskl != true) {
         localStorage.clear();
         webSocket.close();
     }
-    killme = true;
+    end = true;
     document.getElementById("msgs").innerHTML = "";
     document.getElementById("nav").innerHTML = "";
-    killme = false;
+    end = false;
     main();
 }
 
