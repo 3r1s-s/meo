@@ -1,15 +1,20 @@
 [
-    {
-      "name": "Meo Glass",
-      "creator": "JoshAtticus",
-      "description": "Glass theme for Meo",
-      "script": "plugins/glass.js"
-    },
-    {
-      "name": "Unexpected End",
-      "creator": "Bloctans",
-      "description": "unexpected end of JSON input",
-      "script": "plugins/unexpectedend.js"
-    }
-  ]
-  
+  {
+    "name": "Meo Glass",
+    "creator": "JoshAtticus",
+    "description": "Glass theme for Meo",
+    "script": "plugins/glass.js"
+  },
+  {
+    "name": "Unexpected End",
+    "creator": "Bloctans",
+    "description": "unexpected end of JSON input",
+    "script": "plugins/unexpectedend.js"
+  },
+  {
+    "name": "WorseMeower",
+    "creator": "mybearworld",
+    "description": "Worsen your posts significantly",
+    "script": "plugins/worsemeower.js"
+  }
+]
