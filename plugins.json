@@ -22,5 +22,11 @@
     "creator": "Bloctans",
     "description": "Worsen your theme significantly",
     "script": "plugins/worsetheme.js"
+  },
+  {
+    "name": "Meower Turn",
+    "creator": "JoshAtticus",
+    "description": "Make Meower turn on keypress",
+    "script": "https://update.greasyfork.org/scripts/486561/Meower%20Turn.user.js"
   }
 ]
