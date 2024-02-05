@@ -50,7 +50,11 @@ function main() {
             console.log("OUT: " + JSON.stringify(data));
 
             var pageContainer = document.getElementById("main");
-            pageContainer.innerHTML = "<div class='settings'><div class='login'><h1>meo</h1><input type='text' id='userinput' placeholder='Username' class='login-input text'><input type='password' id='passinput' placeholder='Password' class='login-input text'><input type='button' id='submit' value='Log in' class='login-input button' onclick='dowizard()'><input type='button' id='submit' value='Sign up' class='login-input button' onclick='doswizard()'><small>This client was made by eri :></small><small>Thanks for some of the code melt!</small><div id='msgs'></div></div><div class='footer'><img width='25px' src='images/meo96.png'></div></div>";
+            pageContainer.innerHTML = `<div class='settings'><div class='login'><h1>meo</h1>
+            <input type='text' id='userinput' placeholder='Username' class='login-input text'><input type='password' id='passinput' placeholder='Password' class='login-input text'>
+            <input type='button' id='submit' value='Log in' class='login-input button' onclick='dowizard()'><input type='button' id='submit' value='Sign up' class='login-input button' onclick='doswizard()'>
+            <small>This client was made by eri :></small><div id='msgs'></div></div><div class='footer'><img width='25px' src='images/meo96.png'>
+            </div></div>`;
             if (localStorage.getItem("token") != undefined && localStorage.getItem("uname") != undefined) {
                 document.getElementById("userinput").value = localStorage.getItem("uname");
                 document.getElementById("passinput").value = localStorage.getItem("token");
@@ -64,14 +68,13 @@ function main() {
                 localStorage.setItem("token", sentdata.val.payload.token);
             }
 
-
             document.getElementById("msgs").innerHTML = "";
             loadhome();
             console.log("Logged in!");
         } else if (sentdata.val == "E:110 | ID conflict") {
             alert("ID conflict. You probably logged in on another client. Refresh the page and log back in to continue.");
-        } else if (sentdata.val.post_origin == "home") {
-            if (loggedin == true && page == "home") {
+        } else if (sentdata.val.post_origin == page) {
+            if (loggedin == true) {
                 loadpost(sentdata.val);
             }
         } else if (end) {
@@ -138,7 +141,11 @@ function loadpost(p) {
 
     var buttonContainer = document.createElement("div");
     buttonContainer.classList.add("buttonContainer");
-    buttonContainer.innerHTML = "<div class='toolbarContainer'><div class='toolButton' onclick='gotoapi()'><svg viewBox='0 0 20 20' fill='currentColor' aria-hidden='true' width='18' height='18'><path d='M12.9297 3.25007C12.7343 3.05261 12.4154 3.05226 12.2196 3.24928L11.5746 3.89824C11.3811 4.09297 11.3808 4.40733 11.5739 4.60245L16.5685 9.64824C16.7614 9.84309 16.7614 10.1569 16.5685 10.3517L11.5739 15.3975C11.3808 15.5927 11.3811 15.907 11.5746 16.1017L12.2196 16.7507C12.4154 16.9477 12.7343 16.9474 12.9297 16.7499L19.2604 10.3517C19.4532 10.1568 19.4532 9.84314 19.2604 9.64832L12.9297 3.25007Z'></path><path d='M8.42616 4.60245C8.6193 4.40733 8.61898 4.09297 8.42545 3.89824L7.78047 3.24928C7.58466 3.05226 7.26578 3.05261 7.07041 3.25007L0.739669 9.64832C0.5469 9.84314 0.546901 10.1568 0.739669 10.3517L7.07041 16.7499C7.26578 16.9474 7.58465 16.9477 7.78047 16.7507L8.42545 16.1017C8.61898 15.907 8.6193 15.5927 8.42616 15.3975L3.43155 10.3517C3.23869 10.1569 3.23869 9.84309 3.43155 9.64824L8.42616 4.60245Z'></path></svg></div><div class='toolButton' onclick='reply(event)'><svg class='icon_d1ac81' width='24' height='24' viewBox='0 0 24 24'><path d='M10 8.26667V4L3 11.4667L10 18.9333V14.56C15 14.56 18.5 16.2667 21 20C20 14.6667 17 9.33333 10 8.26667Z' fill='currentColor'></path></svg></div></div>";
+    buttonContainer.innerHTML = `
+    <div class='toolbarContainer'><div class='toolButton' onclick='gotoapi()'>
+    <svg viewBox='0 0 20 20' fill='currentColor' aria-hidden='true' width='18' height='18'><path d='M12.9297 3.25007C12.7343 3.05261 12.4154 3.05226 12.2196 3.24928L11.5746 3.89824C11.3811 4.09297 11.3808 4.40733 11.5739 4.60245L16.5685 9.64824C16.7614 9.84309 16.7614 10.1569 16.5685 10.3517L11.5739 15.3975C11.3808 15.5927 11.3811 15.907 11.5746 16.1017L12.2196 16.7507C12.4154 16.9477 12.7343 16.9474 12.9297 16.7499L19.2604 10.3517C19.4532 10.1568 19.4532 9.84314 19.2604 9.64832L12.9297 3.25007Z'></path><path d='M8.42616 4.60245C8.6193 4.40733 8.61898 4.09297 8.42545 3.89824L7.78047 3.24928C7.58466 3.05226 7.26578 3.05261 7.07041 3.25007L0.739669 9.64832C0.5469 9.84314 0.546901 10.1568 0.739669 10.3517L7.07041 16.7499C7.26578 16.9474 7.58465 16.9477 7.78047 16.7507L8.42545 16.1017C8.61898 15.907 8.6193 15.5927 8.42616 15.3975L3.43155 10.3517C3.23869 10.1569 3.23869 9.84309 3.43155 9.64824L8.42616 4.60245Z'></path></svg></div><div class='toolButton' onclick='reply(event)'><svg class='icon_d1ac81' width='24' height='24' viewBox='0 0 24 24'><path d='M10 8.26667V4L3 11.4667L10 18.9333V14.56C15 14.56 18.5 16.2667 21 20C20 14.6667 17 9.33333 10 8.26667Z' fill='currentColor'></path></svg>
+    </div>
+    </div>`;
     postContainer.appendChild(buttonContainer);
 
     var postDate = document.createElement("i");
@@ -229,7 +236,7 @@ function loadpost(p) {
             const fileExtension = url.split('.').pop().toLowerCase();
             const fileDomain = url.includes('tenor.com/view');
         
-            if ((['png', 'jpg', 'jpeg', 'gif', 'mp4', 'webm', 'mov', 'm4v'].includes(fileExtension)) || fileDomain) {
+            if ((['png', 'jpg', 'jpeg', 'webp', 'gif', 'mp4', 'webm', 'mov', 'm4v'].includes(fileExtension)) || fileDomain) {
                 link.classList.add('attachment');
                 link.innerHTML = '<svg class="icon_ecf39b icon__13ad2" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"><path fill="currentColor" d="M10.57 4.01a6.97 6.97 0 0 1 9.86 0l.54.55a6.99 6.99 0 0 1 0 9.88l-7.26 7.27a1 1 0 0 1-1.42-1.42l7.27-7.26a4.99 4.99 0 0 0 0-7.06L19 5.43a4.97 4.97 0 0 0-7.02 0l-8.02 8.02a3.24 3.24 0 1 0 4.58 4.58l6.24-6.24a1.12 1.12 0 0 0-1.58-1.58l-3.5 3.5a1 1 0 0 1-1.42-1.42l3.5-3.5a3.12 3.12 0 1 1 4.42 4.42l-6.24 6.24a5.24 5.24 0 0 1-7.42-7.42l8.02-8.02Z" class=""></path></svg><span> attachments</span>';
             }
@@ -247,10 +254,10 @@ function loadpost(p) {
 
               
 
-                if (['png', 'jpg', 'jpeg', 'gif'].includes(fileExtension)) {
+                if (['png', 'jpg', 'jpeg', 'webp', 'gif'].includes(fileExtension)) {
                     var imgElement = document.createElement("img");
                     imgElement.setAttribute("src", baseURL);
-                    imgElement.setAttribute("style", "max-width: 300px; width: 100%;");
+                    imgElement.setAttribute("style", "max-width: 300px; max-height: 300px");
                     imgElement.classList.add("embed");
 
                     var imgLink = document.createElement("a");
@@ -322,37 +329,6 @@ function loadpost(p) {
                         scriptTag.setAttribute('src', 'embed.js');
                         postContainer.appendChild(scriptTag);
                     }
-                } else if (link.includes('turbowarp.org') || link.includes('scratch.mit.edu') || link.includes('gnaw.pages.dev')) {
-                    var projectId;
-                
-                    if (link.includes('turbowarp.org')) {
-                        projectId = link.split('/').pop();
-                    } else if (link.includes('scratch.mit.edu')) {
-                        var scratchRegex = /projects\/(\d+)/;
-                        var scratchMatch = link.match(scratchRegex);
-                        projectId = scratchMatch ? scratchMatch[1] : null;
-                    } else if (link.includes('gnaw.pages.dev')) {
-                        var gnawRegex = /project=(\d+)$/;
-                        var gnawMatch = link.match(gnawRegex);
-                        projectId = gnawMatch ? gnawMatch[1] : null;
-                    }
-                
-                    console.log('Link:', link);
-                    console.log('projectId:', projectId);
-                
-                    if (projectId) {
-                        var embeddedElement = document.createElement('iframe');
-                        embeddedElement.src = 'https://turbowarp.org/' + projectId + '/embed/';
-                        embeddedElement.setAttribute('style', 'width: 100%; max-width: 380px;');
-                        embeddedElement.setAttribute('height', '320px');
-                        embeddedElement.setAttribute('frameborder', '0');
-                
-                        embeddedElement.classList.add('embed');
-                
-                        postContainer.appendChild(embeddedElement);
-                    } else {
-                        console.log('projectId is falsy.');
-                    }
                 }
                 
 
@@ -392,9 +368,16 @@ function reply(event) {
     var postContainer = event.target.closest('.post');
     if (postContainer) {
         var username = postContainer.querySelector('#username').innerText;
+
+        var postcont = postContainer.querySelector('p').innerText
+        .replace(/\n/g, ' ')
+        .replace(/@\w+/g, '')
+        .split(' ')
+        .slice(0, 6)
+        .join(' ');
         
         var postId = postContainer.id;
-        document.getElementById('msg').value = `@${username} "" (${postId})\n`;
+        document.getElementById('msg').value = `@${username} "${postcont}..." (${postId})\n`;
         document.getElementById('msg').focus();
         autoresize();
     }
@@ -463,16 +446,28 @@ function dopostwizard() {
         return;
     }
 
-    console.log("USER POSTED: " + message);
+    console.log("USER POSTED: " + message + "in: " + page);
 
-    var data = {
-        cmd: "direct",
-        val: {
-            cmd: "post_home",
-            val: message
+    if (page=="home") {
+        var data = {
+            cmd: "direct",
+            val: {
+                cmd: "post_home",
+                val: message
+            }
+        }
+    } else {
+        var data = {
+            cmd: "direct",
+            val: {
+                cmd: "post_chat",
+                val: {
+                    chatid: page,
+                    p: message
+                }
+            }
         }
     };
-
     webSocket.send(JSON.stringify(data));
     console.log("OUT: " + JSON.stringify(data));
 
@@ -485,8 +480,65 @@ function loadhome() {
     var pageContainer = document.getElementById("main");
     pageContainer.innerHTML = `<div class='info'><h1>Home</h1><p id='info'></p></div><div class='message-container'><textarea type='text' oninput="autoresize()" class='message-input text' id='msg' rows='1' autocomplete='false' placeholder='What&apos;s on your mind?'></textarea><button class='message-send button' id='submit' value='Post!' onclick='dopostwizard()'><svg role='img' width='16' height='16' viewBox='0 0 16 16'><path d='M8.2738 8.49222L1.99997 9.09877L0.349029 14.3788C0.250591 14.691 0.347154 15.0322 0.595581 15.246C0.843069 15.4597 1.19464 15.5047 1.48903 15.3613L15.2384 8.7032C15.5075 8.57195 15.6781 8.29914 15.6781 8.00007C15.6781 7.70101 15.5074 7.4282 15.2384 7.29694L1.49839 0.634063C1.20401 0.490625 0.852453 0.535625 0.604941 0.749376C0.356493 0.963128 0.259941 1.30344 0.358389 1.61563L2.00932 6.89563L8.27093 7.50312C8.52405 7.52843 8.71718 7.74125 8.71718 7.99531C8.71718 8.24938 8.52406 8.46218 8.27093 8.4875L8.2738 8.49222Z' fill='currentColor'></path></svg></button></div><div id='msgs' class='posts'></div>`;
     var pageContainer = document.getElementById("nav");
-    pageContainer.innerHTML = "<div class='navigation'><input type='button' class='navigation-button button' id='submit' value='Settings' onclick='loadstgs()'><input type='button' class='navigation-button button' id='submit' value='Logout' onclick='logout(false)'></div>";
+    pageContainer.innerHTML = `
+    <div class='navigation'>
+    <div class='nav-top'>
+    <button class='trans' id='submit' value='Home' onclick='loadhome()'>
+        <svg width="32" height="32" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+            <g>
+                <path fill="currentColor" d="M468.42 20.5746L332.997 65.8367C310.218 58.8105 284.517 55.049 255.499 55.6094C226.484 55.049 200.78 58.8105 178.004 65.8367L42.5803 20.5746C18.9102 16.3251 -1.81518 36.2937 2.5967 59.1025L38.7636 200.894C18.861 248.282 12.1849 296.099 12.1849 325.027C12.1849 399.343 44.6613 492 255.499 492C466.339 492 498.815 399.343 498.815 325.027C498.815 296.099 492.139 248.282 472.237 200.894L508.404 59.1025C512.814 36.2937 492.09 16.3251 468.42 20.5746Z"/>
+            </g>
+        </svg>
+    </button>
+    </div>
+    <input type='button' class='navigation-button button' id='submit' value='Profile' onclick='alert("not finished!");'>
+    <input type='button' class='navigation-button button' id='submit' value='Explore' onclick='alert("not finished!");'>
+    <input type='button' class='navigation-button button' id='submit' value='Inbox' onclick='loadinbox()'>
+    <input type='button' class='navigation-button button' id='submit' value='Settings' onclick='loadstgs()'>
+    <input type='button' class='navigation-button button' id='submit' value='Logout' onclick='logout(false)'>
+    </div>
+    `;
     document.getElementById("info").innerText = lul + " users online (" + sul + ")";
+    
+    const char = new XMLHttpRequest();
+    char.open("GET", "https://api.meower.org/chats?autoget");
+    char.setRequestHeader("token", localStorage.getItem('token'));
+    char.onload = async () => {
+        var response = JSON.parse(char.response);
+        console.log(char.response);
+    
+        const groupsdiv = document.getElementById("groups");
+        const gcdiv = document.createElement("div");
+        gcdiv.className = "gcs";
+
+        groupsdiv.innerHTML = `<h1 class="groupheader">Groups</h1>`;
+
+        const homebutton = document.createElement("input");
+        homebutton.type = "button";
+        homebutton.className = "navigation-button button";
+        homebutton.value = "Home";
+        homebutton.onclick = function() {
+            loadhome();
+        };
+        gcdiv.appendChild(homebutton);
+    
+        response.autoget.forEach(chat => {
+            const r = document.createElement("input");
+            r.id = `submit`;
+            r.type = `button`;
+            r.className = `navigation-button button`;
+            r.onclick = function() {
+                loadchat(chat._id);
+            };
+            r.value = chat.nickname || `DM with ${chat.members.find(v => v !== localStorage.getItem("uname"))}`;
+    
+            gcdiv.appendChild(r);
+        });
+    
+        groupsdiv.appendChild(gcdiv);
+    };
+    char.send();
+    
     const xhttp = new XMLHttpRequest();
     xhttp.open("GET", "https://api.meower.org/home?autoget");
     xhttp.onload = async () => {
@@ -506,7 +558,7 @@ function loadhome() {
 }
 
 function loadchat(chatId) {
-    page = "chat";
+    page = chatId;
 
     const xhttp = new XMLHttpRequest();
     const chaturl = `https://api.meower.org/chats/${chatId}`;
@@ -517,11 +569,10 @@ function loadchat(chatId) {
     xhttp.onload = () => {
         const data = JSON.parse(xhttp.response);
         const nickname = data.nickname;
-
         const mainContainer = document.getElementById("main");
         mainContainer.innerHTML = `
             <div class='info'>
-                <h1>${nickname}</h1>
+                <h1 id='nickname'></h1>
                 <p id='info'></p>
             </div>
             <div class='message-container'>
@@ -532,20 +583,54 @@ function loadchat(chatId) {
             </div>
             <div id='msgs' class='posts'></div>
         `;
-
-        const navContainer = document.getElementById("nav");
-        navContainer.innerHTML = `
-            <div class='navigation'>
-                <input type='button' class='navigation-button button' id='submit' value='Settings' onclick='loadstgs()'>
-                <input type='button' class='navigation-button button' id='submit' value='Logout' onclick='logout(false)'>
-            </div>
-        `;
+        const nicknameElement = document.getElementById('nickname');
+        nicknameElement.textContent = nickname;
 
         const sidedivs = document.querySelectorAll(".side");
         sidedivs.forEach(sidediv => sidediv.classList.remove("hidden"));
 
         const xhttpPosts = new XMLHttpRequest();
         xhttpPosts.open("GET", posturl);
+        xhttpPosts.setRequestHeader("token", localStorage.getItem('token'));
+        xhttpPosts.onload = () => {
+            const postsData = JSON.parse(xhttpPosts.response);
+            const postsarray = postsData.autoget || [];
+
+            postsarray.reverse();
+
+            postsarray.forEach(postId => {
+                loadpost(postId);
+            });
+        };
+        xhttpPosts.send();
+    };
+    xhttp.send();
+}
+
+function loadinbox() {
+    page = "inbox"
+    const inboxUrl = 'https://api.meower.org/inbox?autoget=1';
+
+    const xhttp = new XMLHttpRequest();
+    xhttp.open("GET", inboxUrl);
+    xhttp.setRequestHeader("token", localStorage.getItem('token'));
+    xhttp.onload = () => {
+        const mainContainer = document.getElementById("main");
+        mainContainer.innerHTML = `
+            <div class='info'>
+                <h1>Inbox</h1>
+                <p id='info'>Notifications are displayed here</p>
+            </div>
+            <div class='message-container'>
+            </div>
+            <div id='msgs' class='posts'></div>
+        `;
+
+        const sidedivs = document.querySelectorAll(".side");
+        sidedivs.forEach(sidediv => sidediv.classList.remove("hidden"));
+
+        const xhttpPosts = new XMLHttpRequest();
+        xhttpPosts.open("GET", inboxUrl);
         xhttpPosts.setRequestHeader("token", localStorage.getItem('token'));
         xhttpPosts.onload = () => {
             const postsData = JSON.parse(xhttpPosts.response);
@@ -570,6 +655,7 @@ function logout(iskl) {
     end = true;
     document.getElementById("msgs").innerHTML = "";
     document.getElementById("nav").innerHTML = "";
+    document.getElementById("groups").innerHTML = "";
     end = false;
     main();
 }
@@ -577,8 +663,10 @@ function logout(iskl) {
 function loadstgs() {
     page = "settings";
     document.getElementById("msgs").innerHTML = "";
-    var navContainer = document.getElementById("nav");
-    navContainer.innerHTML = `
+    var gcsc = document.getElementById("groups");
+    gcsc.innerHTML = ""
+    var navc = document.getElementById("nav");
+    navc.innerHTML = `
     <div class='navigation'>
     <div class='nav-top'>
     <input type='button' class='navigation-button button' id='submit' value='General' onclick='loadgeneral()'>
@@ -598,10 +686,12 @@ function loadgeneral() {
         <div class="settings">
             <h1>General</h1>
             <div class="msgs"></div>
+            <div class='post'>
             <label>
             Disable swear filter
             <input type="checkbox" id="swearfilter">
             </label>
+            </div>
             `;
 
             pageContainer.innerHTML = settingsContent;
@@ -680,7 +770,7 @@ function loadpluginscript(scriptUrl) {
 
 async function fetchplugins() {
     try {
-        const response = await fetch('https://raw.githubusercontent.com/3r1s-s/meo/main/plugins.json');
+        const response = await fetch('https://meo-32r.pages.dev/plugins.json');
         const pluginsdata = await response.json();
         return pluginsdata;
     } catch (error) {
@@ -744,10 +834,15 @@ function loadappearance() {
         </p>
         </div>
         <div class="theme-buttons">
-            <button onclick='changetheme(\"light\", this)' class='theme-button light-button'>Light</button>
-            <button onclick='changetheme(\"cosmic\", this)' class='theme-button cosmic-button'>Cosmic Latte</button>
-            <button onclick='changetheme(\"dark\", this)' class='theme-button dark-button'>Dark</button>
-            <button onclick='changetheme(\"blurple\", this)' class='theme-button blurple-button'>Blurple</button>
+            <div class="theme-buttons-inner">
+                <button onclick='changetheme(\"light\", this)' class='theme-button light-button'>Light</button>
+                <button onclick='changetheme(\"dark\", this)' class='theme-button dark-button'>Dark</button>
+            </div>
+            <div class="theme-buttons-inner">
+                <button onclick='changetheme(\"cosmic\", this)' class='theme-button cosmic-button'>Cosmic Latte</button>
+                <button onclick='changetheme(\"blurple\", this)' class='theme-button blurple-button'>Blurple</button>
+                <button onclick='changetheme(\"oled\", this)' class='theme-button oled-button'>OLED</button>
+            </div>
         </div>
     <br>
     <h2 style="display:none;">Icons</h2>

@@ -29,13 +29,29 @@ button {
     font-weight: 400;
 }
 
+.trans {
+    background-color: transparent;
+    margin: 0;
+    padding: 10px;
+    border-radius: 50px;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.trans:hover {
+    background-color: var(--hov-accent-color);
+}
+
 select {
     background-color: var(--accent-color);
     color: var(--color);
     border: none;
     border-radius: 5px;
     outline: none;
-    font-family: Roboto;
+    font-family: Whitney;
     font-weight: 400;
     padding: 1em;
 }
@@ -75,7 +91,7 @@ textarea {
     border: none;
     border-radius: 5px;
     outline: none;
-    font-family: Roboto;
+    font-family: Whitney;
     font-weight: 400;
     font-size: 0.813em;
     resize: none;
@@ -237,7 +253,7 @@ bridge {
 
 .side {
     flex: 0.5;
-    display: flex;  
+    display: flex;
     max-width: 300px;
     height: 100vh;
     position: sticky;
@@ -245,14 +261,39 @@ bridge {
     margin: 0 10px 0 10px;
 }
 
+#nav {
+  justify-content: right;
+}
+
+#groups {
+  justify-content: left;
+  flex-direction: column;
+}
+
 .navigation {
     display: flex;
     flex-direction: column;
     justify-content: end;
-    align-items: baseline;
     height: 100%;
-    width: 100%;
+    width: 70%;
+    padding-left: 15px;
+    margin-left: 10px;
+    margin-right: 10px;
 }
+
+.gcs {
+  display: flex;
+  flex-direction: column;
+  padding-right: 15px;
+  margin: 10px;
+  align-items: normal;
+  height: calc(100vh - 10px);
+  justify-content: flex-start;
+  overflow-y: scroll;
+  width: 70%;
+}
+
+/* make it align at the top */
 
 .navigation-button {
     /*border-radius: 100rem;*/
@@ -293,60 +334,6 @@ possible future styling
     text-decoration: none;
 }
 
-.theme-buttons {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-flow: wrap;
-}
-
-.theme-button {
-    width: 8em;
-    height: 8em;
-    border-radius: 100%;
-    margin: 5px;
-}
-
-.dark-button {
-    background: #1a1b1e;
-    color: #f5f8fb;
-    border: 1px solid var(--background-color);
-}
-
-.light-button {
-    background: #fff;
-    color: #383a41;
-    border: 1px solid var(--background-color);
-}
-
-.cosmic-button {
-    background: #fff8e7;
-    color: #413f38;
-    border: 1px solid var(--background-color);
-}
-
-.blurple-button {
-    background: #15141a;
-    color: #f5f8fb;
-    border: 1px solid var(--background-color);
-}
-
-.flamingo-button {
-    background: #0c0303;
-    color: #f5f8fb;
-    border: 1px solid var(--background-color);
-}
-
-.amoled-button {
-    background: #000;
-    color: #f5f8fb;
-    border: 1px solid var(--background-color);
-}
-
-.selected {
-    border: 3px solid var(--accent-color);
-}
-
 .icon {
   border-radius: 15px;
 }
@@ -376,6 +363,10 @@ possible future styling
     display: flex;
     flex-direction: column;
     margin-top: 10px;
+}
+
+.groupheader {
+    margin-left: 10px;
 }
 
 @media screen and (max-width: 480px) {
@@ -420,10 +411,18 @@ possible future styling
     }
     
     .navigation {
-        width: 50vw;
         margin-left: 10px;
         align-items: normal;
         height: calc(100vh - 50px);
+    }
+
+    .gcs {
+        margin-left: 10px;
+        margin-top: 10px;
+        align-items: normal;
+        height: calc(100vh - 60px);
+        justify-content: flex-start;
+        overflow: scroll;
     }
 
     .launch {
@@ -437,6 +436,10 @@ possible future styling
 
     .toolbarContainer {
         flex-direction: column;
+    }
+
+    .groupheader {
+        display: none;
     }
 }
 

@@ -1,3 +1,22 @@
+:root {
+    --background-color: #1a1b1e;
+    --color: #fefefe;
+    --accent-color: #3a3d43;
+    --hov-accent-color: #323439;
+    --hov-color: #4a4d56;
+    --link-color: #00abd2;
+    --attachment-background-color: #3c286b;
+    --attachment-color: #b190fe;
+    --attachment-background-color-hover: #b190fe;
+    --attachment-color-hover: #fefefe;
+    --button-color: #a5abb3;
+    --hov-button-color: #fefefe;
+    --blue: #00abd2;
+    --green: #32E875;
+    --red: #cc2936;
+    --magenta: #F04290;
+}
+
 .dark-theme {
     --background-color: #1a1b1e;
     --color: #fefefe;
@@ -30,6 +49,10 @@
     --attachment-color-hover: #fefefe;
     --button-color: #676d7a;
     --hov-button-color: #383a41;
+    --blue: #00abd2;
+    --green: #32E875;
+    --red: #cc2936;
+    --magenta: #F04290;
 }
 
 .blurple-theme {
@@ -45,6 +68,10 @@
     --attachment-color-hover: #fefefe;
     --button-color: #9792a9;
     --hov-button-color: #f6f5fb;
+    --blue: #00abd2;
+    --green: #32E875;
+    --red: #cc2936;
+    --magenta: #F04290;
 }
 
 .flamingo-theme {
@@ -60,21 +87,29 @@
     --attachment-color-hover: #fefefe;
     --button-color: #7a2c3f;
     --hov-button-color: #f6f5fb;
+    --blue: #00abd2;
+    --green: #32E875;
+    --red: #cc2936;
+    --magenta: #F04290;
 }
 
-.amoled-theme {
+.oled-theme {
     --background-color: #000;
-    --color: #f5f8fb;
+    --color: #fefefe;
     --accent-color: #000;
-    --hov-accent-color: #060607;
-    --hov-color: #0e0e11;
+    --hov-accent-color: #0d0e0f;
+    --hov-color: #0d0e0f;
     --link-color: #00abd2;
-    --attachment-background-color: #1b1e49;
-    --attachment-color: #a0a4d1;
-    --attachment-background-color-hover: #7236f9;
+    --attachment-background-color: #3c286b;
+    --attachment-color: #b190fe;
+    --attachment-background-color-hover: #b190fe;
     --attachment-color-hover: #fefefe;
-    --button-color: #f6f5fb;
+    --button-color: #31363c;
     --hov-button-color: #fefefe;
+    --blue: #00abd2;
+    --green: #32E875;
+    --red: #cc2936;
+    --magenta: #F04290;
 }
 
 
@@ -91,4 +126,65 @@
     --attachment-color-hover: #fefefe;
     --button-color: #8f8b7c;
     --hov-button-color: #413f38;
+    --blue: #00abd2;
+    --green: #32E875;
+    --red: #cc2936;
+    --magenta: #F04290;
+}
+
+
+
+/* Buttons (I know it's redundant*/
+.theme-buttons-inner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-flow: wrap;
+}
+
+.theme-button {
+    width: 8em;
+    height: 8em;
+    border-radius: 100%;
+    margin: 5px;
+}
+
+.dark-button {
+    background: #1a1b1e;
+    color: #f5f8fb;
+    border: 1px solid var(--background-color);
+}
+
+.light-button {
+    background: #fff;
+    color: #383a41;
+    border: 1px solid var(--background-color);
+}
+
+.cosmic-button {
+    background: #fff8e7;
+    color: #413f38;
+    border: 1px solid var(--background-color);
+}
+
+.blurple-button {
+    background: #15141a;
+    color: #f5f8fb;
+    border: 1px solid var(--background-color);
+}
+
+.flamingo-button {
+    background: #0c0303;
+    color: #f5f8fb;
+    border: 1px solid var(--background-color);
+}
+
+.oled-button {
+    background: #000;
+    color: #f5f8fb;
+    border: 1px solid var(--background-color);
+}
+
+.selected {
+    border: 3px solid var(--accent-color);
 }
