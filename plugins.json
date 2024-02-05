@@ -30,9 +30,9 @@
     "script": "https://update.greasyfork.org/scripts/486561/Meower%20Turn.user.js"
   },
   {
-    "name": "Realmeower",
-    "creator": "roblox888i235",
-    "description": "😺😺😺",
+    "name": "Real Meower",
+    "creator": "JoshAtticus",
+    "description": "Turns every text to cats.",
     "script": "plugins/realmeower.js"
-  },
+  }
 ]
