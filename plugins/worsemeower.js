@@ -1,4 +1,4 @@
-(() => {
+// (() => {
   const originalDoPostWizard = window.dopostwizard;
   window.dopostwizard = () => {
     const msg = document.querySelector("#msg");
