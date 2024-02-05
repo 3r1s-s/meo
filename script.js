@@ -29,7 +29,7 @@ function main() {
         console.log("INC: " + event.data);
 
         var sentdata = JSON.parse(event.data);
-        if (sentdata.val == "I:112 | Trusted Access enabled") {
+        if (sentdata.val == "TAEnabled") {
             var data = {
                 cmd: "direct",
                 val: {
