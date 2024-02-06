@@ -30,9 +30,9 @@
     "script": "https://update.greasyfork.org/scripts/486561/Meower%20Turn.user.js"
   },
   {
-    "name": "Real Meower",
+    "name": "Hell Meo",
     "creator": "Roblox888i",
-    "description": "Turns every text to cats.",
-    "script": "plugins/realmeower.js"
+    "description": "Turns your meo into living hell (WARNING: BAD!!!)",
+    "script": "plugins/hellmeo.js"
   }
 ]
