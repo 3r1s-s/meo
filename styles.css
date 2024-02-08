@@ -97,6 +97,7 @@ textarea {
     font-weight: 400;
     font-size: 0.813em;
     resize: none;
+    transition: var(--transition);
 }
 
 bridge {
