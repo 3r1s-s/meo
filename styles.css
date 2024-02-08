@@ -17,6 +17,7 @@ input {
     outline: none;
     font-family: Roboto;
     font-weight: 400;
+    transition: var(--transition);
 }
 
 button {
@@ -27,6 +28,7 @@ button {
     outline: none;
     font-family: Roboto;
     font-weight: 400;
+    transition: var(--transition);
 }
 
 .trans {

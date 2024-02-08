@@ -15,6 +15,7 @@
     --green: #32E875;
     --red: #cc2936;
     --magenta: #F04290;
+    --transition: all 0.05s ease;
 }
 
 .dark-theme {
