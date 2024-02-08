@@ -1,7 +1,8 @@
 html {
     background-color: var(--background-color);
     color: var(--color);
-    font-family: Whitney;
+    --font: Whitney;
+    font-family: var(--font);
     transition: background-color 0.25s ease-in-out;
 }
 
@@ -15,7 +16,7 @@ input {
     border: none;
     border-radius: 5px;
     outline: none;
-    font-family: Roboto;
+    font-family: var(--font);
     font-weight: 400;
     transition: var(--transition);
 }
@@ -26,7 +27,7 @@ button {
     border: none;
     border-radius: 5px;
     outline: none;
-    font-family: Roboto;
+    font-family: var(--font);
     font-weight: 400;
     transition: var(--transition);
 }
@@ -53,7 +54,7 @@ select {
     border: none;
     border-radius: 5px;
     outline: none;
-    font-family: Whitney;
+    font-family: var(--font);
     font-weight: 400;
     padding: 1em;
 }
@@ -93,7 +94,7 @@ textarea {
     border: none;
     border-radius: 5px;
     outline: none;
-    font-family: Whitney;
+    font-family: var(--font);
     font-weight: 400;
     font-size: 0.813em;
     resize: none;
