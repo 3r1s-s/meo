@@ -65,7 +65,7 @@ function getPostIdFromUrl() {
         var match = replyregex.exec(content);
         if (match) {
             var replyid = match[3];
-            var pageContainer = document.getElementById("msgs");
+            var pageContainer = document.getElementById("postcont");
             if (pageContainer.firstChild) {
                 pageContainer.insertBefore(postcont, pageContainer.firstChild);
             } else {
@@ -244,6 +244,22 @@ function getPostIdFromUrl() {
             console.error('Error loading post:', error);
         }
     }
+
+    async function loadreply(replyid) {
+    try {
+        const replyresp = await fetch(`https://api.meower.org/posts?id=${replyid}`);
+        const replydata = await replyresp.json();
+
+        const replycontainer = document.createElement("div");
+        replycontainer.classList.add("reply");
+        replycontainer.innerHTML = `<p style='font-weight:bold;margin: 10px 0 10px 0;'>${replydata.u}</p><p>${replydata.p}</p>`;
+
+        return replycontainer;
+    } catch (error) {
+        console.error("Error fetching reply:", error);
+        return document.createElement("p");
+    }
+}
 
     window.onload = loadPostData;
 </script>
