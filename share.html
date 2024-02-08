@@ -31,7 +31,14 @@ function getPostIdFromUrl() {
     
     async function loadPost(p) {
         var content = p.p;
+        if (p.u == "Discord") {
+        var rcon = p.p;
+        var parts = rcon.split(': ');
+        var user = parts[0];
+        var content = parts.slice(1).join(': ');
+    } else {
         var user = p.u;
+    }
 
         var postcont = document.createElement("div");
         postcont.id = p._id;
