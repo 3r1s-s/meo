@@ -12,12 +12,6 @@
     "script": "plugins/unexpectedend.js"
   },
   {
-    "name": "WorseMeower",
-    "creator": "mybearworld",
-    "description": "Worsen your posts significantly",
-    "script": "plugins/worsemeower.js"
-  },
-  {
     "name": "WorseMeower Theme",
     "creator": "Bloctans",
     "description": "Worsen your theme significantly",
@@ -31,7 +25,7 @@
   },
   {
     "name": "Hell Meo",
-    "creator": "Roblox888i",
+    "creator": "Roblox888i235",
     "description": "Turns your meo into living hell (WARNING: BAD!!!)",
     "script": "plugins/hellmeo.js"
   }
