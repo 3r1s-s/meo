@@ -198,19 +198,7 @@ function getPostIdFromUrl() {
                             embeddedElement.setAttribute("loading", "lazy");
 
                             embeddedElement.classList.add("embed");
-                    } else if (link.includes('tidal.com')) {
-                        var tidalRegex = /browse\/track\/([a-zA-Z0-9]+)/;
-                        var match = link.match(tidalRegex);
-                        if (match) {
-                            var trackId = match[1];
-
-                            var embeddedElement = document.createElement("iframe");
-                            embeddedElement.setAttribute("src", `https://embed.tidal.com/tracks/${trackId}?disableAnalytics=true`);
-                            embeddedElement.setAttribute("style", "width:100%;height:96px");
-                            embeddedElement.setAttribute("frameborder", "0");
-                            embeddedElement.setAttribute("allowfullscreen", "allowfullscreen");
-        
-                            embeddedElement.classList.add("embed");
+                        }
                     } else if (link.includes('tenor.com')) {
                         var tenorRegex = /\d+$/;
                         var tenorMatch = link.match(tenorRegex);
