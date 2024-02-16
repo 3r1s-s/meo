@@ -28,5 +28,11 @@
     "creator": "Roblox888i235",
     "description": "Turns your meo into living hell (WARNING: BAD!!!)",
     "script": "plugins/hellmeo.js"
+  },
+  {
+    "name": "Meower turn",
+    "creator": "Bloctans",
+    "description": "meos your rotate",
+    "script": "plugins/rotate.js"
   }
 ]
