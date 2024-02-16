@@ -842,6 +842,7 @@ function loadappearance() {
             <div class="theme-buttons-inner">
                 <button onclick='changetheme(\"cosmic\", this)' class='theme-button cosmic-button'>Cosmic Latte</button>
                 <button onclick='changetheme(\"blurple\", this)' class='theme-button blurple-button'>Blurple</button>
+                <button onclick='changetheme(\"midnight\", this)' class='theme-button midnight-button'>Midnight</button>
                 <button onclick='changetheme(\"oled\", this)' class='theme-button oled-button'>OLED</button>
             </div>
         </div>
