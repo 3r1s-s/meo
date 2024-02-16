@@ -16,6 +16,10 @@
     --red: #cc2936;
     --magenta: #F04290;
     --transition: all 0.05s ease;
+    --border: none;
+    --border-radius: 5px;
+    --button-radius: 5px;
+    --margin: 10px;
 }
 
 .dark-theme {
@@ -131,6 +135,29 @@
     --green: #32E875;
     --red: #cc2936;
     --magenta: #F04290;
+}
+
+.x-theme {
+    --background-color: #08070d;
+    --color: #fefefe;
+    --accent-color: transparent;
+    --hov-accent-color: #0e0c17;
+    --hov-color: #0e0c17;
+    --link-color: #00abd2;
+    --attachment-background-color: #3c286b;
+    --attachment-color: #b190fe;
+    --attachment-background-color-hover: #b190fe;
+    --attachment-color-hover: #fefefe;
+    --button-color: #362f59;
+    --hov-button-color: #fefefe;
+    --blue: #00abd2;
+    --green: #32E875;
+    --red: #cc2936;
+    --magenta: #F04290;
+    --border: 2px solid #1f1b33;
+    --border-radius: 0;
+    --button-radius: 10em;
+    --margin: 0;
 }
 
 

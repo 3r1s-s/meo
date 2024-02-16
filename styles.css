@@ -14,7 +14,7 @@ input {
     background-color: var(--accent-color);
     color: var(--color);
     border: none;
-    border-radius: 5px;
+    border-radius: var(--button-radius);
     outline: none;
     font-family: var(--font);
     font-weight: 400;
@@ -25,7 +25,7 @@ button {
     background-color: var(--accent-color);
     color: var(--color);
     border: none;
-    border-radius: 5px;
+    border-radius: var(--button-radius);
     outline: none;
     font-family: var(--font);
     font-weight: 400;
@@ -52,7 +52,7 @@ select {
     background-color: var(--accent-color);
     color: var(--color);
     border: none;
-    border-radius: 5px;
+    border-radius: var(--border-radius);
     outline: none;
     font-family: var(--font);
     font-weight: 400;
@@ -92,7 +92,7 @@ textarea {
     background-color: var(--accent-color);
     color: var(--color);
     border: none;
-    border-radius: 5px;
+    border-radius: var(--button-radius);
     outline: none;
     font-family: var(--font);
     font-weight: 400;
@@ -130,11 +130,23 @@ bridge {
 }
 
 .embed {
-    border-radius: 5px;
+    border-radius: var(--border-radius);
 }
 
 .info {
-    margin-left: 5px;
+    padding-left: 5px;
+    border: var(--border);
+    border-top: none;
+}
+
+.header-top {
+    margin: 0;
+    padding-top: 0.67em;
+    padding-bottom: 0.67em;
+}
+
+#info {
+    margin-top: 0;
 }
 
 #page {
@@ -148,7 +160,7 @@ bridge {
 }
 
 .posts, .settings, .login {
-    margin: 5px;
+    margin: calc(var(--margin) / 2);
     /*border: 1px solid var(--accent-color);*/
 }
 
@@ -157,7 +169,7 @@ bridge {
     border: 1px solid var(--background-color);
     padding-left: 10px;
     padding-right: 10px;
-    border-radius: 5px;
+    border-radius: var(--border-radius);
 }
 
 .login {
@@ -179,6 +191,7 @@ bridge {
     top: 0;
     background-color: var(--background-color);
     z-index: 1;
+    border: var(--border);
 }
 
 .message-input {
@@ -195,11 +208,11 @@ bridge {
 
 .post {
     background-color: var(--accent-color);
-    border-radius: 5px;
+    border-radius: var(--border-radius);
     padding: 10px;
-    margin-bottom: 10px;
+    margin-bottom: var(--margin);
     word-wrap: anywhere;
-    /*border: 1px solid var(--accent-color);*/
+    border: var(--border);
 }
 
 .post:hover {
@@ -250,9 +263,11 @@ bridge {
 
 #main {
     flex: 1;
-    max-width: 800px;
+    max-width: 700px;
     overflow: none;
     height: auto;
+    border: var(--border);
+    border-top: none;
 }
 
 .side {

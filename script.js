@@ -209,8 +209,9 @@ function loadpost(p) {
             .replace(/\*\*\*\*(.*?[^\*])\*\*\*\*/g, '$1')
             .replace(/\*\*(.*?[^\*])\*\*/g, '<strong>$1</strong>')
             .replace(/\*(.*?[^\*])\*/g, '<em>$1</em>')
-            .replace(/```([\s\S]*?)```/g, '<code>$1</code>')
+            .replace(/```([\s\S]*?)```/g, '<div class="code"><code>$1</code></div>')
             .replace(/``([^`]+)``/g, '<code>$1</code>')
+            .replace(/`([^`]+)`/g, '<code>$1</code>')
             .replace(/^# (.*?$)/gm, '<h1>$1</h1>')
             .replace(/^## (.*?$)/gm, '<h2>$1</h2>')
             .replace(/^### (.*?$)/gm, '<h3>$1</h3>')
@@ -478,7 +479,7 @@ function dopostwizard() {
 function loadhome() {
     page = "home";
     var pageContainer = document.getElementById("main");
-    pageContainer.innerHTML = `<div class='info'><h1>Home</h1><p id='info'></p></div><div class='message-container'><textarea type='text' oninput="autoresize()" class='message-input text' id='msg' rows='1' autocomplete='false' placeholder='What&apos;s on your mind?'></textarea><button class='message-send button' id='submit' value='Post!' onclick='dopostwizard()'><svg role='img' width='16' height='16' viewBox='0 0 16 16'><path d='M8.2738 8.49222L1.99997 9.09877L0.349029 14.3788C0.250591 14.691 0.347154 15.0322 0.595581 15.246C0.843069 15.4597 1.19464 15.5047 1.48903 15.3613L15.2384 8.7032C15.5075 8.57195 15.6781 8.29914 15.6781 8.00007C15.6781 7.70101 15.5074 7.4282 15.2384 7.29694L1.49839 0.634063C1.20401 0.490625 0.852453 0.535625 0.604941 0.749376C0.356493 0.963128 0.259941 1.30344 0.358389 1.61563L2.00932 6.89563L8.27093 7.50312C8.52405 7.52843 8.71718 7.74125 8.71718 7.99531C8.71718 8.24938 8.52406 8.46218 8.27093 8.4875L8.2738 8.49222Z' fill='currentColor'></path></svg></button></div><div id='msgs' class='posts'></div>`;
+    pageContainer.innerHTML = `<div class='info'><h1 class='header-top'>Home</h1><p id='info'></p></div><div class='message-container'><textarea type='text' oninput="autoresize()" class='message-input text' id='msg' rows='1' autocomplete='false' placeholder='What&apos;s on your mind?'></textarea><button class='message-send button' id='submit' value='Post!' onclick='dopostwizard()'><svg role='img' width='16' height='16' viewBox='0 0 16 16'><path d='M8.2738 8.49222L1.99997 9.09877L0.349029 14.3788C0.250591 14.691 0.347154 15.0322 0.595581 15.246C0.843069 15.4597 1.19464 15.5047 1.48903 15.3613L15.2384 8.7032C15.5075 8.57195 15.6781 8.29914 15.6781 8.00007C15.6781 7.70101 15.5074 7.4282 15.2384 7.29694L1.49839 0.634063C1.20401 0.490625 0.852453 0.535625 0.604941 0.749376C0.356493 0.963128 0.259941 1.30344 0.358389 1.61563L2.00932 6.89563L8.27093 7.50312C8.52405 7.52843 8.71718 7.74125 8.71718 7.99531C8.71718 8.24938 8.52406 8.46218 8.27093 8.4875L8.2738 8.49222Z' fill='currentColor'></path></svg></button></div><div id='msgs' class='posts'></div>`;
     var pageContainer = document.getElementById("nav");
     pageContainer.innerHTML = `
     <div class='navigation'>
