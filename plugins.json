@@ -30,9 +30,9 @@
     "script": "plugins/hellmeo.js"
   },
   {
-    "name": "Meower turn",
+    "name": "Meower Rotate",
     "creator": "Bloctans",
-    "description": "meos your rotate",
+    "description": "Rotate your meo!!!!",
     "script": "plugins/rotate.js"
   }
 ]
