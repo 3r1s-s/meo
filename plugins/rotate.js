@@ -1,6 +1,6 @@
 var plugins = ""
 
-const start = async function() {
+var start = async function() {
     plugins = await window.fetchplugins()
 
     var turnsrc = ""
