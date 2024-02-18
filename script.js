@@ -771,7 +771,7 @@ function loadpluginscript(scriptUrl) {
 
 async function fetchplugins() {
     try {
-        const response = await fetch('https://meo-32r.pages.dev/plugins.json');
+        const response = await fetch('./plugins.json');
         const pluginsdata = await response.json();
         return pluginsdata;
     } catch (error) {
