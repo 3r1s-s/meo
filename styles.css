@@ -317,7 +317,8 @@ bridge {
 .navigation-button {
     /*border-radius: 100rem;*/
     margin-bottom: 10px;
-    padding: 1em 3em 1em 3em;
+    padding: 1em;
+    text-align: left;
 }
 /*
 .navigation {
