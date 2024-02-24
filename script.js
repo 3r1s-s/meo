@@ -350,7 +350,9 @@ function loadpost(p) {
 
 async function loadreply(replyid) {
     try {
-        const replyresp = await fetch(`https://api.meower.org/posts?id=${replyid}`);
+        const replyresp = await fetch(`https://api.meower.org/posts?id=${replyid}`, {
+            headers: {token: localStorage.getItem("token")}
+        });
         const replydata = await replyresp.json();
 
         const replycontainer = document.createElement("div");
@@ -449,28 +451,14 @@ function dopostwizard() {
 
     console.log("USER POSTED: " + message + "in: " + page);
 
-    if (page=="home") {
-        var data = {
-            cmd: "direct",
-            val: {
-                cmd: "post_home",
-                val: message
-            }
-        }
-    } else {
-        var data = {
-            cmd: "direct",
-            val: {
-                cmd: "post_chat",
-                val: {
-                    chatid: page,
-                    p: message
-                }
-            }
-        }
-    };
-    webSocket.send(JSON.stringify(data));
-    console.log("OUT: " + JSON.stringify(data));
+    fetch(`https://api.meower.org/${page === "home" ? "home" : `posts/${page}`}`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            token: localStorage.getItem("token")
+        },
+        body: JSON.stringify({content: message})
+    });
 
     document.getElementById('msg').value = "";
     autoresize();
@@ -771,7 +759,7 @@ function loadpluginscript(scriptUrl) {
 
 async function fetchplugins() {
     try {
-        const response = await fetch('https://meo-32r.pages.dev/plugins.json');
+        const response = await fetch('./plugins.json');
         const pluginsdata = await response.json();
         return pluginsdata;
     } catch (error) {
