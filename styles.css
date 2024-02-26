@@ -60,7 +60,11 @@ select {
 }
 
 h3 {
-    margin: 10px 0 10px 0;
+    margin: var(--text-margin) 0 10px 0;
+}
+
+p {
+    margin: var(--text-margin) 0 var(--text-margin) 0;
 }
 
 a {
@@ -209,7 +213,7 @@ bridge {
 .post {
     background-color: var(--accent-color);
     border-radius: var(--border-radius);
-    padding: 10px;
+    padding: var(--padding);
     margin-bottom: var(--margin);
     word-wrap: anywhere;
     border: var(--border);
@@ -245,9 +249,9 @@ bridge {
     color: var(--button-color);
   }
 
-  .toolButton:hover {
-      cursor: pointer;
-      color: var(--hov-button-color);
+.toolButton:hover {
+    cursor: pointer;
+    color: var(--hov-button-color);
 }
 
 .date {
@@ -301,23 +305,23 @@ bridge {
 }
 
 .gcs {
-  display: flex;
-  flex-direction: column;
-  padding-right: 15px;
-  margin: 10px;
-  align-items: normal;
-  height: calc(100vh - 10px);
-  justify-content: flex-start;
-  overflow-y: scroll;
-  width: 70%;
+    display: flex;
+    flex-direction: column;
+    padding-right: 15px;
+    margin: 10px;
+    align-items: normal;
+    height: calc(100vh - 10px);
+    justify-content: flex-start;
+    overflow-y: scroll;
+    width: 70%;
 }
 
 /* make it align at the top */
 
 .navigation-button {
     /*border-radius: 100rem;*/
-    margin-bottom: 10px;
-    padding: 1em;
+    margin-bottom: var(--button-margin);
+    padding: var(--button-padding);
     text-align: left;
 }
 /*

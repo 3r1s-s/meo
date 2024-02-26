@@ -20,6 +20,10 @@
     --border-radius: 5px;
     --button-radius: 5px;
     --margin: 10px;
+    --text-margin: 10px;
+    --padding: 10px;
+    --button-padding: 1em;
+    --button-margin: 10px;
 }
 
 .dark-theme {
@@ -158,6 +162,29 @@
     --border-radius: 0;
     --button-radius: 10em;
     --margin: 0;
+}
+
+.roarer-theme {
+    --background-color: #020617;
+    --color: #e2e8f0;
+    --accent-color: #1e293b;
+    --hov-accent-color: #1e293b;
+    --hov-color: #1e293b;
+    --link-color: #38bdf8;
+    --attachment-background-color: #1e293b;
+    --attachment-color: #38bdf8;
+    --attachment-background-color-hover: #1e293b;
+    --attachment-color-hover: #e2e8f0;
+    --button-color: #e2e8f0;
+    --hov-button-color: #e2e8f0;
+    --border: none;
+    --border-radius: 0.75rem;
+    --button-radius: 0.75rem;
+    --margin: 0.5rem;
+    --text-margin: 0px;
+    --padding: 0.5rem;
+    --button-padding: 0.5rem;
+    --button-margin: 0.5rem;
 }
 
 
