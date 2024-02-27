@@ -357,7 +357,7 @@ async function loadreply(replyid) {
 
         const replycontainer = document.createElement("div");
         replycontainer.classList.add("reply");
-        replycontainer.innerHTML = `<p style='font-weight:bold;margin: 10px 0 10px 0;'>${replydata.u}</p><p>${replydata.p}</p>`;
+        replycontainer.innerHTML = `<p style='font-weight:bold;margin: 10px 0 10px 0;'>${replydata.u}</p><p style='font-weight:bold;margin: 10px 0 10px 0;'>${replydata.p}</p>`;
 
         return replycontainer;
     } catch (error) {
