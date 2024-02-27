@@ -105,7 +105,7 @@
 .oled-theme {
     --background-color: #000;
     --color: #fefefe;
-    --accent-color: #000;
+    --accent-color: #060707;
     --hov-accent-color: #0d0e0f;
     --hov-color: #0d0e0f;
     --link-color: #00abd2;
@@ -142,6 +142,34 @@
 }
 
 .midnight-theme {
+    --background-color: #08070d;
+    --color: #fefefe;
+    --accent-color: #171427;
+    --hov-accent-color: #1f1b33;
+    --hov-color: #1f1b33;
+    --link-color: #00abd2;
+    --attachment-background-color: #3c286b;
+    --attachment-color: #b190fe;
+    --attachment-background-color-hover: #b190fe;
+    --attachment-color-hover: #fefefe;
+    --button-color: #74708c;
+    --hov-button-color: #fefefe;
+    --blue: #00abd2;
+    --green: #32E875;
+    --red: #cc2936;
+    --magenta: #F04290;
+    --transition: all 0.05s ease;
+    --border: none;
+    --border-radius: 5px;
+    --button-radius: 5px;
+    --margin: 10px;
+    --text-margin: 10px;
+    --padding: 10px;
+    --button-padding: 1em;
+    --button-margin: 10px;
+}
+
+.midnight-twitter-theme {
     --background-color: #08070d;
     --color: #fefefe;
     --accent-color: transparent;
@@ -243,6 +271,12 @@
 .midnight-button {
     background: #08070d;
     color: #f5f8fb;
+    border: 1px solid var(--background-color);
+}
+
+.roarer-button {
+    background: #020617;
+    color: #e2e8f0;
     border: 1px solid var(--background-color);
 }
 
