@@ -387,6 +387,7 @@ possible future styling
     display: flex;
     flex-direction: column;
     margin-top: 10px;
+    width: 70%;
 }
 
 .groupheader {

@@ -215,9 +215,18 @@
     --button-margin: 0.5rem;
 }
 
+.quake-pro-theme {
+    --border: none;
+    --border-radius: 5px;
+    --button-radius: 5px;
+    --margin: 0.5em;
+    --text-margin: 0.25em;
+    --padding: 0.25em;
+    --button-padding: 0.5em;
+    --button-margin: 0.5em;
+}
 
-
-/* Buttons (I know it's redundant*/
+/* Buttons (I know it's redundant)*/
 .theme-buttons-inner {
     display: flex;
     align-items: center;
