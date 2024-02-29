@@ -487,10 +487,15 @@ possible future styling
     .buttonContainer {
         display: block;
         float: right;
+        color: var(--color);
     }
 
     .toolbarContainer {
         flex-direction: column;
+    }
+
+    .toolButton {
+        color: var(--color);
     }
 
     .groupheader {

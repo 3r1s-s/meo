@@ -121,7 +121,7 @@ function main() {
 }
 
 function loadpost(p) {
-    if (p.u == "Discord") {
+    if (p.u == "Discord" || p.u == "SplashBridge") {
         var rcon = p.p;
         var parts = rcon.split(': ');
         var user = parts[0];
@@ -161,7 +161,7 @@ function loadpost(p) {
     var postContent = document.createElement("h3");
     postContent.innerHTML = "<span id='username'>" + user + "</span>";
 
-    if (p.u === "Discord") {
+    if (p.u == "Discord" || p.u == "SplashBridge") {
         var bridged = document.createElement("bridge");
         bridged.innerText = "Bridged";
         bridged.setAttribute("title", "This post has been bridged from another platform.");
