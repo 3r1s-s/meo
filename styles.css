@@ -358,6 +358,36 @@ possible future styling
     text-decoration: none;
 }
 
+.ext-link {
+    color: var(--attachment-color);
+    background-color: var(--attachment-background-color);
+    border-radius: 5px;
+    text-decoration: none;
+    padding: 1px 5px 1px 5px;
+    transition: all 0.05s ease;
+    display: inline-flex;
+}
+
+.ext-link:hover {
+    color: var(--attachment-color-hover);
+    background-color: var(--attachment-background-color-hover);
+    text-decoration: none;
+}
+
+.ext-link-wrapper {
+    display: inline-flex;
+    align-items: center;
+}
+
+.link-icon-wrapper {
+    display: inline-flex;
+    margin-right: 3px;
+}
+
+.ext-icon {
+    border-radius: 15px;
+}
+
 .icon {
   border-radius: 15px;
 }

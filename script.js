@@ -223,7 +223,9 @@ function loadpost(p) {
             .replace(/&lt;:(\w+):(\d+)&gt;/g, '<img src="https://cdn.discordapp.com/emojis/$2.webp?size=96&quality=lossless" alt="$1" width="16px" class="emoji">')
             .replace(/&lt;a:(\w+):(\d+)&gt;/g, '<img src="https://cdn.discordapp.com/emojis/$2.gif?size=96&quality=lossless" alt="$1" width="16px" class="emoji">')
             .replace(/\n/g, '<br>');
+            
         
+            
         var isEmoji = /^[\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{1F700}-\u{1F77F}\u{1F780}-\u{1F7FF}\u{1F800}-\u{1F8FF}\u{1F900}-\u{1F9FF}\u{1FA00}-\u{1FA6F}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]+$/u.test(content);
         
         if (isEmoji) {
@@ -236,12 +238,48 @@ function loadpost(p) {
             const url = link.getAttribute('href');
             const fileExtension = url.split('.').pop().toLowerCase();
             const fileDomain = url.includes('tenor.com/view');
-        
+            
             if ((['png', 'jpg', 'jpeg', 'webp', 'gif', 'mp4', 'webm', 'mov', 'm4v'].includes(fileExtension)) || fileDomain) {
                 link.classList.add('attachment');
                 link.innerHTML = '<svg class="icon_ecf39b icon__13ad2" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"><path fill="currentColor" d="M10.57 4.01a6.97 6.97 0 0 1 9.86 0l.54.55a6.99 6.99 0 0 1 0 9.88l-7.26 7.27a1 1 0 0 1-1.42-1.42l7.27-7.26a4.99 4.99 0 0 0 0-7.06L19 5.43a4.97 4.97 0 0 0-7.02 0l-8.02 8.02a3.24 3.24 0 1 0 4.58 4.58l6.24-6.24a1.12 1.12 0 0 0-1.58-1.58l-3.5 3.5a1 1 0 0 1-1.42-1.42l3.5-3.5a3.12 3.12 0 1 1 4.42 4.42l-6.24 6.24a5.24 5.24 0 0 1-7.42-7.42l8.02-8.02Z" class=""></path></svg><span> attachments</span>';
+            } else {
+                // find a better method to do this
+                const socregex = {
+                    'twitter': /twitter\.com\/@(\w+)/,
+                    'discord_user': /discord\.com\/users\/(\w+)/,
+                    'discord_channel': /discord\.com\/channels\/(\w+)/,
+                    'discord_server': /discord\.gg\/(\w+)/,
+                    'youtube': /youtube\.com\/@(\w+)/,
+                    'instagram': /instagram\.com\/(\w+)/,
+                    'facebook': /facebook\.com\/(\w+)/,
+                    'scratch': /scratch\.mit.edu\/users\/(\w+)/,
+                    'meower': /app.meower\.org\/users\/(\w+)/
+                };
+                
+                const socialmedicns = {
+                    'twitter': 'twitter_1x.png',
+                    'discord_user': 'discord_1x.png',
+                    'discord_channel': 'discord_1x.png',
+                    'discord_server': 'discord_1x.png',
+                    'youtube': 'youtube_1x.png',
+                    'instagram': 'instagram_1x.png',
+                    'facebook': 'facebook_1x.png',
+                    'scratch': 'scratch_1x.png',
+                    'meower': 'meo_1x.png'
+                };
+        
+                for (const [platform, regex] of Object.entries(socregex)) {
+                    const match = url.match(regex);
+                    if (match) {
+                        const username = match[1];
+                        link.classList.add('ext-link');
+                        const icon = socialmedicns[platform];
+                        link.innerHTML = `<span class="ext-link-wrapper"><span class="link-icon-wrapper"><img width="14px" class="ext-icon" src="images/links/${icon}"></span>${username}</span>`;
+                    }
+                }
             }
         });
+        
 
         postContainer.appendChild(postContentText);
 
