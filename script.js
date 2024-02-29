@@ -253,7 +253,8 @@ function loadpost(p) {
                     'instagram': /instagram\.com\/(\w+)/,
                     'facebook': /facebook\.com\/(\w+)/,
                     'scratch': /scratch\.mit.edu\/users\/(\w+)/,
-                    'meower': /app.meower\.org\/users\/(\w+)/
+                    'meower_user': /app.meower\.org\/users\/(\w+)/,
+                    'meower_share': /meo-32r\.pages\.dev\/share\?id=([\w-]+)/
                 };
                 
                 const socialmedicns = {
@@ -265,7 +266,8 @@ function loadpost(p) {
                     'instagram': 'instagram_1x.png',
                     'facebook': 'facebook_1x.png',
                     'scratch': 'scratch_1x.png',
-                    'meower': 'meo_1x.png'
+                    'meower_user': 'meo_1x.png',
+                    'meower_share': 'meo_1x.png'
                 };
         
                 for (const [platform, regex] of Object.entries(socregex)) {
@@ -868,7 +870,7 @@ function loadappearance() {
             <div class="theme-buttons-inner">
                 <button onclick='changetheme(\"cosmic\", this)' class='theme-button cosmic-button'>Cosmic Latte</button>
                 <button onclick='changetheme(\"blurple\", this)' class='theme-button blurple-button'>Blurple</button>
-                <button onclick='changetheme(\"midnight\", this)' class='theme-button midnight-button'>Midnight</button>
+                <button onclick='changetheme(\"bsky\", this)' class='theme-button bsky-button'>Midnight</button>
                 <button onclick='changetheme(\"oled\", this)' class='theme-button oled-button'>OLED</button>
                 <button onclick='changetheme(\"roarer\", this)' class='theme-button roarer-button'>Roarer</button>
             </div>

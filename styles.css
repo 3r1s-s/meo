@@ -106,7 +106,7 @@ textarea {
 }
 
 bridge {
-    background-color: #714cc8;
+    background-color: var(--primary);
     border-radius: 25px;
     font-size: 12px;
     margin-left: 5px;
@@ -481,7 +481,7 @@ possible future styling
     }
 
     .launch {
-        background: #b190fe;
+        background: var(--secondary);
     }
 
     .buttonContainer {

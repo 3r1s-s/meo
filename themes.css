@@ -1,4 +1,6 @@
 :root {
+    --primary: #714cc8;
+    --secondary: #b190fe;
     --background-color: #1a1b1e;
     --color: #fefefe;
     --accent-color: #3a3d43;
@@ -226,6 +228,26 @@
     --button-margin: 0.5em;
 }
 
+.bsky-theme {
+    --primary: #5677bd;
+    --background-color: #050812;
+    --color: #fefefe;
+    --accent-color: #0c121e;
+    --hov-accent-color: #162035;
+    --hov-color: #162035;
+    --link-color: #7b9adc;
+    --attachment-background-color: #273656;
+    --attachment-color: #7b9adc;
+    --attachment-background-color-hover: #5677bd;
+    --attachment-color-hover: #fefefe;
+    --button-color: #7b9adc;
+    --hov-button-color: #fefefe;
+    --blue: #00abd2;
+    --green: #32E875;
+    --red: #cc2936;
+    --magenta: #F04290;
+}
+
 /* Buttons (I know it's redundant)*/
 .theme-buttons-inner {
     display: flex;
@@ -285,6 +307,12 @@
 
 .roarer-button {
     background: #020617;
+    color: #e2e8f0;
+    border: 1px solid var(--background-color);
+}
+
+.bsky-button {
+    background: #050812;
     color: #e2e8f0;
     border: 1px solid var(--background-color);
 }
