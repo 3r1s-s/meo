@@ -387,6 +387,13 @@ function loadpost(p) {
     } else {
         pageContainer.appendChild(postContainer);
     }
+
+    postContainer.addEventListener('touchstart', function (event) {
+        var postId = p._id;
+        event.preventDefault();
+        openModal(postId);
+      });
+      
 }
 
 async function loadreply(replyid) {
@@ -1017,6 +1024,80 @@ function autoresize() {
     textarea.style.height = (((textarea.scrollHeight)) - 26) + 'px';
 }
 
+function openModal(postId) {
+    var mdlbck = document.querySelector('.modal-back');
+
+    if (mdlbck) {
+        mdlbck.style.display = 'flex';
+
+        var mdl = mdlbck.querySelector('.modal');
+        if (mdl) {
+            mdl.id = postId;
+        }
+    }
+    
+}
+
+function closemodal() {
+    var mdlbck = document.querySelector('.modal-back');
+
+    if (mdlbck) {
+        mdlbck.style.display = 'none';
+    }
+}
+
+document.addEventListener('click', function (event) {
+    var modalButton = event.target.closest('.modal-button');
+    var modal = event.target.closest('.modal');
+    var isInsideModal = modal && modal.contains(event.target);
+
+    if (modalButton && !isInsideModal) {
+        event.stopPropagation();
+    }
+});
+
+
+function mdlreply(event) {
+    var modalId = event.target.closest('.modal').id;
+    var postContainer = document.getElementById(modalId);
+
+    if (postContainer) {
+        var username = postContainer.querySelector('#username').innerText;
+        var postContent = postContainer.querySelector('p').innerText
+            .replace(/\n/g, ' ')
+            .replace(/@\w+/g, '')
+            .split(' ')
+            .slice(0, 6)
+            .join(' ');
+
+        var postId = postContainer.id;
+        document.getElementById('msg').value = `@${username} "${postContent}..." (${postId})\n`;
+        document.getElementById('msg').focus();
+        autoresize();
+    }
+    
+    closemodal();
+}
+
+function mdlpingusr(event) {
+    var modalId = event.target.closest('.modal').id;
+    var postContainer = document.getElementById(modalId);
+
+    if (postContainer) {
+        var username = postContainer.querySelector('#username').innerText;
+        document.getElementById('msg').value = `@${username} `;
+        document.getElementById('msg').focus();
+        autoresize();
+    }
+
+    closemodal();
+}
+
+function mdlshare(event) {
+    var postId = event.target.closest('.modal').id;
+    window.open(`https://meo-32r.pages.dev/share?id=${postId}`, '_blank');
+    closemodal();
+}
 
 
 main();

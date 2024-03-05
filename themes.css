@@ -13,6 +13,8 @@
     --attachment-color-hover: #fefefe;
     --button-color: #a5abb3;
     --hov-button-color: #fefefe;
+    --modal-color: #3a3d43;
+    --modal-button-color: #4a4d56;
     --blue: #00abd2;
     --green: #32E875;
     --red: #cc2936;
@@ -41,6 +43,8 @@
     --attachment-color-hover: #fefefe;
     --button-color: #a5abb3;
     --hov-button-color: #fefefe;
+    --modal-color: #3a3d43;
+    --modal-button-color: #4a4d56;
     --blue: #00abd2;
     --green: #32E875;
     --red: #cc2936;
@@ -60,6 +64,8 @@
     --attachment-color-hover: #fefefe;
     --button-color: #676d7a;
     --hov-button-color: #383a41;
+    --modal-color: #fefefe;
+    --modal-button-color: #dbe0e8;
     --blue: #00abd2;
     --green: #32E875;
     --red: #cc2936;
@@ -79,6 +85,8 @@
     --attachment-color-hover: #fefefe;
     --button-color: #9792a9;
     --hov-button-color: #f6f5fb;
+    --modal-color: #15141a;
+    --modal-button-color: #24222f;
     --blue: #00abd2;
     --green: #32E875;
     --red: #cc2936;
@@ -98,6 +106,8 @@
     --attachment-color-hover: #fefefe;
     --button-color: #7a2c3f;
     --hov-button-color: #f6f5fb;
+    --modal-color: #0c0303;
+    --modal-button-color: #200a0f;
     --blue: #00abd2;
     --green: #32E875;
     --red: #cc2936;
@@ -117,6 +127,8 @@
     --attachment-color-hover: #fefefe;
     --button-color: #31363c;
     --hov-button-color: #fefefe;
+    --modal-color: #000;
+    --modal-button-color: #060707;
     --blue: #00abd2;
     --green: #32E875;
     --red: #cc2936;
@@ -137,6 +149,8 @@
     --attachment-color-hover: #fefefe;
     --button-color: #8f8b7c;
     --hov-button-color: #413f38;
+    --modal-color: #fff8e7;
+    --modal-button-color: #f1ead9;
     --blue: #00abd2;
     --green: #32E875;
     --red: #cc2936;
@@ -156,6 +170,8 @@
     --attachment-color-hover: #fefefe;
     --button-color: #74708c;
     --hov-button-color: #fefefe;
+    --modal-color: #171427;
+    --modal-button-color: #1f1b33;
     --blue: #00abd2;
     --green: #32E875;
     --red: #cc2936;
@@ -207,6 +223,8 @@
     --attachment-color-hover: #e2e8f0;
     --button-color: #e2e8f0;
     --hov-button-color: #e2e8f0;
+    --modal-color: #020617;
+    --modal-button-color: #1e293b;
     --border: none;
     --border-radius: 0.75rem;
     --button-radius: 0.75rem;
@@ -242,6 +260,8 @@
     --attachment-color-hover: #fefefe;
     --button-color: #5677bd;
     --hov-button-color: #fefefe;
+    --modal-color: #0c121e;
+    --modal-button-color: #162035;
     --blue: #00abd2;
     --green: #32E875;
     --red: #cc2936;
