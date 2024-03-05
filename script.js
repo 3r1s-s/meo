@@ -387,13 +387,24 @@ function loadpost(p) {
     } else {
         pageContainer.appendChild(postContainer);
     }
+    
+    var totimer;
 
     postContainer.addEventListener('touchstart', function (event) {
         var postId = p._id;
         event.preventDefault();
-        openModal(postId);
-      });
-      
+    
+        totimer = setTimeout(function() {
+            openModal(postId);
+        }, 500);
+    });
+    
+    postContainer.addEventListener('touchend', function (event) {
+        clearTimeout(totimer);
+    });
+    
+    
+
 }
 
 async function loadreply(replyid) {
