@@ -238,6 +238,11 @@ bridge {
     flex-direction: row;
 }
 
+.mobileContainer {
+    display: none;
+    flex-direction: row;
+}
+
 .toolButton {
     padding: 2px;
     margin: 2px;
@@ -503,6 +508,11 @@ possible future styling
     .groupheader {
         display: none;
     }
+
+    .mobileContainer {
+        display: flex;
+        float: right;
+    }
 }
 
 .hidden {
@@ -530,8 +540,8 @@ possible future styling
     bottom: 0;
     width: 100%;
     padding: var(--padding);
-    padding-bottom: 25px;
-    height: calc(50% + 25px);
+    padding-bottom: 50px;
+    height: calc(50% + 50px);
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
     z-index: 1;
