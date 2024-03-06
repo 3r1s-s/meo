@@ -513,6 +513,14 @@ possible future styling
         display: flex;
         float: right;
     }
+    
+    .post:hover {
+        background-color: var(--accent-color);
+    }
+
+    bridge {
+        display: none;
+    }
 }
 
 .hidden {
