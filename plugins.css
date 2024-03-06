@@ -12,17 +12,18 @@
 }
 
 .customplugin {
-    margin: 5px;
     display: flex;
     flex-direction: column;
-}
-
-.cstpgtxt {
-    resize: both;
+    margin: 5px;
 }
 
 .cstpgbt {
     padding: 1em;
     margin-top: 5px;
     max-width: 100px;
+}
+
+.customcss {
+    display: flex;
+    flex-direction: column;
 }

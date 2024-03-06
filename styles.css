@@ -105,6 +105,10 @@ textarea {
     transition: var(--transition);
 }
 
+textarea:focus {
+    background-color: var(--hov-color);
+}
+
 bridge {
     background-color: var(--primary);
     border-radius: 25px;
@@ -123,14 +127,6 @@ bridge {
     display: flex;
     justify-content: center;
     align-items: center;
-}
-
-.text:focus {
-    background-color: var(--hov-color);
-}
-
-.button:hover, .button:focus {
-    background-color: var(--hov-color);
 }
 
 .embed {
@@ -163,9 +159,18 @@ bridge {
     margin-top: 200px;
 }
 
+
+.button:hover, .button:focus {
+    background-color: var(--hov-color);
+}
+
 .posts, .settings, .login {
     margin: calc(var(--margin) / 2);
     /*border: 1px solid var(--accent-color);*/
+}
+
+.settings {
+    margin-bottom: 10px;
 }
 
 .reply {
@@ -590,4 +595,13 @@ possible future styling
     display: flex;
     align-items: center;
     justify-content: right;
+}
+
+.desc {
+    font-size: 12px;
+}
+
+.editor {
+    padding: var(--padding);
+    min-height: 270px;
 }

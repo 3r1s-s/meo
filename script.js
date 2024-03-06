@@ -8,6 +8,7 @@ var lul = 0;
 var sul = "";
 
 loadsavedplugins();
+loadcstmcss();
 
 function replsh(rpl) {
     var trimmedString = rpl.length > 25 ?
@@ -108,13 +109,15 @@ function main() {
         
     };
     document.addEventListener("keydown", function(event) {    
-        if (event.key === "Enter" && !event.shiftKey) {
+        if (page !== "settings") {
+            if (event.key === "Enter" && !event.shiftKey) {
             event.preventDefault();
             dopostwizard();
             const textarea = document.getElementById('msg');
             textarea.style.height = 'auto';
         } else if (event.key === "Enter" && event.shiftKey) {
         }
+    }
     });
     
 
@@ -788,7 +791,7 @@ async function loadplugins() {
         settingsContent += `
             <div class='plugin'>
                 <h3>${plugin.name}</h3>
-                <i>Created by <a href='https://github.com/${plugin.creator}'>${plugin.creator}</a></i>
+                <i class='desc'>Created by <a href='https://github.com/${plugin.creator}'>${plugin.creator}</a></i>
                 <p class='desc'>${plugin.description}</p>
                 <label>
                     enable
@@ -803,7 +806,7 @@ async function loadplugins() {
             <h1>Custom Plugin</h1>
             <h3>Caution: can be very dangerous</h3>
             <div class='customplugin'>
-                <textarea class="cstpgtxt" id='customplugininput' placeholder="// you put stuff here"></textarea>
+                <textarea class="editor" id='customplugininput' placeholder="// you put stuff here"></textarea>
                 <input class='cstpgbt' type='button' value='Run' onclick="customplugin()">
             </div>
         </div>
@@ -832,7 +835,8 @@ function loadpluginscript(scriptUrl) {
 
 async function fetchplugins() {
     try {
-        const response = await fetch('./plugins.json');
+    //    const response = await fetch('./plugins.json');
+        const response = await fetch('https://meo-32r.pages.dev/plugins.json');
         const pluginsdata = await response.json();
         return pluginsdata;
     } catch (error) {
@@ -925,6 +929,10 @@ function loadappearance() {
         <button class="icon-button"><img class="icon" src="images/Flamingo.png" width="64px"></button>
         <button class="icon-button"><img class="icon" src="images/Blurple.png" width="64px"></button>
     </div>
+    <h2>Custom CSS</h2>
+    <div class='customcss'>
+        <textarea class="editor" id='customcss' placeholder="// you put stuff here"></textarea>
+    </div>
     `
 
     pageContainer.innerHTML = settingsContent;
@@ -941,6 +949,40 @@ function loadappearance() {
     if (storedIconIndex !== null) {
         changecon(parseInt(storedIconIndex, 10));
     }
+
+    const css = localStorage.getItem('customCSS');
+
+    const cstmcsstxt = document.getElementById('customcss');
+    cstmcsstxt.value = css || '';
+
+    cstmcsstxt.addEventListener('input', function () {
+        const newCustomCSS = cstmcsstxt.value;
+
+        let customstyle = document.getElementById('customstyle');
+        if (!customstyle) {
+            customstyle = document.createElement('style');
+            customstyle.id = 'customstyle';
+            document.head.appendChild(customstyle);
+        }
+
+        customstyle.textContent = newCustomCSS;
+
+        localStorage.setItem('customCSS', newCustomCSS);
+    });
+
+}
+
+function loadcstmcss() {
+    const css = localStorage.getItem('customCSS');
+
+    let customstyle = document.getElementById('customstyle');
+    if (!customstyle) {
+        customstyle = document.createElement('style');
+        customstyle.id = 'customstyle';
+        document.head.appendChild(customstyle);
+    }
+
+    customstyle.textContent = css || '';
 }
 
 function changecon(index) {
