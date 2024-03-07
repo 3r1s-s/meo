@@ -278,6 +278,10 @@ bridge {
 
 .pfp {
     padding: var(--padding);
+    align-items: center;
+    display: flex;
+    height: 90px;
+    box-sizing: border-box;
 }
 
 .date {
