@@ -7,6 +7,8 @@ var sidediv = document.querySelectorAll(".side");
 var lul = 0;
 var sul = "";
 
+const pfpCache = {};
+
 loadsavedplugins();
 loadcstmcss();
 
@@ -142,6 +144,12 @@ function loadpost(p) {
     postContainer.id = p._id;
     postContainer.classList.add("post");
 
+    var wrapperDiv = document.createElement("div");
+    wrapperDiv.classList.add("wrapper");
+
+    var pfpDiv = document.createElement("div");
+    pfpDiv.classList.add("pfp");
+    
     var buttonContainer = document.createElement("div");
     buttonContainer.classList.add("buttonContainer");
     buttonContainer.innerHTML = `
@@ -158,7 +166,7 @@ function loadpost(p) {
     </div>
     `;
     
-    postContainer.appendChild(buttonContainer);
+    wrapperDiv.appendChild(buttonContainer);
     
     var mobileButtonContainer = document.createElement("div");
     mobileButtonContainer.classList.add("mobileContainer");
@@ -170,46 +178,46 @@ function loadpost(p) {
     </div>
     `;
     
-    postContainer.appendChild(mobileButtonContainer);
+    wrapperDiv.appendChild(mobileButtonContainer);
 
-    var postDate = document.createElement("i");
-    postDate.classList.add("date");
+    var pstdte = document.createElement("i");
+    pstdte.classList.add("date");
     tsr = p.t.e;
     tsra = tsr * 1000;
     tsrb = Math.trunc(tsra);
     var ts = new Date();
     ts.setTime(tsrb);
     sts = ts.toLocaleString();
-    postDate.innerText = sts;
+    pstdte.innerText = sts;
 
-    var postContent = document.createElement("h3");
-    postContent.innerHTML = "<span id='username'>" + user + "</span>";
+    var pstinf = document.createElement("h3");
+    pstinf.innerHTML = "<span id='username'>" + user + "</span>";
 
     if (p.u == "Discord" || p.u == "SplashBridge") {
         var bridged = document.createElement("bridge");
         bridged.innerText = "Bridged";
         bridged.setAttribute("title", "This post has been bridged from another platform.");
-        postContent.appendChild(bridged);
+        pstinf.appendChild(bridged);
     }
-    postContent.appendChild(postDate);
+    pstinf.appendChild(pstdte);
 
-    postContainer.appendChild(postContent);
+    wrapperDiv.appendChild(pstinf);
 
     var replyregex = /@(\w+)\s+"([^"]*)"\s+\(([^)]+)\)/g;
     var match = replyregex.exec(content);
     if (match) {
         var replyid = match[3];
         var pageContainer = document.getElementById("msgs");
+    
         if (pageContainer.firstChild) {
-//fake 2
             pageContainer.insertBefore(postContainer, pageContainer.firstChild);
         } else {
-// fake
             pageContainer.appendChild(postContainer);
         }
-
+    
         loadreply(replyid).then(replycontainer => {
-            postContainer.insertBefore(replycontainer, postContainer.lastChild);
+            var pElement = wrapperDiv.getElementsByTagName("p")[0];
+            wrapperDiv.insertBefore(replycontainer, pElement);
         });
     
         content = content.replace(match[0], '').trim();
@@ -307,7 +315,7 @@ function loadpost(p) {
         });
         
 
-        postContainer.appendChild(postContentText);
+        wrapperDiv.appendChild(postContentText);
 
         var links = content.match(/(?:https?|ftp):\/\/[^\s(){}[\]]+/g);
         if (links) {
@@ -398,11 +406,23 @@ function loadpost(p) {
                 
 
                 if (embeddedElement) {
-                    postContainer.appendChild(embeddedElement);
+                    wrapperDiv.appendChild(embeddedElement);
                 }
             });
         }
     }
+
+    loadPfp(user)
+        .then(pfpElement => {
+            if (pfpElement) {
+                pfpDiv.appendChild(pfpElement);
+                //stackoverflow
+                pfpCache[user] = pfpElement.cloneNode(true);
+            }
+        });
+
+    postContainer.appendChild(pfpDiv);  
+    postContainer.appendChild(wrapperDiv);
 
     var pageContainer = document.getElementById("msgs");
     if (pageContainer.firstChild) {
@@ -410,7 +430,54 @@ function loadpost(p) {
     } else {
         pageContainer.appendChild(postContainer);
     }
+}
 
+function loadPfp(username) {
+    return new Promise((resolve, reject) => {
+        if (pfpCache[username]) {
+            resolve(pfpCache[username].cloneNode(true));
+        } else {
+            let pfpElement; //make pfp element EXIST
+
+            fetch(`https://api.meower.org/users/${username}`)
+                .then(userResp => userResp.json())
+                .then(userData => {
+
+                    if (userData.avatar) {
+                        const pfpurl = `https://uploads.meower.org/icons/${userData.avatar}`;
+
+                        pfpElement = document.createElement("img");
+                        pfpElement.setAttribute("src", pfpurl);
+                        pfpElement.setAttribute("alt", "User Avatar");
+                        pfpElement.classList.add("avatar");
+
+                        if (userData.avatar_color) {
+                            pfpElement.style.border = `3px solid #${userData.avatar_color}`;
+                        }
+                    } else if (userData.pfp_data) {
+                        const pfpurl = `images/avatars/icon_${userData.pfp_data - 1}.svg`;
+
+                        pfpElement = document.createElement("img");
+                        pfpElement.setAttribute("src", pfpurl);
+                        pfpElement.setAttribute("alt", "User Avatar");
+                        pfpElement.classList.add("avatar");
+                    } else {
+                        console.error("No avatar or pfp_data available for: ", username);
+                        resolve(null);
+                    }
+
+                    if (pfpElement) {
+                        pfpCache[username] = pfpElement.cloneNode(true);
+                    }
+
+                    resolve(pfpElement);
+                })
+                .catch(error => {
+                    console.error("Failed to fetch:", error);
+                    resolve(null);
+                });
+        }
+    });
 }
 
 async function loadreply(replyid) {
@@ -876,30 +943,28 @@ function loadappearance() {
         <h1>Appearance</h1>
         <div class="msgs"></div>
             <h2>Theme</h2>
-            <div id="ex" class="post">
-                <div class="buttonContainer">
-                    <div class="toolbarContainer">
-                        <div class="toolButton">
-                            <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" width="18" height="18">
-                                <path d="M12.9297 3.25007C12.7343 3.05261 12.4154 3.05226 12.2196 3.24928L11.5746 3.89824C11.3811 4.09297 11.3808 4.40733 11.5739 4.60245L16.5685 9.64824C16.7614 9.84309 16.7614 10.1569 16.5685 10.3517L11.5739 15.3975C11.3808 15.5927 11.3811 15.907 11.5746 16.1017L12.2196 16.7507C12.4154 16.9477 12.7343 16.9474 12.9297 16.7499L19.2604 10.3517C19.4532 10.1568 19.4532 9.84314 19.2604 9.64832L12.9297 3.25007Z"></path>
-                                <path d="M8.42616 4.60245C8.6193 4.40733 8.61898 4.09297 8.42545 3.89824L7.78047 3.24928C7.58466 3.05226 7.26578 3.05261 7.07041 3.25007L0.739669 9.64832C0.5469 9.84314 0.546901 10.1568 0.739669 10.3517L7.07041 16.7499C7.26578 16.9474 7.58465 16.9477 7.78047 16.7507L8.42545 16.1017C8.61898 15.907 8.6193 15.5927 8.42616 15.3975L3.43155 10.3517C3.23869 10.1569 3.23869 9.84309 3.43155 9.64824L8.42616 4.60245Z"></path>
-                            </svg>
-                        </div>
-                        <div class="toolButton">
-                        <svg class="icon_d1ac81" width="24" height="24" viewBox="0 0 24 24">
-                            <path d="M10 8.26667V4L3 11.4667L10 18.9333V14.56C15 14.56 18.5 16.2667 21 20C20 14.6667 17 9.33333 10 8.26667Z" fill="currentColor">
-                            </path>
-                        </svg>
-                    </div>
+
+            <div id="example" class="post"><div class="pfp"><img src="https://uploads.meower.org/icons/jmYaED6f9fKddy2mB5eGb2Nr" alt="User Avatar" class="avatar" style="border: 3px solid rgb(0, 0, 0);"></div><div class="wrapper"><div class="buttonContainer">
+            <div class="toolbarContainer">
+                <div class="toolButton">
+                    <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" width="18" height="18"><path d="M12.9297 3.25007C12.7343 3.05261 12.4154 3.05226 12.2196 3.24928L11.5746 3.89824C11.3811 4.09297 11.3808 4.40733 11.5739 4.60245L16.5685 9.64824C16.7614 9.84309 16.7614 10.1569 16.5685 10.3517L11.5739 15.3975C11.3808 15.5927 11.3811 15.907 11.5746 16.1017L12.2196 16.7507C12.4154 16.9477 12.7343 16.9474 12.9297 16.7499L19.2604 10.3517C19.4532 10.1568 19.4532 9.84314 19.2604 9.64832L12.9297 3.25007Z"></path><path d="M8.42616 4.60245C8.6193 4.40733 8.61898 4.09297 8.42545 3.89824L7.78047 3.24928C7.58466 3.05226 7.26578 3.05261 7.07041 3.25007L0.739669 9.64832C0.5469 9.84314 0.546901 10.1568 0.739669 10.3517L7.07041 16.7499C7.26578 16.9474 7.58465 16.9477 7.78047 16.7507L8.42545 16.1017C8.61898 15.907 8.6193 15.5927 8.42616 15.3975L3.43155 10.3517C3.23869 10.1569 3.23869 9.84309 3.43155 9.64824L8.42616 4.60245Z"></path></svg>
+                </div>
+                <div class="toolButton">
+                    <svg class="icon" height="24" width="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.486 2 2 6.486 2 12C2 17.515 6.486 22 12 22C14.039 22 15.993 21.398 17.652 20.259L16.521 18.611C15.195 19.519 13.633 20 12 20C7.589 20 4 16.411 4 12C4 7.589 7.589 4 12 4C16.411 4 20 7.589 20 12V12.782C20 14.17 19.402 15 18.4 15L18.398 15.018C18.338 15.005 18.273 15 18.209 15H18C17.437 15 16.6 14.182 16.6 13.631V12C16.6 9.464 14.537 7.4 12 7.4C9.463 7.4 7.4 9.463 7.4 12C7.4 14.537 9.463 16.6 12 16.6C13.234 16.6 14.35 16.106 15.177 15.313C15.826 16.269 16.93 17 18 17L18.002 16.981C18.064 16.994 18.129 17 18.195 17H18.4C20.552 17 22 15.306 22 12.782V12C22 6.486 17.514 2 12 2ZM12 14.599C10.566 14.599 9.4 13.433 9.4 11.999C9.4 10.565 10.566 9.399 12 9.399C13.434 9.399 14.6 10.565 14.6 11.999C14.6 13.433 13.434 14.599 12 14.599Z"></path></svg>
+                </div>
+                <div class="toolButton">
+                    <svg class="icon_d1ac81" width="24" height="24" viewBox="0 0 24 24"><path d="M10 8.26667V4L3 11.4667L10 18.9333V14.56C15 14.56 18.5 16.2667 21 20C20 14.6667 17 9.33333 10 8.26667Z" fill="currentColor"></path></svg>
                 </div>
             </div>
-        <h3>Username</h3>
-        <p>
-            This is example text 
-            <a href="https://example.com" target="_blank">https://example.com</a>
-        </p>
-        </div>
-        <div class="theme-buttons">
+            </div><div class="mobileContainer">
+            <div class="toolbarContainer">
+                <div class="toolButton mobileButton">
+                    <svg class="icon_d1ac81" aria-hidden="true" role="img" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M4 14a2 2 0 1 0 0-4 2 2 0 0 0 0 4Zm10-2a2 2 0 1 1-4 0 2 2 0 0 1 4 0Zm8 0a2 2 0 1 1-4 0 2 2 0 0 1 4 0Z" clip-rule="evenodd" class=""></path></svg>
+                </div>
+            </div>
+            </div><h3><span id="username">Eris</span><bridge title="This post has been bridged from another platform.">Bridged</bridge><i class="date">06/03/2024, 3:36:53 pm</i></h3><p>Hi</p></div></div>
+
+            <div class="theme-buttons">
             <div class="theme-buttons-inner">
                 <button onclick='changetheme(\"light\", this)' class='theme-button light-button'>Light</button>
                 <button onclick='changetheme(\"dark\", this)' class='theme-button dark-button'>Dark</button>

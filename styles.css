@@ -215,13 +215,18 @@ bridge {
     margin: 5px;
 }
 
+.wrapper {
+    padding: var(--padding);
+    width: 100%;
+}
+
 .post {
     background-color: var(--accent-color);
     border-radius: var(--border-radius);
-    padding: var(--padding);
     margin-bottom: var(--margin);
     word-wrap: anywhere;
     border: var(--border);
+    display: flex;
 }
 
 .post:hover {
@@ -262,6 +267,18 @@ bridge {
 .toolButton:hover {
     cursor: pointer;
     color: var(--hov-button-color);
+}
+
+.avatar {
+    width: 100%;
+    width: 54px;
+    border-radius: 100px;
+    margin: var(--text-margin) 0 10px 0;
+    box-sizing: border-box;
+}
+
+.pfp {
+    padding: var(--padding);
 }
 
 .date {
@@ -525,6 +542,19 @@ possible future styling
 
     bridge {
         display: none;
+    }
+
+    h3 {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .date {
+        margin:0;
+    }
+
+    .embed {
+        max-width: 100% !important;
     }
 }
 
