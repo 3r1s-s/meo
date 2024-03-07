@@ -277,15 +277,20 @@ bridge {
 }
 
 .pfp {
-    padding: var(--padding);
+    padding: 0 var(--padding);
     align-items: center;
     display: flex;
     height: 90px;
-    box-sizing: border-box;
 }
 
 .date {
     margin-left: 5px;
+}
+
+.mobile-date {
+    margin-left: 5px;
+    display: none;
+    font-size: 12px;
 }
 
 .link {
@@ -547,13 +552,12 @@ possible future styling
         display: none;
     }
 
-    h3 {
-        display: flex;
-        flex-direction: column;
+    .date {
+        display: none;
     }
 
-    .date {
-        margin:0;
+    .mobile-date {
+        display: inline-block;
     }
 
     .embed {

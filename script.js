@@ -187,6 +187,15 @@ function loadpost(p) {
     sts = ts.toLocaleString();
     pstdte.innerText = sts;
 
+    var mpstdte = document.createElement("i");
+    mpstdte.classList.add("mobile-date");
+    var mtsr = p.t.e;
+    var mtsra = mtsr * 1000;
+    var mtsrb = Math.trunc(mtsra);
+    var mts = new Date(mtsrb);
+    var msts = mts.toLocaleString('en-US', { month: '2-digit', day: '2-digit', year: '2-digit', hour: 'numeric', minute: 'numeric', hour12: true });
+    mpstdte.innerText = msts;
+
     var pstinf = document.createElement("h3");
     pstinf.innerHTML = "<span id='username'>" + user + "</span>";
 
@@ -197,6 +206,7 @@ function loadpost(p) {
         pstinf.appendChild(bridged);
     }
     pstinf.appendChild(pstdte);
+    pstinf.appendChild(mpstdte);
 
     wrapperDiv.appendChild(pstinf);
 
