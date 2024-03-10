@@ -147,13 +147,18 @@ textarea {
     margin-bottom: 16px;
 }
 
+.wrapper {
+    padding: var(--padding);
+    width: 100%;
+}
+
 .post {
     background-color: var(--accent-color);
     border-radius: var(--border-radius);
-    padding: var(--padding);
     margin-bottom: var(--margin);
     word-wrap: anywhere;
     border: var(--border);
+    display: flex;
 }
 
 .shell {
@@ -183,4 +188,23 @@ textarea {
     padding-left: 10px;
     padding-right: 10px;
     border-radius: 5px;
+}
+
+.avatar {
+    width: 100%;
+    width: 54px;
+    border-radius: 100px;
+    margin: var(--text-margin) 0 10px 0;
+    box-sizing: border-box;
+}
+
+.pfp {
+    padding: 0 var(--padding);
+    align-items: center;
+    display: flex;
+    height: 90px;
+}
+
+.date {
+    margin-left: 5px;
 }
