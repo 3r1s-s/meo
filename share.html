@@ -56,10 +56,7 @@ function loadpost(p) {
         var user = parts[0];
         var content = parts.slice(1).join(': ');
     } else {
-        var storedsettings = settingsstuff();
-        var swearfilterenabled = storedsettings.swearfilter;
-        var content = swearfilterenabled && p.unfiltered_p ? p.unfiltered_p : p.p;
-        
+        var content = p.p;
         var user = p.u;
     }
     
