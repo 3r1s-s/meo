@@ -139,6 +139,10 @@ bridge {
     border-top: none;
 }
 
+#username:hover {
+    cursor: pointer;
+}
+
 .header-top {
     margin: 0;
     padding-top: 0.67em;
@@ -274,6 +278,15 @@ bridge {
     border-radius: 100px;
     margin: var(--text-margin) 0 10px 0;
     box-sizing: border-box;
+    aspect-ratio: 1;
+}
+
+.avatar-big {
+    width: 96px;
+    border-radius: 100px;
+    margin: var(--text-margin) 0 10px 0;
+    box-sizing: border-box;
+    aspect-ratio: 1;
 }
 
 .pfp {
@@ -591,7 +604,7 @@ possible future styling
     width: 100%;
     padding: var(--padding);
     padding-bottom: 50px;
-    height: calc(50% + 50px);
+    height: calc(60% + 50px);
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
     z-index: 1;
@@ -641,4 +654,10 @@ possible future styling
 .editor {
     padding: var(--padding);
     min-height: 270px;
+}
+
+.profile {
+    border: none;
+    width: 100%;
+    height: 100%;
 }
