@@ -450,17 +450,19 @@ function loadPfp(username) {
                         pfpElement = document.createElement("img");
                         pfpElement.setAttribute("src", pfpurl);
                         pfpElement.setAttribute("alt", "User Avatar");
+                        pfpElement.setAttribute("onclick", `openUsrModal('${username}')`);
                         pfpElement.classList.add("avatar");
-
+                        
                         if (userData.avatar_color) {
                             pfpElement.style.border = `3px solid #${userData.avatar_color}`;
                         }
                     } else if (userData.pfp_data) {
                         const pfpurl = `images/avatars/icon_${userData.pfp_data - 1}.svg`;
-
+                        
                         pfpElement = document.createElement("img");
                         pfpElement.setAttribute("src", pfpurl);
                         pfpElement.setAttribute("alt", "User Avatar");
+                        pfpElement.setAttribute("onclick", `openUsrModal('${username}')`);
                         pfpElement.classList.add("avatar");
                     } else {
                         console.error("No avatar or pfp_data available for: ", username);
