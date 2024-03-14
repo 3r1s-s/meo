@@ -472,7 +472,99 @@ possible future styling
     margin-left: 10px;
 }
 
+.modal {
+    background-color: var(--modal-color);
+    box-shadow: 0px 5px 10px #000;
+    width: 400px;
+    padding: var(--padding);
+    height: calc(60% + 50px);
+    z-index: 1;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 30px;
+    transform: scale(0.5);
+    animation: open cubic-bezier(.2,-.25,0,1) 0.2s forwards;
+}
+
+.modal-close {
+    background-color: var(--modal-button-color);
+    width: 100%;
+    padding: var(--button-padding);
+    border-radius: 100px;
+    align-self: end;
+}
+
+.modal-button {
+    background-color: var(--modal-button-color);
+    width: 100%;
+    padding: 10px 15px 10px 15px;
+    border-radius: 100px;
+    margin-top: 0.5em;
+    margin-bottom: 1em;
+    text-align: left;
+    display: flex;
+    align-items: center;
+}
+
+.modal-top {
+    width: 100%;
+    height: 100%;
+}
+
+.modal-icon {
+    width: 100%;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: right;
+}
+
+.modal-back {
+    background: linear-gradient(0deg, rgba(0,0,0,0.3) 0%,rgba(0,0,0,0.3) 50%, rgba(0,0,0,0) 100%); 
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+
+@keyframes popup {
+    from {
+        transform: translateY(50%);
+    }
+    to {
+        transform: translateY(0%);
+    }
+}
+
+@keyframes open {
+    from {
+        transform: scale(0.5);
+    }
+    to {
+        transform: scale(1);
+    }
+}
+
 @media screen and (max-width: 480px) {
+    
+    .modal {
+        width: 100%;
+        position: fixed;
+        padding-bottom: 50px;
+        bottom: 0;
+        border-top-left-radius: 15px;
+        border-top-right-radius: 15px;
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+        transform: translateY(-50%);
+        animation: popup cubic-bezier(.2,-.25,0,1) 0.2s forwards;
+    }
     
     #page {
         justify-content: normal;
@@ -584,67 +676,6 @@ possible future styling
 
 #header {
     display: none !important;
-}
-
-.modal-back {
-    background: linear-gradient(0deg, rgba(0,0,0,0.3) 0%,rgba(0,0,0,0.3) 50%, rgba(0,0,0,0) 100%); 
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 1;
-    display: none;
-}
-
-.modal {
-    background-color: var(--modal-color);
-    box-shadow: 0px 5px 10px #000;
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    padding: var(--padding);
-    padding-bottom: 50px;
-    height: calc(60% + 50px);
-    border-top-left-radius: 15px;
-    border-top-right-radius: 15px;
-    z-index: 1;
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.modal-close {
-    background-color: var(--modal-button-color);
-    width: 100%;
-    padding: var(--button-padding);
-    border-radius: 100px;
-    align-self: end;
-}
-
-.modal-button {
-    background-color: var(--modal-button-color);
-    width: 100%;
-    padding: 10px 15px 10px 15px;
-    border-radius: 100px;
-    margin-top: 0.5em;
-    margin-bottom: 1em;
-    text-align: left;
-    display: flex;
-    align-items: center;
-}
-
-.modal-top {
-    width: 100%;
-    height: 100%;
-}
-
-.modal-icon {
-    width: 100%;
-    height: 30px;
-    display: flex;
-    align-items: center;
-    justify-content: right;
 }
 
 .desc {

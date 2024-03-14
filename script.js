@@ -1149,11 +1149,12 @@ function autoresize() {
 }
 
 function openModal(postId) {
+    document.documentElement.style.overflow = "hidden";
     var mdlbck = document.querySelector('.modal-back');
-
+    
     if (mdlbck) {
         mdlbck.style.display = 'flex';
-
+        
         var mdl = mdlbck.querySelector('.modal');
         if (mdl) {
             mdl.id = postId;
@@ -1171,6 +1172,8 @@ function openModal(postId) {
 }
 
 function openUsrModal(uId) {
+    document.documentElement.style.overflow = "hidden";
+    
     var mdlbck = document.querySelector('.modal-back');
 
     if (mdlbck) {
@@ -1190,6 +1193,8 @@ function openUsrModal(uId) {
 }
 
 function closemodal() {
+    document.documentElement.style.overflow = "";
+
     var mdlbck = document.querySelector('.modal-back');
 
     if (mdlbck) {

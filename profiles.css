@@ -12,6 +12,10 @@
             width: 100%;
             max-width: 400px;
         }
+        
+        #avtr-clr {
+            width: 64px;
+        }
 
         #avtr-clr, #profile-photo {
             background-color: transparent;
@@ -27,6 +31,8 @@
             display: flex;
             align-items: center;
             margin: var(--text-margin) 0 var(--text-margin) 0;
+            padding: var(--padding);
+            border-radius: var(--border-radius);
         }
                 
         .quote-edit {
@@ -34,4 +40,5 @@
             width: 100%;
             padding: 0;
             background-color: var(--hov-accent-color);
+            min-height: 100px;
         }
