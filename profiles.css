@@ -1,6 +1,6 @@
         html {
             transition: none;
-            background-color: var(--accent-color);
+            background-color: var(--modal-color);
         }
 
         hr {
