@@ -419,10 +419,10 @@ function loadpost(p) {
                 pfpDiv.appendChild(pfpElement);
                 //thx stackoverflow
                 pfpCache[user] = pfpElement.cloneNode(true);
+                postContainer.insertBefore(pfpDiv, wrapperDiv);
             }
         });
-
-    postContainer.appendChild(pfpDiv);  
+        
     postContainer.appendChild(wrapperDiv);
 
     var pageContainer = document.getElementById("msgs");
