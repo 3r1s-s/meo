@@ -60,7 +60,7 @@
                     
                     if (data._id === localStorage.getItem('uname')) {
                         profilecont.innerHTML += `
-                        <button class="modal-button" onclick="updateprofile()"><div>Update</div></button>      
+                        <button class="modal-button updt-prfl" onclick="updateprofile()"><div>Update</div></button>      
                         `;
                     }                    
                     

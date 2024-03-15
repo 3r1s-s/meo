@@ -16,6 +16,10 @@
             flex: 0.1;
         }
 
+        .updt-prfl {
+            margin: 0;
+        }
+
         .mdl-sec {
             width: 100%;
             max-width: 400px;
