@@ -2,15 +2,27 @@
             transition: none;
             background-color: var(--accent-color);
         }
+
+        hr {
+            color: var(--hov-accent-color);
+        }
         
         .uname {
             margin: 0;
-            margin: 0 0 var(--text-margin) 0;
+            flex: 1;
+        }
+
+        .dm-btn {
+            flex: 0.1;
         }
 
         .mdl-sec {
             width: 100%;
             max-width: 400px;
+        }
+
+        .usr-header {
+            display: flex;
         }
         
         #avtr-clr {

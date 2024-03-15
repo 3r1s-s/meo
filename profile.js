@@ -16,13 +16,16 @@
                         <img class="avatar-big" style="border: 6px solid #${data.avatar_color}"; src="images/avatars/icon_${data.pfp_data - 1}.svg"></img>
                         `
                     }
-                    profilecont.innerHTML += `
-                    <h2 class="uname">${data._id}</h2>
-                    `
 
                     if (data._id === localStorage.getItem('uname')) {
                         profilecont.innerHTML += `
-                        <span class="subheader">Bio</span>
+                        <div class="usr-header">
+                        <h2 class="uname">${data._id}</h2>
+                        </div>
+                        <hr>
+                        `
+                        profilecont.innerHTML += `
+                        <span class="subheader">Quote</span>
                         <div class="sec">
                         <textarea class="quote-edit" id="quote">${data.quote}</textarea>
                         </div>
@@ -35,7 +38,19 @@
                         `;
                     } else {
                         profilecont.innerHTML += `
-                        <p>${data.quote}</p>
+                        <div class="usr-header">
+                        <h2 class="uname">${data._id}</h2>
+                        <button class="button dm-btn" onclick="opendm('${data._id}');">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24"><path fill="currentColor" d="M12 22a10 10 0 1 0-8.45-4.64c.13.19.11.44-.04.61l-2.06 2.37A1 1 0 0 0 2.2 22H12Z" class=""></path></svg>
+                        </button>
+                        </div>
+                        <hr>
+                        `
+                        profilecont.innerHTML += `
+                        <span class="subheader">Quote</span>
+                        <div class="sec">
+                        <span>${data.quote}</span>
+                        </div>
                         `;
                     }              
 
@@ -144,4 +159,32 @@
                 xhttp.send(JSON.stringify(data));
             }
         }
+
+        
+        function opendm(user) {
+            const token = localStorage.getItem("token");
+            const url = `https://api.meower.org/users/${user}/dm`;
+
+            fetch(url, {
+                method: 'GET',
+                headers: {
+                    'token': `${token}`
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log(data);
+                parent.loadchat(data._id);
+                parent.closemodal();
+            })
+            .catch(error => {
+                console.error('There was a problem with the fetch operation:', error);
+            });
+        }
+        
         

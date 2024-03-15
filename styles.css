@@ -4,6 +4,7 @@ html {
     --font: Whitney;
     font-family: var(--font);
     transition: background-color 0.25s ease-in-out;
+    scrollbar-gutter: stable;
 }
 
 body {
@@ -107,6 +108,10 @@ textarea {
 
 textarea:focus {
     background-color: var(--hov-color);
+}
+
+hr {
+    color: var(--accent-color);
 }
 
 bridge {
@@ -284,7 +289,7 @@ bridge {
 .avatar-big {
     width: 96px;
     border-radius: 100px;
-    margin: var(--text-margin) 0 10px 0;
+    margin: 0 0 10px 0;
     box-sizing: border-box;
     aspect-ratio: 1;
 }
@@ -360,7 +365,7 @@ bridge {
     align-items: normal;
     height: calc(100vh - 10px);
     justify-content: flex-start;
-    overflow-y: scroll;
+    overflow-y: auto;
     width: 70%;
 }
 
@@ -483,7 +488,7 @@ possible future styling
     display: flex;
     flex-direction: column;
     align-items: center;
-    border-radius: 30px;
+    border-radius: var(--border-radius);
     transform: scale(0.5);
     animation: open cubic-bezier(.2,-.25,0,1) 0.2s forwards;
 }
@@ -492,7 +497,7 @@ possible future styling
     background-color: var(--modal-button-color);
     width: 100%;
     padding: var(--button-padding);
-    border-radius: 100px;
+    border-radius: var(--border-radius);
     align-self: end;
 }
 
@@ -522,7 +527,7 @@ possible future styling
 }
 
 .modal-back {
-    background: linear-gradient(0deg, rgba(0,0,0,0.3) 0%,rgba(0,0,0,0.3) 50%, rgba(0,0,0,0) 100%); 
+    background: linear-gradient(0deg, rgba(0,0,0,0.5) 0%,rgba(0,0,0,0.5) 50%, rgba(0,0,0,0) 100%); 
     position: fixed;
     bottom: 0;
     width: 100%;
@@ -535,7 +540,7 @@ possible future styling
 
 @keyframes popup {
     from {
-        transform: translateY(50%);
+        transform: translateY(100%);
     }
     to {
         transform: translateY(0%);
@@ -564,6 +569,10 @@ possible future styling
         border-bottom-right-radius: 0;
         transform: translateY(-50%);
         animation: popup cubic-bezier(.2,-.25,0,1) 0.2s forwards;
+    }
+
+    .modal-close {
+        border-radius: 100px;
     }
     
     #page {
