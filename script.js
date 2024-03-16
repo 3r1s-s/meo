@@ -1252,6 +1252,12 @@ async function closemodal(message) {
         mdlbck.style.display = 'none';
     }
 
+    var mdl = document.querySelector('.modal');
+
+    if (mdlbck) {
+        mdl.id = '';
+    }
+
     if (message) {
         const delay = ms => new Promise(res => setTimeout(res, ms));
         await delay(5);
