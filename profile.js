@@ -175,6 +175,8 @@
                 // If no file is selected, just send the data object
                 xhttp.send(JSON.stringify(data));
             }
+            parent.closemodal("Profile Updated!");
+
         }
 
         

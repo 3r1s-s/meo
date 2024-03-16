@@ -112,6 +112,8 @@ textarea:focus {
 
 hr {
     color: var(--accent-color);
+    border: none;
+    border-top: 1px solid;
 }
 
 bridge {
@@ -303,12 +305,6 @@ bridge {
 
 .date {
     margin-left: 5px;
-}
-
-.mobile-date {
-    margin-left: 5px;
-    display: none;
-    font-size: 12px;
 }
 
 .link {
@@ -504,8 +500,8 @@ possible future styling
 .modal-button {
     background-color: var(--modal-button-color);
     width: 100%;
-    padding: 10px 15px 10px 15px;
-    border-radius: 100px;
+    padding: var(--button-padding);
+    border-radius: var(--border-radius);
     margin-top: 0.5em;
     margin-bottom: 1em;
     text-align: left;
@@ -528,7 +524,7 @@ possible future styling
 }
 
 .modal-back {
-    background: linear-gradient(0deg, rgba(0,0,0,0.5) 0%,rgba(0,0,0,0.5) 50%, rgba(0,0,0,0) 100%); 
+    background: rgba(0,0,0,0.5); 
     position: fixed;
     bottom: 0;
     width: 100%;
@@ -537,6 +533,29 @@ possible future styling
     display: none;
     justify-content: center;
     align-items: center;
+    animation: fade cubic-bezier(.2,-.25,0,1) 0.2s forwards;
+}
+
+.mdl-txt {
+    background-color: var(--modal-button-color);
+    width: 100%;
+    padding: var(--button-padding);
+    border-radius: var(--border-radius);
+    margin-top: 0.5em;
+    margin-bottom: 1em;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+    min-height: 100px;
+}
+
+.mdl-hr {
+    color: var(--hov-accent-color);
+}
+
+#mdl-uptd {
+    height: auto;
 }
 
 @keyframes popup {
@@ -554,6 +573,15 @@ possible future styling
     }
     to {
         transform: scale(1);
+    }
+}
+
+@keyframes fade {
+    from {
+        opacity: 0.5;
+    }
+    to {
+        opacity: 1;
     }
 }
 
@@ -576,6 +604,15 @@ possible future styling
         border-radius: 100px;
     }
     
+    .modal-button {
+        border-radius: 100px;
+        padding: 10px 15px 10px 15px;
+    }
+
+    .modal-back {
+        background: linear-gradient(0deg, rgba(0,0,0,0.5) 0%,rgba(0,0,0,0.5) 50%, rgba(0,0,0,0) 100%); 
+    }
+
     #page {
         justify-content: normal;
         overflow-x: scroll;
@@ -668,11 +705,7 @@ possible future styling
     }
 
     .date {
-        display: none;
-    }
-
-    .mobile-date {
-        display: inline-block;
+        font-size: 12px;
     }
 
     .embed {
