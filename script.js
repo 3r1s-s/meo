@@ -110,7 +110,7 @@ function main() {
         
     };
     document.addEventListener("keydown", function(event) {    
-        if (page !== "settings") {
+        if (page !== "settings" && page !== "explore") {
             if (event.key === "Enter" && !event.shiftKey) {
             event.preventDefault();
             dopostwizard();
@@ -485,8 +485,16 @@ async function loadreply(replyid) {
 
         const replycontainer = document.createElement("div");
         replycontainer.classList.add("reply");
-        replycontainer.innerHTML = `<p style='font-weight:bold;margin: 10px 0 10px 0;'>${replydata.u}</p><p style='margin: 10px 0 10px 0;'>${replydata.p}</p>`;
-
+        if (replydata.u === "Discord" || replydata.u === "SplashBridge") {
+            var rcon = replydata.p;
+            var parts = rcon.split(': ');
+            var user = parts[0];
+            var content = parts.slice(1).join(': ');
+            replycontainer.innerHTML = `<p style='font-weight:bold;margin: 10px 0 10px 0;'>${user}</p><p style='margin: 10px 0 10px 0;'>${content}</p>`;
+        } else {
+            replycontainer.innerHTML = `<p style='font-weight:bold;margin: 10px 0 10px 0;'>${replydata.u}</p><p style='margin: 10px 0 10px 0;'>${replydata.p}</p>`;
+        }
+        
         return replycontainer;
     } catch (error) {
         console.error("Error fetching reply:", error);
@@ -620,7 +628,7 @@ function loadhome() {
     </button>
     </div>
     <input type='button' class='navigation-button button' id='submit' value='Profile' onclick='openUsrModal("${localStorage.getItem("uname")}")'>
-    <input type='button' class='navigation-button button' id='submit' value='Explore' onclick='alert("not finished!");'>
+    <input type='button' class='navigation-button button' id='submit' value='Explore' onclick='loadExplore();'>
     <input type='button' class='navigation-button button' id='submit' value='Inbox' onclick='loadinbox()'>
     <input type='button' class='navigation-button button' id='submit' value='Settings' onclick='loadstgs()'>
     <input type='button' class='navigation-button button' id='submit' value='Logout' onclick='logout(false)'>
@@ -814,7 +822,7 @@ function loadgeneral() {
         <div class="settings">
             <h1>General</h1>
             <div class="msgs"></div>
-            <div class='post'>
+            <div class='section'>
             <label>
             Disable swear filter
             <input type="checkbox" id="swearfilter">
@@ -1019,20 +1027,22 @@ function loadappearance() {
     const cstmcsstxt = document.getElementById('customcss');
     cstmcsstxt.value = css || '';
 
+
     cstmcsstxt.addEventListener('input', function () {
         const newCustomCSS = cstmcsstxt.value;
-
+        
         let customstyle = document.getElementById('customstyle');
         if (!customstyle) {
             customstyle = document.createElement('style');
             customstyle.id = 'customstyle';
             document.head.appendChild(customstyle);
         }
-
+        
         customstyle.textContent = newCustomCSS;
-
+        
         localStorage.setItem('customCSS', newCustomCSS);
     });
+    
 
 }
 
@@ -1337,6 +1347,60 @@ function mdlshare(event) {
     var postId = event.target.closest('.modal').id;
     window.open(`https://meo-32r.pages.dev/share?id=${postId}`, '_blank');
     closemodal();
+}
+
+function loadExplore() {
+    page = "explore";
+    document.getElementById("main").innerHTML = `
+    <h1>Explore</h1>
+    <h3>Open User</h3>
+    <form class="section-form" onsubmit="gotousr();">
+        <input type="text" class="section-input" id="usrinp" placeholder="MikeDEV">
+        <button class="section-send button">Go!</button>
+    </form>
+    <h3>Statistics</h3>
+    <div class="section stats">
+    </div>
+    `;
+
+    loadstats();
+
+}
+
+function gotousr() {
+    event.preventDefault(); 
+    openUsrModal(document.getElementById("usrinp").value);
+    document.getElementById("usrinp").blur();
+}
+
+async function loadstats() {
+    try {
+        const response = await fetch('https://api.meower.org/statistics');
+        const data = await response.json();
+
+        const formattedData = {
+            chats: formatNumber(data.chats),
+            posts: formatNumber(data.posts),
+            users: formatNumber(data.users)
+        };
+
+        const statsDiv = document.querySelector('.stats');
+        statsDiv.innerHTML = `
+            <p>There are ${formattedData.chats} chats, ${formattedData.posts} posts, ${formattedData.users} users and counting!</p>
+        `;
+    } catch (error) {
+        console.error('Error loading statistics:', error);
+    }
+}
+
+function formatNumber(number) {
+    if (number >= 1e6) {
+        return (number / 1e6).toFixed(1) + 'm';
+    } else if (number >= 1e3) {
+        return (number / 1e3).toFixed(1) + 'k';
+    } else {
+        return number.toString();
+    }
 }
 
 

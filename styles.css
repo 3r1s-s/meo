@@ -713,6 +713,35 @@ possible future styling
     }
 }
 
+.section {
+    background-color: var(--accent-color);
+    color: var(--color);
+    border: none;
+    border-radius: var(--button-radius);
+    padding: var(--padding);
+}
+
+.section-form {
+    width: 100%;
+    display: flex;
+}
+
+.section-input {
+    background-color: var(--accent-color);
+    color: var(--color);
+    border: none;
+    border-radius: var(--button-radius);
+    padding: var(--padding);
+    box-sizing: border-box;
+    flex: 0.9;
+    margin-right: 5px;
+}
+
+.section-send {
+    flex: 0.1;
+    margin-left: 5px;
+}
+
 .hidden {
     display: none;
 }
