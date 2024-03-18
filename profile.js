@@ -127,6 +127,8 @@
                 if (this.readyState == 4) {
                     if (this.status == 200) {
                         console.log('Profile updated successfully.');
+                                        parent.closemodal("Profile Updated!");
+
                     } else {
                         console.error('Failed to update profile. HTTP ' + this.status.toString());
                     }
@@ -175,7 +177,6 @@
                 // If no file is selected, just send the data object
                 xhttp.send(JSON.stringify(data));
             }
-            parent.closemodal("Profile Updated!");
 
         }
 
