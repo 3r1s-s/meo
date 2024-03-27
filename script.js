@@ -987,7 +987,7 @@ function loadappearance() {
     <br>
     <h2 style="display:none;">Icons</h2>
     <div class="icons" style="display:none;">
-        <button class="icon-button"><img class="icon" src="images/Meo.png" width="64px"></button>
+        <button class="icon-button"><img class="icon" src="images/meo.png" width="64px"></button>
         <button class="icon-button"><img class="icon" src="images/Blue Gradient.png" width="64px"></button>
         <button class="icon-button"><img class="icon" src="images/Blue Solid.png" width="64px"></button>
         <button class="icon-button"><img class="icon" src="images/Enceladus.png" width="64px"></button>
@@ -1062,7 +1062,7 @@ function loadcstmcss() {
 function changecon(index) {
 
     const icons = [
-        'Meo.png',
+        'meo.png',
         'Blue Gradient.png',
         'Blue Solid.png',
         'Enceladus.png',
