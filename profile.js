@@ -8,9 +8,23 @@
                     const profilecont = document.createElement('div');
                     profilecont.classList.add('mdl-sec');
                     if (data.avatar) {
-                        profilecont.innerHTML = `
-                        <img class="avatar-big" style="border: 6px solid #${data.avatar_color}"; src="https://uploads.meower.org/icons/${data.avatar}"></img>
-                        `
+                        if (isChrome && parseInt(RegExp.$1) <= 22 ||
+                            isEdge && parseInt(RegExp.$1) <= 17 ||
+                            isSafari && parseInt(RegExp.$1) <= 13 ||
+                            isFirefox && parseInt(RegExp.$1) <= 64 ||
+                            isOpera && parseInt(RegExp.$1) <= 10 ||
+                            isIE ||
+                            isIOS && parseInt(RegExp.$1) <= 13 ||
+                            isAndroid && parseInt(RegExp.$1) <= 3 ||
+                            isKaiOS && parseInt(RegExp.$1) <= 2) {
+                            profilecont.innerHTML = `
+                            <img class="avatar-big" style="border: 6px solid #${data.avatar_color}"; src="https://uploads.meower.org/icons/${data.avatar}?format=png"></img>
+                            `;
+                        } else {
+                            profilecont.innerHTML = `
+                            <img class="avatar-big" style="border: 6px solid #${data.avatar_color}"; src="https://uploads.meower.org/icons/${data.avatar}"></img>
+                            `;
+                        }
                     } else if (data.pfp_data) {                        
                         profilecont.innerHTML = `
                         <img class="avatar-big" style="border: 6px solid #${data.avatar_color}"; src="images/avatars/icon_${data.pfp_data - 1}.svg"></img>
