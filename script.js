@@ -21,14 +21,14 @@ function replsh(rpl) {
 
 function main() {
     page = "login";
-    webSocket = new WebSocket("wss://server.meower.org/");
+    meowerConnection = new WebSocket("wss://server.meower.org/");
     var loggedin = false;
 
-    webSocket.onclose = (event) => {
+    meowerConnection.onclose = (event) => {
         logout(true);
     };
     loadtheme();
-    webSocket.onmessage = (event) => {
+    meowerConnection.onmessage = (event) => {
         console.log("INC: " + event.data);
 
         var sentdata = JSON.parse(event.data);
@@ -41,7 +41,7 @@ function main() {
                 }
             };
 
-            webSocket.send(JSON.stringify(data));
+            meowerConnection.send(JSON.stringify(data));
             console.log("OUT: " + JSON.stringify(data));
 
             var data = {
@@ -49,33 +49,45 @@ function main() {
                 val: "meower"
             };
 
-            webSocket.send(JSON.stringify(data));
+            meowerConnection.send(JSON.stringify(data));
             console.log("OUT: " + JSON.stringify(data));
-
-            var pageContainer = document.getElementById("main");
-            pageContainer.innerHTML = `<div class='settings'><div class='login'><h1>meo</h1>
-            <input type='text' id='userinput' placeholder='Username' class='login-input text'><input type='password' id='passinput' placeholder='Password' class='login-input text'>
-            <input type='button' id='submit' value='Log in' class='login-input button' onclick='dowizard()'><input type='button' id='submit' value='Sign up' class='login-input button' onclick='doswizard()'>
-            <small>This client was made by eri :></small><div id='msgs'></div></div><div class='footer'><img width='25px' src='images/meo96.png'>
-            </div></div>`;
             if (localStorage.getItem("token") != undefined && localStorage.getItem("uname") != undefined) {
-                document.getElementById("userinput").value = localStorage.getItem("uname");
-                document.getElementById("passinput").value = localStorage.getItem("token");
-                dowizard();
+                login(localStorage.getItem("uname"), localStorage.getItem("token"));
+            } else {
+                var pageContainer = document.getElementById("main");
+                pageContainer.innerHTML = 
+                `<div class='settings'>
+                <div class='login'>
+                <h1>Login</h1>
+                <input type='text' id='userinput' placeholder='Username' class='login-input text'>
+                <input type='password' id='passinput' placeholder='Password' class='login-input text'>
+                <input type='button' id='submit' value='Log in' class='login-input button' onclick='login(document.getElementById("userinput").value, document.getElementById("passinput").value)'><input type='button' id='submit' value='Sign up' class='login-input button' onclick='signup(document.getElementById("userinput").value, document.getElementById("passinput").value)'>
+                <small>This client was made by eri :></small>
+                <div id='msgs'></div>
+                </div>
+                <div class='footer'>
+                <svg width="80" height="44.25" viewBox="0 0 321 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M124.695 17.2859L175.713 0.216682C184.63 -1.38586 192.437 6.14467 190.775 14.7463L177.15 68.2185C184.648 86.0893 187.163 104.122 187.163 115.032C187.163 143.057 174.929 178 95.4997 178C16.0716 178 3.83691 143.057 3.83691 115.032C3.83691 104.122 6.35199 86.0893 13.8498 68.2185L0.224791 14.7463C-1.43728 6.14467 6.3705 -1.38586 15.2876 0.216682L66.3051 17.2859C74.8856 14.6362 84.5688 13.2176 95.4997 13.429C106.431 13.2176 116.114 14.6362 124.695 17.2859ZM174.699 124.569H153.569V80.6255C153.569 75.6157 151.762 72.1804 146.896 72.1804C143.143 72.1804 139.529 74.6137 135.775 78.3353V124.569H114.785V80.6255C114.785 75.6157 112.977 72.1804 108.112 72.1804C104.22 72.1804 100.744 74.6137 96.9909 78.3353V124.569H76V54.4314H94.4887L96.0178 64.0216C102.134 57.5804 108.39 53 117.148 53C126.462 53 131.605 57.7235 134.107 64.0216C140.224 57.7235 146.896 53 155.376 53C168.026 53 174.699 61.1588 174.699 74.7569V124.569ZM247.618 89.3569C247.618 91.5039 247.479 93.7941 247.201 94.9392H206.331C207.443 105.961 213.838 110.255 223.012 110.255C230.519 110.255 237.887 107.392 245.393 102.955L247.479 118.127C240.111 122.994 231.075 126 220.371 126C199.936 126 185.34 114.835 185.34 89.7863C185.34 66.8843 198.963 53 217.452 53C238.304 53 247.618 69.0314 247.618 89.3569ZM227.6 83.0588C226.905 72.4667 223.29 67.0274 216.896 67.0274C211.057 67.0274 206.887 72.3235 206.192 83.0588H227.6ZM288.054 126C306.96 126 321 111.973 321 89.5C321 67.0274 307.099 53 288.193 53C269.426 53 255.525 67.1706 255.525 89.6431C255.525 112.116 269.287 126 288.054 126ZM288.193 70.749C296.256 70.749 300.704 78.3353 300.704 89.6431C300.704 100.951 296.256 108.537 288.193 108.537C280.269 108.537 275.821 100.808 275.821 89.5C275.821 78.049 280.13 70.749 288.193 70.749Z" fill="#FEFEFE"/>
+                </svg>
+                </div>
+                </div>
+                `;
             };
         } else if (sentdata.val.mode == "auth") {
             loggedin = true;
             page = "home";
-            if (localStorage.getItem("token") == undefined || localStorage.getItem("uname") == undefined) {
+            if (localStorage.getItem("token") == undefined || localStorage.getItem("uname") == undefined || localStorage.getItem("permissions") == undefined) {
                 localStorage.setItem("uname", sentdata.val.payload.username);
                 localStorage.setItem("token", sentdata.val.payload.token);
+                localStorage.setItem("permissions", sentdata.val.payload.account.permissions);
             }
-
-            document.getElementById("msgs").innerHTML = "";
             loadhome();
             console.log("Logged in!");
         } else if (sentdata.val == "E:110 | ID conflict") {
-            alert("ID conflict. You probably logged in on another client. Refresh the page and log back in to continue.");
+            openUpdate("You probably logged in on another client. Refresh the page and log back in to continue.");
+        } else if (sentdata.val == "I:011 | Invalid Password") {
+            logout(true);
+            openUpdate("Wrong Password!");
         } else if (sentdata.val.post_origin == page) {
             if (loggedin == true) {
                 loadpost(sentdata.val);
@@ -83,14 +95,15 @@ function main() {
         } else if (end) {
             return 0;
         } else if (sentdata.val.mode == "update_post") {
-            console.log("Got update post for " + sentdata.val.payload._id);
-            for (var vi = 0; vi < document.getElementById(sentdata.val.payload._id).children.length; vi++) {
-                i = document.getElementById(sentdata.val.payload._id).children[vi];
-                if (i.tagName == "IMG" && i.className == "editedicon") {
-                    i.style = "height: 18px; width: auto; vertical-align: middle; margin-bottom: 5px;";
-                } else if (i.tagName == "POSTCONTENT") {
-                    i.innerText = sentdata.val.payload.p;
-                }
+            var postId = sentdata.val.payload.post_id;
+            var postElement = document.getElementById(postId);
+            
+            if (postElement) {
+                var postMessage = sentdata.val.payload.p;
+                postElement.querySelector('.post-content').innerHTML = md.render(postMessage);
+                console.log("Edited " + sentdata.val.payload._id);
+            } else {
+                console.log(postId + " not found.");
             }
         } else if (sentdata.cmd == "ulist") {
             var iul = sentdata.val;
@@ -106,17 +119,27 @@ function main() {
             if (page == "home") {
                 document.getElementById("info").innerText = lul + " users online (" + sul + ")";
             }
+        } else if (sentdata.val.mode == "delete") {
+          console.log("Received delete command for ID:", sentdata.val.id);
+          const divToDelete = document.getElementById(sentdata.val.id);
+          if (divToDelete) {
+            divToDelete.parentNode.removeChild(divToDelete);
+            console.log(sentdata.val.id, "deleted successfully.");
+          } else {
+            console.warn(sentdata.val.id, "not found.");
+          }
         }
-        
     };
     document.addEventListener("keydown", function(event) {    
-        if (page !== "settings" && page !== "explore") {
+        if (page !== "settings" && page !== "explore" && page !== "login") {
             if (event.key === "Enter" && !event.shiftKey) {
             event.preventDefault();
             dopostwizard();
             const textarea = document.getElementById('msg');
             textarea.style.height = 'auto';
         } else if (event.key === "Enter" && event.shiftKey) {
+        } else if (event.key === "Escape") {
+            closemodal();
         }
     }
     });
@@ -554,37 +577,34 @@ function sharepost() {
     window.open(`https://meo-32r.pages.dev/share?id=${postId}`, '_blank');
 }
 
-function dowizard() {
-    console.log(document.getElementById('userinput').value);
+function login(user, pass) {
     var data = {
         cmd: "direct",
         val: {
             cmd: "authpswd",
             val: {
-                username: document.getElementById('userinput').value,
-                pswd: document.getElementById('passinput').value
+                username: user,
+                pswd: pass
             }
         }
     };
-    document.getElementById("msgs").innerHTML = '';
-    webSocket.send(JSON.stringify(data));
+    meowerConnection.send(JSON.stringify(data));
+    console.log(user);
     console.log("User is logging in, details will not be logged for security reasons.");
 }
 
-function doswizard() {
-    console.log(document.getElementById('userinput').value);
+function signup(user, pass) {
     var data = {
         cmd: "direct",
         val: {
             cmd: "gen_account",
             val: {
-                username: document.getElementById('userinput').value,
-                pswd: document.getElementById('passinput').value
+                username: user,
+                pswd: pass
             }
         }
     };
-    document.getElementById("msgs").innerHTML = '';
-    webSocket.send(JSON.stringify(data));
+    meowerConnection.send(JSON.stringify(data));
     console.log("User is signing up, details will not be logged for security reasons.");
 }
 
@@ -786,7 +806,7 @@ function loadinbox() {
 function logout(iskl) {
     if (iskl != true) {
         localStorage.clear();
-        webSocket.close();
+        meowerConnection.close();
     }
     end = true;
     document.getElementById("msgs").innerHTML = "";
@@ -1142,7 +1162,7 @@ function formattime(timestamp) {
 }
 
 function ping() {
-    webSocket.send(JSON.stringify({
+    meowerConnection.send(JSON.stringify({
         cmd: "ping",
         val: ""
     }));
@@ -1248,7 +1268,7 @@ function sendReport(id) {
             }
         }
     };
-    webSocket.send(JSON.stringify(data));
+    meowerConnection.send(JSON.stringify(data));
     console.log("Report Sent!");
     closemodal("Report Sent!");
 }
