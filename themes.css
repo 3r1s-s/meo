@@ -1,11 +1,11 @@
 :root {
     --primary: #714cc8;
     --secondary: #c7c7ff;
-    --background-color: #1c1c26;
+    --background-color: #181818;
     --color: #fefefe;
-    --accent-color: #2f3040;
-    --hov-accent-color: #3e3f54;
-    --hov-color: #4b4c66;
+    --accent-color: #f9a535;
+    --hov-accent-color: #f9a535;
+    --hov-color: #f9a535;
     --link-color: #9da1fe;
     --attachment-background-color: #595c97;
     --attachment-color: #c7c7ff;
