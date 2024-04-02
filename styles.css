@@ -3,7 +3,7 @@ html {
     color: var(--color);
     --font: Whitney;
     font-family: var(--font);
-    transition: background-color 0.25s ease-in-out;
+    transition: background-color 0.2s ease-in-out;
     scrollbar-gutter: stable;
 }
 
@@ -119,6 +119,10 @@ hr {
     border-top: 1px solid;
 }
 
+ul {
+    margin: var(--text-margin);
+}
+
 bridge {
     background-color: var(--primary);
     border-radius: 25px;
@@ -137,6 +141,10 @@ bridge {
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.launch-logo {
+    animation: infinite 1s ease-in-out spin;
 }
 
 .embed {
@@ -230,18 +238,27 @@ bridge {
 .message-input {
     padding: 1em;
     flex: 0.9;
-    margin: 5px;
+    margin: calc(var(--margin)/2);
     overflow-y: hidden;
 }
 
 .message-send {
+    flex: 0.2;
+    margin: calc(var(--margin)/2);
+    min-width: 60px;
+    max-width: 75px;
+}
+
+.message-tool {
     flex: 0.1;
-    margin: 5px;
+    margin: calc(var(--margin)/2);
+    min-width: 40px;
 }
 
 .wrapper {
     padding: var(--padding);
     width: 100%;
+    height: 100%;
     overflow: hidden;
 }
 
@@ -294,13 +311,23 @@ bridge {
     color: var(--hov-button-color);
 }
 
+.toolButton:active {
+    padding-top: 3px;
+    padding-bottom: 2px;
+}
+
 .avatar {
     width: 100%;
     width: 54px;
     border-radius: 100px;
-    margin: var(--text-margin) 0 10px 0;
     box-sizing: border-box;
     aspect-ratio: 1;
+    box-shadow: 0px 1px 5px #00000050;
+}
+
+.avatar:active {
+    transform: translateY(2px);
+    box-shadow: none;
 }
 
 .avatar-big {
@@ -309,6 +336,7 @@ bridge {
     margin: 0 0 10px 0;
     box-sizing: border-box;
     aspect-ratio: 1;
+    box-shadow: 0px 1px 5px #00000050;
 }
 
 .svg-avatar {
@@ -319,7 +347,7 @@ bridge {
     padding: 0 var(--padding);
     align-items: center;
     display: flex;
-    height: 90px;
+    max-height: calc(var(--padding)*9);
 }
 
 .date {
@@ -498,7 +526,7 @@ possible future styling
     width: 80%;
     max-width: 400px;
     padding: var(--padding);
-    height: calc(60% + 55px);
+    height: calc(70% + 55px);
     z-index: 1;
     box-sizing: border-box;
     display: flex;
@@ -654,7 +682,6 @@ possible future styling
 }
 
 #mdl-big {
-    height: 80%;
     width: 80%;
     max-width: 600px;
 }
@@ -683,6 +710,27 @@ possible future styling
 
 .mod-actions > :not(:first-child):not(:last-child) {
     margin: var(--margin);
+}
+
+.mod-table {
+    border-radius: var(--border-radius);
+    margin: var(--margin);
+    display: flex;
+    flex-direction: column;
+    border: 2px solid var(--modal-button-color);
+    overflow: hidden;
+}
+
+.table-section {
+    display: flex;
+
+}
+
+.mod-td {
+    border: 1px solid var(--modal-button-color);
+    width: calc(100% / 3);
+    padding: var(--padding);
+    overflow: scroll;
 }
 
 @keyframes popup {
@@ -721,6 +769,20 @@ possible future styling
     }
 }
 
+@keyframes spin {
+    0% {
+        transform: rotate(0);
+    }
+    
+    75% {
+        transform: rotate(1turn);
+    }
+    
+    100% {
+        transform: rotate(1turn);
+    }
+}
+
 .section {
     background-color: var(--accent-color);
     color: var(--color);
@@ -743,6 +805,10 @@ possible future styling
     box-sizing: border-box;
     flex: 0.9;
     margin-right: 5px;
+}
+
+.section-input:focus {
+    background-color: var(--hov-color);
 }
 
 .section-send {
@@ -838,12 +904,9 @@ possible future styling
     --hov-modal-button-color: #ffffff30;
     --hov-color: #ffffff20;
     --hov-accent-color: #ffffff10;
+    --accent-color: #ffffff20;
     --color: #fefefe;
     color: var(--color);
-}
-
-@media screen and (max-width: 480px) {
-
 }
 
 .edit-txt {
@@ -852,11 +915,104 @@ possible future styling
     align-items: center;
 }
 
+.emojisidebar {
+    display: flex;
+    flex-direction: column;
+}
+
+.emojipicker {
+    position: absolute;
+    background-color: var(--modal-color);
+    padding: var(--padding);
+    margin: calc(var(--margin)/2);
+    right: 80px;
+    top: 50px;
+    box-shadow: 0px 3px 10px #00000050;
+    border-radius: var(--border-radius);
+    display: flex;
+    width: 570px;
+    min-width: 314px;
+    max-width: 629px;
+    overflow: auto;
+    resize: horizontal;
+    transform: translateY(0px);
+    animation: slidedown cubic-bezier(.2,-.25,0,1) 0.2s forwards;
+}
+
+.emojisec {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.emojicont {
+    padding-left: var(--padding);
+    overflow-y: scroll;
+    max-height: 430px;
+    scrollbar-width: none;
+    width: 100%;
+}
+
+.emojiheader {
+    margin: calc(var(--margin)/2);
+}
+
+.emojibutton {
+    background-color: var(--modal-button-color);
+    font-size: 24px;
+    padding: var(--padding);
+    margin: calc(var(--margin)/2);
+    width: 52.95px;
+    height: 52.95px;
+}
+
+.emojibutton:hover {
+    background-color: var(--hov-modal-button-color);
+}
+
+.emojibuttonside {
+    background-color: var(--modal-button-color);
+    font-size: 16px;
+    padding: var(--padding);
+    margin: calc(var(--margin)/2);
+}
+
+.emojisearch {
+    position: sticky;
+    display: flex;
+    top: 0;
+    background-color: var(--modal-color);
+    padding: calc(var(--padding)/2) 0;
+}
+
+.emjinpt {
+    background-color: var(--modal-button-color);
+    color: var(--color);
+    border: none;
+    border-radius: var(--button-radius);
+    padding: var(--padding);
+    box-sizing: border-box;
+    flex: 1;
+    margin: 0 calc(var(--margin)/2);
+}
+
+.emjinpt:focus {
+    background-color: var(--hov-modal-button-color);
+}
+
+.emoji-back {
+    display: none;
+    position: fixed;
+    top:0;
+    left:0;
+    width: 100vw;
+    height: 100vh;
+}
+
 @media screen and (max-width: 480px) {
     .modal {
         width: 100%;
         max-width: 100%;
-        height: 75%;
+        height: 85%;
         position: fixed;
         padding-bottom: 50px;
         bottom: 0;
@@ -882,7 +1038,7 @@ possible future styling
     }
 
     .modal-back {
-        background: linear-gradient(0deg, rgba(0,0,0,0.5) 0%,rgba(0,0,0,0.5) 50%, rgba(0,0,0,0) 100%); 
+        background: linear-gradient(0deg, rgba(0,0,0,0.5) 0%,rgba(0,0,0,0.5) 80%, rgba(0,0,0,0) 100%); 
     }
 
     #mdl-big {
@@ -891,10 +1047,10 @@ possible future styling
 
     @keyframes fade {
         from {
-            background: linear-gradient(0deg, rgba(0,0,0,0) 0%,rgba(0,0,0,0) 50%, rgba(0,0,0,0) 100%); 
+            background: linear-gradient(0deg, rgba(0,0,0,0) 0%,rgba(0,0,0,0) 80%, rgba(0,0,0,0) 100%); 
         }
         to {
-            background: linear-gradient(0deg, rgba(0,0,0,0.5) 0%,rgba(0,0,0,0.5) 50%, rgba(0,0,0,0) 100%); 
+            background: linear-gradient(0deg, rgba(0,0,0,0.5) 0%,rgba(0,0,0,0.5) 80%, rgba(0,0,0,0) 100%); 
         }
     }
     
@@ -949,10 +1105,6 @@ possible future styling
         height: calc(100vh - 60px);
         justify-content: flex-start;
         overflow: scroll;
-    }
-
-    .launch {
-        background: var(--secondary);
     }
 
     .buttonContainer {
@@ -1016,5 +1168,70 @@ possible future styling
     
     .mod-post:hover {
         background-color: var(--modal-button-color);
+    }
+
+    .modal-button:hover {
+        background-color: var(--modal-button-color);
+    }
+
+    .modal-back-btn:hover {
+        background-color: var(--modal-button-color);
+    }
+
+    .modal-close:hover {
+        background-color: var(--modal-button-color);
+    }
+
+    .ext-link:hover {
+        color: var(--attachment-color);
+        background-color: var(--attachment-background-color);
+        text-decoration: none;
+    }
+
+    .attachment:hover {
+        color: var(--attachment-color-hover);
+        background-color: var(--attachment-background-color-hover);
+        text-decoration: none;
+    }
+
+    .button:hover {
+        background-color: var(--accent-color);
+    }
+
+    .modal-button:active {
+        background-color: var(--hov-modal-button-color);
+    }
+
+    .modal-back-btn:active {
+        background-color: var(--hov-modal-button-color);
+    }
+
+    .modal-close:active {
+        background-color: var(--hov-modal-button-color);
+    }
+
+
+    .ext-link:active {
+        color: var(--attachment-color-hover);
+        background-color: var(--attachment-background-color-hover);
+        text-decoration: none;
+    }
+
+    .attachment:active {
+        color: var(--attachment-color-hover);
+        background-color: var(--attachment-background-color-hover);
+        text-decoration: none;
+    }
+
+    .button:active {
+        background-color: var(--hov-accent-color);
+    }
+
+    .launch-logo {
+        animation: none;
+    }
+
+    .emoji-button {
+        display: none;
     }
 }
