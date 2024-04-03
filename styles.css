@@ -3,7 +3,7 @@ html {
     color: var(--color);
     --font: Whitney;
     font-family: var(--font);
-    transition: background-color 0.25s ease-in-out;
+    transition: background-color 0.2s ease-in-out;
     scrollbar-gutter: stable;
 }
 
@@ -78,8 +78,11 @@ a:hover {
     text-decoration: underline;
 }
 
-code {
-    background-color: #00000020;
+pre {
+    background: #00000050;
+    padding: var(--padding);
+    border-radius: var(--border-radius);
+    overflow: scroll;
 }
 
 i {
@@ -116,6 +119,10 @@ hr {
     border-top: 1px solid;
 }
 
+ul {
+    margin: var(--text-margin);
+}
+
 bridge {
     background-color: var(--primary);
     border-radius: 25px;
@@ -134,6 +141,10 @@ bridge {
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.launch-logo {
+    animation: infinite 1s ease-in-out spin;
 }
 
 .embed {
@@ -170,12 +181,15 @@ bridge {
     margin-top: 200px;
 }
 
-
-.button:hover, .button:focus {
+.button:hover {
     background-color: var(--hov-color);
 }
 
-.posts, .settings, .login {
+.button:active {
+    background-color: var(--hov-accent-color);
+}
+
+.posts, .settings, .login, .explore {
     margin: calc(var(--margin) / 2);
     /*border: 1px solid var(--accent-color);*/
 }
@@ -213,21 +227,39 @@ bridge {
     border: var(--border);
 }
 
+.sub-msg-cnt {
+    padding-left: calc(var(--padding) / 2);
+    font-size: 14px;
+    height: auto;
+    overflow: hidden;
+    transition: all 0.1s ease-out;
+}
+
 .message-input {
     padding: 1em;
     flex: 0.9;
-    margin: 5px;
+    margin: calc(var(--margin)/2);
     overflow-y: hidden;
 }
 
 .message-send {
+    flex: 0.2;
+    margin: calc(var(--margin)/2);
+    min-width: 60px;
+    max-width: 75px;
+}
+
+.message-tool {
     flex: 0.1;
-    margin: 5px;
+    margin: calc(var(--margin)/2);
+    min-width: 40px;
 }
 
 .wrapper {
     padding: var(--padding);
     width: 100%;
+    height: 100%;
+    overflow: hidden;
 }
 
 .post {
@@ -279,13 +311,23 @@ bridge {
     color: var(--hov-button-color);
 }
 
+.toolButton:active {
+    padding-top: 3px;
+    padding-bottom: 2px;
+}
+
 .avatar {
     width: 100%;
     width: 54px;
     border-radius: 100px;
-    margin: var(--text-margin) 0 10px 0;
     box-sizing: border-box;
     aspect-ratio: 1;
+    box-shadow: 0px 1px 5px #00000050;
+}
+
+.avatar:active {
+    transform: translateY(2px);
+    box-shadow: none;
 }
 
 .avatar-big {
@@ -294,13 +336,18 @@ bridge {
     margin: 0 0 10px 0;
     box-sizing: border-box;
     aspect-ratio: 1;
+    box-shadow: 0px 1px 5px #00000050;
+}
+
+.svg-avatar {
+    background-color: #fff;
 }
 
 .pfp {
     padding: 0 var(--padding);
     align-items: center;
     display: flex;
-    height: 90px;
+    max-height: calc(var(--padding)*9);
 }
 
 .date {
@@ -476,9 +523,10 @@ possible future styling
 .modal {
     background-color: var(--modal-color);
     box-shadow: 0px 5px 10px #000;
-    width: 400px;
+    width: 80%;
+    max-width: 400px;
     padding: var(--padding);
-    height: calc(60% + 50px);
+    height: calc(70% + 55px);
     z-index: 1;
     box-sizing: border-box;
     display: flex;
@@ -495,6 +543,33 @@ possible future styling
     padding: var(--button-padding);
     border-radius: var(--border-radius);
     align-self: end;
+    transition: var(--transition);
+}
+
+.modal-close:hover {
+    background-color: var(--hov-modal-button-color);
+}
+
+.modal-close:active {
+    background-color: var(--modal-button-color);
+}
+
+.modal-back-btn {
+    background-color: var(--modal-button-color);
+    width: 100%;
+    padding: var(--button-padding);
+    border-radius: var(--border-radius);
+    align-self: end;
+    transition: var(--transition);
+    margin-bottom: var(--margin);
+}
+
+.modal-back-btn:hover {
+    background-color: var(--hov-modal-button-color);
+}
+
+.modal-back-btn:active {
+    background-color: var(--modal-button-color);
 }
 
 .modal-button {
@@ -502,8 +577,29 @@ possible future styling
     width: 100%;
     padding: var(--button-padding);
     border-radius: var(--border-radius);
-    margin-top: 0.5em;
-    margin-bottom: 1em;
+    margin-top: var(--margin);
+    margin-bottom: var(--margin);
+    text-align: left;
+    display: flex;
+    align-items: center;
+    transition: var(--transition);
+}
+
+.modal-button:hover {
+    background-color: var(--hov-modal-button-color);
+}
+
+.modal-button:active {
+    background-color: var(--modal-button-color);
+}
+
+.modal-select {
+    background-color: var(--modal-button-color);
+    width: 100%;
+    padding: var(--button-padding);
+    border-radius: var(--border-radius);
+    margin-top: var(--margin);
+    margin-bottom: var(--margin);
     text-align: left;
     display: flex;
     align-items: center;
@@ -513,6 +609,12 @@ possible future styling
     width: 100%;
     height: 100%;
     margin-bottom: 10px;
+    overflow: auto;
+    box-sizing: border-box;
+}
+
+.modal-bottom {
+    width: 100%;
 }
 
 .modal-icon {
@@ -541,21 +643,94 @@ possible future styling
     width: 100%;
     padding: var(--button-padding);
     border-radius: var(--border-radius);
-    margin-top: 0.5em;
-    margin-bottom: 1em;
+    margin: var(--margin) 0;
     text-align: left;
     display: flex;
     align-items: center;
     box-sizing: border-box;
     min-height: 100px;
+    transition: var(--transition);
+}
+
+.mdl-txt:focus {
+    background-color: var(--hov-modal-button-color);
+}
+
+.mdl-inp {
+    background-color: var(--modal-button-color);
+    flex: 1;
+    padding: var(--button-padding);
+    border-radius: var(--border-radius);
+    margin: var(--margin) 0;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+    transition: var(--transition);
+}
+
+.mdl-inp:focus {
+    background-color: var(--hov-modal-button-color);
 }
 
 .mdl-hr {
-    color: var(--hov-accent-color);
+    color: var(--modal-button-color);
 }
 
 #mdl-uptd {
     height: auto;
+}
+
+#mdl-big {
+    width: 80%;
+    max-width: 600px;
+}
+
+.mdl-ovr {
+    overflow: auto;
+}
+
+.mod-actions {
+    display: flex;
+}
+
+.md-fx {
+    margin: var(--margin) 0 var(--margin) 0;
+}
+
+.md-inp-btn {
+    flex: 0.15;
+    margin: var(--margin) 0 var(--margin) var(--margin);
+    background-color: var(--modal-button-color);
+}
+
+.md-inp-btn:hover {
+    background-color: var(--hov-modal-button-color);
+}
+
+.mod-actions > :not(:first-child):not(:last-child) {
+    margin: var(--margin);
+}
+
+.mod-table {
+    border-radius: var(--border-radius);
+    margin: var(--margin);
+    display: flex;
+    flex-direction: column;
+    border: 2px solid var(--modal-button-color);
+    overflow: hidden;
+}
+
+.table-section {
+    display: flex;
+
+}
+
+.mod-td {
+    border: 1px solid var(--modal-button-color);
+    width: calc(100% / 3);
+    padding: var(--padding);
+    overflow: scroll;
 }
 
 @keyframes popup {
@@ -578,17 +753,266 @@ possible future styling
 
 @keyframes fade {
     from {
-        opacity: 0.5;
+        background: rgba(0,0,0,0); 
     }
     to {
-        opacity: 1;
+        background: rgba(0,0,0,0.5); 
     }
 }
 
-@media screen and (max-width: 480px) {
+@keyframes slidedown {
+    from {
+        transform: translateY(-20px);
+    }
+    to {
+        transform: translateY(0);
+    }
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0);
+    }
     
+    75% {
+        transform: rotate(1turn);
+    }
+    
+    100% {
+        transform: rotate(1turn);
+    }
+}
+
+.section {
+    background-color: var(--accent-color);
+    color: var(--color);
+    border: none;
+    border-radius: var(--button-radius);
+    padding: var(--padding);
+}
+
+.section-form {
+    width: 100%;
+    display: flex;
+}
+
+.section-input {
+    background-color: var(--accent-color);
+    color: var(--color);
+    border: none;
+    border-radius: var(--button-radius);
+    padding: var(--padding);
+    box-sizing: border-box;
+    flex: 0.9;
+    margin-right: 5px;
+}
+
+.section-input:focus {
+    background-color: var(--hov-color);
+}
+
+.section-send {
+    flex: 0.1;
+    margin-left: 5px;
+}
+
+.hidden {
+    display: none;
+}
+
+#header {
+    display: none !important;
+}
+
+.desc {
+    font-size: 12px;
+}
+
+.editor {
+    padding: var(--padding);
+    min-height: 270px;
+}
+
+.profile {
+    border: none;
+    width: 100%;
+    height: 99%; /*temp solution*/
+}
+
+.report-box {
+    background-color: var(--modal-button-color);
+    border-radius: var(--border-radius);
+    margin: var(--margin) 0;
+    border: var(--border);
+    padding: var(--padding);
+}
+
+.report-box:hover {
+    background-color: var(--hov-modal-button-color);
+}
+
+.report-box:hover .buttonContainer {
+    background-color: var(--hov-modal-button-color);
+    display: block;
+}
+
+.report-post {
+    border: var(--border);
+    border-radius: var(--border-radius);
+    padding: var(--padding);
+    background-color: var(--modal-color);
+    box-sizing: border-box;
+    word-wrap: anywhere;
+    display: flex;
+}
+
+.report-user {
+    border: var(--border);
+    border-radius: var(--border-radius);
+    padding: var(--padding);
+    background-color: var(--accent-color);
+    box-sizing: border-box;
+    word-wrap: anywhere;
+    display: flex;
+}
+
+.mod-post {
+    background-color: var(--modal-button-color);
+    margin: var(--margin) 0 var(--margin) 0;
+    border-radius: var(--border-radius);
+    word-wrap: anywhere;
+    border: var(--border);
+    display: flex;
+}
+
+.mod-post:hover {
+    background-color: var(--hov-modal-button-color);
+}
+
+.mdbtcntner {
+    display: none;
+    float: right;
+}
+
+.mod-post:hover .mdbtcntner {
+    background-color: var(--hov-modal-button-color);
+    display: block;
+}
+
+.custom-bg {
+    --modal-button-color: #ffffff20;
+    --hov-modal-button-color: #ffffff30;
+    --hov-color: #ffffff20;
+    --hov-accent-color: #ffffff10;
+    --accent-color: #ffffff20;
+    --color: #fefefe;
+    color: var(--color);
+}
+
+.edit-txt {
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+}
+
+.emojisidebar {
+    display: flex;
+    flex-direction: column;
+}
+
+.emojipicker {
+    position: absolute;
+    background-color: var(--modal-color);
+    padding: var(--padding);
+    margin: calc(var(--margin)/2);
+    right: 80px;
+    top: 50px;
+    box-shadow: 0px 3px 10px #00000050;
+    border-radius: var(--border-radius);
+    display: flex;
+    width: 570px;
+    min-width: 314px;
+    max-width: 629px;
+    overflow: auto;
+    resize: horizontal;
+    transform: translateY(0px);
+    animation: slidedown cubic-bezier(.2,-.25,0,1) 0.2s forwards;
+}
+
+.emojisec {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.emojicont {
+    padding-left: var(--padding);
+    overflow-y: scroll;
+    max-height: 430px;
+    scrollbar-width: none;
+    width: 100%;
+}
+
+.emojiheader {
+    margin: calc(var(--margin)/2);
+}
+
+.emojibutton {
+    background-color: var(--modal-button-color);
+    font-size: 24px;
+    padding: var(--padding);
+    margin: calc(var(--margin)/2);
+    width: 52.95px;
+    height: 52.95px;
+}
+
+.emojibutton:hover {
+    background-color: var(--hov-modal-button-color);
+}
+
+.emojibuttonside {
+    background-color: var(--modal-button-color);
+    font-size: 16px;
+    padding: var(--padding);
+    margin: calc(var(--margin)/2);
+}
+
+.emojisearch {
+    position: sticky;
+    display: flex;
+    top: 0;
+    background-color: var(--modal-color);
+    padding: calc(var(--padding)/2) 0;
+}
+
+.emjinpt {
+    background-color: var(--modal-button-color);
+    color: var(--color);
+    border: none;
+    border-radius: var(--button-radius);
+    padding: var(--padding);
+    box-sizing: border-box;
+    flex: 1;
+    margin: 0 calc(var(--margin)/2);
+}
+
+.emjinpt:focus {
+    background-color: var(--hov-modal-button-color);
+}
+
+.emoji-back {
+    display: none;
+    position: fixed;
+    top:0;
+    left:0;
+    width: 100vw;
+    height: 100vh;
+}
+
+@media screen and (max-width: 480px) {
     .modal {
         width: 100%;
+        max-width: 100%;
+        height: 85%;
         position: fixed;
         padding-bottom: 50px;
         bottom: 0;
@@ -598,6 +1022,10 @@ possible future styling
         border-bottom-right-radius: 0;
         transform: translateY(-50%);
         animation: popup cubic-bezier(.2,-.25,0,1) 0.2s forwards;
+    }
+
+    .modal-back-btn {
+        border-radius: 100px;
     }
 
     .modal-close {
@@ -610,9 +1038,22 @@ possible future styling
     }
 
     .modal-back {
-        background: linear-gradient(0deg, rgba(0,0,0,0.5) 0%,rgba(0,0,0,0.5) 50%, rgba(0,0,0,0) 100%); 
+        background: linear-gradient(0deg, rgba(0,0,0,0.5) 0%,rgba(0,0,0,0.5) 80%, rgba(0,0,0,0) 100%); 
     }
 
+    #mdl-big {
+        width: 100%;
+    }
+
+    @keyframes fade {
+        from {
+            background: linear-gradient(0deg, rgba(0,0,0,0) 0%,rgba(0,0,0,0) 80%, rgba(0,0,0,0) 100%); 
+        }
+        to {
+            background: linear-gradient(0deg, rgba(0,0,0,0.5) 0%,rgba(0,0,0,0.5) 80%, rgba(0,0,0,0) 100%); 
+        }
+    }
+    
     #page {
         justify-content: normal;
         overflow-x: scroll;
@@ -623,7 +1064,6 @@ possible future styling
         scrollbar-width: none;
         scrollbar-color: transparent;
         -ms-overflow-style: -ms-autohiding-scrollbar;
-        
     }
     
     #page::-webkit-scrollbar {
@@ -667,10 +1107,6 @@ possible future styling
         overflow: scroll;
     }
 
-    .launch {
-        background: var(--secondary);
-    }
-
     .buttonContainer {
         display: none;
     }
@@ -711,56 +1147,91 @@ possible future styling
     .embed {
         max-width: 100% !important;
     }
-}
 
-.section {
-    background-color: var(--accent-color);
-    color: var(--color);
-    border: none;
-    border-radius: var(--button-radius);
-    padding: var(--padding);
-}
+    .mdbtcntner {
+        display: block;
+        float: right;
+    }
 
-.section-form {
-    width: 100%;
-    display: flex;
-}
+    .report-box .buttonContainer {
+        display: block;
+    }
 
-.section-input {
-    background-color: var(--accent-color);
-    color: var(--color);
-    border: none;
-    border-radius: var(--button-radius);
-    padding: var(--padding);
-    box-sizing: border-box;
-    flex: 0.9;
-    margin-right: 5px;
-}
+    .report-box:hover, .report-box:hover .buttonContainer {
+        background-color: var(--modal-button-color);
+    }
+    
+    .mod-post:hover .mdbtcntner {
+        background-color: var(--modal-button-color);
+        display: block;
+    }
+    
+    .mod-post:hover {
+        background-color: var(--modal-button-color);
+    }
 
-.section-send {
-    flex: 0.1;
-    margin-left: 5px;
-}
+    .modal-button:hover {
+        background-color: var(--modal-button-color);
+    }
 
-.hidden {
-    display: none;
-}
+    .modal-back-btn:hover {
+        background-color: var(--modal-button-color);
+    }
 
-#header {
-    display: none !important;
-}
+    .modal-close:hover {
+        background-color: var(--modal-button-color);
+    }
 
-.desc {
-    font-size: 12px;
-}
+    .ext-link:hover {
+        color: var(--attachment-color);
+        background-color: var(--attachment-background-color);
+        text-decoration: none;
+    }
 
-.editor {
-    padding: var(--padding);
-    min-height: 270px;
-}
+    .attachment:hover {
+        color: var(--attachment-color-hover);
+        background-color: var(--attachment-background-color-hover);
+        text-decoration: none;
+    }
 
-.profile {
-    border: none;
-    width: 100%;
-    height: 100%;
+    .button:hover {
+        background-color: var(--accent-color);
+    }
+
+    .modal-button:active {
+        background-color: var(--hov-modal-button-color);
+    }
+
+    .modal-back-btn:active {
+        background-color: var(--hov-modal-button-color);
+    }
+
+    .modal-close:active {
+        background-color: var(--hov-modal-button-color);
+    }
+
+
+    .ext-link:active {
+        color: var(--attachment-color-hover);
+        background-color: var(--attachment-background-color-hover);
+        text-decoration: none;
+    }
+
+    .attachment:active {
+        color: var(--attachment-color-hover);
+        background-color: var(--attachment-background-color-hover);
+        text-decoration: none;
+    }
+
+    .button:active {
+        background-color: var(--hov-accent-color);
+    }
+
+    .launch-logo {
+        animation: none;
+    }
+
+    .emoji-button {
+        display: none;
+    }
 }

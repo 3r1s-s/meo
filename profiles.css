@@ -1,10 +1,11 @@
         html {
             transition: none;
-            background-color: var(--modal-color);
+            background-color: transparent;
+            scrollbar-width: none;
         }
 
         hr {
-            color: var(--hov-accent-color);
+            color: var(--modal-button-color);
         }
         
         .uname {
@@ -14,15 +15,13 @@
 
         .dm-btn {
             flex: 0.1;
-        }
-
-        .updt-prfl {
-            margin: 0;
+            background-color: transparent;
         }
 
         .mdl-sec {
             width: 100%;
             max-width: 400px;
+            border-radius: var(--border-radius);
         }
 
         .usr-header {
@@ -41,20 +40,26 @@
         #profile-photo {
             font-size: 12px;
         }
+
+        .svg-avatar {
+            background-color: #fff;
+        }
         
         .sec {
-            background-color: var(--hov-accent-color);
+            background-color: var(--modal-button-color);
             display: flex;
             align-items: center;
             margin: var(--text-margin) 0 var(--text-margin) 0;
             padding: var(--padding);
             border-radius: var(--border-radius);
+            word-wrap: anywhere;
         }
                 
         .quote-edit {
             font-size: 16px;
-            width: 100%;
-            padding: 0;
-            background-color: var(--hov-accent-color);
-            min-height: 100px;
+            padding: var(--padding);
+        }
+
+        .profile-qt, p {
+            margin: 0;
         }
