@@ -7,10 +7,15 @@ var sidediv = document.querySelectorAll(".side");
 var lul = 0;
 var sul = "";
 
+let ipBlocked = false;
+
 const pfpCache = {};
 
 loadsavedplugins();
 loadcstmcss();
+
+const communityDiscordLink = "https://discord.com/invite/THgK9CgyYJ";
+const forumLink = "https://forums.meower.org";
 
 function replsh(rpl) {
     var trimmedString = rpl.length > 25 ?
@@ -88,6 +93,11 @@ function main() {
         } else if (sentdata.val == "I:011 | Invalid Password") {
             logout(true);
             openUpdate("Wrong Password!");
+          
+        } else if (sentdata.val == "E:119 | IP Blocked") {
+            ipBlockedModal();
+            ipBlocked = true;
+          
         } else if (sentdata.val.post_origin == page) {
             if (loggedin == true) {
                 loadpost(sentdata.val);
@@ -813,7 +823,7 @@ function logout(iskl) {
     document.getElementById("nav").innerHTML = "";
     document.getElementById("groups").innerHTML = "";
     end = false;
-    main();
+    if (!ipBlocked) main();
 }
 
 function loadstgs() {
@@ -1007,7 +1017,7 @@ function loadappearance() {
     <br>
     <h2 style="display:none;">Icons</h2>
     <div class="icons" style="display:none;">
-        <button class="icon-button"><img class="icon" src="images/Meo.png" width="64px"></button>
+        <button class="icon-button"><img class="icon" src="images/meo.png" width="64px"></button>
         <button class="icon-button"><img class="icon" src="images/Blue Gradient.png" width="64px"></button>
         <button class="icon-button"><img class="icon" src="images/Blue Solid.png" width="64px"></button>
         <button class="icon-button"><img class="icon" src="images/Enceladus.png" width="64px"></button>
@@ -1082,7 +1092,7 @@ function loadcstmcss() {
 function changecon(index) {
 
     const icons = [
-        'Meo.png',
+        'meo.png',
         'Blue Gradient.png',
         'Blue Solid.png',
         'Enceladus.png',
@@ -1162,10 +1172,12 @@ function formattime(timestamp) {
 }
 
 function ping() {
-    meowerConnection.send(JSON.stringify({
-        cmd: "ping",
-        val: ""
-    }));
+    if (!ipBlocked) {
+        meowerConnection.send(JSON.stringify({
+            cmd: "ping",
+            val: ""
+        }));
+    }
 }
 
 function autoresize() {
@@ -1217,6 +1229,29 @@ function openUsrModal(uId) {
         }
     }
     
+}
+
+function ipBlockedModal() {
+    console.log("Showing IP blocked modal");
+    document.documentElement.style.overflow = "hidden";
+
+    let modalback = document.querySelector(".modal-back");
+
+    if (modalback) {
+        modalback.style.display = "flex";
+
+        let modal = modalback.querySelector(".modal");
+        if (modal) {
+            let modaltop = modal.querySelector(".modal-top");
+            if (modaltop) {
+                modaltop.innerHTML = `
+                <h3>IP Blocked</h3>
+                <hr class="mdl-hr">
+                <span class="subheader">Your current IP address is blocked from accessing Meower.<br /><br />If you think this is a mistake, please contact the moderation team via <a href="${communityDiscordLink}" target="_blank">Discord</a> or the <a href="${forumLink}" target="_blank">Forum</a>, or try a different network.</span>
+                `
+            }
+        }
+    }
 }
 
 function reportModal(id) {
