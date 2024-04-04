@@ -14,6 +14,9 @@ const pfpCache = {};
 loadsavedplugins();
 loadcstmcss();
 
+const communityDiscordLink = "https://discord.com/invite/THgK9CgyYJ";
+const forumLink = "https://forums.meower.org";
+
 function replsh(rpl) {
     var trimmedString = rpl.length > 25 ?
         rpl.substring(0, 22) + "..." :
@@ -92,7 +95,6 @@ function main() {
             openUpdate("Wrong Password!");
           
         } else if (sentdata.val == "E:119 | IP Blocked") {
-            // TODO: Use openUpdate()?
             ipBlockedModal();
             ipBlocked = true;
           
@@ -1229,8 +1231,6 @@ function openUsrModal(uId) {
     
 }
 
-// TODO: Rewrite in a nicer fashion
-// TODO: Add links to Discord and Forum
 function ipBlockedModal() {
     console.log("Showing IP blocked modal");
     document.documentElement.style.overflow = "hidden";
@@ -1247,7 +1247,7 @@ function ipBlockedModal() {
                 modaltop.innerHTML = `
                 <h3>IP Blocked</h3>
                 <hr class="mdl-hr">
-                <span class="subheader">Your current IP address is blocked from accessing Meower. If you think this is a mistake, contact the moderation team via Discord or the Forum.</span>
+                <span class="subheader">Your current IP address is blocked from accessing Meower.<br /><br />If you think this is a mistake, please contact the moderation team via <a href="${communityDiscordLink}" target="_blank">Discord</a> or the <a href="${forumLink}" target="_blank">Forum</a>, or try a different network.</span>
                 `
             }
         }
