@@ -471,7 +471,7 @@ function loadPfp(username) {
                 .then(userData => {
 
                     if (userData.avatar) {
-                        const pfpurl = `https://uploads.meower.org/icons/${userData.avatar}?format=png`;
+                        const pfpurl = `https://uploads.meower.org/icons/${userData.avatar}.png`;
 
                         pfpElement = document.createElement("img");
                         pfpElement.setAttribute("src", pfpurl);
