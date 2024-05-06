@@ -34,5 +34,11 @@
     "creator": "Bloctans",
     "description": "Rotate your meo!!!!",
     "script": "plugins/rotate.js"
+  },
+    {
+    "name": "Meower Rotate",
+    "creator": "3r1s-s",
+    "description": "I love adware!!",
+    "script": "plugins/meoads.js"
   }
 ]
