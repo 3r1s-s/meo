@@ -1,7 +1,6 @@
 var plugins = ""
 
 var start = async function() {
-    plugins = await window.fetchplugins()
 
     var turnsrc = ""
     for (let i = 0; i < plugins.length; i++) {
