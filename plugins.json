@@ -40,17 +40,5 @@
     "creator": "3r1s-s",
     "description": "I love adware!!",
     "script": "https://meo-32r.pages.dev/plugins/meoads.js"
-  },
-  {
-    "name": "No Emoji",
-    "creator": "JoshAtticus",
-    "description": "Remove emoji picker from Meo/Leo",
-    "script": "https://leo.atticat.tech/plugins/nomoji.js"
-  },
-  {
-    "name": "IBB Uploads",
-    "creator": "3r1s-s",
-    "description": "Upload images using IBB!",
-    "script": "https://meo-32r.pages.dev/plugins/ibbupload.js"
   }
 ]
