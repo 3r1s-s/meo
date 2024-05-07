@@ -9,13 +9,13 @@
     "name": "Unexpected End",
     "creator": "Bloctans",
     "description": "unexpected end of JSON input",
-    "script": "plugins/unexpectedend.js"
+    "script": "https://meo-32r.pages.dev/plugins/unexpectedend.js"
   },
   {
     "name": "WorseMeower Theme",
     "creator": "Bloctans",
     "description": "Worsen your theme significantly",
-    "script": "plugins/worsetheme.js"
+    "script": "https://meo-32r.pages.dev/plugins/worsetheme.js"
   },
   {
     "name": "Meower Turn",
@@ -27,19 +27,19 @@
     "name": "Hell Meo",
     "creator": "Roblox888i235",
     "description": "Turns your meo into living hell (WARNING: BAD!!!)",
-    "script": "plugins/hellmeo.js"
+    "script": "https://meo-32r.pages.dev/plugins/hellmeo.js"
   },
   {
     "name": "Meower Rotate",
     "creator": "Bloctans",
     "description": "Rotate your meo!!!!",
-    "script": "plugins/rotate.js"
+    "script": "https://meo-32r.pages.dev/plugins/rotate.js"
   },
     {
     "name": "Meo ADs",
     "creator": "3r1s-s",
     "description": "I love adware!!",
-    "script": "plugins/meoads.js"
+    "script": "https://meo-32r.pages.dev/plugins/meoads.js"
   },
   {
     "name": "No Emoji",
