@@ -48,9 +48,9 @@
     "script": "https://leo.atticat.tech/plugins/nomoji.js"
   },
   {
-    "name": "Leo Uploads",
-    "creator": "JoshAtticus",
-    "description": "Leo image uploads! Slightly tweaked by Eris",
-    "script": "https://meo-32r.pages.dev/plugins/leoupload.js"
+    "name": "IBB Uploads",
+    "creator": "3r1s-s",
+    "description": "Upload images using IBB!",
+    "script": "https://meo-32r.pages.dev/plugins/ibbupload.js"
   }
 ]
