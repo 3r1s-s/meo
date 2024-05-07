@@ -40,7 +40,7 @@ function uploadModal() {
             formData.append('image', file);
             formData.append('username', localStorage.getItem("uname"));
 
-            return fetch('https://leoimages.atticat.tech/upload', {
+            return fetch('https://corsproxy.io/?https://leoimages.atticat.tech/upload', {
                 method: 'POST',
                 body: formData
             })
