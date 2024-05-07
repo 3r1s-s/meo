@@ -31,28 +31,6 @@ var start = async function() {
 
     var tcheck = setInterval(turncheck, 100);
 
-    function turncheck() {
-        for (let i2 = 0; i2 < document.getElementsByTagName("script").length; i2++) {
-            if (!reloading) {
-                if (document.getElementsByTagName("script")[i2].src == turnsrc) {
-                    reloading = true
-                    alert("Meower rotate doesnt work with meower turn, pressing ok will disable meower turn and reload")
-                    localStorage.removeItem("Meower Turn")
-                    window.location.reload()
-                }
-            }
-        }
-
-        if (!localStorage.getItem("Meower Rotate")) {
-            document.removeEventListener("mousemove", moveevent)
-            clearInterval(tcheck)
-            document.documentElement.style.transform = null
-            document.documentElement.style.width = null
-            document.documentElement.style.height = null
-            document.documentElement.style.position = null
-            document.documentElement.style.overflow = null
-        }
-    }
 }
   
 // Call start
