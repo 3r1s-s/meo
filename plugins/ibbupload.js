@@ -34,7 +34,7 @@ function uploadModal() {
 
         const textarea = document.querySelector('.message-input.text');
         textarea.placeholder = `Uploading ${files.length} ${files.length > 1 ? 'images' : 'image'}...`;
-        textarea.disabled = "true"
+        textarea.disabled = true;
 
 
         const uploads = files.map(file => {
@@ -55,7 +55,7 @@ function uploadModal() {
             textarea.value += imageUrls.join('\n') + '\n';
             autoresize();
             textarea.placeholder = lang().meo_messagebox;
-            textarea.disabled = "false"
+            textarea.disabled = false;
         });
     };
 }
