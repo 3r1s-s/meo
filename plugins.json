@@ -3,55 +3,55 @@
     "creator": "JoshAtticus",
     "description": "Glass theme for Meo",
     "script": "https://update.greasyfork.org/scripts/485845/Meo%20Glass.user.js",
-    "flags": "none"
+    "flags": "0"
 },
 {
     "name": "IBB Uploads",
     "creator": "3r1s-s",
     "description": "Upload images using IBB!",
     "script": "https://meo-32r.pages.dev/plugins/ibbupload.js",
-    "flags": "none"
+    "flags": "0"
 },
 {
     "name": "Unexpected End",
     "creator": "Bloctans",
     "description": "unexpected end of JSON input",
     "script": "https://meo-32r.pages.dev/plugins/unexpectedend.js",
-    "flags": "warn"
+    "flags": "1"
 },
 {
     "name": "WorseMeower Theme",
     "creator": "Bloctans",
     "description": "Worsen your theme significantly",
     "script": "https://meo-32r.pages.dev/plugins/worsetheme.js",
-    "flags": "warn"
+    "flags": "1"
 },
 {
     "name": "Meower Turn",
     "creator": "JoshAtticus",
     "description": "Make Meower turn on keypress",
     "script": "https://update.greasyfork.org/scripts/486561/Meower%20Turn.user.js",
-    "flags": "none"
+    "flags": "0"
 },
 {
     "name": "Hell Meo",
     "creator": "Roblox888i235",
     "description": "Turns your meo into living hell (WARNING: BAD!!!)",
     "script": "https://meo-32r.pages.dev/plugins/hellmeo.js",
-    "flags": "warn"
+    "flags": "1"
 },
 {
     "name": "Meower Rotate",
     "creator": "Bloctans",
     "description": "Rotate your meo!!!!",
     "script": "https://meo-32r.pages.dev/plugins/rotate.js",
-    "flags": "none"
+    "flags": "0"
 },
 {
     "name": "Meo ADs",
     "creator": "3r1s-s",
     "description": "I love adware!!",
     "script": "https://meo-32r.pages.dev/plugins/meoads.js",
-    "flags": "none"
+    "flags": "0"
 }
 ]
