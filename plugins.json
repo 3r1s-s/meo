@@ -6,6 +6,12 @@
     "script": "https://update.greasyfork.org/scripts/485845/Meo%20Glass.user.js"
   },
   {
+    "name": "IBB Uploads",
+    "creator": "3r1s-s",
+    "description": "Upload images using IBB!",
+    "script": "https://meo-32r.pages.dev/plugins/ibbupload.js"
+  },
+  {
     "name": "Unexpected End",
     "creator": "Bloctans",
     "description": "unexpected end of JSON input",
@@ -40,11 +46,5 @@
     "creator": "3r1s-s",
     "description": "I love adware!!",
     "script": "https://meo-32r.pages.dev/plugins/meoads.js"
-  },
-    {
-    "name": "IBB Uploads",
-    "creator": "3r1s-s",
-    "description": "Upload images using IBB!",
-    "script": "https://meo-32r.pages.dev/plugins/ibbupload.js"
   }
 ]
