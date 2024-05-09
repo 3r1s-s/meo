@@ -34,6 +34,8 @@ function uploadModal() {
 
         const textarea = document.querySelector('.message-input.text');
         textarea.placeholder = `Uploading ${files.length} ${files.length > 1 ? 'images' : 'image'}...`;
+        textarea.disabled = "true"
+
 
         const uploads = files.map(file => {
             const formData = new FormData();
@@ -45,15 +47,15 @@ function uploadModal() {
                 body: formData
             })
             .then(response => response.json())
-            .then(data => data.image_url) // Just return the URL
+            .then(data => data.data.url)
             .catch(error => errorModal("Error uploading image", error));
         });
 
         Promise.all(uploads).then(imageUrls => {
-            // Add all the URLs to the textarea
             textarea.value += imageUrls.join('\n') + '\n';
             autoresize();
-            textarea.placeholder = lang().meo_messagebox; // Reset placeholder
+            textarea.placeholder = lang().meo_messagebox;
+            textarea.disabled = "false"
         });
     };
 }
