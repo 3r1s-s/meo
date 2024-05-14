@@ -6,13 +6,6 @@
     "flags": "0"
 },
 {
-    "name": "IBB Uploads",
-    "creator": "3r1s-s",
-    "description": "Upload images using IBB!",
-    "script": "https://meo-32r.pages.dev/plugins/ibbupload.js",
-    "flags": "0"
-},
-{
     "name": "Unexpected End",
     "creator": "Bloctans",
     "description": "unexpected end of JSON input",
