@@ -927,11 +927,17 @@ async function loadplugins() {
     });
 }
 
-function loadpluginscript(scriptUrl) {
-    const script = document.createElement('script');
-    script.src = scriptUrl;
-    script.async = true;
-    document.head.appendChild(script);
+function loadPluginScript(scriptUrl) {
+    fetch(scriptUrl, {
+        headers: {
+            'Accept': 'application.javascript'
+        }
+    })
+    .then(response => response.text())
+    .then(data =>{
+        eval(data);
+    })
+    .catch(error => console.error('Error:', error));
 }
 
 async function fetchplugins() {
