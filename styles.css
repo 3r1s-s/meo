@@ -1717,6 +1717,10 @@ possible future styling
     display: none;
 }
 
+#profile-photo {
+    display: none;
+}
+
 .filesel {
     background-color: var(--accent-color);
     padding: var(--padding);
@@ -2542,6 +2546,18 @@ possible future styling
     .jump {
         position: sticky;
         bottom: var(--margin);
+    }
+        
+    .filesel {
+        display: none;
+    }
+        
+    #gc-photo {
+        display: block;
+    }
+
+    #profile-photo {
+        display: block;
     }
 }
 
