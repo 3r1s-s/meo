@@ -5,7 +5,7 @@
   "display": "standalone",
   "background_color": "#1c1c26",
   "lang": "en",
-  "scope": "/",
+  "scope": "/meo",
   "description": "Neo + Meower",
   "categories": [
     "communication",
