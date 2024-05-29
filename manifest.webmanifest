@@ -1,0 +1,52 @@
+{
+  "name": "meo",
+  "short_name": "meo",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1c1c26",
+  "lang": "en",
+  "scope": "/",
+  "description": "Neo + Meower",
+  "categories": [
+    "communication",
+    "chat",
+    "messaging"
+  ],
+  "orientation": "any",
+  "theme_color": "#1c1c26",
+  "icons": [
+    {
+      "src": "images/icons/meo_144.png",
+      "type": "image/png",
+      "sizes": "144x144",
+      "purpose": ""
+    },
+    {
+      "src": "images/icons/meo_192.png",
+      "type": "image/png",
+      "sizes": "192x192",
+      "purpose": "any"
+    },
+    {
+      "src": "images/monochrome.svg",
+      "type": "image/svg+xml",
+      "sizes": "48x48 72x72 96x96 128x128 256x256 512x512",
+      "purpose": "monochrome"
+    },
+    {
+      "src": "images/icons/meo_512.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "maskable"
+    }
+  ],
+  "id": "meov120",
+  "dir": "ltr",
+  "edge_side_panel": {
+    "preferred_width": 400
+  },
+  "display_override": [
+    "standalone",
+    "window-controls-overlay"
+  ]
+}

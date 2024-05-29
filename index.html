@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en-US" class="dark-theme">
+<head>
+    <title>meo</title>
+    <meta charset="UTF-8">
+    <link rel="icon" href="images/meo128.png">
+    <link rel="manifest" href="manifest.webmanifest">
+    <meta name="apple-mobile-web-app-title" content="meo">
+    <link rel="apple-touch-icon" sizes="180x180" href="images/meo.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="description" content="Neo + Meower">
+    <meta name="theme-color" content="#1c1c26">
+    <meta name="background-color" content="#1c1c26">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta class="special" property="og:image" content="images/meo.png">
+    <link rel="canonical" href="https://meo-32r.pages.dev/"/>
+
+    <!--Splash Screens for iOS Devices-->
+    <link href="images/splash/iphone5.png" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image">
+    <link href="images/splash/iphone6.png" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image">
+    <link href="images/splash/iphoneplus.png" media="(device-width: 621px) and (device-height: 1104px) and (-webkit-device-pixel-ratio: 3)" rel="apple-touch-startup-image">
+    <link href="images/splash/iphonex.png" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3)" rel="apple-touch-startup-image">
+    <link href="images/splash/iphonexr.png" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image">
+    <link href="images/splash/iphonexsmax.png" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3)" rel="apple-touch-startup-image">
+    <link href="images/splash/ipad.png" media="(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image">
+    <link href="images/splash/ipadpro1.png" media="(device-width: 834px) and (device-height: 1112px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image">
+    <link href="images/splash/ipadpro3.png" media="(device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image">
+    <link href="images/splash/ipadpro2.png" media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image">
+
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="themes.css">
+    <link rel="stylesheet" href="fonts.css">
+    <link rel="stylesheet" href="scheme.css">
+    <link rel="stylesheet" href="glass.css">
+    <style id="customtheme">
+      .custom-theme {
+          --primary: #15a4c1;
+          --secondary: #0f788e;
+          --background: #1c1f26;
+          --color: #fefefe;
+          --accent-color: #2f3540;
+          --hov-accent-color: #353b49;
+          --hov-color: #414959;
+          --link-color: #00abd2;
+          --attachment-background-color: #094c5b;
+          --attachment-color: #15a4c1;
+          --attachment-background-color-hover: #15a4c1;
+          --attachment-color-hover: #fefefe;
+          --button-color: #a5abb3;
+          --hov-button-color: #fefefe;
+          --modal-color: #2f3540;
+          --modal-button-color: #414959;
+          --hov-modal-button-color: #4d576a;
+          --color-scheme: dark;
+      }
+    </style>
+    <style id="customstyle"></style>
+</head>
+<body>
+  <div id="page">
+    <div id="nav" class="side">
+    </div>
+    <div id="main">
+      <div class="launch">
+        <svg class="launch-logo" width="128" height="128" viewBox="0 0 512 512" fill="var(--color)" xmlns="http://www.w3.org/2000/svg">
+          <g>
+            <path d="M468.42 20.5746L332.997 65.8367C310.218 58.8105 284.517 55.049 255.499 55.6094C226.484 55.049 200.78 58.8105 178.004 65.8367L42.5803 20.5746C18.9102 16.3251 -1.81518 36.2937 2.5967 59.1025L38.7636 200.894C18.861 248.282 12.1849 296.099 12.1849 325.027C12.1849 399.343 44.6613 492 255.499 492C466.339 492 498.815 399.343 498.815 325.027C498.815 296.099 492.139 248.282 472.237 200.894L508.404 59.1025C512.814 36.2937 492.09 16.3251 468.42 20.5746Z"/>
+          </g>
+          </svg>
+      </div>
+      <div id="msg">
+
+      </div>
+    </div>
+    <div id="groups" class="side">
+    </div>
+    <div class="image-back" onclick="closeImage()">
+      <div class="image-mdl">
+
+      </div>
+    </div>
+    <div class="modal-back">
+      <div class="modal">
+        <div class="modal-top">
+        </div>
+        <div class="modal-bottom">
+        </div>
+        <button class="modal-close" onclick="closemodal();" aria-label="close modal">Close</button>
+      </div>
+    </div>
+    </div>
+    <div class="emoji-back" onclick="closepicker()"></div>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/default.min.css">
+    <script src="lang.js" type="text/javascript"></script>
+    <script src="https://cdn.jsdelivr.net/npm/markdown-it@14.1.0/dist/markdown-it.min.js" type="text/javascript"></script>
+    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      window.md = new markdownit("default", {
+        breaks: true,
+        linkify: true,
+        typographer: true,
+      });
+    </script>
+    <script src="script.js" type="text/javascript"></script>
+    <script src="markdown.js" type="text/javascript"></script>
+    <script src="emoji.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      if ("serviceWorker" in navigator) {
+        navigator.serviceWorker
+          .register("sw.js")
+          .then(function (registration) {
+            // Registration was successful
+            console.log(
+              "ServiceWorker registration successful with scope: ",
+              registration.scope
+            );
+          })
+          .catch(function (err) {
+            // registration failed :(
+            console.log("ServiceWorker registration failed: ", err);
+          });
+      }
+      window.addEventListener("beforeinstallprompt", function (e) {
+        e.userChoice.then(function (choiceResult) {
+          console.log(choiceResult.outcome);
+          if (choiceResult.outcome == "dismissed") {
+            console.log("User cancelled home screen install");
+          } else {
+            console.log("User added to home screen");
+          }
+        });
+      });
+    </script>
+    <script type="text/javascript">
+      var element = new Image;
+      var devtoolsOpen = false;
+      element.__defineGetter__("id", function() {
+          devtoolsOpen = true;
+      });
+      setInterval(function() {
+          devtoolsOpen = false;
+          if (!settingsstuff().consolewarnings) {
+            console.log("%c" + "Warning!!", "font-size: 24px; color: red; font-weight: bold;");
+            console.log("Pasting anything in here is dangerous, there be dragons.");
+          }
+      }, 3000);
+  </script>
+</body>
+</html>

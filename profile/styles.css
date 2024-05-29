@@ -1,0 +1,103 @@
+html {
+    transition: none;
+    background-color: transparent;
+    scrollbar-width: none;
+}
+
+p {
+    margin: var(--margin) 0;
+}
+
+h1 {
+    margin: var(--margin) 0;
+}
+
+hr {
+    color: var(--modal-button-color);
+}
+
+#page {
+    overflow-x: hidden !important;
+}
+
+.username {
+    margin: 0;
+    flex: 1;
+}
+
+.dm-btn {
+    flex: 0.1;
+    background-color: transparent;
+}
+
+.mdl-sec {
+    width: 100%;
+    max-width: 480px;
+    border-radius: var(--border-radius);
+}
+
+.usr-header {
+    display: flex;
+}
+
+#avtr-clr {
+    width: 64px;
+}
+
+#avtr-clr,
+#profile-photo {
+    background-color: transparent;
+    padding: 4px;
+}
+
+#profile-photo {
+    display: none;
+}
+
+.svg-avatar {
+    background-color: #fff;
+}
+
+.sec {
+    background-color: var(--modal-button-color);
+    display: flex;
+    align-items: center;
+    margin: var(--text-margin) 0 var(--text-margin) 0;
+    padding: var(--padding);
+    border-radius: var(--border-radius);
+    word-wrap: anywhere;
+}
+
+.quote-edit {
+    font-size: 16px;
+    padding: var(--padding);
+    border: 2px dashed;
+}
+
+.profile-qt,
+p {
+    margin: 0;
+}
+
+.custom-bg > button,
+.custom-bg > .mdl-txt,
+.custom-bg > .sec {
+    border: 1px solid #ffffff20;
+}
+
+.custom-bg .quote-edit {
+    border: 2px dashed #ffffff20;
+}
+
+.custom-bg a {
+    color: var(--accent);
+}
+
+.custom-bg a:hover {
+    color: var(--accent);
+}
+
+.edit {
+    display: flex;
+    justify-content: space-between;
+}

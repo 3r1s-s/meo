@@ -1,0 +1,136 @@
+/* Styles for .glight-theme and .gdark-theme */
+
+.glight-theme .post:hover .buttonContainer,
+.glight-theme .message-container,
+.glight-theme .emojisearch,
+.gdark-theme .post:hover .buttonContainer,
+.gdark-theme .message-container,
+.gdark-theme .emojisearch {
+    background-color: transparent;
+}
+
+/* Styles for .glight-theme and .gdark-theme with backdrop-filter support */
+@supports ((-webkit-backdrop-filter: blur(2em)) or (backdrop-filter: blur(2em))) {
+    .glight-theme .post,
+    .glight-theme .emojipicker,
+    .glight-theme .modal,
+    .gdark-theme .post,
+    .gdark-theme .emojipicker,
+    .gdark-theme .modal {
+        backdrop-filter: blur(50px) saturate(1.5);
+        -webkit-backdrop-filter: blur(50px) saturate(1.5);
+        border: .5px solid rgba(0,0,0,.2);
+        box-shadow: inset 0 0 0 1px rgba(255,255,255,.2),0 8px 40px #00000050;
+    }
+
+    .glight-theme .post::before,
+    .glight-theme .modal::before,
+    .gdark-theme .post::before,
+    .gdark-theme .modal::before {
+        position: fixed;
+        width: 100%;
+        top: 0px;
+        height: 100%;
+        background-size: 100px 100px;
+        opacity: 0.04;
+        background-image: url("data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PScwIDAgNTEyIDUxMicgeG1sbnM9J2h0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnJz4KICA8ZmlsdGVyIGlkPSdub2lzZUZpbHRlcic+CiAgICA8ZmVUdXJidWxlbmNlIAogICAgICB0eXBlPSdmcmFjdGFsTm9pc2UnIAogICAgICBiYXNlRnJlcXVlbmN5PScwLjcnCiAgICAgIG51bU9jdGF2ZXM9JzMnIAogICAgICBzdGl0Y2hUaWxlcz0nc3RpdGNoJy8+CiAgICA8ZmVDb2xvck1hdHJpeCBpbj0idHVyYnVsZW5jZSIgdHlwZT0ic2F0dXJhdGUiIHZhbHVlcz0iMCIvPgoKICAgIDxmZUNvbXBvbmVudFRyYW5zZmVyPgogICAgICA8ZmVGdW5jUiB0eXBlPSJkaXNjcmV0ZSIgdGFibGVWYWx1ZXM9IjAgMSIgLz4KICAgICAgPGZlRnVuY0cgdHlwZT0iZGlzY3JldGUiIHRhYmxlVmFsdWVzPSIwIDEiIC8+CiAgICAgIDxmZUZ1bmNCIHR5cGU9ImRpc2NyZXRlIiB0YWJsZVZhbHVlcz0iMCAxIiAvPgogICAgPC9mZUNvbXBvbmVudFRyYW5zZmVyPgogIDwvZmlsdGVyPgogIAogIDxyZWN0IHdpZHRoPScxMDAlJyBoZWlnaHQ9JzEwMCUnIGZpbHRlcj0ndXJsKCNub2lzZUZpbHRlciknLz4KPC9zdmc+");
+        background-repeat: repeat;
+        mix-blend-mode: overlay;
+        content: "";
+        z-index: -1;
+    }
+
+    .glight-theme textarea,
+    .glight-theme button,
+    .glight-theme input,
+    .glight-theme select,
+    .glight-theme .section,
+    .glight-theme .stg-section,
+    .gdark-theme textarea,
+    .gdark-theme button,
+    .gdark-theme input,
+    .gdark-theme select,
+    .gdark-theme .section,
+    .gdark-theme .stg-section {
+        backdrop-filter: blur(5px) saturate(1.5);
+        -webkit-backdrop-filter: blur(5px) saturate(1.5);
+        border: .5px solid rgba(0,0,0,.2);
+        box-shadow: inset 0 0 0 1px rgba(255,255,255,.2),0 8px 40px #00000050;
+    }
+
+    .glight-theme .emojibutton,
+    .gdark-theme .emojibutton {
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+    }
+
+    .glight-theme ::-webkit-input-placeholder,
+    .gdark-theme ::-webkit-input-placeholder {
+        /* WebKit, Blink, Edge */
+        color: #ffffff70;
+    }
+
+    .glight-theme :-moz-placeholder,
+    .gdark-theme :-moz-placeholder {
+        /* Mozilla Firefox 4 to 18 */
+        color: #ffffff70;
+    }
+
+    .glight-theme ::-moz-placeholder,
+    .gdark-theme ::-moz-placeholder {
+        /* Mozilla Firefox 19+ */
+        color: #ffffff70;
+    }
+}
+
+.contrast-theme .post,
+.contrast-theme .emojipicker,
+.contrast-theme .modal,
+.contrast-theme .report-box,
+.contrast-theme .report-user,
+.contrast-theme .report-post,
+.contrast-theme .mod-post,
+.contrast-theme .stg-section,
+.contrast-theme .reply,
+.contrast-theme .section,
+.contrast-theme .searchitem,
+.contrast-theme input,
+.contrast-theme textarea,
+.contrast-theme select,
+.contrast-theme button {
+    border: 2px solid #0ff;
+}
+
+.contrast-theme .selected {
+    border: 2px solid #ff0;
+}
+
+.contrast-theme .post {
+    box-sizing: border-box;
+}
+
+.contrast-theme input:focus,
+.contrast-theme textarea:focus,
+.contrast-theme select:focus,
+.contrast-theme button:focus {
+    border: 2px solid #0f0;
+}
+
+.contrast-theme .mdl-hr {
+    border: 1px solid #0ff;
+}
+
+.contrast-theme .toolButton:hover {
+    background-color: var(--hov-color);
+}
+
+.contrast-theme .buttonContainer {
+    background-color: transparent;
+}
+
+.contrast-theme :-moz-placeholder,
+.contrast-theme ::-webkit-input-placeholder,
+.contrast-theme ::-moz-placeholder {
+    color: #ffffff;
+    opacity: 1;
+}
