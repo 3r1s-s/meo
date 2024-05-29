@@ -1,3 +1,0 @@
-# Meo
-
-Neo + Meower
