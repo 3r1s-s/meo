@@ -22,11 +22,13 @@ body {
 
 .hero {
     background: #131327;
-    display: flex;
     gap: 32px;
-    justify-content: center;
-    align-items: center;
     flex-direction: column;
+
+    background-image: url(images/back.webp);
+    background-size: contain;
+    background-repeat: repeat;
+    background-position: center;
 }
 
 .section {

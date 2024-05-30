@@ -1713,23 +1713,24 @@ possible future styling
     color-scheme: light;
 }
 
-#gc-photo {
-    display: none;
-}
-
-#profile-photo {
-    display: none;
-}
-
-.filesel {
-    background-color: var(--accent-color);
+#gc-photo::file-selector-button, #profile-photo::file-selector-button {
+    background-color: var(--hov-modal-button-color);
     padding: var(--padding);
     border-radius: var(--border-radius);
     transition: var(--transition);
+    color: var(--color);
+    border: none;
+    font-family: var(--font);
+    font-size: 16px;
+    width: 100px;
 }
 
-.filesel:hover {
-    background-color: var(--hov-accent-color);
+#gc-photo::file-selector-button:hover, #profile-photo::file-selector-button:hover {
+    cursor: pointer;
+}
+
+#gc-photo, #profile-photo {
+    width: 100px;
 }
 
 .duo-cl {
@@ -2546,18 +2547,6 @@ possible future styling
     .jump {
         position: sticky;
         bottom: var(--margin);
-    }
-        
-    .filesel {
-        display: none;
-    }
-        
-    #gc-photo {
-        display: block;
-    }
-
-    #profile-photo {
-        display: block;
     }
 }
 

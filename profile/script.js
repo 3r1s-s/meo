@@ -53,8 +53,7 @@ function fetchprofile() {
                 <div class="sec edit"><span>${lang().profile.profilecolor}:</span><input id="avtr-clr" type="color" value="#${data.avatar_color}"></input>
                 </div>
                 <div class="sec edit">
-                <span>${lang().profile.profilepic}:</span>
-                <label for="gc-photo" class="filesel">Choose Image</label>
+                <label for="gc-photo" class="filesel">${lang().profile.profilepic}</label>
                 <input type="file" id="profile-photo" accept="image/png,image/jpeg,image/webp,image/gif">
                 </div>
                 `;

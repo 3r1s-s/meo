@@ -4424,8 +4424,7 @@ function openGcModal() {
                         <input id="gc-clr" type="color" value="#1f5831">
                     </div>
                     <div class="gcsec">
-                        <span>Chat Icon</span>
-                        <label for="gc-photo" class="filesel">Choose Image</label>
+                        <label for="gc-photo" class="filesel">Chat Icon</label>
                         <input type="file" id="gc-photo" accept="image/png,image/jpeg,image/webp,image/gif">
                     </div>        
                 </div>
