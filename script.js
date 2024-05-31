@@ -13,7 +13,7 @@ let eul;
 let sul = "";
 let pre = settingsstuff().homepage ? 'home' : 'start';
 
-let bridges = ['Discord', 'SplashBridge', 'gc'];
+let bridges = ['Discord', 'SplashBridge', 'gc', 'Revower'];
 
 let ipBlocked = false;
 let openprofile = false;
