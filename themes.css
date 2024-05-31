@@ -7,9 +7,9 @@
     --accent-color: #2f3040;
     --hov-accent-color: #3e3f54;
     --hov-color: #4b4c66;
-    --link-color: #bea2ff;
-    --attachment-background-color: #372b63;
-    --attachment-color: #bea2ff;
+    --link-color: #9683f7;
+    --attachment-background-color: #322865;
+    --attachment-color: #b9a3f7;
     --attachment-background-color-hover: #765dee;
     --attachment-color-hover: #fefefe;
     --button-color: #babbe2;
@@ -17,6 +17,8 @@
     --modal-color: #2f3040;
     --modal-button-color: #4b4c66;
     --hov-modal-button-color: #626386;
+
+    --animation: none;
 
     --blue: #00abd2;
     --hov-blue: #19cbf3;
@@ -290,6 +292,7 @@
 }
 
 .oldlight-theme {
+    --primary: #b190fe;
     --background: #fefefe;
     --color: #383a41;
     --accent-color: #dbe0e8;
@@ -309,7 +312,7 @@
 }
 
 .old-theme {
-    --primary: #765dee;
+    --primary: #714cc8;
     --secondary: #b190fe;
     --background: #1a1b1e;
     --color: #fefefe;
@@ -389,6 +392,26 @@
     --modal-color: #25242e;
     --modal-button-color: #383645;
     --hov-modal-button-color: #413f50;
+}
+
+.pride-theme, .trans-theme {
+    --background: #000;
+    --color: #fefefe;
+    --accent-color: #4749502f;
+    --hov-accent-color: #111214;
+    --hov-color: #16191e;
+    --link-color: #00abd2;
+    --attachment-background-color: #322865;
+    --attachment-color: #b9a3f7;
+    --attachment-background-color-hover: #765dee;
+    --attachment-color-hover: #fefefe;
+    --button-color: #a5abb3;
+    --hov-button-color: #fefefe;
+    --modal-color: #000;
+    --modal-button-color: #0d0e0f;
+    --hov-modal-button-color: #16191e;
+
+    --color-scheme: dark;
 }
 
 /*Unused*/
