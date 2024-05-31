@@ -11,24 +11,28 @@ body {
     margin: 0;
 }
 
-.header {
-    padding: 50px;
+#page {
     background: #131327;
-
-    display: flex;
-    justify-content: space-between;
-    gap: 10px;
-}
-
-.hero {
-    background: #131327;
-    gap: 32px;
-    flex-direction: column;
-
     background-image: url(images/back.webp);
     background-size: contain;
     background-repeat: repeat;
     background-position: center;
+}
+
+.header {
+    padding: 50px;
+    background: transparent;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+}
+
+.hero {
+    background: transparent;
+    gap: 32px;
+    flex-direction: column;
 }
 
 .section {
