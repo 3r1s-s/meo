@@ -903,7 +903,7 @@ function loadtheme() {
 
 function sharepost() {
     const postId = event.target.closest('.post').id;
-    window.open(`https://meo-32r.pages.dev/share?id=${postId}`, '_blank');
+    window.open(`https://leo.atticat.tech/share?id=${postId}`, '_blank');
 }
 
 function toggleLogin(yn) {
@@ -3650,7 +3650,7 @@ function mdlpingusr(event) {
 
 function mdlshare(event) {
     const postId = event.target.closest('.modal').id;
-    window.open(`https://meo-32r.pages.dev/share?id=${postId}`, '_blank');
+    window.open(`https://leo.atticat.tech/share?id=${postId}`, '_blank');
     closemodal();
 }
 
@@ -4175,8 +4175,7 @@ function shareModal() {
             if (mdlt) {
                 mdlt.innerHTML = `
                 <h3>${lang().modals.share}</h3>
-                <input id="share" class="mdl-inp" type="text" value="https://meo-32r.pages.dev/" readonly>
-                <input id="share" class="mdl-inp" type="text" value="https://eris.pages.dev/meo-experimental/" readonly>
+                <input id="share" class="mdl-inp" type="text" value="https://leo.atticat.tech/" readonly>
                 `;
             }
             const mdbt = mdl.querySelector('.modal-bottom');
