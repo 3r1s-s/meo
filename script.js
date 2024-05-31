@@ -3665,6 +3665,9 @@ function loadexplore() {
     <h3>Statistics</h3>
     <div class="section stats">
     </div>
+    <h3>Trending (Beta)</h3>
+    <div class="section trending">
+    </div>
     </div>
     `;
     
@@ -3672,6 +3675,23 @@ function loadexplore() {
 
     loadstats();
 
+    loadTrending();
+}
+
+function loadTrending() {
+    // Show loading text
+    document.querySelector('.trending').innerHTML = 'Loading...';
+
+    fetch('http://localhost:3000/ai/trending')
+    .then(response => response.text())
+    .then(data => {
+        // Split the data into an array, reverse it, then join it back into a string
+        const listData = data.split('\n').reverse().map(item => item.replace('-', '<li>')).join('');
+        document.querySelector('.trending').innerHTML = `<ul>${listData}</ul>`;
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+    });
 }
 
 function gotousr() {
