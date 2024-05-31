@@ -1,16 +1,16 @@
 :root {
-    --primary: #714cc8;
-    --secondary: #5d6092;
-    --tertiary: #9fa1d8;
+    --primary: #765dee;
+    --secondary: #503f98;
+    --tertiary: #372b63;
     --background: #1c1c26;
     --color: #fefefe;
     --accent-color: #2f3040;
     --hov-accent-color: #3e3f54;
     --hov-color: #4b4c66;
     --link-color: #bea2ff;
-    --attachment-background-color: #5b409b90;
+    --attachment-background-color: #372b63;
     --attachment-color: #bea2ff;
-    --attachment-background-color-hover: #714cc8;
+    --attachment-background-color-hover: #765dee;
     --attachment-color-hover: #fefefe;
     --button-color: #babbe2;
     --hov-button-color: #fefefe;
@@ -22,6 +22,8 @@
     --hov-blue: #19cbf3;
     --green: #248046;
     --hov-green: #35a95f;
+    --orange: #f9a636;
+    --hov-orange: #fdae47;
     --red: #cc2936;
     --hov-red: #f23040;
     --magenta: #ee3c8c;
@@ -42,18 +44,18 @@
 }
 
 .dark-theme {
-    --primary: #714cc8;
-    --secondary: #5d6092;
-    --tertiary: #9fa1d8;
+    --primary: #765dee;
+    --secondary: #503f98;
+    --tertiary: #372b63;
     --background: #1c1c26;
     --color: #fefefe;
     --accent-color: #2f3040;
     --hov-accent-color: #3e3f54;
     --hov-color: #4b4c66;
-    --link-color: #bea2ff;
-    --attachment-background-color: #5b409b90;
-    --attachment-color: #bea2ff;
-    --attachment-background-color-hover: #714cc8;
+    --link-color: #9683f7;
+    --attachment-background-color: #322865;
+    --attachment-color: #b9a3f7;
+    --attachment-background-color-hover: #765dee;
     --attachment-color-hover: #fefefe;
     --button-color: #babbe2;
     --hov-button-color: #fefefe;
@@ -63,16 +65,16 @@
 }
 
 .light-theme {
-    --primary: #714cc8;
+    --primary: #765dee;
     --background: #f1f0fb;
     --color: #43485b;
     --accent-color: #dad9e9;
     --hov-accent-color: #c7c6d8;
     --hov-color: #d0cfe3;
-    --link-color: #714cc8;
-    --attachment-background-color: #d4c1ff;
+    --link-color: #765dee;
+    --attachment-background-color: #baaef8;
     --attachment-color: #513593;
-    --attachment-background-color-hover: #b190fe;
+    --attachment-background-color-hover: #765dee;
     --attachment-color-hover: #fefefe;
     --button-color: #7b7783;
     --hov-button-color: #43485b;
@@ -90,9 +92,9 @@
     --hov-accent-color: #111214;
     --hov-color: #16191e;
     --link-color: #00abd2;
-    --attachment-background-color: #30215490;
-    --attachment-color: #bea2ff;
-    --attachment-background-color-hover: #714cc8;
+    --attachment-background-color: #322865;
+    --attachment-color: #b9a3f7;
+    --attachment-background-color-hover: #765dee;
     --attachment-color-hover: #fefefe;
     --button-color: #a5abb3;
     --hov-button-color: #fefefe;
@@ -165,7 +167,7 @@
     --link-color: #00abd2;
     --attachment-background-color: #5b409b90;
     --attachment-color: #bea2ff;
-    --attachment-background-color-hover: #714cc8;
+    --attachment-background-color-hover: #765dee;
     --attachment-color-hover: #fefefe;
     --button-color: #a6a2ba;
     --hov-button-color: #f0f0f0;
@@ -307,7 +309,7 @@
 }
 
 .old-theme {
-    --primary: #714cc8;
+    --primary: #765dee;
     --secondary: #b190fe;
     --background: #1a1b1e;
     --color: #fefefe;
@@ -424,13 +426,13 @@
 }
 
 .scratch-theme {
-    --primary: #714cc8;
+    --primary: #765dee;
     --background: #f1f0fb;
     --color: #43485b;
     --accent-color: #dad9e9;
     --hov-accent-color: #dfdeed;
     --hov-color: #e6e3f0;
-    --link-color: #714cc8;
+    --link-color: #765dee;
     --attachment-background-color: #d4c1ff;
     --attachment-color: #513593;
     --attachment-background-color-hover: #b190fe;

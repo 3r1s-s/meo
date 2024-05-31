@@ -131,17 +131,13 @@ body {
     box-shadow: #09080f8c 0px 10px 20px;
 }
 
-.footer {
-    background: #131327;
-}
-
 .footer-inner {
     padding: 50px;
-    background: #131327;
     margin: auto;
     width: 90vw;
     display: flex;
     justify-content: space-between;
+    align-items: center;
     gap: 10px;
 }
 

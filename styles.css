@@ -51,7 +51,12 @@ button {
 }
 
 .trans:hover {
-    background-color: var(--hov-accent-color);
+    background-color: var(--primary);
+    color: var(--color-on);
+}
+
+.trans:active {
+    transform: translateY(1px);
 }
 
 select {
