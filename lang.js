@@ -99,7 +99,7 @@ const en = {
     },
     "login_sub": {
         "title": "Login",
-        "desc": "This client was made by eri :>",
+        "desc": "meo by eri, leo by josh",
         "oldpass": "Old Password",
         "newpass": "New Password",
         "agreement": "Terms of Use & Privacy Policy",
@@ -303,7 +303,7 @@ const enuk = {
     },
     "login_sub": {
         "title": "Login",
-        "desc": "This client was made by eri :>",
+        "desc": "meo by eri, leo by josh",
         "oldpass": "Old Password",
         "newpass": "New Password",
         "agreement": "Terms of Use & Privacy Policy",
@@ -510,7 +510,7 @@ const es = {
     },
     "login_sub": {
         "title": "Iniciar sesión",
-        "desc": "Este cliente/servicio fue hecho por eri :> - Traducido al español por ether",
+        "desc": "meo por eri, leo por josh - Traducido al español por ether",
         "oldpass": "Contraseña Anterior",
         "newpass": "Contraseña Nueva",
         "agreement": "Términos de servicio y Política de privacidad"
@@ -712,7 +712,7 @@ const de = {
     },
     "login_sub": {
         "title": "Anmelden",
-        "desc": "Dieser Client wurde von eri gemacht :>",
+        "desc": "meo von eri, leo von josh",
         "oldpass": "Altes Passwort",
         "newpass": "Neues Passwort",
         "agreement": "Geschäftsbedingungen und Datenschutzerklärung"
