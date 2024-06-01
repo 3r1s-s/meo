@@ -2054,6 +2054,11 @@ function loadAppearance() {
                 <button onclick='changeTheme(\"dark\", this)' class='theme-button dark-theme'>Dark</button>
                 <button onclick='changeTheme(\"oled\", this)' class='theme-button oled-theme'>Black</button>
             </div>
+            <h3>Pride Themes</h3>
+                <div class="theme-buttons-inner">
+                    <button onclick='changeTheme(\"pride\", this)' class='theme-button pride-theme'>Pride</button>
+                    <button onclick='changeTheme(\"trans\", this)' class='theme-button trans-theme'>Trans</button>
+                </div>
             <h3>${lang().appearance_sub.spthemes}</h3>
                 <div class="theme-buttons-inner">
                     <button onclick='changeTheme(\"cosmic\", this)' class='theme-button cosmic-theme'>Cosmic Latte</button>

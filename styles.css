@@ -1,5 +1,8 @@
 html {
     background: var(--background);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
     color: var(--color);
     --font: Whitney, sans-serif;
     font-family: var(--font);
@@ -242,7 +245,6 @@ bridge {
 
 .info {
     padding-left: 5px;
-    border: var(--border);
     border-top: none;
 }
 
@@ -585,7 +587,6 @@ bridge {
     top: 0;
     background: var(--background);
     z-index: 1;
-    border: var(--border);
     border-radius: var(--border-radius);
     gap: 10px;
 }
@@ -653,6 +654,7 @@ bridge {
     word-wrap: anywhere;
     border: var(--border);
     display: flex;
+    animation: var(--animation);
 }
 
 .post:hover {
@@ -780,7 +782,6 @@ bridge {
     max-width: 700px;
     overflow: none;
     height: auto;
-    border: var(--border);
     border-top: none;
 }
 
