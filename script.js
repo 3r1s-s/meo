@@ -1279,6 +1279,15 @@ function loadstart() {
             <button class="ubtn button skeleton" aria-label="Skeleton"><div class="ubtnsa"><div class="start-pfp-outer"><div class="skeleton-avatar-small"></div></div></div></button>
             <button class="ubtn button skeleton" aria-label="Skeleton"><div class="ubtnsa"><div class="start-pfp-outer"><div class="skeleton-avatar-small"></div></div></div></button>
         </div>
+        <div class="trending">
+        <span class="user-header"><span>Trending</span><bridge>Beta</bridge></span>
+        <div class="section trending-topics">
+        </div>
+        <div class="section trending-inner">
+        </div>
+        <hr>
+        <p style="font-size: 12px;">Powered by AtticusAI | Trending (Beta) updates every 30 seconds | AI can make things up, take everything with a grain of salt.</p>
+        </div>
         <div class="quick-btns">
         <div class="qc-bts-sc">
         <button class="qbtn button" aria-label="create chat" onclick="createChatModal()">${lang().action.creategc}</button>
@@ -1293,6 +1302,9 @@ function loadstart() {
         </div>
     </div>
     `;
+
+    loadTrending();
+    
     fetch('https://api.meower.org/ulist?autoget')
     .then(response => response.json())
     .then(data => {

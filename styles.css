@@ -1625,7 +1625,7 @@ possible future styling
 .start-users-online {
     display: flex;
     flex-direction: column;
-    height: 60vh;
+    height: 30vh;
     overflow-y: scroll;
     margin-bottom: var(--button-margin);
 }
