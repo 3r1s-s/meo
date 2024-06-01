@@ -158,3 +158,13 @@
     -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.8) 70%, rgba(0, 0, 0, 0) 100%);
     mask-image: linear-gradient(to bottom, rgba(0, 0, 0, .25) 0%, rgba(0, 0, 0, 0) 100%);
 }
+
+.theme-button.trans-theme {
+    background: linear-gradient(90deg, rgb(27, 111, 133) 0%, rgb(138, 82, 93) 25%, rgb(113, 113, 113) 50%, rgb(138, 82, 93) 75%, rgb(27, 111, 133) 100%); 
+    background-size: cover;
+}
+
+.theme-button.pride-theme {
+    background: linear-gradient(90deg, rgba(150,0,0,1) 0%, rgba(150,73,0,1) 13%, rgba(150,110,0,1) 30%, rgba(0,110,0,1) 50%, rgba(0,70,150,1) 60%, rgba(130,0,150,1) 75%, rgba(150,0,0,1) 100%);
+    background-size: cover;
+}

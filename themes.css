@@ -414,6 +414,14 @@
     --color-scheme: dark;
 }
 
+.trans-theme {
+    --primary: #1aa6ca;
+}
+
+.pride-theme {
+    --primary: #9000ff;
+}
+
 /*Unused*/
 
 .softblue-theme {
