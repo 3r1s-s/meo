@@ -3679,18 +3679,32 @@ function loadexplore() {
 }
 
 function loadTrending() {
+    const currentLanguage = currentlang();
+    if (currentLanguage !== 'en' && currentLanguage !== 'enuk') {
+        document.querySelector('.trending').innerHTML = lang().explore_sub.trendingunavailable;
+        return;
+    }
+
     // Show loading text
     document.querySelector('.trending').innerHTML = 'Loading...';
 
-    fetch('http://localhost:3000/ai/trending')
-    .then(response => response.text())
+    fetch('https://leoextended.atticat.tech/ai/trending')
+    .then(response => response.json())
     .then(data => {
-        // Split the data into an array, reverse it, then join it back into a string
-        const listData = data.split('\n').reverse().map(item => item.replace('-', '<li>')).join('');
-        document.querySelector('.trending').innerHTML = `<ul>${listData}</ul>`;
+        // Split the data into an array, then map each item to a list item
+        const topics = data.trends;
+        const listData = data.list.split('\n').map(item => {
+            // Replace @username with the desired HTML structure
+            const replacedItem = item.replace(/@([-\w]+)/g, (match, username) => {
+                return `<span style="display: inline-flex; align-items: center; position: relative; top: -6px;" class="ext-link-wrapper attachment" onclick="openUsrModal('${username}')"><span style="display: inline-flex; align-items: center; position: relative; top: -4px;" class="link-icon-wrapper"></span>@${username}</span>`;
+            });
+            return `<li style="padding-top: 10px;">${replacedItem.replace(/^- /, '')}</li>`;
+        }).join('');
+        document.querySelector('.trending').innerHTML = `<h3 style="position: relative: top: -10px;">Current Topics</h3><p style="font-weight: 300; font-size: 24px;">${topics}</p><h3 style="position: relative: top: -10px;">What's happening?</h3><ul>${listData}</ul><hr><center><p style="font-size: 12px;">Powered by AtticusAI | Trending (Beta) updates every 30 seconds | AI can make things up, take everything with a grain of salt.</p></center>`;
     })
     .catch((error) => {
         console.error('Error:', error);
+        document.querySelector('.trending').innerHTML = "Ruh roh! Something went wrong and Trending (Beta) couldn't load :(";
     });
 }
 

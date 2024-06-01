@@ -10,6 +10,10 @@ function lang() {
     return  eval(language);
 }
 
+function currentlang() {
+    return localStorage.getItem("language");
+}
+
 const en = {
     "language": "English, US",
     "page_home": "Home",
@@ -93,6 +97,9 @@ const en = {
     },
     "inbox_sub": {
         "desc": "Notifications are displayed here.",
+    },
+    "explore_sub": {
+        "trendingunavailable": "Sorry, Trending (Beta) is only available in English for now.",
     },
     "live_sub": {
         "desc": "Messages won't be saved here."
@@ -297,6 +304,9 @@ const enuk = {
     },
     "inbox_sub": {
         "desc": "Notifications are displayed here.",
+    },
+    "explore_sub": {
+        "trendingunavailable": "Sorry, Trending (Beta) is only available in English for now.",
     },
     "live_sub": {
         "desc": "Messages won't be saved here."
@@ -505,6 +515,9 @@ const es = {
     "inbox_sub": {
         "desc": "Las notificaciones aparecen aquí.",
     },
+    "explore_sub": {
+        "trendingunavailable": "Lo sentimos, Trending (Beta) solo está disponible en inglés por ahora.",
+    },
     "live_sub": {
         "desc": "Messages won't be saved here." // update
     },
@@ -706,6 +719,9 @@ const de = {
     },
     "inbox_sub": {
         "desc": "Benachrichtigungen werden hier angezeigt.",
+    },
+    "explore_sub": {
+        "trendingunavailable": "Entschuldigung, Trending (Beta) ist derzeit nur auf Englisch verfügbar.",
     },
     "live_sub": {
         "desc": "Messages won't be saved here." // update
