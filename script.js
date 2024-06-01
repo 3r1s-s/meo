@@ -3706,6 +3706,7 @@ function loadTrending() {
     const currentLanguage = currentlang();
     if (currentLanguage !== 'en' && currentLanguage !== 'enuk') {
         document.querySelector('.trending-inner').innerHTML = lang().explore_sub.trendingunavailable;
+        document.querySelector('.trending-topics').remove();
         return;
     }
 
