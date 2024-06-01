@@ -3670,8 +3670,14 @@ function loadexplore() {
     <h3>Statistics</h3>
     <div class="section stats">
     </div>
-    <h3>Trending (Beta)</h3>
-    <div class="section trending">
+    <div class="trending">
+        <span class="user-header"><span>Trending</span><bridge>Beta</bridge></span>
+        <div class="section trending-topics">
+        </div>
+        <div class="section trending-inner">
+        </div>
+        <hr>
+        <p style="font-size: 12px;">Powered by AtticusAI | Trending (Beta) updates every 30 seconds | AI can make things up, take everything with a grain of salt.</p>
     </div>
     </div>
     <br>
@@ -3687,12 +3693,12 @@ function loadexplore() {
 function loadTrending() {
     const currentLanguage = currentlang();
     if (currentLanguage !== 'en' && currentLanguage !== 'enuk') {
-        document.querySelector('.trending').innerHTML = lang().explore_sub.trendingunavailable;
+        document.querySelector('.trending-inner').innerHTML = lang().explore_sub.trendingunavailable;
         return;
     }
 
     // Show loading text
-    document.querySelector('.trending').innerHTML = 'Loading...';
+    document.querySelector('.trending-inner').innerHTML = 'Loading...';
 
     fetch('https://leoextended.atticat.tech/ai/trending')
     .then(response => response.json())
@@ -3702,15 +3708,20 @@ function loadTrending() {
         const listData = data.list.split('\n').map(item => {
             // Replace @username with the desired HTML structure
             const replacedItem = item.replace(/@([-\w]+)/g, (match, username) => {
-                return `<span style="display: inline-flex; align-items: center; position: relative; top: -6px;" class="ext-link-wrapper attachment" onclick="openUsrModal('${username}')"><span style="display: inline-flex; align-items: center; position: relative; top: -4px;" class="link-icon-wrapper"></span>@${username}</span>`;
+                return `<span id="username" class="attachment" onclick="openUsrModal('${username}')">@${username}</span>`;
             });
-            return `<li style="padding-top: 10px;">${replacedItem.replace(/^- /, '')}</li>`;
+            return `<p class="trending-item">${replacedItem.replace(/^- /, '')}</p>`;
         }).join('');
-        document.querySelector('.trending').innerHTML = `<h3 style="position: relative: top: -10px;">Current Topics</h3><p style="font-weight: 300; font-size: 24px;">${topics}</p><h3 style="position: relative: top: -10px;">What's happening?</h3><ul>${listData}</ul><hr><center><p style="font-size: 12px;">Powered by AtticusAI | Trending (Beta) updates every 30 seconds | AI can make things up, take everything with a grain of salt.</p></center>`;
+        document.querySelector('.trending-inner').innerHTML = `
+        <div>${listData}</div>
+        `;
+        document.querySelector('.trending-topics').innerHTML = `
+        <div><span style="font-weight: bold;">${topics}</span></div>
+        `;
     })
     .catch((error) => {
         console.error('Error:', error);
-        document.querySelector('.trending').innerHTML = "Ruh roh! Something went wrong and Trending (Beta) couldn't load :(";
+        document.querySelector('.trending-inner').innerHTML = "Ruh roh! Something went wrong and Trending (Beta) couldn't load :(";
     });
 }
 

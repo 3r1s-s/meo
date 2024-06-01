@@ -2639,3 +2639,12 @@ input[type="button"]:focus-visible {
     background-color: var(--hov-magenta);
     color: var(--color-on);
 }
+
+.trending-item {
+    display: inline-table;
+    margin-top: 10px;
+}
+
+.trending-topics {
+    margin: 10px 0;
+}
