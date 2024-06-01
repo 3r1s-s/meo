@@ -27,7 +27,7 @@ const en = {
         "title": "This post has been bridged from another platform."
     },
     "title_chats": "Chats",
-    "title_live": "LiveChat",
+    "title_live": "Livechat",
     "settings_general": "General",
     "settings_appearance": "Appearance",
     "settings_plugins": "Plugins",
@@ -231,7 +231,7 @@ const enuk = {
         "title": "This post has been bridged from another platform.",
     },
     "title_chats": "Chats",
-    "title_live": "LiveChat",
+    "title_live": "Livechat",
     "settings_general": "General",
     "settings_appearance": "Appearance",
     "settings_plugins": "Plugins",
@@ -438,7 +438,7 @@ const es = {
         "title": "Este mensaje ha sido puenteado desde otra plataforma."
     },
     "title_chats": "Chats",
-    "title_live": "LiveChat", // update
+    "title_live": "Livechat", // update
     "settings_general": "General",
     "settings_appearance": "Apariencia",
     "settings_plugins": "Plugins (expansiones)",
@@ -640,7 +640,7 @@ const de = {
         "title": "Dieser Post wurde auf einer externen Platform geschickt."
     },
     "title_chats": "Chats",
-    "title_live": "LiveChat", // update
+    "title_live": "Livechat", // update
     "settings_general": "Allgemein",
     "settings_appearance": "Aussehen",
     "settings_plugins": "Plugins",

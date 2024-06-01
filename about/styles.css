@@ -53,11 +53,13 @@ body {
     position: relative;
     font-size: 78px;
     text-align: center;
+    margin: 0 15px;
 }
 
 .sub-header {
     font-size: 28px;
     text-align: center;
+    margin: 0 15px;
 }
 
 .big-header {
