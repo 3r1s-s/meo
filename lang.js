@@ -209,6 +209,7 @@ const en = {
         "deleteacc": "Delete Account?",
         "share": "Share",
         "plugin": "Refresh Required!",
+        "uploadimage": "Upload an image",
     },
     "profile": {
         "quote": "Quote",
@@ -416,6 +417,7 @@ const enuk = {
         "deleteacc": "Delete Account?",
         "share": "Share",
         "plugin": "Refresh Required!",
+        "uploadimage": "Upload an image",
     },
     "profile": {
         "quote": "Quote",
@@ -623,6 +625,7 @@ const es = {
         "cleartokens": "Borrar Fichas de sesión (Tokens)?",
         "changepass": "Cambiar Contraseña",
         "clearls": "Borrar Almacenamiento Local?",
+        "uploadimage": "Subir una imagen",
     },
     "profile": {
         "quote": "Cita de perfil",
@@ -831,6 +834,7 @@ const de = {
         "deleteacc": "Konto löschen?",
         "share": "Teilen",
         "plugin": "Aktualisierung benötigt!",
+        "uploadimage": "Lade ein Bild hoch",
     },
     "profile": {
         "quote": "Zitat",
