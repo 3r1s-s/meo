@@ -3669,6 +3669,7 @@ function loadexplore() {
     <div class="section trending">
     </div>
     </div>
+    <br>
     `;
     
     sidebars();
