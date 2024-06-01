@@ -3735,6 +3735,7 @@ function loadTrending() {
     .catch((error) => {
         console.error('Error:', error);
         document.querySelector('.trending-inner').innerHTML = "Ruh roh! Something went wrong and Trending (Beta) couldn't load :(";
+        document.querySelector('.trending-topics').remove();
     });
 }
 
