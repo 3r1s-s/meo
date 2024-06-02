@@ -7,9 +7,9 @@
     --accent-color: #2f3040;
     --hov-accent-color: #3e3f54;
     --hov-color: #4b4c66;
-    --link-color: #9683f7;
-    --attachment-background-color: #624bd7;
-    --attachment-color: #dcd4ff;
+    --link-color: #a290ff;
+    --attachment-background-color: #4d3d94;
+    --attachment-color: #c5b9ff;
     --attachment-background-color-hover: #765dee;
     --attachment-color-hover: #fefefe;
     --button-color: #babbe2;
@@ -79,10 +79,7 @@
     --hov-accent-color: #111214;
     --hov-color: #16191e;
     --link-color: #00abd2;
-    --attachment-background-color: #322865;
-    --attachment-color: #b9a3f7;
-    --attachment-background-color-hover: #765dee;
-    --attachment-color-hover: #fefefe;
+
     --button-color: #a5abb3;
     --hov-button-color: #fefefe;
     --modal-color: #000;
@@ -386,10 +383,7 @@
     --hov-accent-color: #111214;
     --hov-color: #16191e;
     --link-color: #00abd2;
-    --attachment-background-color: #322865;
-    --attachment-color: #b9a3f7;
-    --attachment-background-color-hover: #765dee;
-    --attachment-color-hover: #fefefe;
+
     --button-color: #a5abb3;
     --hov-button-color: #fefefe;
     --modal-color: #000;
