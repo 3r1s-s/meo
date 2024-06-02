@@ -10,6 +10,10 @@ function lang() {
     return  eval(language);
 }
 
+function currentlang() {
+    return localStorage.getItem("language");
+}
+
 const en = {
     "language": "English, US",
     "page_home": "Home",
@@ -94,12 +98,15 @@ const en = {
     "inbox_sub": {
         "desc": "Notifications are displayed here.",
     },
+    "explore_sub": {
+        "trendingunavailable": "Sorry, Trending (Beta) is only available in English for now.",
+    },
     "live_sub": {
         "desc": "Messages won't be saved here."
     },
     "login_sub": {
         "title": "Login",
-        "desc": "This client was made by eri :>",
+        "desc": "meo by eri, leo by josh",
         "oldpass": "Old Password",
         "newpass": "New Password",
         "agreement": "Terms of Use & Privacy Policy",
@@ -202,6 +209,7 @@ const en = {
         "deleteacc": "Delete Account?",
         "share": "Share",
         "plugin": "Refresh Required!",
+        "uploadimage": "Upload an image",
     },
     "profile": {
         "quote": "Quote",
@@ -298,12 +306,15 @@ const enuk = {
     "inbox_sub": {
         "desc": "Notifications are displayed here.",
     },
+    "explore_sub": {
+        "trendingunavailable": "Sorry, Trending (Beta) is only available in English for now.",
+    },
     "live_sub": {
         "desc": "Messages won't be saved here."
     },
     "login_sub": {
         "title": "Login",
-        "desc": "This client was made by eri :>",
+        "desc": "meo by eri, leo by josh",
         "oldpass": "Old Password",
         "newpass": "New Password",
         "agreement": "Terms of Use & Privacy Policy",
@@ -406,6 +417,7 @@ const enuk = {
         "deleteacc": "Delete Account?",
         "share": "Share",
         "plugin": "Refresh Required!",
+        "uploadimage": "Upload an image",
     },
     "profile": {
         "quote": "Quote",
@@ -505,12 +517,15 @@ const es = {
     "inbox_sub": {
         "desc": "Las notificaciones aparecen aquí.",
     },
+    "explore_sub": {
+        "trendingunavailable": "Lo sentimos, Trending (Beta) solo está disponible en inglés por ahora.",
+    },
     "live_sub": {
         "desc": "Messages won't be saved here." // update
     },
     "login_sub": {
         "title": "Iniciar sesión",
-        "desc": "Este cliente/servicio fue hecho por eri :> - Traducido al español por ether",
+        "desc": "meo por eri, leo por josh - Traducido al español por ether",
         "oldpass": "Contraseña Anterior",
         "newpass": "Contraseña Nueva",
         "agreement": "Términos de servicio y Política de privacidad"
@@ -610,6 +625,7 @@ const es = {
         "cleartokens": "Borrar Fichas de sesión (Tokens)?",
         "changepass": "Cambiar Contraseña",
         "clearls": "Borrar Almacenamiento Local?",
+        "uploadimage": "Subir una imagen",
     },
     "profile": {
         "quote": "Cita de perfil",
@@ -707,12 +723,15 @@ const de = {
     "inbox_sub": {
         "desc": "Benachrichtigungen werden hier angezeigt.",
     },
+    "explore_sub": {
+        "trendingunavailable": "Entschuldigung, Trending (Beta) ist derzeit nur auf Englisch verfügbar.",
+    },
     "live_sub": {
         "desc": "Messages won't be saved here." // update
     },
     "login_sub": {
         "title": "Anmelden",
-        "desc": "Dieser Client wurde von eri gemacht :>",
+        "desc": "meo von eri, leo von josh",
         "oldpass": "Altes Passwort",
         "newpass": "Neues Passwort",
         "agreement": "Geschäftsbedingungen und Datenschutzerklärung"
@@ -815,6 +834,7 @@ const de = {
         "deleteacc": "Konto löschen?",
         "share": "Teilen",
         "plugin": "Aktualisierung benötigt!",
+        "uploadimage": "Lade ein Bild hoch",
     },
     "profile": {
         "quote": "Zitat",

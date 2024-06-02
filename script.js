@@ -13,7 +13,7 @@ let eul;
 let sul = "";
 let pre = settingsstuff().homepage ? 'home' : 'start';
 
-let bridges = ['Discord', 'SplashBridge', 'gc'];
+let bridges = ['Discord', 'SplashBridge', 'gc', 'Revower'];
 
 let ipBlocked = false;
 let openprofile = false;
@@ -405,9 +405,6 @@ function loadLogin() {
             <small>${lang().login_sub.desc}</small>
         </div>
         <div class="login-top">
-            <svg width="80" height="44.25" viewBox="0 0 321 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path fill-rule="evenodd" clip-rule="evenodd" d="M124.695 17.2859L175.713 0.216682C184.63 -1.38586 192.437 6.14467 190.775 14.7463L177.15 68.2185C184.648 86.0893 187.163 104.122 187.163 115.032C187.163 143.057 174.929 178 95.4997 178C16.0716 178 3.83691 143.057 3.83691 115.032C3.83691 104.122 6.35199 86.0893 13.8498 68.2185L0.224791 14.7463C-1.43728 6.14467 6.3705 -1.38586 15.2876 0.216682L66.3051 17.2859C74.8856 14.6362 84.5688 13.2176 95.4997 13.429C106.431 13.2176 116.114 14.6362 124.695 17.2859ZM174.699 124.569H153.569V80.6255C153.569 75.6157 151.762 72.1804 146.896 72.1804C143.143 72.1804 139.529 74.6137 135.775 78.3353V124.569H114.785V80.6255C114.785 75.6157 112.977 72.1804 108.112 72.1804C104.22 72.1804 100.744 74.6137 96.9909 78.3353V124.569H76V54.4314H94.4887L96.0178 64.0216C102.134 57.5804 108.39 53 117.148 53C126.462 53 131.605 57.7235 134.107 64.0216C140.224 57.7235 146.896 53 155.376 53C168.026 53 174.699 61.1588 174.699 74.7569V124.569ZM247.618 89.3569C247.618 91.5039 247.479 93.7941 247.201 94.9392H206.331C207.443 105.961 213.838 110.255 223.012 110.255C230.519 110.255 237.887 107.392 245.393 102.955L247.479 118.127C240.111 122.994 231.075 126 220.371 126C199.936 126 185.34 114.835 185.34 89.7863C185.34 66.8843 198.963 53 217.452 53C238.304 53 247.618 69.0314 247.618 89.3569ZM227.6 83.0588C226.905 72.4667 223.29 67.0274 216.896 67.0274C211.057 67.0274 206.887 72.3235 206.192 83.0588H227.6ZM288.054 126C306.96 126 321 111.973 321 89.5C321 67.0274 307.099 53 288.193 53C269.426 53 255.525 67.1706 255.525 89.6431C255.525 112.116 269.287 126 288.054 126ZM288.193 70.749C296.256 70.749 300.704 78.3353 300.704 89.6431C300.704 100.951 296.256 108.537 288.193 108.537C280.269 108.537 275.821 100.808 275.821 89.5C275.821 78.049 280.13 70.749 288.193 70.749Z" fill="currentColor"></path>
-            </svg>
             <select id="login-language-sel" onchange="loginLang(this.value)">
             <option value="en" ${language === "en" ? "selected" : ""}>${en.language}</option>
             <option value="enuk" ${language === "enuk" ? "selected" : ""}>${enuk.language}</option>
@@ -906,7 +903,7 @@ function loadtheme() {
 
 function sharepost() {
     const postId = event.target.closest('.post').id;
-    window.open(`https://eris.pages.dev/meo/share?id=${postId}`, '_blank');
+    window.open(`https://leo.atticat.tech/share?id=${postId}`, '_blank');
 }
 
 function toggleLogin(yn) {
@@ -1285,6 +1282,15 @@ function loadstart() {
             <button class="ubtn button skeleton" aria-label="Skeleton"><div class="ubtnsa"><div class="start-pfp-outer"><div class="skeleton-avatar-small"></div></div></div></button>
             <button class="ubtn button skeleton" aria-label="Skeleton"><div class="ubtnsa"><div class="start-pfp-outer"><div class="skeleton-avatar-small"></div></div></div></button>
         </div>
+        <div class="trending">
+        <span class="user-header"><span>Trending</span><bridge>Beta</bridge></span>
+        <div class="section trending-topics">
+        </div>
+        <div class="section trending-inner">
+        </div>
+        <hr>
+        <p style="font-size: 12px;">Powered by AtticusAI | Trending (Beta) updates every 30 seconds | AI can make things up, take everything with a grain of salt.</p>
+        </div>
         <div class="quick-btns">
         <div class="qc-bts-sc">
         <button class="qbtn button" aria-label="create chat" onclick="createChatModal()">${lang().action.creategc}</button>
@@ -1299,6 +1305,9 @@ function loadstart() {
         </div>
     </div>
     `;
+
+    loadTrending();
+    
     fetch('https://api.meower.org/ulist?autoget')
     .then(response => response.json())
     .then(data => {
@@ -1750,7 +1759,7 @@ function loadGeneral() {
             </div>
             <h3>${lang().general_sub.about}</h3>
             <div class="stg-section">
-            <span>meo v1.2.0</span>
+            <span>leo v1.2.0</span>
             </div>
             <h3>${lang().general_sub.credits}</h3>
             <div class="stg-section">
@@ -3658,7 +3667,7 @@ function mdlpingusr(event) {
 
 function mdlshare(event) {
     const postId = event.target.closest('.modal').id;
-    window.open(`https://meo-32r.pages.dev/share?id=${postId}`, '_blank');
+    window.open(`https://leo.atticat.tech/share?id=${postId}`, '_blank');
     closemodal();
 }
 
@@ -3676,13 +3685,61 @@ function loadexplore() {
     <h3>Statistics</h3>
     <div class="section stats">
     </div>
+    <div class="trending">
+        <span class="user-header"><span>Trending</span><bridge>Beta</bridge></span>
+        <div class="section trending-topics">
+        </div>
+        <div class="section trending-inner">
+        </div>
+        <hr>
+        <p style="font-size: 12px;">Powered by AtticusAI | Trending (Beta) updates every 30 seconds | AI can make things up, take everything with a grain of salt.</p>
     </div>
+    </div>
+    <br>
     `;
     
     sidebars();
 
     loadstats();
 
+    loadTrending();
+}
+
+function loadTrending() {
+    const currentLanguage = currentlang();
+    if (currentLanguage !== 'en' && currentLanguage !== 'enuk') {
+        document.querySelector('.trending-inner').innerHTML = lang().explore_sub.trendingunavailable;
+        document.querySelector('.trending-topics').remove();
+        return;
+    }
+
+    // Show loading text
+    document.querySelector('.trending-inner').innerHTML = 'Loading...';
+
+    fetch('https://leoextended.atticat.tech/ai/trending')
+    .then(response => response.json())
+    .then(data => {
+        // Split the data into an array, then map each item to a list item
+        const topics = data.trends;
+        const listData = data.list.split('\n').map(item => {
+            // Replace @username with the desired HTML structure
+            const replacedItem = item.replace(/@([-\w]+)/g, (match, username) => {
+                return `<span id="username" class="attachment" onclick="openUsrModal('${username}')">@${username}</span>`;
+            });
+            return `<p class="trending-item">${replacedItem.replace(/^- /, '')}</p>`;
+        }).join('');
+        document.querySelector('.trending-inner').innerHTML = `
+        <div>${listData}</div>
+        `;
+        document.querySelector('.trending-topics').innerHTML = `
+        <div><span style="font-weight: bold;">${topics}</span></div>
+        `;
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+        document.querySelector('.trending-inner').innerHTML = "Ruh roh! Something went wrong and Trending (Beta) couldn't load :(";
+        document.querySelector('.trending-topics').remove();
+    });
 }
 
 function gotousr() {
@@ -4183,8 +4240,7 @@ function shareModal() {
             if (mdlt) {
                 mdlt.innerHTML = `
                 <h3>${lang().modals.share}</h3>
-                <input id="share" class="mdl-inp" type="text" value="https://meo-32r.pages.dev/" readonly>
-                <input id="share" class="mdl-inp" type="text" value="https://eris.pages.dev/meo-experimental/" readonly>
+                <input id="share" class="mdl-inp" type="text" value="https://leo.atticat.tech/" readonly>
                 `;
             }
             const mdbt = mdl.querySelector('.modal-bottom');
