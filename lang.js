@@ -435,212 +435,215 @@ const enuk = {
 }
 
 const es = {
-    //Spanish Translation by ethernet/Ethernet0
-    //Last updated 6/8/2024 - version I
-    //hi eri! :)
-    "language": "Español (América Latina)",
-    "page_home": "Home",
-    "page_start": "Inicio",
+    // Spanish translation by ethernet/ethernet0, corrected by NotFenixio
+    // Last updated 02/06/2024 (dd/mm/yyyy)
+    // hey eris, hi josh
+    "language": "Español",
+    "page_home": "Inicio",
+    "page_start": "Comienzo",
     "page_explore": "Explorar",
-    "page_inbox": "Buzón",
-    "page_settings": "Configuracion",
-    "meo_username": "Nombre de Usuario",
+    "page_inbox": "Bandeja de entrada",
+    "page_settings": "Configuración",
+    "meo_username": "Nombre de usuario",
     "meo_password": "Contraseña",
-    "meo_messagebox": "¿En qué estás pensando?",
-    "meo_goanywhere": "A dónde le gustaría ir?",
+    "meo_messagebox": "¿Qué tienes en mente?",
+    "meo_goanywhere": "¿A dónde te gustaría ir?",
     "meo_welcome": "¡Bienvenido!",
     "meo_bridged": {
-        "start": "Puenteado",
-        "title": "Este mensaje ha sido puenteado desde otra plataforma."
+        "start": "Conectado",
+        "title": "Esta publicación ha sido conectada desde otra plataforma."
     },
     "title_chats": "Chats",
-    "title_live": "Livechat", // update
+    "title_live": "Chat en vivo",
     "settings_general": "General",
     "settings_appearance": "Apariencia",
-    "settings_plugins": "Plugins (expansiones)",
+    "settings_plugins": "Complementos",
     "settings_languages": "Idiomas",
     "general_sub": {
         "chat": "Chat",
         "accessibility": "Accesibilidad",
-        "misc": "Otros",
+        "misc": "Misceláneo",
         "acc": "Cuenta",
-        "blockedusers": "Usuarios Bloqueados",
-        "blockedwords": "Palabras Bloqueadas",
-        "about": "Acerca De",
-        "credits": "Creditos",
+        "blockedusers": "Usuarios bloqueados",
+        "blockedwords": "Palabras en lista negra",
+        "about": "Acerca de",
+        "credits": "Créditos"
     },
     "general_list": {
         "title": {
-            "homepage": "Auto-navegar a Home",
-            "consolewarnings": "Desactivar advertencias de la consola",
-            "forceupdates": "Enable forced updates", // update
-            "blockedmessages": "Hide blocked user messages",
-            "invtyping": "Escritura/Tecleado invisible",
+            "homepage": "Navegación automática a Inicio",
+            "consolewarnings": "Desactivar advertencias de consola",
+            "forceupdates": "Habilitar actualizaciones forzadas",
+            "blockedmessages": "Ocultar mensajes de usuarios bloqueados",
+            "invtyping": "Escritura invisible",
             "imagewhitelist": "Permitir imágenes de cualquier fuente",
-            "censorwords": "Censurar palabras de la lista negra",
-            "embeds": "Incorporaciones especiales",
+            "censorwords": "Censurar palabras en lista negra",
+            "embeds": "Incrustaciones especiales",
             "reducemotion": "Reducir movimiento",
-            "showpostbuttons": "Siempre mostrar botones en mensajes",
-            "underlinelinks": "Siempre subrayar enlaces",
-            "entersend": "Don't send on Enter", // update
-            "hideimages": "Hide images", // update
+            "showpostbuttons": "Mostrar siempre los botones de publicación",
+            "underlinelinks": "Subrayar siempre los enlaces",
+            "entersend": "No enviar con Enter",
+            "hideimages": "Ocultar imágenes"
         },
         "desc": {
-            "homepage": "En lugar de mostrarte la página de inicio, navegar directamente a home",
-            "consolewarnings": "Oculta los mensajes de alerta de la consola",
-            "forceupdates": "Shows a force update button allowing you to force an update even if you're already up to date or using a beta build. Reload settings to see changes.", // update
-            "blockedmessages": "Mostrar una advertencia (o) ocultar completamente los mensajes bloqueados",
-            "invtyping": "Otros usuarios no te verán teclear",
-            "imagewhitelist": "Esto permite que cualquier sitio vea tu direction IP, use responsibly",
-            "censorwords": "Censurar palabras en lugar de tratarlas como un mensaje bloqueado",
-            "embeds": "Incoroporar GIFs de Tenor, Videos de Youtube, ect. (Usa cookies de 3ª part)",
-            "reducemotion": "Reducir la intensidad de las animaciones y otros efectos con movimiento",
-            "showpostbuttons": "Los botones en las publicaciónes/mensajes permanecen siempre visibles",
-            "underlinelinks": "Subrayar los enlaces a sitios web y otras páginas para que destaquen más.",
-            "entersend": "Enter key creates newlines instead of sending the post", // update
-            "hideimages": "Blurs images before opening them", // update
+            "homepage": "En lugar de mostrarte la Página de Inicio, serás llevado directamente a Inicio",
+            "consolewarnings": "Oculta los mensajes de advertencia de la consola",
+            "forceupdates": "Muestra un botón de actualización forzada que te permite forzar una actualización incluso si ya estás actualizado o usando una versión beta. Recarga la configuración para ver los cambios.",
+            "blockedmessages": "Mostrar una advertencia u ocultar los mensajes completamente",
+            "invtyping": "Otros usuarios no verán que estás escribiendo",
+            "imagewhitelist": "Esto permite que cualquier sitio vea tu IP, úsalo responsablemente",
+            "censorwords": "Censura palabras en lugar de tratarlas como un mensaje bloqueado",
+            "embeds": "Incrusta GIFs de Tenor, videos de YouTube, etc. (Usa cookies de terceros)",
+            "reducemotion": "Reduce la intensidad de las animaciones y otros efectos en movimiento",
+            "showpostbuttons": "Los botones de publicación siempre permanecen visibles",
+            "underlinelinks": "Hacer que los enlaces a sitios web y otras páginas resalten más subrayándolos",
+            "entersend": "La tecla Enter crea nuevas líneas en lugar de enviar la publicación",
+            "hideimages": "Desenfoca las imágenes antes de abrirlas"
         }
     },
     "appearance_sub": {
         "theme": "Tema",
-        "spthemes": "Temas Speciales",
-        "acthemes": "Temas Accesibles",
-        "ogthemes": "Temas Originales",
-        "glthemes": "Temas de Vidrio",
-        "cstheme": "Tema Personalizado",
-        "cscss": "Código CSS personalizado",
+        "spthemes": "Temas especiales",
+        "acthemes": "Temas accesibles",
+        "ogthemes": "Temas originales",
+        "glthemes": "Temas de vidrio",
+        "cstheme": "Tema personalizado",
+        "cscss": "CSS personalizado"
     },
     "plugins_sub": {
-        "manage": "Manage",
-        "desc": "The plugins repo can be found ",
-        "link": "here!"
+        "manage": "Gestionar",
+        "desc": "El repositorio de complementos se puede encontrar ",
+        "link": "aquí!"
     },
     "languages_sub": {
-        "title": "Select a Language",
-        "desc": "Don't see your language here? Help translate on",
+        "title": "Seleccionar un idioma",
+        "desc": "¿No ves tu idioma aquí? Ayuda a traducir en",
         "link": "Github!"
     },
     "inbox_sub": {
-        "desc": "Las notificaciones aparecen aquí.",
+        "desc": "Las notificaciones se muestran aquí."
     },
     "explore_sub": {
-        "trendingunavailable": "Lo sentimos, Trending (Beta) solo está disponible en inglés por ahora.",
+        "trendingunavailable": "Lo siento, Trending (Beta) solo está disponible en inglés por ahora."
     },
     "live_sub": {
-        "desc": "Messages won't be saved here." // update
+        "desc": "Los mensajes no se guardarán aquí."
     },
     "login_sub": {
         "title": "Iniciar sesión",
-        "desc": "meo por eri, leo por josh - Traducido al español por ether",
-        "oldpass": "Contraseña Anterior",
-        "newpass": "Contraseña Nueva",
-        "agreement": "Términos de servicio y Política de privacidad"
+        "desc": "meo por eri, leo por josh",
+        "oldpass": "Contraseña antigua",
+        "newpass": "Nueva contraseña",
+        "agreement": "Términos de uso y Política de privacidad"
     },
-    "leave_sub": { // update
-        "desc": "Are you sure you want to leave",
+    "leave_sub": {
+        "desc": "¿Estás seguro de que quieres salir",
         "end": "?",
     },
     "action": {
-        "logout": "Cerrar Sesión",
-        "login": "Iniciar Sesión",
+        "logout": "Cerrar sesión",
+        "login": "Iniciar sesión",
         "signup": "Registrarse",
-        "search": "Búsqueda",
+        "search": "Buscar",
         "mod": "Moderar",
-        "creategc": "Crear Chat (Grupo)",
-        "leavegc": "Leave Chat?", // update
+        "creategc": "Crear chat",
+        "leavegc": "¿Salir del chat?",
         "dmme": "DM Me :)",
-        "invite": "Invitar Personas",
-        "gohome": "Ir a Home",
-        "cleartokens": "Borrar Fichas de sesión (Tokens)",
-        "changepw": "Cambiar Contraseña",
-        "clearls": "Borrar Almacenamiento Local",
-        "deleteacc": "Eliminar Cuenta",
+        "invite": "Invitar a personas",
+        "gohome": "Ir a Inicio",
+        "cleartokens": "Borrar tokens",
+        "changepw": "Cambiar contraseña",
+        "clearls": "Borrar almacenamiento local",
+        "deleteacc": "Eliminar cuenta",
         "block": "Bloquear",
-        "blockuser": "Bloquear Usuario",
-        "blockword": "Añadir Palabra a la Lista Negra",
-        "run": "Run (Ejecutar)",
+        "blockuser": "Bloquear usuario",
+        "blockword": "Palabra en lista negra",
+        "run": "Ejecutar",
         "close": "Cerrar",
         "back": "Atrás",
-        "opennewtab": "Abrir En Navegador Web",
+        "opennewtab": "Abrir en el navegador",
         "reply": "Responder",
-        "mention": "Mencionar Usuario",
-        "report": "Denunciar",
+        "mention": "Mencionar",
+        "report": "Reportar",
         "delete": "Eliminar",
         "edit": "Editar",
         "share": "Compartir",
         "comment": "Comentar",
-        "nick": "Sobrenombre",
+        "nick": "Apodo",
         "create": "Crear",
         "reason": "Razón",
-        "sendreport": "Enviar Denuncia",
-        "yes": "Si",
+        "sendreport": "Enviar reporte",
+        "yes": "Sí",
         "confirm": "Confirmar",
         "update": "Actualizar",
         "go": "Ir",
         "apply": "Aplicar",
-        "savetheme": "Save Theme (Salvar Tema)",
-        "loadtheme": "Load Theme (Cargar Tema)",
-        "resetplugins": "Disable All", // update
-        "favorite": "Favorite", // update
+        "savetheme": "Guardar tema",
+        "loadtheme": "Cargar tema",
+        "resetplugins": "Deshabilitar todo",
+        "favorite": "Favorito"
     },
     "info": {
-        "accexists": "¡Nombre de Usuario ya Ocupado!",
-        "invaliduser": "¡Nombre de Usuario Inválido!",
-        "invalidpass": "¡Contraseña Inválida!",
-        "accbanned": "¡Cuenta Vetada!",
+        "accexists": "¡Nombre de usuario ya tomado!",
+        "invaliduser": "¡Nombre de usuario inválido!",
+        "invalidpass": "¡Contraseña inválida!",
+        "accbanned": "¡Cuenta bloqueada!",
         "accdeleted": "¡Cuenta eliminada!",
-        "conflict": "Es probable que hayas iniciado una sesión en otro servicio/ciber cliente. Refresque la página y vuelva a iniciar una sesión para continuar.",
+        "conflict": "Probablemente iniciaste sesión en otro cliente. Refresca la página e inicia sesión nuevamente para continuar.",
         "unknown": "Estado de inicio de sesión desconocido:",
-        "chatremoved": "Has sido eliminado del chat/grupo en el que estabas.",
-        "passupdate": "Su contraseña ha sido actualizada. Es posible que tenga que volver a iniciar su sesión.",
-        "editingpost": "Editando Mensaje:",
-        "reportsent": "¡Denuncia enviada!",
-        "blockedip": "Dirección IP bloqueada",
+        "chatremoved": "Has sido eliminado del chat en el que estabas.",
+        "passupdate": "¡Tu contraseña ha sido actualizada!",
+        "editingpost": "Editando publicación:",
+        "reportsent": "¡Reporte enviado!",
+        "blockedip": "IP bloqueada",
         "searchany": "¡Busca cualquier cosa!",
-        "cleartokens": "Esto cerrará tu sesión en todas partes",
+        "cleartokens": "Esto cerrará tu sesión en todas partes.",
         "clearls": "Esto cerrará tu sesión.",
-        "signup": "Al registrarte aceptas los términos y condiciones de servicio de Meower",
-        "tokenscleared": "Fichas de sesión (Session Tokens) eliminadas, tendrá que volver a iniciar sesión",
-        "accscheduled": "Cuenta de usuario programada para su eliminación",
-        "deletewarn": "Se borrará PARA SIEMPRE (¡Un tiempo muy largo!)",
-        "changepwwarn": "It will be updated immediately.", //update
+        "signup": "Al registrarte aceptas los Términos de Servicio de Meower",
+        "tokenscleared": "Tokens eliminados, necesitarás iniciar sesión nuevamente",
+        "accscheduled": "Cuenta programada para eliminación",
+        "deletewarn": "Se eliminará PARA SIEMPRE (¡un tiempo muy largo!)",
+        "changepwwarn": "Se actualizará inmediatamente.",
         "tryagain": "Inténtalo de nuevo",
         "cleared": "¡Borrado!",
-        "plugin": "Restart now to apply new plugins and their settings", // update
+        "plugin": "Reinicia ahora para aplicar los nuevos complementos y sus configuraciones"
     },
     "reports": {
-        "spam": "Spam (Basura)",
-        "harassment": "Acoso o abuso hacia otras personas",
-        "language": "Lenguaje grosero, vulgar (y/o) ofensivo",
-        "nsfw": "NSFW (sexual, alcohol, violencia, sangriento, etc.)",
-        "scam": "Estafas, hackeos, phishing (y/o) otros contenidos maliciosos",
-        "harm": "Amenazas de violencia o daños en el mundo real",
+        "spam": "Spam",
+        "harrassment": "Acoso o abuso hacia otros",
+        "language": "Lenguaje grosero, vulgar u ofensivo",
+        "nsfw": "NSFW (sexual, alcohol, violencia, gore, etc.)",
+        "scam": "Estafas, hacks, phishing u otro contenido malicioso",
+        "harm": "Amenaza de violencia o daño real",
         "illegal": "Actividad ilegal",
-        "suicide": "Autolesión/suicidio",
-        "age": "Esta persona es demasiado/a joven para usar Meower",
-        "other": "Otro",
+        "suicide": "Auto-lesiones/suicidio",
+        "age": "Esta persona es demasiado joven para usar Meower",
+        "other": "Otro"
     },
     "modals": {
-        "report": "Denunciar Mensaje",
-        "blockword": "Añadir Palabra a la Lista Negra",
-        "blockauser": "Block a User (case sensitive)",
+        "report": "Reportar publicación",
+        "blockword": "Añadir una palabra a la lista negra",
+        "blockauser": "Bloquear a un usuario (sensible a mayúsculas)",
         "blockuser": "Bloquear",
         "unblockuser": "Desbloquear",
-        "bgimage": "Enlace de Imagen de Fondo (Background Image Link)",
-        "blockedip": "Dirección IP bloqueada",
-        "cleartokens": "Borrar Fichas de sesión (Tokens)?",
-        "changepass": "Cambiar Contraseña",
-        "clearls": "Borrar Almacenamiento Local?",
-        "uploadimage": "Subir una imagen",
+        "bgimage": "Enlace de imagen de fondo",
+        "blockedip": "IP bloqueada",
+        "cleartokens": "¿Borrar tokens?",
+        "changepass": "Cambiar contraseña",
+        "clearls": "¿Borrar almacenamiento local?",
+        "deleteacc": "¿Eliminar cuenta?",
+        "share": "Compartir",
+        "plugin": "¡Requiere actualización!",
+        "uploadimage": "Subir una imagen"
     },
     "profile": {
-        "quote": "Cita de perfil",
+        "quote": "Cita",
         "persona": "Personalización",
         "profilecolor": "Color del perfil",
-        "profilepic": "Foto de perfil",
+        "profilepic": "Foto de perfil"
     },
-    "chats": { // update
-        "members": "Members"
+    "chats": {
+        "members": "Miembros"
     }
 }
 
