@@ -1744,6 +1744,15 @@ function loadGeneral() {
                 <input type="checkbox" id="consolewarnings" class="settingstoggle">
                 </label>
             </div>
+            <div class="stg-section">
+                <label class="general-label">
+                <div class="general-desc">
+                ${lang().general_list.title.forceupdates}
+                <p class="subsubheader">${lang().general_list.desc.forceupdates}</p>
+                </div>
+                <input type="checkbox" id="forceupdates" class="settingstoggle">
+                </label>
+            </div>
             <h3>${lang().general_sub.acc}</h3>
             <button onclick="deleteTokensModal()" class="button blockeduser">${lang().action.cleartokens}</button>
             <button onclick="changePasswordModal()" class="button blockeduser">${lang().action.changepw}</button>
@@ -1768,6 +1777,7 @@ function loadGeneral() {
             <span id="beta-string" style="display: none;">You're using a beta build of leo. Beware of the bugs!</span>
             </div>
             <button id="update-button" class="blockeduser button" style="display: none;" onclick="window.location.reload()">Update leo</button>
+            <button id="force-update-button" class="blockeduser button" style="display: none;" onclick="window.location.reload()">Force update</button>
             <h3>${lang().general_sub.credits}</h3>
             <div class="stg-section">
                 <div class="list">
@@ -1784,7 +1794,7 @@ function loadGeneral() {
 
     pageContainer.innerHTML = settingsContent;
 
-    const currentBuildNo = "3"; // replace with your current build number
+    const currentBuildNo = "4"; // replace with your current build number
 
     fetch('https://leoextended.atticat.tech/data/version')
         .then(response => response.json())
@@ -1809,9 +1819,16 @@ function loadGeneral() {
         })
         .catch(error => console.error('Error:', error));
 
+        if (!settingsstuff().forceupdates) {
+            document.getElementById('force-update-button').style.display = 'none';
+        } else {
+            document.getElementById('force-update-button').style.display = '';
+        }
+
     const settings = {
         homepage: document.getElementById("homepage"),
         consolewarnings: document.getElementById("consolewarnings"),
+        forceupdates: document.getElementById("forceupdates"),
         blockedmessages: document.getElementById("blockedmessages"),
         invtyping: document.getElementById("invtyping"),
         imagewhitelist: document.getElementById("imagewhitelist"),
@@ -1829,6 +1846,7 @@ function loadGeneral() {
             localStorage.setItem('settings', JSON.stringify({
                 homepage: settings.homepage.checked,
                 consolewarnings: settings.consolewarnings.checked,
+                forceupdates: settings.forceupdates.checked,
                 blockedmessages: settings.blockedmessages.checked,
                 invtyping: settings.invtyping.checked,
                 imagewhitelist: settings.imagewhitelist.checked,

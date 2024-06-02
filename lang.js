@@ -50,6 +50,7 @@ const en = {
         "title": {
             "homepage": "Auto-navigate to Home",
             "consolewarnings": "Disable console warning",
+            "forceupdates": "Enable forced updates",
             "blockedmessages": "Hide blocked user messages",
             "invtyping": "Invisible typing",
             "imagewhitelist": "Allow images from any source",
@@ -64,6 +65,7 @@ const en = {
         "desc": {
             "homepage": "Instead of showing you the Start Page you get directly taken to home",
             "consolewarnings": "Hides warning message from console",
+            "forceupdates": "Shows a force update button allowing you to force an update even if you're already up to date or using a beta build. Reload settings to see changes.",
             "blockedmessages": "Show a warning or hide messages completely",
             "invtyping": "Other users won't see you typing",
             "imagewhitelist": "This allows any site to see your IP, use responsibly",
@@ -258,6 +260,7 @@ const enuk = {
         "title": {
             "homepage": "Auto-navigate to Home",
             "consolewarnings": "Disable console warning",
+            "forceupdates": "Enable forced updates",
             "blockedmessages": "Hide blocked user messages",
             "invtyping": "Invisible typing",
             "imagewhitelist": "Allow images from any source",
@@ -272,6 +275,7 @@ const enuk = {
         "desc": {
             "homepage": "Instead of showing you the Start Page, you're taken directly to the Home.",
             "consolewarnings": "Hides warning messages from the console.",
+            "forceupdates": "Shows a force update button allowing you to force an update even if you're already up to date or using a beta build. Reload settings to see changes.",
             "blockedmessages": "Shows a warning or hides messages completely.",
             "invtyping": "Other users won't see you typing.",
             "imagewhitelist": "Allows images from any site, use responsibly.",
@@ -469,6 +473,7 @@ const es = {
         "title": {
             "homepage": "Auto-navegar a Home",
             "consolewarnings": "Desactivar advertencias de la consola",
+            "forceupdates": "Enable forced updates", // update
             "blockedmessages": "Hide blocked user messages",
             "invtyping": "Escritura/Tecleado invisible",
             "imagewhitelist": "Permitir imágenes de cualquier fuente",
@@ -483,6 +488,7 @@ const es = {
         "desc": {
             "homepage": "En lugar de mostrarte la página de inicio, navegar directamente a home",
             "consolewarnings": "Oculta los mensajes de alerta de la consola",
+            "forceupdates": "Shows a force update button allowing you to force an update even if you're already up to date or using a beta build. Reload settings to see changes.", // update
             "blockedmessages": "Mostrar una advertencia (o) ocultar completamente los mensajes bloqueados",
             "invtyping": "Otros usuarios no te verán teclear",
             "imagewhitelist": "Esto permite que cualquier sitio vea tu direction IP, use responsibly",
@@ -675,6 +681,7 @@ const de = {
         "title": {
             "homepage": "Automatisch zu Home gehen",
             "consolewarnings": "Konsolenwarnung ausschalten",
+            "forceupdates": "Enable forced updates", // update
             "blockedmessages": "Nachrichten von blockierten Nutzern verstecken",
             "invtyping": "Durchsichtiges Tippen",
             "imagewhitelist": "Bilder von jeder Quelle erlauben",
@@ -689,6 +696,7 @@ const de = {
         "desc": {
             "homepage": "Direkt zu Home navigieren, statt die Startseite anzuzeigen",
             "consolewarnings": "Die Warnmeldung in der Konsole nicht zeigen",
+            "forceupdates": "Shows a force update button allowing you to force an update even if you're already up to date or using a beta build. Reload settings to see changes.", // update
             "blockedmessages": "Nur eine Warnung zeigen, oder die Nachricht komplett verstecken",
             "invtyping": "Andere Nutzer werden dich nicht tippen sehen",
             "imagewhitelist": "Dadurch kann dadurch deine IP-Adresse sehen, nutze das verantwortlich",
