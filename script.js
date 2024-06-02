@@ -1778,14 +1778,14 @@ function loadGeneral() {
 
     pageContainer.innerHTML = settingsContent;
 
-    const currentBuildNo = "1"; // replace with your current build number
+    const currentBuildNo = "2"; // replace with your current build number
 
     fetch('https://leoextended.atticat.tech/data/version')
         .then(response => response.json())
         .then(data => {
             if (parseInt(data.buildno) > parseInt(currentBuildNo)) {
                 setTimeout(() => {
-                    document.getElementById('outdated-tag').style.display = 'block';
+                    document.getElementById('outdated-tag').style.display = '';
                     document.getElementById('update-button').style.display = 'block';
                 }, 1000);
             }
