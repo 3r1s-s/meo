@@ -453,7 +453,7 @@ function loadpost(p) {
     
     if (bridged) {
         const rcon = p.p;
-        const match = rcon.match(/^([a-zA-Z0-9]{1,20})?: ([\s\S]+)?/m);
+        const match = rcon.match(/^([a-zA-Z0-9_-]{1,20})?: ([\s\S]+)?/m);
         
         if (match) {
             user = match[1];
@@ -789,7 +789,7 @@ async function loadreply(postOrigin, replyid) {
 
         if (bridged) {
             const rcon = content;
-            const match = rcon.match(/^([a-zA-Z0-9]{1,20})?: ([\s\S]+)?/m);
+            const match = rcon.match(/^([a-zA-Z0-9_-]{1,20})?: ([\s\S]+)?/m);
 
             if (match) {
                 user = match[1];
