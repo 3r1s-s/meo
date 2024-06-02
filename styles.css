@@ -2313,10 +2313,6 @@ possible future styling
         background-color: var(--accent-color);
     }
 
-    bridge {
-        display: none;
-    }
-
     .date {
         font-size: 12px;
     }
