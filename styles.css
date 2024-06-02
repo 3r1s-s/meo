@@ -2296,10 +2296,6 @@ possible future styling
         display: none;
     }
 
-    .toolbarContainer {
-        flex-direction: column;
-    }
-
     .toolButton {
         color: var(--color);
     }

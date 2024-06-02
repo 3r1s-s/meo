@@ -450,7 +450,7 @@ function loadpost(p) {
     
     if (bridged) {
         const rcon = p.p;
-        const match = rcon.match(/^([a-zA-Z0-9]{1,20})?: ([\s\S]+)?/m);
+        const match = rcon.match(/^([a-zA-Z0-9_-]{1,20})?: ([\s\S]+)?/m);
         
         if (match) {
             user = match[1];
@@ -513,6 +513,9 @@ function loadpost(p) {
     mobileButtonContainer.classList.add("mobileContainer");
     mobileButtonContainer.innerHTML = `
     <div class='toolbarContainer'>
+        <div class='toolButton mobileButton' onclick='reply(event)' aria-label="reply" title="reply" tabindex="0">
+            <svg width='24' height='24' viewBox='0 0 24 24'><path d='M10 8.26667V4L3 11.4667L10 18.9333V14.56C15 14.56 18.5 16.2667 21 20C20 14.6667 17 9.33333 10 8.26667Z' fill='currentColor'></path></svg>
+        </div>    
         <div class='toolButton mobileButton' onclick='openModal("${p._id}");'>
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M4 14a2 2 0 1 0 0-4 2 2 0 0 0 0 4Zm10-2a2 2 0 1 1-4 0 2 2 0 0 1 4 0Zm8 0a2 2 0 1 1-4 0 2 2 0 0 1 4 0Z" clip-rule="evenodd" class=""></path></svg>
         </div>
@@ -783,7 +786,7 @@ async function loadreply(postOrigin, replyid) {
 
         if (bridged) {
             const rcon = content;
-            const match = rcon.match(/^([a-zA-Z0-9]{1,20})?: ([\s\S]+)?/m);
+            const match = rcon.match(/^([a-zA-Z0-9_-]{1,20})?: ([\s\S]+)?/m);
 
             if (match) {
                 user = match[1];

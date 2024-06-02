@@ -198,6 +198,24 @@ body {
     .big-header-shadow {
         -webkit-text-stroke-width: 7px;
     }
+
+    .h-logo {
+        display: none;
+    }
+
+    .header {
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
+
+    .header, .footer-inner {
+        justify-content: center;
+    }
+
+    .links {
+        display: none;
+    }
 }
 
 @media screen and (max-width: 520px) {
