@@ -209,6 +209,10 @@ textarea {
     box-shadow: 0px 1px 5px #00000050;
 }
 
+.svg-avatar {
+    background-color: #fff;
+}
+
 .pfp {
     padding: 0 var(--padding);
     align-items: center;
@@ -218,4 +222,12 @@ textarea {
 
 .date {
     margin-left: 5px;
+}
+
+.logo {
+    color: #fefefe;
+}
+
+.logo:hover {
+    color: #fefefe;
 }

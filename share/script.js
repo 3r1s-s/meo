@@ -182,9 +182,9 @@ function loadPfp(username) {
                     } else if (userData.pfp_data) {
                         let pfpurl;
                         if (userData.pfp_data > 0 && userData.pfp_data <= 37) {
-                            pfpurl = `images/avatars/icon_${userData.pfp_data - 1}.svg`;
+                            pfpurl = `../images/avatars/icon_${userData.pfp_data - 1}.svg`;
                         } else {
-                            pfpurl = `images/avatars/icon_err.svg`;
+                            pfpurl = `../images/avatars/icon_err.svg`;
                         }
                         
                         pfpElement = document.createElement("img");
