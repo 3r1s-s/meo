@@ -866,6 +866,7 @@ possible future styling
     transition: all 0.05s ease;
     user-select: none;
     font-weight: normal;
+    line-height: 1.4;
 }
 
 .attachment:hover {
