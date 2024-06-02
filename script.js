@@ -1759,7 +1759,13 @@ function loadGeneral() {
             </div>
             <h3>${lang().general_sub.about}</h3>
             <div class="stg-section">
-            <span>leo v1.2.0 <bridge id="outdated-tag" style="display: none;">Outdated</bridge></span>
+            <span>leo v1.2.0 <bridge id="outdated-tag" style="display: none;">Outdated</bridge><bridge id="beta-tag" style="display: none;">Beta</bridge><bridge id="current-tag" style="display: none;">Up to date!</bridge></span>
+            <br>
+            </div>
+            <div class="stg-section">
+            <span id="outdated-string" style="display: none;">You're using an outdated build of leo. Click the button below to update.</span>
+            <span id="current-string" style="display: none;">Yay! you're using an up to date version of leo :D</span>
+            <span id="beta-string" style="display: none;">You're using a beta build of leo. Beware of the bugs!</span>
             </div>
             <button id="update-button" class="blockeduser button" style="display: none;" onclick="window.location.reload()">Update leo</button>
             <h3>${lang().general_sub.credits}</h3>
@@ -1778,7 +1784,7 @@ function loadGeneral() {
 
     pageContainer.innerHTML = settingsContent;
 
-    const currentBuildNo = "2"; // replace with your current build number
+    const currentBuildNo = "3"; // replace with your current build number
 
     fetch('https://leoextended.atticat.tech/data/version')
         .then(response => response.json())
@@ -1786,9 +1792,20 @@ function loadGeneral() {
             if (parseInt(data.buildno) > parseInt(currentBuildNo)) {
                 setTimeout(() => {
                     document.getElementById('outdated-tag').style.display = '';
-                    document.getElementById('update-button').style.display = 'block';
-                }, 1000);
-            }
+                    document.getElementById('outdated-string').style.display = '';
+                    document.getElementById('update-button').style.display = '';
+                }, 100);
+            } else if (parseInt(data.buildno) < parseInt(currentBuildNo)) {
+                setTimeout(() => {
+                    document.getElementById('beta-tag').style.display = '';
+                    document.getElementById('beta-string').style.display = '';
+                }, 100);
+            } else if (parseInt(data.buildno) == parseInt(currentBuildNo)) {
+                setTimeout(() => {
+                    document.getElementById('current-tag').style.display = '';
+                    document.getElementById('current-string').style.display = '';
+                }, 100);
+        }
         })
         .catch(error => console.error('Error:', error));
 
