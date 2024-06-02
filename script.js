@@ -1756,7 +1756,7 @@ function loadGeneral() {
             </div>
             <h3>${lang().general_sub.about}</h3>
             <div class="stg-section">
-            <span>meo v1.2.0</span>
+            <span>leo v1.2.0</span>
             </div>
             <h3>${lang().general_sub.credits}</h3>
             <div class="stg-section">
