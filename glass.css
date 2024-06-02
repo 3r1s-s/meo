@@ -13,19 +13,23 @@
 @supports ((-webkit-backdrop-filter: blur(2em)) or (backdrop-filter: blur(2em))) {
     .glight-theme .post,
     .glight-theme .emojipicker,
+    .glight-theme .skeleton-post,
     .glight-theme .modal,
     .gdark-theme .post,
+    .gdark-theme .skeleton-post,
     .gdark-theme .emojipicker,
     .gdark-theme .modal {
         backdrop-filter: blur(50px) saturate(1.5);
         -webkit-backdrop-filter: blur(50px) saturate(1.5);
         border: .5px solid rgba(0,0,0,.2);
-        box-shadow: inset 0 0 0 1px rgba(255,255,255,.2),0 8px 40px #00000050;
+        box-shadow: inset 0 0 0 1px rgba(255,255,255,.2);
     }
 
     .glight-theme .post::before,
+    .glight-theme .skeleton-post::before,
     .glight-theme .modal::before,
     .gdark-theme .post::before,
+    .gdark-theme .skeleton-post::before,
     .gdark-theme .modal::before {
         position: fixed;
         width: 100%;
@@ -36,7 +40,6 @@
         background-image: url("data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PScwIDAgNTEyIDUxMicgeG1sbnM9J2h0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnJz4KICA8ZmlsdGVyIGlkPSdub2lzZUZpbHRlcic+CiAgICA8ZmVUdXJidWxlbmNlIAogICAgICB0eXBlPSdmcmFjdGFsTm9pc2UnIAogICAgICBiYXNlRnJlcXVlbmN5PScwLjcnCiAgICAgIG51bU9jdGF2ZXM9JzMnIAogICAgICBzdGl0Y2hUaWxlcz0nc3RpdGNoJy8+CiAgICA8ZmVDb2xvck1hdHJpeCBpbj0idHVyYnVsZW5jZSIgdHlwZT0ic2F0dXJhdGUiIHZhbHVlcz0iMCIvPgoKICAgIDxmZUNvbXBvbmVudFRyYW5zZmVyPgogICAgICA8ZmVGdW5jUiB0eXBlPSJkaXNjcmV0ZSIgdGFibGVWYWx1ZXM9IjAgMSIgLz4KICAgICAgPGZlRnVuY0cgdHlwZT0iZGlzY3JldGUiIHRhYmxlVmFsdWVzPSIwIDEiIC8+CiAgICAgIDxmZUZ1bmNCIHR5cGU9ImRpc2NyZXRlIiB0YWJsZVZhbHVlcz0iMCAxIiAvPgogICAgPC9mZUNvbXBvbmVudFRyYW5zZmVyPgogIDwvZmlsdGVyPgogIAogIDxyZWN0IHdpZHRoPScxMDAlJyBoZWlnaHQ9JzEwMCUnIGZpbHRlcj0ndXJsKCNub2lzZUZpbHRlciknLz4KPC9zdmc+");
         background-repeat: repeat;
         mix-blend-mode: overlay;
-        content: "";
         z-index: -1;
     }
 
@@ -55,7 +58,7 @@
         backdrop-filter: blur(5px) saturate(1.5);
         -webkit-backdrop-filter: blur(5px) saturate(1.5);
         border: .5px solid rgba(0,0,0,.2);
-        box-shadow: inset 0 0 0 1px rgba(255,255,255,.2),0 8px 40px #00000050;
+        box-shadow: inset 0 0 0 1px rgba(255,255,255,.2);
     }
 
     .glight-theme .emojibutton,
@@ -141,7 +144,7 @@
     top: 0;
     z-index: -1;
     width: 100%;
-    height: 150px;
+    height: var(--grad-height);
     background: linear-gradient(90deg, rgba(255,0,0,1) 0%, rgba(255,127,0,1) 13%, rgba(255,230,0,1) 30%, rgba(0,171,0,1) 50%, rgba(0,115,255,1) 71%, rgba(190,0,255,1) 100%);
     -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.8) 70%, rgba(0, 0, 0, 0) 100%);
     mask-image: linear-gradient(to bottom, rgba(0, 0, 0, .25) 0%, rgba(0, 0, 0, 0) 100%);
@@ -153,7 +156,7 @@
     top: 0;
     z-index: -1;
     width: 100%;
-    height: 150px;
+    height: var(--grad-height);
     background: linear-gradient(90deg, rgba(49,201,240,1) 0%, rgba(255,255,255,1) 50%, rgba(255,151,172,1) 100%); 
     -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.8) 70%, rgba(0, 0, 0, 0) 100%);
     mask-image: linear-gradient(to bottom, rgba(0, 0, 0, .25) 0%, rgba(0, 0, 0, 0) 100%);
