@@ -1794,7 +1794,7 @@ function loadGeneral() {
 
     pageContainer.innerHTML = settingsContent;
 
-    const currentBuildNo = "6"; // replace with your current build number
+    const currentBuildNo = "7"; // replace with your current build number
 
     fetch('https://leoextended.atticat.tech/data/version')
         .then(response => response.json())
