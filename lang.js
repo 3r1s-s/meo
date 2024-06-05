@@ -435,10 +435,214 @@ const enuk = {
 }
 
 const es = {
-    // Spanish translation by ethernet/ethernet0, corrected by NotFenixio
+    //Spanish Americas Translation by ethernet/Ethernet0
+    //Last updated 6/4/2024(2024-06-04) - version 1.1
+    //hi eri! :)
+    "language": "Español Latinoamérica", //corrected - ethernet0 v1.1
+    "page_home": "Home",
+    "page_start": "Inicio",
+    "page_explore": "Explorar",
+    "page_inbox": "Buzón",
+    "page_settings": "Configuracion",
+    "meo_username": "Nombre de Usuario",
+    "meo_password": "Contraseña",
+    "meo_messagebox": "¿En qué estás pensando?",
+    "meo_goanywhere": "A dónde le gustaría ir?",
+    "meo_welcome": "¡Bienvenido!",
+    "meo_bridged": {
+        "start": "Puenteado",
+        "title": "Este mensaje ha sido puenteado desde otra plataforma."
+    },
+    "title_chats": "Chats",
+    "title_live": "Tiempo real (LiveChat)", // update - completed v1.1
+    "settings_general": "General",
+    "settings_appearance": "Apariencia",
+    "settings_plugins": "Plugins (expansiones)",
+    "settings_languages": "Idiomas",
+    "general_sub": {
+        "chat": "Chat",
+        "accessibility": "Accesibilidad",
+        "misc": "Otros",
+        "acc": "Cuenta",
+        "blockedusers": "Usuarios Bloqueados",
+        "blockedwords": "Palabras Bloqueadas",
+        "about": "Acerca De",
+        "credits": "Creditos",
+    },
+    "general_list": {
+        "title": {
+            "homepage": "Auto-navegar a Home",
+            "consolewarnings": "Desactivar advertencias de la consola",
+            "blockedmessages": "Hide blocked user messages",
+            "invtyping": "Escritura/Tecleado invisible",
+            "imagewhitelist": "Permitir imágenes de cualquier fuente",
+            "censorwords": "Censurar palabras de la lista negra",
+            "embeds": "Incorporaciones especiales",
+            "reducemotion": "Reducir movimiento",
+            "showpostbuttons": "Siempre mostrar botones en mensajes",
+            "underlinelinks": "Siempre subrayar enlaces",
+            "entersend": "No enviar en Intro/Enter", // update - completed v1.1
+            "hideimages": "Ocultar imágenes", // update - completed v1.1
+        },
+        "desc": {
+            "homepage": "En lugar de mostrarte la página de inicio, navegar directamente a home",
+            "consolewarnings": "Oculta los mensajes de alerta de la consola",
+            "blockedmessages": "Mostrar una advertencia (o) ocultar completamente los mensajes bloqueados",
+            "invtyping": "Otros usuarios no te verán teclear",
+            "imagewhitelist": "Esto permite que cualquier sitio vea tu direction IP, use responsibly",
+            "censorwords": "Censurar palabras en lugar de tratarlas como un mensaje bloqueado",
+            "embeds": "Incoroporar GIFs de Tenor, Videos de Youtube, ect. (Usa cookies de 3ª part)",
+            "reducemotion": "Reducir la intensidad de las animaciones y otros efectos con movimiento",
+            "showpostbuttons": "Los botones en las publicaciónes/mensajes permanecen siempre visibles",
+            "underlinelinks": "Subrayar los enlaces a sitios web y otras páginas para que destaquen más.",
+            "entersend": "La tecla Intro crea nuevas líneas en lugar de enviar el mensaje", // update - completed v1.1
+            "hideimages": "Difuminar imágenes antes de abrirlas", // update - completed v1.1
+        }
+    },
+    "appearance_sub": {
+        "theme": "Tema",
+        "spthemes": "Temas Speciales",
+        "acthemes": "Temas Accesibles",
+        "ogthemes": "Temas Originales",
+        "glthemes": "Temas de Vidrio",
+        "cstheme": "Tema Personalizado",
+        "cscss": "Código CSS personalizado",
+    },
+    "plugins_sub": {
+        "manage": "Manage",
+        "desc": "The plugins repo can be found ",
+        "link": "here!"
+    },
+    "languages_sub": {
+        "title": "Seleccione un idioma", //corrected - ethernet0 v1.1
+        "desc": "¿No ves tu idioma aquí? Ayuda a traducir en", //corrected - ethernet0 v1.1
+        "link": "Github!"
+    },
+    "inbox_sub": {
+        "desc": "Las notificaciones aparecen aquí.",
+    },
+    "live_sub": {
+        "desc": "Aquí no se guardan los mensajes." // update - completed v1.1
+    },
+    "login_sub": {
+        "title": "Iniciar sesión",
+        "desc": "Este cliente/servicio fue hecho por eri :> - Traducido al español por ether",
+        "oldpass": "Contraseña Anterior",
+        "newpass": "Contraseña Nueva",
+        "agreement": "Términos de servicio y Política de privacidad"
+    },
+    "leave_sub": { // update - completed v1.1
+        "desc": "¿Estás seguro de que quieres irte",
+        "end": "?",
+    },
+    "action": {
+        "logout": "Cerrar Sesión",
+        "login": "Iniciar Sesión",
+        "signup": "Registrarse",
+        "search": "Búsqueda",
+        "mod": "Moderar",
+        "creategc": "Crear Chat (Grupo)",
+        "leavegc": "¿Abandonar Chat/Groupo?", // update - completed v1.1
+        "dmme": "DM Me :)",
+        "invite": "Invitar Personas",
+        "gohome": "Ir a Home",
+        "cleartokens": "Borrar Fichas de sesión (Tokens)",
+        "changepw": "Cambiar Contraseña",
+        "clearls": "Borrar Almacenamiento Local",
+        "deleteacc": "Eliminar Cuenta",
+        "block": "Bloquear",
+        "blockuser": "Bloquear Usuario",
+        "blockword": "Añadir Palabra a la Lista Negra",
+        "run": "Run (Ejecutar)",
+        "close": "Cerrar",
+        "back": "Atrás",
+        "opennewtab": "Abrir En Navegador Web",
+        "reply": "Responder",
+        "mention": "Mencionar Usuario",
+        "report": "Denunciar",
+        "delete": "Eliminar",
+        "edit": "Editar",
+        "share": "Compartir",
+        "comment": "Comentar",
+        "nick": "Sobrenombre",
+        "create": "Crear",
+        "reason": "Razón",
+        "sendreport": "Enviar Denuncia",
+        "yes": "Si",
+        "confirm": "Confirmar",
+        "update": "Actualizar",
+        "go": "Ir",
+        "apply": "Aplicar",
+        "savetheme": "Save Theme (Salvar Tema)",
+        "loadtheme": "Load Theme (Cargar Tema)",
+        "resetplugins": "Deshabilitar todo", // update - completed v1.1
+        "favorite": "Favoritos", // update - completed v1.1
+    },
+    "info": {
+        "accexists": "¡Nombre de Usuario ya Ocupado!",
+        "invaliduser": "¡Nombre de Usuario Inválido!",
+        "invalidpass": "¡Contraseña Inválida!",
+        "accbanned": "¡Cuenta Vetada!",
+        "accdeleted": "¡Cuenta eliminada!",
+        "conflict": "Es probable que hayas iniciado una sesión en otro servicio/ciber cliente. Refresque la página y vuelva a iniciar una sesión para continuar.",
+        "unknown": "Estado de inicio de sesión desconocido:",
+        "chatremoved": "Has sido eliminado del chat/grupo en el que estabas.",
+        "passupdate": "Su contraseña ha sido actualizada. Es posible que tenga que volver a iniciar su sesión.",
+        "editingpost": "Editando Mensaje:",
+        "reportsent": "¡Denuncia enviada!",
+        "blockedip": "Dirección IP bloqueada",
+        "searchany": "¡Busca cualquier cosa!",
+        "cleartokens": "Esto cerrará tu sesión en todas partes",
+        "clearls": "Esto cerrará tu sesión.",
+        "signup": "Al registrarte aceptas los términos y condiciones de servicio de Meower",
+        "tokenscleared": "Fichas de sesión (Session Tokens) eliminadas, tendrá que volver a iniciar sesión",
+        "accscheduled": "Cuenta de usuario programada para su eliminación",
+        "deletewarn": "Se borrará PARA SIEMPRE (¡Un tiempo muy largo!)",
+        "changepwwarn": "Se actualizará de inmediato.", //update - completed v1.1
+        "tryagain": "Inténtalo de nuevo",
+        "cleared": "¡Borrado!",
+        "plugin": "Reinicia ahora para aplicar las nuevas expansiones y sus ajustes.", // update - completed v1.1
+    },
+    "reports": {
+        "spam": "Spam (Basura)",
+        "harassment": "Acoso o abuso hacia otras personas",
+        "language": "Lenguaje grosero, vulgar (y/o) ofensivo",
+        "nsfw": "NSFW (sexual, alcohol, violencia, sangriento, etc.)",
+        "scam": "Estafas, hackeos, phishing (y/o) otros contenidos maliciosos",
+        "harm": "Amenazas de violencia o daños en el mundo real",
+        "illegal": "Actividad ilegal",
+        "suicide": "Autolesión/suicidio",
+        "age": "Esta persona es demasiado/a joven para usar Meower",
+        "other": "Otro",
+    },
+    "modals": {
+        "report": "Denunciar Mensaje",
+        "blockword": "Añadir Palabra a la Lista Negra",
+        "blockauser": "Block a User (case sensitive)",
+        "blockuser": "Bloquear",
+        "unblockuser": "Desbloquear",
+        "bgimage": "Enlace de Imagen de Fondo (Background Image Link)",
+        "blockedip": "Dirección IP bloqueada",
+        "cleartokens": "Borrar Fichas de sesión (Tokens)?",
+        "changepass": "Cambiar Contraseña",
+        "clearls": "Borrar Almacenamiento Local?",
+    },
+    "profile": {
+        "quote": "Cita de perfil",
+        "persona": "Personalización",
+        "profilecolor": "Color del perfil",
+        "profilepic": "Foto de perfil",
+    },
+    "chats": { // update - completed v1.1
+        "members": "Miembros"
+    }
+}
+
+const es_es = {
+    // Spanish translation by ethernet/ethernet0, converted by NotFenixio
     // Last updated 02/06/2024 (dd/mm/yyyy)
     // hey eris, hi josh
-    "language": "Español",
+    "language": "Español España",
     "page_home": "Inicio",
     "page_start": "Comienzo",
     "page_explore": "Explorar",
