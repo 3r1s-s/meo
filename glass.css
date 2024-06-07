@@ -138,6 +138,34 @@
     opacity: 1;
 }
 
+.teb-theme #page::after {
+    content: '';
+    position: fixed;
+    bottom: 0;
+    z-index: -1;
+    width: 100%;
+    height: var(--grad-height);
+    background: linear-gradient(90deg, #3178af 0%, #195990 13%, #2968a1 30%, #216398 50%, #153866 71%, #5290c3 100%);
+    -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.8) 70%, rgba(0, 0, 0, 0) 100%);
+    mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, .25) 100%);
+}
+
+.teb-theme .post:hover .buttonContainer, .fabloo-theme .post:hover .buttonContainer {
+    background-color: transparent;
+}
+
+.fabloo-theme #page::after {
+    content: '';
+    position: fixed;
+    bottom: 0;
+    z-index: -1;
+    width: 100%;
+    height: var(--grad-height);
+    background: linear-gradient(70deg, #eb6458 0%, #3669a0 25%, #f0e95f 50%, #b3b2ae 75%, #87c27c 100%);
+    -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.8) 70%, rgba(0, 0, 0, 0) 100%);
+    mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, .25) 100%);
+}
+
 .pride-theme #page::after {
     content: '';
     position: fixed;
@@ -170,4 +198,46 @@
 .theme-button.pride-theme {
     background: linear-gradient(90deg, rgba(150,0,0,1) 0%, rgba(150,73,0,1) 13%, rgba(150,110,0,1) 30%, rgba(0,110,0,1) 50%, rgba(0,70,150,1) 60%, rgba(130,0,150,1) 75%, rgba(150,0,0,1) 100%);
     background-size: cover;
+}
+
+.midnight-blurple-theme #page::after {
+    content: '';
+    position: fixed;
+    top: 0;
+    z-index: -1;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, #0f0d25 0%, #04020a 100%);
+}
+
+.theme-button.midnight-blurple-theme {
+    background: #0c0a18;
+}
+
+.meower-theme .post {
+    border: 3px solid var(--primary);
+    background-color: transparent;
+}
+
+.meower-theme .message-input {
+    border: 3px solid var(--primary);
+    background-color: transparent;
+}
+
+.meower-theme .message-tool, .meower-theme .message-send {
+    background-color: var(--primary);
+}
+
+.meower-theme .toolButton {
+    background-color: var(--primary);
+    border-radius: 500px;
+    color: var(--color);
+}
+
+.meower-theme .post:hover .buttonContainer {
+    background-color: transparent;
+}
+
+.meower-theme .reply {
+    border: 3px solid var(--primary);
 }
