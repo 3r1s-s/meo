@@ -376,7 +376,9 @@
     --hov-modal-button-color: #413f50;
 }
 
-.pride-theme, .trans-theme {
+/*Gradients*/
+
+.pride-theme, .trans-theme, .teb-theme, .fabloo-theme {
     --background: #000;
     --color: #fefefe;
     --accent-color: #4749502f;
@@ -401,6 +403,56 @@
 .pride-theme {
     --primary: #9443d1;
     --grad-height: 150px;
+}
+
+.teb-theme {
+    --primary: #4288bd;
+    --background: #03080d;
+    --hov-accent-color: #5c68782f;
+    --hov-color: #6273882f;
+    --grad-height: 600px;
+
+    --button-color: #8ea5bb;
+    --hov-button-color: #fefefe;
+
+    --modal-color: #03080d;
+    --modal-button-color: #101419;
+    --hov-modal-button-color: #181e26;
+}
+
+.fabloo-theme {
+    --primary: #da9019;
+    --grad-height: 100%;
+
+    --background: #000;
+    --hov-accent-color: #8282822f;
+    --hov-color: #7c7c7c2f;
+
+    --button-color: #a8a8a8;
+    --hov-button-color: #fefefe;
+    
+    --modal-color: #000000;
+    --modal-button-color: #191919;
+    --hov-modal-button-color: #252525;
+}
+
+.midnight-blurple-theme {
+    --background: #0a081825;
+    --accent-color: #47417350;
+    --hov-accent-color: #2c2751;
+    --hov-color: #403965;
+}
+
+.meower-theme {
+    --primary: #e48b26;
+    --background: #181818;
+    --accent-color: #202020;
+    --hov-color: #303030;
+    --hov-accent-color: #252525;
+
+    --modal-color: #202020;
+    --modal-button-color: #303030;
+    --hov-modal-button-color: #404040;
 }
 
 /*Unused*/
