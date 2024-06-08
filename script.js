@@ -690,7 +690,6 @@ function loadPfp(username, button) {
                             pfpElement.removeEventListener('error', pngFallback);
                             pfpElement.setAttribute("src", `${pfpurl}.png`);
                             pfpCache[username].setAttribute("src", `${pfpurl}.png`);
-                            pfpElement.removeEventListener('error', whar);
                         });
 
                     } else if (userData.pfp_data) {
