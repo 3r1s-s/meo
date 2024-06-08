@@ -181,6 +181,7 @@ function attach(attachment) {
                 imgElement.setAttribute("src", link + '?preview');
                 imgElement.setAttribute("onclick", `openImage('${link}')`);
                 imgElement.setAttribute("alt", fileName);
+                imgElement.setAttribute("title", fileName);
                 imgElement.classList.add("embed");
                 if (settingsstuff().hideimages) {
                     imgElement.classList.add("spoiler");
@@ -199,6 +200,7 @@ function attach(attachment) {
             mediaElement.setAttribute("playsinline", "");
             mediaElement.setAttribute("preload", "metadata");
             mediaElement.setAttribute("alt", fileName);
+            imgElement.setAttribute("title", fileName);
             mediaElement.classList.add("embed");
             
             element.appendChild(mediaElement);
@@ -212,6 +214,7 @@ function attach(attachment) {
             mediaElement.setAttribute("src", baseURL);
             mediaElement.setAttribute("controls", "controls");
             mediaElement.setAttribute("alt", fileName);
+            imgElement.setAttribute("title", fileName);
             mediaElement.classList.add("embed");
             
             element.appendChild(mediaElement);
