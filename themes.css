@@ -438,9 +438,13 @@
 
 .midnight-blurple-theme {
     --background: #0a081825;
-    --accent-color: #47417350;
+    --accent-color: #1c1931;
     --hov-accent-color: #2c2751;
     --hov-color: #403965;
+
+    --modal-color: #080614;
+    --modal-button-color: #1c1931;
+    --hov-modal-button-color: #2c2751;
 }
 
 .meower-theme {

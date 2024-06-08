@@ -690,6 +690,7 @@ function loadPfp(username, button) {
                             pfpElement.removeEventListener('error', pngFallback);
                             pfpElement.setAttribute("src", `${pfpurl}.png`);
                             pfpCache[username].setAttribute("src", `${pfpurl}.png`);
+                            pfpElement.removeEventListener('error', whar);
                         });
 
                     } else if (userData.pfp_data) {
@@ -2080,7 +2081,7 @@ function loadAppearance() {
                     <button onclick='changeTheme(\"grip\", this)' class='theme-button grip-theme'>9rip</button>
                     <button onclick='changeTheme(\"teb\", this)' class='theme-button teb-theme'>Blue</button>
                     <button onclick='changeTheme(\"fabloo\", this)' class='theme-button fabloo-theme'>Fabloo</button>
-                    <button onclick='changeTheme(\"midnight-blurple\", this)' class='theme-button midnight-blurple-theme'>Discord</button>
+                    <button onclick='changeTheme(\"midnight-blurple\", this)' class='theme-button midnight-blurple-theme'>Blurple</button>
                 </div>
             <h3>${lang().appearance_sub.acthemes}</h3>
                 <div class="theme-buttons-inner">
