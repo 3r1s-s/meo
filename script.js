@@ -4455,4 +4455,4 @@ function openGcModal() {
 }
 // work on this
 main();
-setInterval(ping, 5000);
+setInterval(ping, 25000);
