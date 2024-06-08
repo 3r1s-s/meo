@@ -686,7 +686,8 @@ function loadPfp(username, button) {
                             pfpElement.style.backgroundColor = `#${userData.avatar_color}`;
                         }
                         
-                        pfpElement.addEventListener('error', () => {
+                        pfpElement.addEventListener('error', function pngFallback() {
+                            pfpElement.removeEventListener('error', pngFallback);
                             pfpElement.setAttribute("src", `${pfpurl}.png`);
                             pfpCache[username].setAttribute("src", `${pfpurl}.png`);
                             pfpElement.removeEventListener('error', whar);
