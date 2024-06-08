@@ -210,6 +210,10 @@
     background: linear-gradient(45deg, #0f0d25 0%, #04020a 100%);
 }
 
+.midnight-blurple-theme .message-container {
+    background-color: #0c0a1880;
+}
+
 .theme-button.midnight-blurple-theme {
     background: #0c0a18;
 }
