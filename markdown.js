@@ -214,7 +214,7 @@ function attach(attachment) {
             mediaElement.setAttribute("src", baseURL);
             mediaElement.setAttribute("controls", "controls");
             mediaElement.setAttribute("alt", fileName);
-            imgElement.setAttribute("title", fileName);
+            mediaElement.setAttribute("title", fileName);
             mediaElement.classList.add("embed");
             
             element.appendChild(mediaElement);
@@ -256,6 +256,7 @@ function embed(links) {
                     imgElement.setAttribute("src", link);
                     imgElement.setAttribute("onclick", `openImage('${link}')`);
                     imgElement.setAttribute("alt", fileName);
+                    imgElement.setAttribute("title", fileName);
                     imgElement.classList.add("embed");
                     if (settingsstuff().hideimages) {
                         imgElement.classList.add("spoiler");
@@ -275,6 +276,7 @@ function embed(links) {
                 mediaElement.setAttribute("playsinline", "");
                 mediaElement.setAttribute("preload", "metadata");
                 mediaElement.setAttribute("alt", fileName);
+                mediaElement.setAttribute("title", fileName);
                 mediaElement.setAttribute("style", "max-width:300px");
                 mediaElement.classList.add("embed");
 
@@ -288,6 +290,7 @@ function embed(links) {
                 mediaElement.setAttribute("src", baseURL);
                 mediaElement.setAttribute("controls", "controls");
                 mediaElement.setAttribute("alt", fileName);
+                mediaElement.setAttribute("title", fileName);
                 mediaElement.classList.add("embed");
                 
                 element.appendChild(mediaElement);
