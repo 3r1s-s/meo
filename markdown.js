@@ -200,7 +200,7 @@ function attach(attachment) {
             mediaElement.setAttribute("playsinline", "");
             mediaElement.setAttribute("preload", "metadata");
             mediaElement.setAttribute("alt", fileName);
-            imgElement.setAttribute("title", fileName);
+            mediaElement.setAttribute("title", fileName);
             mediaElement.classList.add("embed");
             
             element.appendChild(mediaElement);
