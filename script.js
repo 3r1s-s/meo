@@ -1394,14 +1394,6 @@ function loadchat(chatId) {
     if (data.nickname) {
         mainContainer.innerHTML = `<div class='info'><div class="gctitle"><h1 id='nickname' class='header-top'>${escapeHTML(data.nickname)}</h1><i class="subtitle">${chatId}</i></div>
         <p id='info'></p></div>` + loadinputs();
-        const ulinf = document.getElementById('info');
-        data.members.forEach((user, index) => {
-            if (index === data.members.length - 1) {
-                ulinf.innerHTML += `<div class='ulmember'><span id='ulmnl'>${user}</span></div>`;
-            } else {
-                ulinf.innerHTML += `<div class='ulmember'><span id='ulmnl'>${user}</span>, </div>`;
-            }
-        });
     } else {
         mainContainer.innerHTML = `<div class='info'><div class="gctitle"><h1 id='username' class='header-top' onclick="openUsrModal('${data.members.find(v => v !== localStorage.getItem("username"))}')">${data.members.find(v => v !== localStorage.getItem("username"))}</h1><i class="subtitle">${chatId}</i></div><p id='info'></p></div>` + loadinputs();
     }
