@@ -178,7 +178,7 @@ const en = {
     },
     "reports": {
         "spam": "Spam",
-        "harrassment": "Harassment or abuse towards others",
+        "harassment": "Harassment or abuse towards others",
         "language": "Rude, vulgar or offensive language",
         "nsfw": "NSFW (sexual, alcohol, violence, gore, etc.)",
         "scam": "Scams, hacks, phishing or other malicious content",
@@ -793,7 +793,7 @@ const es_es = {
     },
     "reports": {
         "spam": "Spam",
-        "harrassment": "Acoso o abuso hacia otros",
+        "harassment": "Acoso o abuso hacia otros",
         "language": "Lenguaje grosero, vulgar u ofensivo",
         "nsfw": "NSFW (sexual, alcohol, violencia, gore, etc.)",
         "scam": "Estafas, hacks, phishing u otro contenido malicioso",
@@ -998,7 +998,7 @@ const de = {
     },
     "reports": {
         "spam": "Spam",
-        "harrassment": "Hassrede oder Missbrauch anderer",
+        "harassment": "Hassrede oder Missbrauch anderer",
         "language": "Unhöfliche, vulgäre oder Rude, vulgar or anstößige Sprache",
         "nsfw": "NSFW (Sexuelles, Alkohol, Gewalt, Blut, usw.)",
         "scam": "Betrug, Hacks, Phishing oder andere bösartigen Inhalte",
