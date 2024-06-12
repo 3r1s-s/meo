@@ -167,7 +167,6 @@ function attach(attachment) {
     console.debug(attachment.mime)
     if (link) {
         const baseURL = link.split('?')[0];
-        const fileExtension = baseURL.split('.').pop().toLowerCase();
         const fileName = baseURL.split('/').pop();
 
         let embeddedElement;
@@ -227,7 +226,7 @@ function attach(attachment) {
             }
             console.debug(attachment);
             element.innerHTML = `
-            <a href="${link}" target="_blank">${attachment.filename}</a>
+            <a href="${link}?download" target="_blank">${attachment.filename}</a>
             <span class="subsubheader">${formatSize(attachment.size)}</span>
             `;
             embeddedElement = element;

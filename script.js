@@ -2528,7 +2528,7 @@ function openImage(url) {
             <img class='embed-large' src='${url}' alt="${fileName}" onclick='preventClose(event)'>
             <div class="img-links">
             <span class="img-link-outer"><a onclick="closeImage()" class="img-link">${lang().action.close}</a></span>
-            <span><a href="${url}" target="_blank" class="img-link">${lang().action.opennewtab}</a></span>
+            <span><a href="${url}?download" target="_blank" class="img-link">${lang().action.download}</a></span>
             </div>
             `;
         }
