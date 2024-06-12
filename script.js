@@ -553,40 +553,33 @@ function loadpost(p) {
     const roarer = /@([\w-]+)\s+"([^"]*)"\s+\(([^)]+)\)/g;
     const bettermeower = /@([\w-]+)\[([a-zA-Z0-9]+)\]/g;
 
-    let match1 = roarer.exec(content);
-    let match2 = bettermeower.exec(content);
-    
-    if (match1) {
-        const replyid = match1[3];
+
+    let matches1 = [...content.matchAll(roarer)];
+    let matches2 = [...content.matchAll(bettermeower)];
+
+    let allMatches = matches1.concat(matches2);
+
+    if (allMatches.length > 0) {
+        const replyIds = allMatches.map(match => match[3] || match[2]);
         const pageContainer = document.getElementById("msgs");
-    
+
         if (pageContainer.firstChild) {
             pageContainer.insertBefore(postContainer, pageContainer.firstChild);
         } else {
             pageContainer.appendChild(postContainer);
         }
-        
-        loadreply(p.post_origin, replyid).then(replycontainer => {
-            pstinf.after(replycontainer);
+
+        loadreplies(p.post_origin, replyIds).then(replyContainers => {
+            replyContainers.forEach(replyContainer => {
+                pstinf.after(replyContainer);
+            });
         });
-    
-        content = content.replace(match1[0], '').trim();
-    } else if (match2) {
-        const replyid = match2[2];
-        const pageContainer = document.getElementById("msgs");
-    
-        if (pageContainer.firstChild) {
-            pageContainer.insertBefore(postContainer, pageContainer.firstChild);
-        } else {
-            pageContainer.appendChild(postContainer);
-        }
-        
-        loadreply(p.post_origin, replyid).then(replycontainer => {
-            pstinf.after(replycontainer);
+
+        allMatches.forEach(match => {
+            content = content.replace(match[0], '').trim();
         });
-    
-        content = content.replace(match2[0], '').trim();
     }
+
     let postContentText = document.createElement("p");
     postContentText.className = "post-content";
     // tysm tni <3
@@ -745,6 +738,11 @@ function loadPfp(username, button) {
     });
 }
 
+async function loadreplies(postOrigin, replyIds) {
+    const replies = await Promise.all(replyIds.map(replyid => loadreply(postOrigin, replyid)));
+    return replies;
+}
+
 async function loadreply(postOrigin, replyid) {
     const roarRegex = /^@[\w-]+ (.+?) \(([^)]+)\)/;
     const betterMeowerRegex = /@([\w-]+)\[([a-zA-Z0-9]+)\]/g;
@@ -802,14 +800,14 @@ async function loadreply(postOrigin, replyid) {
         }
 
         replycontainer.innerHTML = `<p style='font-weight:bold;margin: 10px 0 10px 0;'>${escapeHTML(user)}</p><p style='margin: 10px 0 10px 0;'>${escapeHTML(content)}</p>`;
-        
+
         const full = document.createElement("div");
         full.href = `${replyid}`;
         full.classList.add("reply-outer");
-        
+
         full.addEventListener('click', (e) => {
             e.preventDefault();
-            
+
             const targetElement = document.getElementById(`${replyid}`);
             const outer = document.getElementById("main");
             targetElement.style.backgroundColor = 'var(--hov-accent-color)';
@@ -825,7 +823,7 @@ async function loadreply(postOrigin, replyid) {
                 const containerRect = outer.getBoundingClientRect();
                 const elementRect = targetElement.getBoundingClientRect();
                 const elementPosition = elementRect.top - containerRect.top + outer.scrollTop - navbarOffset;
-        
+
                 outer.scrollTo({
                     top: elementPosition,
                     behavior: scroll
@@ -841,8 +839,6 @@ async function loadreply(postOrigin, replyid) {
                 targetElement.style.backgroundColor = '';
             }, 1000);
         });
-        
-        
 
         full.appendChild(replycontainer);
         return full;
@@ -853,6 +849,7 @@ async function loadreply(postOrigin, replyid) {
         return errorElement;
     }
 }
+
 
 function reply(event) {
     let postcont = "";
