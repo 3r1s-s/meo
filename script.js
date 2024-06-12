@@ -764,7 +764,7 @@ async function loadreply(postOrigin, replyid) {
 
         const replycontainer = document.createElement("div");
         replycontainer.classList.add("reply");
-        replycontainer.id = `reply-${replyid}`;  // Add an ID to the reply container
+        replycontainer.id = `reply-${replyid}`;
 
         let content;
         let user;
