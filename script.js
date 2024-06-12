@@ -2827,8 +2827,8 @@ function reportModal(id) {
                 <span class="subheader">${lang().action.reason}</span>
                 <select id="report-reason" class="modal-select">
                     <option value="Spam">${lang().reports.spam}</option>
-                    <option value="Harassment or abuse towards others">${lang().reports.harrassment}</option>
-                    <option value="Rude, vulgar or offensive language">${lang().reports.lanugage}</option>
+                    <option value="Harassment or abuse towards others">${lang().reports.harassment}</option>
+                    <option value="Rude, vulgar or offensive language">${lang().reports.language}</option>
                     <option value="NSFW (sexual, alcohol, violence, gore, etc.)">${lang().reports.nsfw}</option>
                     <option value="Scams, hacks, phishing or other malicious content">${lang().reports.scam}</option>
                     <option value="Threatening violence or real world harm">${lang().reports.harm}</option>
