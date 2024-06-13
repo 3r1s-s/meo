@@ -195,8 +195,11 @@ bridge {
 .embed {
     border-radius: var(--border-radius);
     cursor: pointer;
+    min-width: 25px;
+    min-height: 25px;
     max-width: 300px;
     max-height: 300px;
+    background-color: var(--background);
 }
 
 .embed-large {

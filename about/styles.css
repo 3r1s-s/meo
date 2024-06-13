@@ -184,6 +184,11 @@ body {
     .big-header-shadow {
         -webkit-text-stroke-width: 8px;
     }
+    
+    .main-h {
+        font-size: 48px;
+        font-weight: 800;
+    }
 }
 
 @media screen and (max-width: 720px) {
@@ -215,6 +220,30 @@ body {
 
     .links {
         display: none;
+    }
+        
+    .main-h {
+        font-size: 40px;
+        font-weight: 800;
+    }
+        
+    .main-sub {
+        font-size: 12px;
+    }
+
+    .main-outer {
+        justify-content: center;
+        align-items: center;
+        max-width: 100%;
+    }
+
+    .section {
+        flex-direction: column;
+        gap: 32px;
+    }
+
+    .side-image {
+        width: 16vh;
     }
 }
 
