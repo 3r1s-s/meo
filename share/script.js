@@ -1,4 +1,4 @@
-let pfpCache = "";
+let bridges = ["Discord", "SplashBridge"];
 
 async function loadsharedpost() {
     const urlParams = new URLSearchParams(window.location.search);
@@ -13,37 +13,28 @@ async function loadsharedpost() {
     try {
         const response = await fetch(api);
         const data = await response.json();
-
         loadpost(data);
-
     } catch (error) {
         console.error('Fetch Error:', error);
     }
 }
 
 function loadpost(p) {
-    let user
-    let content
-    if (p.u == "Discord" || p.u == "SplashBridge") {
+    let user, content;
+    let bridged = bridges.includes(p.u);
+
+    if (bridged) {
         const rcon = p.p;
-        const parts = rcon.split(': ');
-        user = parts[0];
-        content = parts.slice(1).join(': ');
+        const match = rcon.match(/^([a-zA-Z0-9_-]{1,20})?: ([\s\S]+)?/m);
+        user = match ? match[1] : p.u;
+        content = match ? match[2] : rcon;
     } else {
         content = p.p;
         user = p.u;
     }
-    
-    let postContainer = document.getElementById(p._id);
-    if (!postContainer) {
-        postContainer = document.createElement("div");
-        postContainer.id = p._id;
-        postContainer.classList.add("post");
-    }
 
-    while (postContainer.firstChild) {
-        postContainer.firstChild.remove();
-    }
+    const postContainer = document.createElement("div");
+    postContainer.classList.add("post");
 
     const wrapperDiv = document.createElement("div");
     wrapperDiv.classList.add("wrapper");
@@ -53,66 +44,64 @@ function loadpost(p) {
 
     const pstdte = document.createElement("i");
     pstdte.classList.add("date");
-    tsr = p.t.e;
-    tsra = tsr * 1000;
-    tsrb = Math.trunc(tsra);
-    const ts = new Date();
-    ts.setTime(tsrb);
-    pstdte.innerText = new Date(tsrb).toLocaleString([], { month: '2-digit', day: '2-digit', year: '2-digit', hour: 'numeric', minute: 'numeric' });
+    const ts = new Date(p.t.e * 1000);
+    pstdte.innerText = ts.toLocaleString([], { month: '2-digit', day: '2-digit', year: '2-digit', hour: 'numeric', minute: 'numeric' });
 
-    const pstinf = document.createElement("h3");
+    const pstinf = document.createElement("span");
+    pstinf.classList.add("user-header");
     pstinf.innerHTML = `<span id='username'>${user}</span>`;
 
-    if (p.u == "Discord" || p.u == "SplashBridge") {
-        const bridged = document.createElement("bridge");
-        bridged.innerText = "Bridged";
-        bridged.setAttribute("title", "This post has been bridged from another platform.");
-        pstinf.appendChild(bridged);
+    if (bridged) {
+        const bridgedElem = document.createElement("bridge");
+        bridgedElem.innerText = "Bridged";
+        bridgedElem.setAttribute("title", "This post has been bridged from another platform.");
+        pstinf.appendChild(bridgedElem);
     }
-    
+
     pstinf.appendChild(pstdte);
     wrapperDiv.appendChild(pstinf);
 
-    const replyregex = /@(\w+)\s+"([^"]*)"\s+\(([^)]+)\)/g;
-    let match = replyregex.exec(content);
-    if (match) {
-        const replyid = match[3];
-        const pageContainer = document.getElementById("msgs");
-    
-        if (pageContainer.firstChild) {
-            pageContainer.insertBefore(postContainer, pageContainer.firstChild);
-        } else {
-            pageContainer.appendChild(postContainer);
-        }
-    
-        loadreply(p.post_origin, replyid).then(replycontainer => {
-            wrapperDiv.insertBefore(replycontainer, wrapperDiv.querySelector(".post-content"));
+    const roarer = /@([\w-]+)\s+"([^"]*)"\s+\(([^)]+)\)/g;
+    const bettermeower = /@([\w-]+)\[([a-zA-Z0-9]+)\]/g;
+
+    let matches1 = [...content.matchAll(roarer)];
+    let matches2 = [...content.matchAll(bettermeower)];
+
+    let allMatches = matches1.concat(matches2);
+
+    if (allMatches.length > 0) {
+        const replyIds = allMatches.map(match => match[3] || match[2]);
+        loadreplies(p.post_origin, replyIds).then(replyContainers => {
+            replyContainers.forEach(replyContainer => {
+                pstinf.after(replyContainer);
+            });
         });
-    
-        content = content.replace(match[0], '').trim();
+
+        allMatches.forEach(match => {
+            content = content.replace(match[0], '').trim();
+        });
     }
+
     let postContentText = document.createElement("p");
     postContentText.className = "post-content";
-    // tysm tni <3
+
     if (typeof md !== 'undefined') {
         md.disable(['image']);
         postContentText.innerHTML = erimd(md.render(content));
         postContentText.innerHTML = buttonbadges(postContentText);
     } else {
-        // fallback for when md doenst work
-        // figure this issue OUT
         postContentText.innerHTML = oldMarkdown(content);
-        console.error("Parsed with old markdown, fix later :)")
     }
-    const emojiRgx = /^(?:\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])+$/gi;
+
+    const emojiRgx = /^(?:(?!\d)(?:\p{Emoji}|[\u200d\ufe0f\u{E0061}-\u{E007A}\u{E007F}]))+$/u;
     const discordRgx = /^<(a)?:\w+:\d+>$/gi;
     if (emojiRgx.test(content) || discordRgx.test(content)) {
         postContentText.classList.add('big');
     }
-    
+
     if (content) {
         wrapperDiv.appendChild(postContentText);
-    } 
+    }
 
     const links = content.match(/(?:https?|ftp):\/\/[^\s(){}[\]]+/g);
     const embd = embed(links);
@@ -122,145 +111,86 @@ function loadpost(p) {
         });
     }
 
-    loadPfp(user)
-        .then(pfpElement => {
-            if (pfpElement) {
-                pfpDiv.appendChild(pfpElement);
-                //thx stackoverflow
-                pfpCache[user] = pfpElement.cloneNode(true);
-                postContainer.insertBefore(pfpDiv, wrapperDiv);
-            }
-        });
-        
-    postContainer.appendChild(wrapperDiv);
-
-    if (!document.getElementById(p._id)) {
-        const pageContainer = document.getElementById("msgs");
-        if (pageContainer.firstChild) {
-            pageContainer.insertBefore(postContainer, pageContainer.firstChild);
-        } else {
-            pageContainer.appendChild(postContainer);
+    loadPfp(user).then(pfpElement => {
+        if (pfpElement) {
+            pfpDiv.appendChild(pfpElement);
+            postContainer.insertBefore(pfpDiv, wrapperDiv);
         }
-    }
+    });
+
+    postContainer.appendChild(wrapperDiv);
+    const pageContainer = document.getElementById("msgs");
+    pageContainer.insertBefore(postContainer, pageContainer.firstChild);
 }
 
 function loadPfp(username) {
     return new Promise((resolve, reject) => {
-        if (pfpCache[username]) {
-            resolve(pfpCache[username].cloneNode(true));
-        } else {
-            let pfpElement;
-
-            fetch(`https://api.meower.org/users/${username}`)
-                .then(userResp => userResp.json())
-                .then(userData => {
-                    if (userData.avatar) {
-                        const pfpurl = `https://uploads.meower.org/icons/${userData.avatar}`;
-
-                        
-                        pfpElement = document.createElement("img");
-                        pfpElement.setAttribute("src", pfpurl);
-                        pfpElement.setAttribute("alt", username);
-                        pfpElement.setAttribute("data-username", username);
-                        pfpElement.classList.add("avatar");
-                        
-                        if (userData.avatar_color) {
-//                            if (userData.avatar_color === "!color") {
-//                                pfpElement.style.border = `3px solid #f00`;
-//                                pfpElement.style.backgroundColor = `#f00`;
-//                            } else {
-//                            }
-                            pfpElement.style.border = `3px solid #${userData.avatar_color}`;
-                            pfpElement.style.backgroundColor = `#${userData.avatar_color}`;
-                        }
-                        
-                        pfpElement.addEventListener('error', () => {
-                            pfpElement.setAttribute("src", `${pfpurl}.png`);
-                            pfpCache[username].setAttribute("src", `${pfpurl}.png`);
-                        });
-
-                    } else if (userData.pfp_data) {
-                        let pfpurl;
-                        if (userData.pfp_data > 0 && userData.pfp_data <= 37) {
-                            pfpurl = `../images/avatars/icon_${userData.pfp_data - 1}.svg`;
-                        } else {
-                            pfpurl = `../images/avatars/icon_err.svg`;
-                        }
-                        
-                        pfpElement = document.createElement("img");
-                        pfpElement.setAttribute("src", pfpurl);
-                        pfpElement.setAttribute("alt", username);
-                        pfpElement.setAttribute("data-username", username);
-                        pfpElement.classList.add("avatar");
-
-                        pfpElement.classList.add("svg-avatar");
-
-                        if (userData.avatar_color) {
-                            pfpElement.style.border = `3px solid #${userData.avatar_color}`;
-                        }
-                        
-                    } else {
-                        const pfpurl = `images/avatars/icon_-4.svg`;
-                        
-                        pfpElement = document.createElement("img");
-                        pfpElement.setAttribute("src", pfpurl);
-                        pfpElement.setAttribute("alt", username);
-                        pfpElement.setAttribute("data-username", username);
-
-                        pfpElement.classList.add("avatar");
-                        pfpElement.classList.add("svg-avatar");
-                        
-                        pfpElement.style.border = `3px solid #fff`;
-                        pfpElement.style.backgroundColor = `#fff`;
-                        
-                        console.error("No avatar or pfp_data available for: ", username);
-                        resolve(null);
+        fetch(`https://api.meower.org/users/${username}`)
+            .then(userResp => userResp.json())
+            .then(userData => {
+                let pfpElement;
+                if (userData.avatar) {
+                    const pfpurl = `https://uploads.meower.org/icons/${userData.avatar}`;
+                    pfpElement = document.createElement("img");
+                    pfpElement.setAttribute("src", pfpurl);
+                    pfpElement.setAttribute("alt", username);
+                    pfpElement.classList.add("avatar");
+                    if (userData.avatar_color) {
+                        pfpElement.style.border = `3px solid #${userData.avatar_color}`;
+                        pfpElement.style.backgroundColor = `#${userData.avatar_color}`;
                     }
-
-                    if (pfpElement) {
-                        pfpCache[username] = pfpElement.cloneNode(true);
-                    }
-
-                    resolve(pfpElement);
-                })
-                .catch(error => {
-                    console.error("Failed to fetch:", error);
-                    resolve(null);
-                });
-        }
+                    pfpElement.addEventListener('error', () => {
+                        pfpElement.setAttribute("src", `${pfpurl}.png`);
+                    });
+                } else {
+                    pfpElement = document.createElement("img");
+                    pfpElement.setAttribute("src", `images/avatars/icon_err.svg`);
+                    pfpElement.setAttribute("alt", username);
+                    pfpElement.classList.add("avatar");
+                    pfpElement.classList.add("svg-avatar");
+                    pfpElement.style.border = `3px solid #fff`;
+                    pfpElement.style.backgroundColor = `#fff`;
+                }
+                resolve(pfpElement);
+            })
+            .catch(error => {
+                console.error("Failed to fetch:", error);
+                resolve(null);
+            });
     });
 }
 
+async function loadreplies(postOrigin, replyIds) {
+    const replies = await Promise.all(replyIds.map(replyid => loadreply(postOrigin, replyid)));
+    return replies;
+}
+
 async function loadreply(postOrigin, replyid) {
-    const replyregex = /^@[^ ]+ (.+?) \(([^)]+)\)/;
+    const roarRegex = /^@[\w-]+ (.+?) \(([^)]+)\)/;
+    const betterMeowerRegex = /@([\w-]+)\[([a-zA-Z0-9]+)\]/g;
+
     try {
-        let replydata = postCache[postOrigin].find(post => post._id === replyid);
-        if (!replydata) {
-            const replyresp = await fetch(`https://api.meower.org/posts?id=${replyid}`, {
-                headers: { token: localStorage.getItem("token") }
-            });
+        const replyresp = await fetch(`https://api.meower.org/posts?id=${replyid}`);
+        let replydata;
+        if (replyresp.status === 404) {
+            replydata = { p: "[original message was deleted]" };
+        } else {
             replydata = await replyresp.json();
         }
 
         const replycontainer = document.createElement("div");
         replycontainer.classList.add("reply");
-        let replyContent = replydata.p;
-        
-        const match = replydata.p.replace(replyregex, "").trim();
+
+        let content = replydata.p || '';
+        let user = replydata.u || '';
+
+        const match = content.replace(roarRegex, "").replace(betterMeowerRegex, "").trim();
         if (match) {
-            replyContent = match;
+            content = match;
         }
-        
-        if (replydata.u === "Discord" || replydata.u === "SplashBridge") {
-            const rcon = replyContent;
-            const parts = rcon.split(': ');
-            const user = parts[0];
-            const content = parts.slice(1).join(': ');
-            replycontainer.innerHTML = `<p style='font-weight:bold;margin: 10px 0 10px 0;'>${escapeHTML(user)}</p><p style='margin: 10px 0 10px 0;'>${escapeHTML(content)}</p>`;
-        } else {
-            replycontainer.innerHTML = `<p style='font-weight:bold;margin: 10px 0 10px 0;'>${escapeHTML(replydata.u)}</p><p style='margin: 10px 0 10px 0;'>${escapeHTML(replyContent)}</p>`;
-        }
-        
+
+        replycontainer.innerHTML = `<p style='font-weight:bold;margin: 10px 0 10px 0;'>${escapeHTML(user)}</p><p style='margin: 10px 0 10px 0;'>${escapeHTML(content)}</p>`;
+
         return replycontainer;
     } catch (error) {
         console.error("Error fetching reply:", error);
@@ -268,4 +198,4 @@ async function loadreply(postOrigin, replyid) {
     }
 }
 
-window.onload = loadsharedpost();
+window.onload = loadsharedpost;

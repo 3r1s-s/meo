@@ -850,7 +850,6 @@ async function loadreply(postOrigin, replyid) {
     }
 }
 
-
 function reply(event) {
     let postcont = "";
     const postContainer = event.target.closest('.post');

@@ -160,6 +160,13 @@ textarea {
     width: 100%;
 }
 
+.user-header {
+    font-weight: 700;
+    font-size: 19px;
+    display: block;
+    margin: var(--text-margin) 0 10px 0;
+}
+
 .post {
     background-color: var(--accent-color);
     border-radius: var(--border-radius);
