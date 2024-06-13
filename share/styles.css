@@ -168,6 +168,9 @@ textarea {
     border: var(--border);
     display: flex;
     user-select: none;
+
+    width: calc(100% - 10px);
+    max-width: 700px;
 }
 
 .shell {
