@@ -846,7 +846,6 @@ async function loadreply(postOrigin, replyid) {
     }
 }
 
-
 function reply(event) {
     let postcont = "";
     const postContainer = event.target.closest('.post');
@@ -1402,14 +1401,6 @@ function loadchat(chatId) {
     if (data.nickname) {
         mainContainer.innerHTML = `<div class='info'><div class="gctitle"><h1 id='nickname' class='header-top'>${escapeHTML(data.nickname)}</h1><i class="subtitle">${chatId}</i></div>
         <p id='info'></p></div>` + loadinputs();
-        const ulinf = document.getElementById('info');
-        data.members.forEach((user, index) => {
-            if (index === data.members.length - 1) {
-                ulinf.innerHTML += `<div class='ulmember'><span id='ulmnl'>${user}</span></div>`;
-            } else {
-                ulinf.innerHTML += `<div class='ulmember'><span id='ulmnl'>${user}</span>, </div>`;
-            }
-        });
     } else {
         mainContainer.innerHTML = `<div class='info'><div class="gctitle"><h1 id='username' class='header-top' onclick="openUsrModal('${data.members.find(v => v !== localStorage.getItem("username"))}')">${data.members.find(v => v !== localStorage.getItem("username"))}</h1><i class="subtitle">${chatId}</i></div><p id='info'></p></div>` + loadinputs();
     }
@@ -2594,7 +2585,7 @@ function openImage(url) {
             <img class='embed-large' src='${url}' alt="${fileName}" onclick='preventClose(event)'>
             <div class="img-links">
             <span class="img-link-outer"><a onclick="closeImage()" class="img-link">${lang().action.close}</a></span>
-            <span><a href="${url}" target="_blank" class="img-link">${lang().action.opennewtab}</a></span>
+            <span><a href="${url}?download" target="_blank" class="img-link">${lang().action.download}</a></span>
             </div>
             `;
         }

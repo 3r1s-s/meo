@@ -159,6 +159,7 @@ const en = {
         "loadtheme": "Load Theme",
         "resetplugins": "Disable All",
         "favorite": "Favorite",
+        "download": "Download",
     },
     "info": {
         "accexists": "Username Already Taken!",
@@ -369,6 +370,7 @@ const enuk = {
         "loadtheme": "Load Theme",
         "resetplugins": "Disable All",
         "favorite": "Favourite",
+        "download": "Download",
     },
     "info": {
         "accexists": "Username Already Taken!",
@@ -577,6 +579,7 @@ const es = {
         "loadtheme": "Load Theme (Cargar Tema)",
         "resetplugins": "Deshabilitar todo", // update - completed v1.1
         "favorite": "Favoritos", // update - completed v1.1
+        "download": "Download", // update
     },
     "info": {
         "accexists": "¡Nombre de Usuario ya Ocupado!",
@@ -785,7 +788,8 @@ const es_es = {
         "savetheme": "Guardar tema",
         "loadtheme": "Cargar tema",
         "resetplugins": "Deshabilitar todo",
-        "favorite": "Favorito"
+        "favorite": "Favorito",
+        "download": "Download", // update
     },
     "info": {
         "accexists": "¡Nombre de usuario ya tomado!",
@@ -997,6 +1001,7 @@ const de = {
         "loadtheme": "Aussehen laden",
         "resetplugins": "Alles ausschalten",
         "favorite": "Favorite", // update
+        "download": "Download", // update
     },
     "info": {
         "accexists": "Der Benutzername wird schon benutzt!",
