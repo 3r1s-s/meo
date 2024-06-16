@@ -585,7 +585,7 @@ function loadpost(p) {
     // tysm tni <3
     if (typeof md !== 'undefined') {
         md.disable(['image']);
-        postContentText.innerHTML = erimd(md.render(content));
+        postContentText.innerHTML = erimd(md.render(content.replace(/&/g, '&amp;')));
         postContentText.innerHTML = buttonbadges(postContentText);
     } else {
         // fallback for when md doenst work
