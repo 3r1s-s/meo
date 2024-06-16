@@ -49,6 +49,7 @@
     --primary: #765dee;
     --background: #1c1c26;
     --accent-color: #2f3040;
+    --color: #fefefe;
 }
 
 .light-theme {
@@ -441,7 +442,7 @@
     --accent-color: #1c1931;
     --hov-accent-color: #2c2751;
     --hov-color: #403965;
-
+    --color: #fefefe;
     --modal-color: #080614;
     --modal-button-color: #1c1931;
     --hov-modal-button-color: #2c2751;
@@ -453,7 +454,7 @@
     --accent-color: #202020;
     --hov-color: #303030;
     --hov-accent-color: #252525;
-
+    --color: #fefefe;
     --modal-color: #202020;
     --modal-button-color: #303030;
     --hov-modal-button-color: #404040;
