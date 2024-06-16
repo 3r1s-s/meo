@@ -195,7 +195,7 @@ function attach(attachment) {
             element.classList.add("media-outer");
 
             let mediaElement = document.createElement("video");
-            mediaElement.setAttribute("src", baseURL);
+            mediaElement.setAttribute("src", baseURL + '?preview');
             mediaElement.setAttribute("controls", "controls");
             mediaElement.setAttribute("playsinline", "");
             mediaElement.setAttribute("preload", "metadata");
