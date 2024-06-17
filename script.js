@@ -3274,6 +3274,7 @@ async function modDeletePost(postid) {
         });
 
         if (response.ok) {
+            console.log("post deleted")
         } else {
             console.error(`Error deleting post with ID ${postid}: ${response.status} - ${response.statusText}`);
         }
