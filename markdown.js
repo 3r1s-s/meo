@@ -173,7 +173,7 @@ function attach(attachment) {
         let embeddedElement;
 
         if (attachment.mime.includes("image")) {
-            if (whitelist.some(source => link.includes(source))  || settingsstuff().imagewhitelist) {
+            if (whitelist.some(source => link.includes(source))) {
                 const element = document.createElement("div");
                 element.classList.add("image-outer");
 
