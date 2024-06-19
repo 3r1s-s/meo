@@ -1253,7 +1253,7 @@ function renderChats() {
         const chatOps = document.createElement("div");
         chatOps.classList.add("chat-ops");
         chatOps.innerHTML = `
-        <div class="chat-op" onclick="favChat(event, '${escapeHTML(chat._id)}')" title="${lang().action.favorite}" aria-label="${lang().action.favorite}">
+        <div class="chat-op" onclick="favChat(event, '${escapeHTML(chat._id)}')" title="${lang().action.favorite}">
             ${favoritedChats.includes(chat._id) ? `
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path fill="currentColor" d="M3.05649 9.24618L0.635792 6.89056C0.363174 6.62527 0.264902 6.22838 0.382279 5.8667C0.499657 5.50502 0.812337 5.24125 1.1889 5.18626L5.27593 4.58943L7.10348 0.890366C7.27196 0.549372 7.61957 0.333496 8.00019 0.333496C8.38081 0.333496 8.72843 0.549372 8.8969 0.890366L9.72865 2.57387L3.05649 9.24618Z"/>
@@ -1266,7 +1266,7 @@ function renderChats() {
             </svg>
             `}
         </div>
-        <div class="chat-op" onclick="closeChatModal(event, '${escapeHTML(chat._id)}', '${escnickname || chat.members.find(v => v !== localStorage.getItem("username"))}')" title="${lang().action.close}" aria-label="${lang().action.close}">
+        <div class="chat-op" onclick="closeChatModal(event, '${escapeHTML(chat._id)}', '${escnickname || chat.members.find(v => v !== localStorage.getItem("username"))}')" title="${lang().action.close}">
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path fill="currentColor" d="M2.3352 13.6648C2.78215 14.1117 3.50678 14.1117 3.95372 13.6648L8 9.61851L12.0463 13.6648C12.4932 14.1117 13.2179 14.1117 13.6648 13.6648C14.1117 13.2179 14.1117 12.4932 13.6648 12.0463L9.61851 8L13.6648 3.95372C14.1117 3.50678 14.1117 2.78214 13.6648 2.3352C13.2179 1.88826 12.4932 1.88827 12.0463 2.33521L8 6.38149L3.95372 2.33521C3.50678 1.88827 2.78214 1.88827 2.3352 2.33521C1.88826 2.78215 1.88827 3.50678 2.33521 3.95372L6.38149 8L2.33521 12.0463C1.88827 12.4932 1.88827 13.2179 2.3352 13.6648Z"/>
             </svg>            
