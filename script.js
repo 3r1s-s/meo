@@ -664,8 +664,9 @@ function loadPfp(username, button) {
                         const pfpurl = `https://uploads.meower.org/icons/${userData.avatar}`;
 
                         
-                        pfpElement = document.createElement("img");
-                        pfpElement.setAttribute("src", pfpurl);
+                        pfpElement = document.createElement("div");
+                        pfpElement.style.backgroundImage = `url(${pfpurl})`;
+                        pfpElement.classList.add("pfp-inner");
                         pfpElement.setAttribute("alt", username);
                         pfpElement.setAttribute("data-username", username);
                         pfpElement.classList.add("avatar");
@@ -697,8 +698,9 @@ function loadPfp(username, button) {
                             pfpurl = `images/avatars/icon_err.svg`;
                         }
                         
-                        pfpElement = document.createElement("img");
-                        pfpElement.setAttribute("src", pfpurl);
+                        pfpElement = document.createElement("div");
+                        pfpElement.style.backgroundImage = `url(${pfpurl})`;
+                        pfpElement.classList.add("pfp-inner");
                         pfpElement.setAttribute("alt", username);
                         pfpElement.setAttribute("data-username", username);
                         pfpElement.classList.add("avatar");
@@ -714,8 +716,9 @@ function loadPfp(username, button) {
                     } else {
                         const pfpurl = `images/avatars/icon_-4.svg`;
                         
-                        pfpElement = document.createElement("img");
-                        pfpElement.setAttribute("src", pfpurl);
+                        pfpElement = document.createElement("div");
+                        pfpElement.style.backgroundImage = `url(${pfpurl})`;
+                        pfpElement.classList.add("pfp-inner");
                         pfpElement.setAttribute("alt", username);
                         pfpElement.setAttribute("data-username", username);
                         if (!button) {
@@ -1103,7 +1106,7 @@ function sidebars() {
     <input type='button' class='navigation-button button' id='inbox' value='${lang().page_inbox}' onclick='loadinbox()' aria-label="inbox" tabindex="0">
     <input type='button' class='navigation-button button' id='settings' value='${lang().page_settings}' onclick='loadstgs()' aria-label="settings" tabindex="0">
     <button type='button' class='user-area button' id='profile' onclick='openUsrModal("${localStorage.getItem("username")}")' aria-label="profile" tabindex="0">
-        <img class="avatar-small" id="uav" src="" alt="Avatar">
+        <div class="avatar-small" id="uav" alt="Avatar"></div>
         <span class="gcname">${localStorage.getItem("username")}</span></div>
     </button>
     `;
@@ -1112,13 +1115,21 @@ function sidebars() {
     .then(pfpElem => {
         if (pfpElem) {
             const userAvatar = document.getElementById("uav");
-            userAvatar.src = pfpElem.src;
+            let bgImageUrl = pfpElem.style.backgroundImage;
+            if (bgImageUrl) {
+                bgImageUrl = bgImageUrl.slice(5, -2);
+            }
+            
+            userAvatar.style.backgroundImage = `url(${bgImageUrl})`;
             userAvatar.style.border = pfpElem.style.border.replace("3px", "3px");
+            userAvatar.classList.add("pfp-inner");
+
             if (pfpElem.classList.contains("svg-avatar")) {
                 userAvatar.classList.add("svg-avatar");
             }
         }
     });
+
 
     if (localStorage.getItem("permissions") === "1") {
     navlist = `<input type='button' class='navigation-button button' id='moderation' value='${lang().action.mod}' onclick='openModModal()' aria-label="moderate">` + navlist;
@@ -1190,14 +1201,15 @@ function renderChats() {
             loadchat(chat._id);
         };
 
-        const chatIconElem = document.createElement("img");
+        const chatIconElem = document.createElement("div");
         chatIconElem.classList.add("avatar-small");
+        chatIconElem.classList.add("pfp-inner");
         chatIconElem.setAttribute("alt", "Avatar");
         if (chat.type === 0) {
             if (chat.icon) {
-                chatIconElem.src = 'https://uploads.meower.org/icons/' + chat.icon;
+                chatIconElem.style.backgroundImage = `url(https://uploads.meower.org/icons/${chat.icon})`;
             } else {
-                chatIconElem.src = "images/GC.svg";
+                chatIconElem.style.backgroundImage = `url(images/GC.svg)`;
             }
             if (!chat.icon) {
                 chatIconElem.style.border = "3px solid #" + '1f5831';
@@ -1212,12 +1224,18 @@ function renderChats() {
             loadPfp(chat.members.find(v => v !== localStorage.getItem("username")))
             .then(pfpElem => {
                 if (pfpElem) {
-                    chatIconElem.src = pfpElem.src;
+                    let bgImageUrl = pfpElem.style.backgroundImage;
+                    if (bgImageUrl) {
+                        bgImageUrl = bgImageUrl.slice(5, -2);
+                    }
+                    console.log(bgImageUrl);
                     chatIconElem.style.border = pfpElem.style.border.replace("3px", "3px");
-                    chatIconElem.style.background = pfpElem.style.border.replace("3px solid", "");
+                    chatIconElem.style.backgroundColor = pfpElem.style.border.replace("3px solid", "");
+                    chatIconElem.style.backgroundImage = `url("${bgImageUrl}")`;
+                    chatIconElem.classList.add("pfp-inner");
                     if (pfpElem.classList.contains("svg-avatar")) {
                         chatIconElem.classList.add("svg-avatar");
-                        chatIconElem.style.background = '#fff';
+                        chatIconElem.style.backgroundColor = '#fff';
                     }
                 }
             });
