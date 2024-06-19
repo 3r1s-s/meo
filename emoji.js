@@ -67,7 +67,6 @@ document.addEventListener('input', function(event) {
             const aa = document.querySelectorAll(".emojisec");
             aa.forEach(function(bb) {
                 bb.style.display = "flex";
-                console.log(bb)
             });
             const ee = document.querySelectorAll(".emojiheader");
             ee.forEach(function(ff) {

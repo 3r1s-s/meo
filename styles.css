@@ -612,7 +612,7 @@ bridge {
 
 .message-input {
     padding: 1em;
-    flex: 0.9;
+    flex: 1;
     margin: 0;
     overflow-y: hidden;
 }
@@ -2632,4 +2632,9 @@ input[type="button"]:focus-visible {
 .magenta:hover {
     background-color: var(--hov-magenta);
     color: var(--color-on);
+}
+
+
+.widemode {
+    max-width: 100% !important;
 }

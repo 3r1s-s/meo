@@ -52,6 +52,11 @@ function replsh(rpl) {
         rpl;
     return trimmedString;
 }
+
+if (settingsstuff().widemode) {
+    document.getElementById("main").classList.add("widemode");
+}
+
 // make it so when reconnect happens it goes back to the prev screen and not the start page
 function main() {
     meowerConnection = new WebSocket(server);
@@ -1594,22 +1599,48 @@ function logout(iskl) {
 function loadstgs() {
     page = "settings";
     pre = "settings";
-    const navc = document.querySelector(".nav-top");
-    navc.innerHTML = `
-    <input type='button' class='navigation-button button' id='submit' value='${lang().settings_general}' onclick='loadGeneral()' aria-label="general">
-    <input type='button' class='navigation-button button' id='submit' value='${lang().settings_appearance}' onclick='loadAppearance()' aria-label="appearance">
-    <input type="button" class="navigation-button button" id="submit" value='${lang().settings_languages}' onclick="loadLanguages()" aria-label="languages">
-    <input type="button" class="navigation-button button" id="submit" value='${lang().settings_plugins}' onclick="loadPlugins()" aria-label="plugins">
-    <input type='button' class='navigation-button button' id='logout' value='${lang().action.logout}' onclick='logout(false)' aria-label="logout">
-    `;
+
+    let navc
+    if (settingsstuff().widemode) {
+        const pageContainer = document.getElementById("main");
+        const settingsContent = `
+            <div class="settings-nav">
+                    <input type='button' class='navigation-button button' id='submit' value='${lang().settings_general}' onclick='loadGeneral()' aria-label="general">
+                    <input type='button' class='navigation-button button' id='submit' value='${lang().settings_appearance}' onclick='loadAppearance()' aria-label="appearance">
+                    <input type="button" class="navigation-button button" id="submit" value='${lang().settings_languages}' onclick="loadLanguages()" aria-label="languages">
+                    <input type="button" class="navigation-button button" id="submit" value='${lang().settings_plugins}' onclick="loadPlugins()" aria-label="plugins">
+                    <input type='button' class='navigation-button button' id='logout' value='${lang().action.logout}' onclick='logout(false)' aria-label="logout">
+            </div>
+            <div class="settings">
+            </div>
+            `
+        pageContainer.innerHTML = settingsContent;
+    } else {
+        const pageContainer = document.getElementById("main");
+        const settingsContent = `
+            <div class="settings-nav">
+            </div>
+            <div class="settings">
+            </div>
+            `
+        pageContainer.innerHTML = settingsContent;
+
+        navc = document.querySelector(".nav-top");
+        navc.innerHTML = `
+        <input type='button' class='navigation-button button' id='submit' value='${lang().settings_general}' onclick='loadGeneral()' aria-label="general">
+        <input type='button' class='navigation-button button' id='submit' value='${lang().settings_appearance}' onclick='loadAppearance()' aria-label="appearance">
+        <input type="button" class="navigation-button button" id="submit" value='${lang().settings_languages}' onclick="loadLanguages()" aria-label="languages">
+        <input type="button" class="navigation-button button" id="submit" value='${lang().settings_plugins}' onclick="loadPlugins()" aria-label="plugins">
+        <input type='button' class='navigation-button button' id='logout' value='${lang().action.logout}' onclick='logout(false)' aria-label="logout">
+        `;
+    }
     loadGeneral();
 }
 
 function loadGeneral() {
     setTop();
-    const pageContainer = document.getElementById("main");
+    const pageContainer = document.querySelector(".settings");
     const settingsContent = `
-        <div class="settings">
             <h1>${lang().settings_general}</h1>
             <h3>${lang().general_sub.chat}</h3>
             <div class="msgs"></div>
@@ -1751,7 +1782,6 @@ function loadGeneral() {
                     <span class="credit">All the contributors and translators</span>
                 </div>
             </div>
-            </div>
             `;
 
             pageContainer.innerHTML = settingsContent;
@@ -1768,7 +1798,8 @@ function loadGeneral() {
                 showpostbuttons: document.getElementById("showpostbuttons"),
                 underlinelinks: document.getElementById("underlinelinks"),
                 entersend: document.getElementById("entersend"),
-                hideimages: document.getElementById("hideimages")
+                hideimages: document.getElementById("hideimages"),
+                widemode: document.getElementById("widemode")
             };
         
             Object.values(settings).forEach((checkbox) => {
@@ -1785,7 +1816,8 @@ function loadGeneral() {
                         showpostbuttons: settings.showpostbuttons.checked,
                         underlinelinks: settings.underlinelinks.checked,
                         entersend: settings.entersend.checked,
-                        hideimages: settings.hideimages.checked
+                        hideimages: settings.hideimages.checked,
+                        widemode: settings.widemode.checked
                     }));
                     setAccessibilitySettings();
                 });
@@ -1835,9 +1867,8 @@ function loadGeneral() {
 
 async function loadPlugins() {
     setTop();
-    let pageContainer = document.getElementById("main");
+    let pageContainer = document.querySelector(".settings");
     let settingsContent = `
-        <div class="settings">
             <h1>${lang().settings_plugins}</h1>
             <div class="msgs"></div>
             <h3>${lang().plugins_sub.manage}</h3>
@@ -1854,7 +1885,6 @@ async function loadPlugins() {
             </div>
             <hr>
             <span>${lang().plugins_sub.desc} <a href='https://github.com/3r1s-s/meo-plugins' target="_blank" id='link'>${lang().plugins_sub.link}</a></span>
-        </div>
     `;
     pageContainer.innerHTML = settingsContent;
 
@@ -1950,9 +1980,8 @@ function resetPlugins() {
 
 function loadAppearance() {
     setTop();
-    let pageContainer = document.getElementById("main");
+    let pageContainer = document.querySelector(".settings");
     let settingsContent = `
-    <div class="settings">
         <h1>${lang().settings_appearance}</h1>
         <div class="msgs example-msg">
         <div id="example" class="post" style="margin-top: -2.8em;"><div class="pfp"><img src="https://uploads.meower.org/icons/o1KPbrqDXKV6BeqmbwLvZurG" alt="Avatar" class="avatar" style="border: 3px solid #ad3e00;"></div><div class="wrapper"><div class="buttonContainer">
@@ -2170,7 +2199,6 @@ function loadAppearance() {
         <div class='list'>
             <textarea class="editor" id='customcss' placeholder="// you put stuff here"></textarea>
         </div>
-    </div>
     `
 
     pageContainer.innerHTML = settingsContent;
@@ -2343,9 +2371,8 @@ function changeTheme(theme, button) {
 
 function loadLanguages() {
     setTop();
-    const pageContainer = document.getElementById("main");
+    const pageContainer = document.querySelector(".settings");
     const settingsContent = `
-    <div class="settings">
         <h1>${lang().settings_languages}</h1>
         <h3>${lang().languages_sub.title}</h3>
         <div class="msgs"></div>
@@ -2358,7 +2385,6 @@ function loadLanguages() {
         </div>
         <hr>
         <span>${lang().languages_sub.desc} <a href='https://github.com/3r1s-s/meo' target="_blank" id='link'>${lang().languages_sub.link}</a></span>
-    </div>
     `;
     pageContainer.innerHTML = settingsContent;
     document.getElementById(language).classList.add("language-selected");
