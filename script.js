@@ -1289,7 +1289,7 @@ function loadstart() {
     pageContainer.innerHTML = `
     <div class="info"><h1>${lang().page_start}</h1></div>
     <div class="explore">
-        <h3>Online - ${lul}</h3>
+        <span class="span-h3">Online - ${lul}</span>
         <div class="start-users-online">
             <button class="ubtn button skeleton" aria-label="Skeleton"><div class="ubtnsa"><div class="start-pfp-outer"><div class="skeleton-avatar-small"></div></div></div></button>
             <button class="ubtn button skeleton" aria-label="Skeleton"><div class="ubtnsa"><div class="start-pfp-outer"><div class="skeleton-avatar-small"></div></div></div></button>
