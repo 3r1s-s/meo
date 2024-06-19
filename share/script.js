@@ -19,6 +19,10 @@ async function loadsharedpost() {
     }
 }
 
+function settingsstuff() {
+    return false;
+}
+
 function loadpost(p) {
     let user, content;
     let bridged = bridges.includes(p.u);
@@ -105,10 +109,21 @@ function loadpost(p) {
 
     const links = content.match(/(?:https?|ftp):\/\/[^\s(){}[\]]+/g);
     const embd = embed(links);
-    if (embd) {
-        embd.forEach(embeddedElement => {
-            wrapperDiv.appendChild(embeddedElement);
+    if (embd || p.attachments) {
+        const embedsDiv = document.createElement('div');
+        embedsDiv.classList.add('embeds');
+        if (embd) {
+            embd.forEach(embeddedElement => {
+                embedsDiv.appendChild(embeddedElement);
+            });
+        }
+
+        p.attachments.forEach(attachment => {
+            const g = attach(attachment);
+            embedsDiv.appendChild(g);
         });
+
+        wrapperDiv.appendChild(embedsDiv);
     }
 
     loadPfp(user).then(pfpElement => {

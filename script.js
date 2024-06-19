@@ -68,7 +68,6 @@ function main() {
     loadtheme();
 
     if ('windowControlsOverlay' in navigator) {
-        console.log("PWA!!!!");
     }
 
     meowerConnection.onmessage = (event) => {
@@ -581,7 +580,7 @@ function loadpost(p) {
     // tysm tni <3
     if (typeof md !== 'undefined') {
         md.disable(['image']);
-        postContentText.innerHTML = erimd(md.render(content));
+        postContentText.innerHTML = erimd(md.render(content.replace(/&/g, '&amp;')));
         postContentText.innerHTML = buttonbadges(postContentText);
     } else {
         // fallback for when md doenst work
@@ -2526,7 +2525,6 @@ async function deletePost(postid) {
         });
 
         if (response.ok) {
-            console.log(`Post with ID ${postid} deleted successfully.`);
             closemodal();
         } else {
             console.error(`Error deleting post with ID ${postid}: ${response.status} - ${response.statusText}`);
@@ -2851,7 +2849,6 @@ function sendReport(id) {
         }
     };
     meowerConnection.send(JSON.stringify(data));
-    console.log("Report Sent!");
     closemodal(lang().info.reportsent);
 }
 
@@ -3335,7 +3332,7 @@ async function modDeletePost(postid) {
         });
 
         if (response.ok) {
-            console.log(`Post with ID ${postid} deleted successfully.`);
+            console.log("post deleted")
         } else {
             console.error(`Error deleting post with ID ${postid}: ${response.status} - ${response.statusText}`);
         }
@@ -3357,13 +3354,12 @@ function updateNote(postid) {
             notes: note
         })
     })
-        .then(response => response.json())
-        .then(data => {
-            console.log("Note updated successfully:", data);
-        })
-        .catch(error => {
-            console.error("Error updating note:", error);
-        });
+    .then(response => response.json())
+    .then(data => {
+    })
+    .catch(error => {
+        console.error("Error updating note:", error);
+    });
 }
 
 function sendAlert(userid) {
@@ -3379,13 +3375,12 @@ function sendAlert(userid) {
             content: note
         })
     })
-        .then(response => response.json())
-        .then(data => {
-            console.log("Alerted successfully:", data);
-        })
-        .catch(error => {
-            console.error("Error sending alert:", error);
-        });
+    .then(response => response.json())
+    .then(data => {
+    })
+    .catch(error => {
+        console.error("Error sending alert:", error);
+    });
 }
 
 function closeReport(postid, action) {
@@ -3400,13 +3395,12 @@ function closeReport(postid, action) {
                 status: "action.taken"
             })
         })
-            .then(response => response.json())
-            .then(data => {
-                console.log("Report updated successfully:", data);
-            })
-            .catch(error => {
-                console.error("Error updating report:", error);
-            });
+        .then(response => response.json())
+        .then(data => {
+        })
+        .catch(error => {
+            console.error("Error updating report:", error);
+        });
     } else {
         fetch(`https://api.meower.org/admin/reports/${postid}`, {
             method: "PATCH",
@@ -3418,13 +3412,12 @@ function closeReport(postid, action) {
                 status: "no_action_taken"
             })
         })
-            .then(response => response.json())
-            .then(data => {
-                console.log("Report updated successfully:", data);
-            })
-            .catch(error => {
-                console.error("Error updating report:", error);
-            });
+        .then(response => response.json())
+        .then(data => {
+        })
+        .catch(error => {
+            console.error("Error updating report:", error);
+        });
     }
 }
 
@@ -3594,7 +3587,6 @@ function imagemodal() {
 
 function loadBG() {
     const bgImageURL = localStorage.getItem('backgroundImageURL');
-    console.log(bgImageURL)
     if (bgImageURL) {
         const lightThemeBody = document.querySelector('.glight-theme body');
         if (lightThemeBody) {
@@ -3630,7 +3622,6 @@ function updateBG() {
 
 // credit: theotherhades
 function ipBlockedModal() {
-    console.log("Showing IP blocked modal");
     document.documentElement.style.overflow = "hidden";
 
     let modalback = document.querySelector(".modal-back");
@@ -4165,13 +4156,12 @@ function blockUser(user) {
             state: toggle
         })
     })
-        .then(response => response.json())
-        .then(data => {
-            console.log("sent", data);
-        })
-        .catch(error => {
-            console.error("error:", error);
-        });
+    .then(response => response.json())
+    .then(data => {
+    })
+    .catch(error => {
+        console.error("error:", error);
+    });
     if (page = 'settings') {
         loadstgs();
     }

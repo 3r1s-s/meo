@@ -173,7 +173,7 @@ function attach(attachment) {
         let embeddedElement;
 
         if (attachment.mime.includes("image")) {
-            if (whitelist.some(source => link.includes(source))  || settingsstuff().imagewhitelist) {
+            if (whitelist.some(source => link.includes(source))) {
                 const element = document.createElement("div");
                 element.classList.add("image-outer");
 
@@ -195,7 +195,7 @@ function attach(attachment) {
             element.classList.add("media-outer");
 
             let mediaElement = document.createElement("video");
-            mediaElement.setAttribute("src", baseURL);
+            mediaElement.setAttribute("src", baseURL + '?preview');
             mediaElement.setAttribute("controls", "controls");
             mediaElement.setAttribute("playsinline", "");
             mediaElement.setAttribute("preload", "metadata");
@@ -408,6 +408,17 @@ function createButtonContainer(p) {
         nwbtn.setAttribute("onclick", `deletePost("${p._id}")`);
         nwbtn.setAttribute("title", `delete`);
         nwbtn.setAttribute("aria-label", `delete post`);
+        nwbtn.innerHTML = `
+        <svg width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M15 3.999V2H9V3.999H3V5.999H21V3.999H15Z"></path><path fill="currentColor" d="M5 6.99902V18.999C5 20.101 5.897 20.999 7 20.999H17C18.103 20.999 19 20.101 19 18.999V6.99902H5ZM11 17H9V11H11V17ZM15 17H13V11H15V17Z"></path></svg>
+        `;
+        buttonContainer.querySelector('.toolbarContainer').prepend(nwbtn);
+    } else if (localStorage.getItem("permissions") === "1") {
+        nwbtn = document.createElement("div");
+        nwbtn.classList.add("toolButton");
+        nwbtn.setAttribute("onclick", `modDeletePost("${p._id}")`);
+        nwbtn.setAttribute("title", `mod delete`);
+        nwbtn.setAttribute("aria-label", `mod delete`);
+        nwbtn.setAttribute("tabindex", "0");
         nwbtn.innerHTML = `
         <svg width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M15 3.999V2H9V3.999H3V5.999H21V3.999H15Z"></path><path fill="currentColor" d="M5 6.99902V18.999C5 20.101 5.897 20.999 7 20.999H17C18.103 20.999 19 20.101 19 18.999V6.99902H5ZM11 17H9V11H11V17ZM15 17H13V11H15V17Z"></path></svg>
         `;
