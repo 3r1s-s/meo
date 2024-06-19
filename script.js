@@ -1228,7 +1228,6 @@ function renderChats() {
                     if (bgImageUrl) {
                         bgImageUrl = bgImageUrl.slice(5, -2);
                     }
-                    console.log(bgImageUrl);
                     chatIconElem.style.border = pfpElem.style.border.replace("3px", "3px");
                     chatIconElem.style.backgroundColor = pfpElem.style.border.replace("3px solid", "");
                     chatIconElem.style.backgroundImage = `url("${bgImageUrl}")`;
@@ -1332,15 +1331,15 @@ function loadstart() {
                 }
                 if (item.avatar) {
                     profilecont.innerHTML = `
-                        <img class="avatar-small" style="border: 3px solid #${item.avatar_color}; background-color:#${item.avatar_color};" src="https://uploads.meower.org/icons/${item.avatar}" alt="Avatar" title="${item._id}"></img>
+                        <div class="avatar-small pfp-inner" style="border: 3px solid #${item.avatar_color}; background-color:#${item.avatar_color}; background-image: url(https://uploads.meower.org/icons/${item.avatar});" alt="Avatar" title="${item._id}"></div>
                     `;
                 } else if (item.pfp_data) {
                     profilecont.innerHTML = `
-                        <img class="avatar-small svg-avatar" style="border: 3px solid #${item.avatar_color}"; src="images/avatars/icon_${item.pfp_data - 1}.svg" alt="Avatar" title="${item._id}"></img>
+                        <div class="avatar-small svg-avatar pfp-inner" style="border: 3px solid #${item.avatar_color}; background-image: url(images/avatars/icon_${item.pfp_data - 1}.svg)" alt="Avatar" title="${item._id}"></div>
                     `;
                 } else {
                     profilecont.innerHTML = `
-                        <img class="avatar-small svg-avatar" style="border: 3px solid #000"; src="images/avatars/icon_-4.svg" alt="Avatar" title="${item._id}"></img>
+                        <div class="avatar-small svg-avatar pfp-inner" style="border: 3px solid #000; background-image: url(images/avatars/icon_-4.svg)" alt="Avatar" title="${item._id}"></div>
                     `;
                 }
                 pl += `<button class="ubtn button" aria-label="${gr}"><div class="ubtnsa" onclick="openUsrModal('${gr}')">${profilecont.outerHTML}${gr}</div><div class="ubtnsb" onclick="opendm('${gr}')" id="username"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24"><path fill="currentColor" d="M12 22a10 10 0 1 0-8.45-4.64c.13.19.11.44-.04.61l-2.06 2.37A1 1 0 0 0 2.2 22H12Z" class=""></path></svg></div></button>`;
@@ -1770,6 +1769,15 @@ function loadGeneral() {
                 <p class="subsubheader">${lang().general_list.desc.consolewarnings}</p>
                 </div>
                 <input type="checkbox" id="consolewarnings" class="settingstoggle">
+                </label>
+            </div>
+            <div class="stg-section" style="display:none;">
+                <label class="general-label">
+                <div class="general-desc">
+                ${lang().general_list.title.widemode}
+                <p class="subsubheader">${lang().general_list.desc.widemode}</p>
+                </div>
+                <input type="checkbox" id="widemode" class="settingstoggle">
                 </label>
             </div>
             <h3>${lang().general_sub.acc}</h3>
