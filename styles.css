@@ -2501,6 +2501,8 @@ possible future styling
         width: 100%;
         box-sizing: border-box;
         top: 25vh;
+        left: 0;
+        right: 0;
     }
 
     .login-top {
