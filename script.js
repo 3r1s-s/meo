@@ -1649,7 +1649,7 @@ function loadstgs() {
 
 function loadGeneral() {
     setTop();
-    const pageContainer = document.querySelector(".settings-inner");
+    const pageContainer = document.querySelector(".settings");
     const settingsContent = `
             <h1>${lang().settings_general}</h1>
             <h3>${lang().general_sub.chat}</h3>
