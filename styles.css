@@ -823,7 +823,10 @@ bridge {
     padding-left: 15px;
     margin-left: 10px;
     margin-right: 10px;
+    gap: var(--button-margin);
 }
+
+
 
 .gcs {
     display: flex;
@@ -835,17 +838,37 @@ bridge {
     justify-content: flex-start;
     overflow-y: auto;
     width: 70%;
+    gap: var(--button-margin);
 }
 
 /* make it align at the top */
 
-.navigation-button {
-    /*border-radius: 100rem;*/
-    margin-bottom: var(--button-margin);
+.settings-button {
     padding: var(--button-padding);
     text-align: left;
     display: flex;
     align-items: center;
+    justify-content: center;
+}
+
+.navigation-button {
+    /*border-radius: 100rem;*/
+    padding: var(--button-padding);
+    text-align: left;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.nav-button-label {
+    padding: 10px var(--button-padding);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    height: 100%;
+    box-sizing: border-box;
+    text-wrap: nowrap;
+    text-align: left;
+    width: 100%;
 }
 /*
 .navigation {
@@ -939,6 +962,7 @@ possible future styling
     top: 0;
     display: flex;
     flex-direction: column;
+    gap: var(--button-margin);
     margin-top: 10px;
     width: 70%;
 }
@@ -2654,7 +2678,6 @@ input[type="button"]:focus-visible {
     color: var(--color-on);
 }
 
-
-.widemode {
-    max-width: 100% !important;
+.widemode #main {
+    max-width: 100%;
 }

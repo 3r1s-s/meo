@@ -54,7 +54,7 @@ function replsh(rpl) {
 }
 
 if (settingsstuff().widemode) {
-    document.getElementById("main").classList.add("widemode");
+    document.getElementById("page").classList.add("widemode");
 }
 
 // make it so when reconnect happens it goes back to the prev screen and not the start page
@@ -1102,12 +1102,12 @@ function sidebars() {
     `;
     
     let navlist = `
-    <input type='button' class='navigation-button button' id='explore' value='${lang().page_explore}' onclick='loadexplore();' aria-label="explore" tabindex="0">
-    <input type='button' class='navigation-button button' id='inbox' value='${lang().page_inbox}' onclick='loadinbox()' aria-label="inbox" tabindex="0">
-    <input type='button' class='navigation-button button' id='settings' value='${lang().page_settings}' onclick='loadstgs()' aria-label="settings" tabindex="0">
+    <input type="button" class="navigation-button button" id="explore" value="${lang().page_explore}" onclick="loadexplore();" aria-label="explore" tabindex="0">
+    <input type="button" class="navigation-button button" id="inbox" value="${lang().page_inbox}" onclick="loadinbox()" aria-label="inbox" tabindex="0">
+    <input type="button" class="navigation-button button" id="settings" value="${lang().page_settings}" onclick="loadstgs()" aria-label="settings" tabindex="0">
     <button type='button' class='user-area button' id='profile' onclick='openUsrModal("${localStorage.getItem("username")}")' aria-label="profile" tabindex="0">
         <div class="avatar-small" id="uav" alt="Avatar"></div>
-        <span class="gcname">${localStorage.getItem("username")}</span></div>
+        <span class="nav-button-label">${localStorage.getItem("username")}</span></div>
     </button>
     `;
 
@@ -1132,7 +1132,8 @@ function sidebars() {
 
 
     if (localStorage.getItem("permissions") === "1") {
-    navlist = `<input type='button' class='navigation-button button' id='moderation' value='${lang().action.mod}' onclick='openModModal()' aria-label="moderate">` + navlist;
+    navlist = `
+      <input type="button" class="navigation-button button" id="moderation" value="${lang().action.mod}" onclick="openModModal()" aria-label="moderate">` + navlist;
     }
 
     let mdmdl = document.getElementsByClassName('navigation')[0];
@@ -1618,45 +1619,37 @@ function loadstgs() {
     pre = "settings";
 
     let navc
-    if (settingsstuff().widemode) {
-        const pageContainer = document.getElementById("main");
-        const settingsContent = `
-            <div class="settings-nav">
-                    <input type='button' class='navigation-button button' id='submit' value='${lang().settings_general}' onclick='loadGeneral()' aria-label="general">
-                    <input type='button' class='navigation-button button' id='submit' value='${lang().settings_appearance}' onclick='loadAppearance()' aria-label="appearance">
-                    <input type="button" class="navigation-button button" id="submit" value='${lang().settings_languages}' onclick="loadLanguages()" aria-label="languages">
-                    <input type="button" class="navigation-button button" id="submit" value='${lang().settings_plugins}' onclick="loadPlugins()" aria-label="plugins">
-                    <input type='button' class='navigation-button button' id='logout' value='${lang().action.logout}' onclick='logout(false)' aria-label="logout">
-            </div>
-            <div class="settings">
-            </div>
-            `
-        pageContainer.innerHTML = settingsContent;
-    } else {
         const pageContainer = document.getElementById("main");
         const settingsContent = `
             <div class="settings-nav">
             </div>
             <div class="settings">
+                <div class="settings-inner"></div>
             </div>
             `
         pageContainer.innerHTML = settingsContent;
 
         navc = document.querySelector(".nav-top");
         navc.innerHTML = `
-        <input type='button' class='navigation-button button' id='submit' value='${lang().settings_general}' onclick='loadGeneral()' aria-label="general">
-        <input type='button' class='navigation-button button' id='submit' value='${lang().settings_appearance}' onclick='loadAppearance()' aria-label="appearance">
-        <input type="button" class="navigation-button button" id="submit" value='${lang().settings_languages}' onclick="loadLanguages()" aria-label="languages">
-        <input type="button" class="navigation-button button" id="submit" value='${lang().settings_plugins}' onclick="loadPlugins()" aria-label="plugins">
-        <input type='button' class='navigation-button button' id='logout' value='${lang().action.logout}' onclick='logout(false)' aria-label="logout">
+        <button class="trans" id="submit" value="Home" onclick="loadstart()" aria-label="Home">
+            <svg width="32" height="32" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+                <g>
+                    <path fill="currentColor" d="M468.42 20.5746L332.997 65.8367C310.218 58.8105 284.517 55.049 255.499 55.6094C226.484 55.049 200.78 58.8105 178.004 65.8367L42.5803 20.5746C18.9102 16.3251 -1.81518 36.2937 2.5967 59.1025L38.7636 200.894C18.861 248.282 12.1849 296.099 12.1849 325.027C12.1849 399.343 44.6613 492 255.499 492C466.339 492 498.815 399.343 498.815 325.027C498.815 296.099 492.139 248.282 472.237 200.894L508.404 59.1025C512.814 36.2937 492.09 16.3251 468.42 20.5746Z"></path>
+                </g>
+            </svg>
+        </button>
+        <input type='button' class='settings-button button' id='submit' value='${lang().settings_general}' onclick='loadGeneral()' aria-label="general">
+        <input type='button' class='settings-button button' id='submit' value='${lang().settings_appearance}' onclick='loadAppearance()' aria-label="appearance">
+        <input type="button" class="settings-button button" id="submit" value='${lang().settings_languages}' onclick="loadLanguages()" aria-label="languages">
+        <input type="button" class="settings-button button" id="submit" value='${lang().settings_plugins}' onclick="loadPlugins()" aria-label="plugins">
+        <input type='button' class='settings-button button' id='logout' value='${lang().action.logout}' onclick='logout(false)' aria-label="logout">
         `;
-    }
     loadGeneral();
 }
 
 function loadGeneral() {
     setTop();
-    const pageContainer = document.querySelector(".settings");
+    const pageContainer = document.querySelector(".settings-inner");
     const settingsContent = `
             <h1>${lang().settings_general}</h1>
             <h3>${lang().general_sub.chat}</h3>
@@ -1771,7 +1764,7 @@ function loadGeneral() {
                 <input type="checkbox" id="consolewarnings" class="settingstoggle">
                 </label>
             </div>
-            <div class="stg-section" style="display:none;">
+            <div class="stg-section">
                 <label class="general-label">
                 <div class="general-desc">
                 ${lang().general_list.title.widemode}

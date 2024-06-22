@@ -67,6 +67,7 @@ document.addEventListener('input', function(event) {
             const aa = document.querySelectorAll(".emojisec");
             aa.forEach(function(bb) {
                 bb.style.display = "flex";
+
             });
             const ee = document.querySelectorAll(".emojiheader");
             ee.forEach(function(ff) {
@@ -108,6 +109,7 @@ function emjpage(page) {
 function fstemj() {
     addemoji(document.querySelector('.emojibutton:not([style*="display: none;"])').getAttribute('onclick').match(/'(.*?)'/)[1]);
 }
+
 
 function pickerhtm() {
     return `
