@@ -172,7 +172,8 @@ bridge {
     padding-bottom: 1px;
     font-weight: bold;
     color: #fff;
-    user-select: none;
+    -webkit-user-select: none;
+user-select: none;
 }
 
 .list {
@@ -219,12 +220,12 @@ bridge {
 
 .media-outer {
     border-radius: var(--border-radius);
-    overflow: clip;
+    overflow: hidden;
 }
 
 .image-outer {
     border-radius: var(--border-radius);
-    overflow: clip;
+    overflow: hidden;
     width: max-content;
 }
 
@@ -776,6 +777,7 @@ bridge {
 
 .date {
     margin-left: 5px;
+    -webkit-user-select: none;
     user-select: none;
 }
 
@@ -848,7 +850,7 @@ bridge {
     text-align: left;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: left;
 }
 
 .navigation-button {
@@ -857,7 +859,7 @@ bridge {
     text-align: left;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: left;
 }
 
 .nav-button-label {
@@ -896,6 +898,7 @@ possible future styling
     text-decoration: none;
     padding: 1px 5px;
     transition: all 0.05s ease;
+    -webkit-user-select: none;
     user-select: none;
     font-weight: normal;
 }
@@ -1835,6 +1838,7 @@ possible future styling
 }
 
 .general-label {
+    -webkit-user-select: none;
     user-select: none;
     display: flex;
     position: relative;
@@ -1846,6 +1850,7 @@ possible future styling
 
 .subsubheader {
     font-size: 12px;
+    -webkit-user-select: none;
     user-select: none;
     opacity: 0.8;
     margin: 2px 0;
@@ -1857,6 +1862,7 @@ possible future styling
     overflow: hidden;
     border: 1px solid var(--accent-color);
     border-radius: var(--border-radius);
+    -webkit-user-select: none;
     user-select: none;
 }
 
@@ -1894,6 +1900,7 @@ possible future styling
 
 .pluginsub {
     font-size: 12px;
+    -webkit-user-select: none;
     user-select: none;
     opacity: 0.8;
 }
@@ -2128,6 +2135,7 @@ possible future styling
     opacity: 0.8;
     background: var(--accent-color);
     border-radius: var(--border-radius);
+    -webkit-user-select: none;
     user-select: none;
 }
 
@@ -2167,6 +2175,7 @@ possible future styling
 }
 
 .download a {
+    width: -moz-fit-content;
     width: fit-content;
 }
 
