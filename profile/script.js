@@ -15,15 +15,15 @@ function fetchprofile() {
             
             if (data.avatar) {
                 profilecont.innerHTML = `
-                <img class="avatar-big" style="border: 6px solid #${data.avatar_color}; background-color:#${data.avatar_color};" src="https://uploads.meower.org/icons/${data.avatar}"></img>
+                <div class="avatar-big pfp-inner" style="border: 6px solid #${data.avatar_color}; background-color:#${data.avatar_color}; background-image: url(https://uploads.meower.org/icons/${data.avatar});"></div>
                 `
             } else if (data.pfp_data) {                    
                 profilecont.innerHTML = `
-                <img class="avatar-big svg-avatar" style="border: 6px solid #${data.avatar_color}"; src="../images/avatars/icon_${data.pfp_data - 1}.svg"></img>
+                <div class="avatar-big pfp-inner svg-avatar" style="border: 6px solid #${data.avatar_color}; background-image: url(../images/avatars/icon_${data.pfp_data - 1}.svg);"></div>
                 `
             } else {                        
                 profilecont.innerHTML = `
-                <img class="avatar-big svg-avatar" style="border: 6px solid #000"; src="../images/avatars/icon_-4.svg"></img>
+                <div class="avatar-big pfp-inner svg-avatar" style="border: 6px solid #000; background-image: url(../images/avatars/icon_-4.svg);"></div>
                 `
             }
 

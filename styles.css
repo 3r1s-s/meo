@@ -172,7 +172,8 @@ bridge {
     padding-bottom: 1px;
     font-weight: bold;
     color: #fff;
-    user-select: none;
+    -webkit-user-select: none;
+user-select: none;
 }
 
 .list {
@@ -219,12 +220,12 @@ bridge {
 
 .media-outer {
     border-radius: var(--border-radius);
-    overflow: clip;
+    overflow: hidden;
 }
 
 .image-outer {
     border-radius: var(--border-radius);
-    overflow: clip;
+    overflow: hidden;
     width: max-content;
 }
 
@@ -612,7 +613,7 @@ bridge {
 
 .message-input {
     padding: 1em;
-    flex: 0.9;
+    flex: 1;
     margin: 0;
     overflow-y: hidden;
 }
@@ -726,7 +727,7 @@ bridge {
 .avatar-big {
     width: 96px;
     border-radius: 100px;
-    margin: 0 0 10px 0;
+    margin: 0 0 12px 0;
     box-sizing: border-box;
     aspect-ratio: 1;
     box-shadow: 0px 1px 5px #00000050;
@@ -752,6 +753,13 @@ bridge {
     max-height: calc(var(--padding)*9);
 }
 
+.pfp-inner {
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    flex-shrink: 0;
+}
+
 .online {
     position: relative;
 }
@@ -769,6 +777,7 @@ bridge {
 
 .date {
     margin-left: 5px;
+    -webkit-user-select: none;
     user-select: none;
 }
 
@@ -816,7 +825,10 @@ bridge {
     padding-left: 15px;
     margin-left: 10px;
     margin-right: 10px;
+    gap: var(--button-margin);
 }
+
+
 
 .gcs {
     display: flex;
@@ -828,17 +840,37 @@ bridge {
     justify-content: flex-start;
     overflow-y: auto;
     width: 70%;
+    gap: var(--button-margin);
 }
 
 /* make it align at the top */
 
-.navigation-button {
-    /*border-radius: 100rem;*/
-    margin-bottom: var(--button-margin);
+.settings-button {
     padding: var(--button-padding);
     text-align: left;
     display: flex;
     align-items: center;
+    justify-content: left;
+}
+
+.navigation-button {
+    /*border-radius: 100rem;*/
+    padding: var(--button-padding);
+    text-align: left;
+    display: flex;
+    align-items: center;
+    justify-content: left;
+}
+
+.nav-button-label {
+    padding: 10px var(--button-padding);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    height: 100%;
+    box-sizing: border-box;
+    text-wrap: nowrap;
+    text-align: left;
+    width: 100%;
 }
 /*
 .navigation {
@@ -866,6 +898,7 @@ possible future styling
     text-decoration: none;
     padding: 1px 5px;
     transition: all 0.05s ease;
+    -webkit-user-select: none;
     user-select: none;
     font-weight: normal;
 }
@@ -932,6 +965,7 @@ possible future styling
     top: 0;
     display: flex;
     flex-direction: column;
+    gap: var(--button-margin);
     margin-top: 10px;
     width: 70%;
 }
@@ -1227,6 +1261,17 @@ possible future styling
     text-decoration: underline;
     color: #fefefe;
     cursor: pointer;
+}
+
+.span-h3 {
+    display: block;
+    font-size: 1.17em;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    font-weight: bold;
+    margin: var(--text-margin) 0 10px 0;
 }
 
 @keyframes reduced-motion {
@@ -1793,6 +1838,7 @@ possible future styling
 }
 
 .general-label {
+    -webkit-user-select: none;
     user-select: none;
     display: flex;
     position: relative;
@@ -1804,6 +1850,7 @@ possible future styling
 
 .subsubheader {
     font-size: 12px;
+    -webkit-user-select: none;
     user-select: none;
     opacity: 0.8;
     margin: 2px 0;
@@ -1815,6 +1862,7 @@ possible future styling
     overflow: hidden;
     border: 1px solid var(--accent-color);
     border-radius: var(--border-radius);
+    -webkit-user-select: none;
     user-select: none;
 }
 
@@ -1852,6 +1900,7 @@ possible future styling
 
 .pluginsub {
     font-size: 12px;
+    -webkit-user-select: none;
     user-select: none;
     opacity: 0.8;
 }
@@ -2086,6 +2135,7 @@ possible future styling
     opacity: 0.8;
     background: var(--accent-color);
     border-radius: var(--border-radius);
+    -webkit-user-select: none;
     user-select: none;
 }
 
@@ -2125,6 +2175,7 @@ possible future styling
 }
 
 .download a {
+    width: -moz-fit-content;
     width: fit-content;
 }
 
@@ -2483,6 +2534,8 @@ possible future styling
         width: 100%;
         box-sizing: border-box;
         top: 25vh;
+        left: 0;
+        right: 0;
     }
 
     .login-top {
@@ -2634,6 +2687,8 @@ input[type="button"]:focus-visible {
     color: var(--color-on);
 }
 
+.widemode #main {
+    max-width: 100%;
 .trending-item {
     display: inline-table;
     margin-top: 10px;

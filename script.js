@@ -52,6 +52,11 @@ function replsh(rpl) {
         rpl;
     return trimmedString;
 }
+
+if (settingsstuff().widemode) {
+    document.getElementById("page").classList.add("widemode");
+}
+
 // make it so when reconnect happens it goes back to the prev screen and not the start page
 function main() {
     meowerConnection = new WebSocket(server);
@@ -655,8 +660,9 @@ function loadPfp(username, button) {
                         const pfpurl = `https://uploads.meower.org/icons/${userData.avatar}`;
 
 
-                        pfpElement = document.createElement("img");
-                        pfpElement.setAttribute("src", pfpurl);
+                        pfpElement = document.createElement("div");
+                        pfpElement.style.backgroundImage = `url(${pfpurl})`;
+                        pfpElement.classList.add("pfp-inner");
                         pfpElement.setAttribute("alt", username);
                         pfpElement.setAttribute("data-username", username);
                         pfpElement.classList.add("avatar");
@@ -673,7 +679,7 @@ function loadPfp(username, button) {
                             pfpElement.style.border = `3px solid #${userData.avatar_color}`;
                             pfpElement.style.backgroundColor = `#${userData.avatar_color}`;
                         }
-                        
+
                         pfpElement.addEventListener('error', function pngFallback() {
                             pfpElement.removeEventListener('error', pngFallback);
                             pfpElement.setAttribute("src", `${pfpurl}.png`);
@@ -688,8 +694,9 @@ function loadPfp(username, button) {
                             pfpurl = `images/avatars/icon_err.svg`;
                         }
 
-                        pfpElement = document.createElement("img");
-                        pfpElement.setAttribute("src", pfpurl);
+                        pfpElement = document.createElement("div");
+                        pfpElement.style.backgroundImage = `url(${pfpurl})`;
+                        pfpElement.classList.add("pfp-inner");
                         pfpElement.setAttribute("alt", username);
                         pfpElement.setAttribute("data-username", username);
                         pfpElement.classList.add("avatar");
@@ -705,8 +712,9 @@ function loadPfp(username, button) {
                     } else {
                         const pfpurl = `images/avatars/icon_-4.svg`;
 
-                        pfpElement = document.createElement("img");
-                        pfpElement.setAttribute("src", pfpurl);
+                        pfpElement = document.createElement("div");
+                        pfpElement.style.backgroundImage = `url(${pfpurl})`;
+                        pfpElement.classList.add("pfp-inner");
                         pfpElement.setAttribute("alt", username);
                         pfpElement.setAttribute("data-username", username);
                         if (!button) {
@@ -1090,12 +1098,12 @@ function sidebars() {
     `;
 
     let navlist = `
-    <input type='button' class='navigation-button button' id='explore' value='${lang().page_explore}' onclick='loadexplore();' aria-label="explore" tabindex="0">
-    <input type='button' class='navigation-button button' id='inbox' value='${lang().page_inbox}' onclick='loadinbox()' aria-label="inbox" tabindex="0">
-    <input type='button' class='navigation-button button' id='settings' value='${lang().page_settings}' onclick='loadstgs()' aria-label="settings" tabindex="0">
+    <input type="button" class="navigation-button button" id="explore" value="${lang().page_explore}" onclick="loadexplore();" aria-label="explore" tabindex="0">
+    <input type="button" class="navigation-button button" id="inbox" value="${lang().page_inbox}" onclick="loadinbox()" aria-label="inbox" tabindex="0">
+    <input type="button" class="navigation-button button" id="settings" value="${lang().page_settings}" onclick="loadstgs()" aria-label="settings" tabindex="0">
     <button type='button' class='user-area button' id='profile' onclick='openUsrModal("${localStorage.getItem("username")}")' aria-label="profile" tabindex="0">
-        <img class="avatar-small" id="uav" src="" alt="Avatar">
-        <span class="gcname">${localStorage.getItem("username")}</span></div>
+        <div class="avatar-small" id="uav" alt="Avatar"></div>
+        <span class="nav-button-label">${localStorage.getItem("username")}</span></div>
     </button>
     `;
 
@@ -1103,16 +1111,25 @@ function sidebars() {
         .then(pfpElem => {
             if (pfpElem) {
                 const userAvatar = document.getElementById("uav");
-                userAvatar.src = pfpElem.src;
+                let bgImageUrl = pfpElem.style.backgroundImage;
+                if (bgImageUrl) {
+                    bgImageUrl = bgImageUrl.slice(5, -2);
+                }
+
+                userAvatar.style.backgroundImage = `url(${bgImageUrl})`;
                 userAvatar.style.border = pfpElem.style.border.replace("3px", "3px");
+                userAvatar.classList.add("pfp-inner");
+
                 if (pfpElem.classList.contains("svg-avatar")) {
                     userAvatar.classList.add("svg-avatar");
                 }
             }
         });
 
+
     if (localStorage.getItem("permissions") === "1") {
-        navlist = `<input type='button' class='navigation-button button' id='moderation' value='${lang().action.mod}' onclick='openModModal()' aria-label="moderate">` + navlist;
+        navlist = `
+      <input type="button" class="navigation-button button" id="moderation" value="${lang().action.mod}" onclick="openModModal()" aria-label="moderate">` + navlist;
     }
 
     let mdmdl = document.getElementsByClassName('navigation')[0];
@@ -1181,14 +1198,15 @@ function renderChats() {
             loadchat(chat._id);
         };
 
-        const chatIconElem = document.createElement("img");
+        const chatIconElem = document.createElement("div");
         chatIconElem.classList.add("avatar-small");
+        chatIconElem.classList.add("pfp-inner");
         chatIconElem.setAttribute("alt", "Avatar");
         if (chat.type === 0) {
             if (chat.icon) {
-                chatIconElem.src = 'https://uploads.meower.org/icons/' + chat.icon;
+                chatIconElem.style.backgroundImage = `url(https://uploads.meower.org/icons/${chat.icon})`;
             } else {
-                chatIconElem.src = "images/GC.svg";
+                chatIconElem.style.backgroundImage = `url(images/GC.svg)`;
             }
             if (!chat.icon) {
                 chatIconElem.style.border = "3px solid #" + '1f5831';
@@ -1203,15 +1221,20 @@ function renderChats() {
             loadPfp(chat.members.find(v => v !== localStorage.getItem("username")))
                 .then(pfpElem => {
                     if (pfpElem) {
-                        chatIconElem.src = pfpElem.src;
-                        chatIconElem.style.border = pfpElem.style.border.replace("3px", "3px");
-                        chatIconElem.style.background = pfpElem.style.border.replace("3px solid", "");
+                        let bgImageUrl = pfpElem.style.backgroundImage;
+                        if (bgImageUrl) {
+                            bgImageUrl = bgImageUrl.slice(5, -2); // Assuming the URL is wrapped in "url('')"
+                        }
+                        chatIconElem.style.border = pfpElem.style.border.replace("3px", "3px"); // This line seems redundant as it replaces "3px" with "3px"
+                        chatIconElem.style.backgroundColor = pfpElem.style.border.replace("3px solid", "");
+                        chatIconElem.style.backgroundImage = `url("${bgImageUrl}")`;
+                        chatIconElem.classList.add("pfp-inner");
                         if (pfpElem.classList.contains("svg-avatar")) {
                             chatIconElem.classList.add("svg-avatar");
-                            chatIconElem.style.background = '#fff';
+                            chatIconElem.style.backgroundColor = '#fff';
                         }
                     }
-                });
+                }); // Corrected the closing of the then block
         }
         r.appendChild(chatIconElem);
 
@@ -1227,7 +1250,7 @@ function renderChats() {
         const chatOps = document.createElement("div");
         chatOps.classList.add("chat-ops");
         chatOps.innerHTML = `
-        <div class="chat-op" onclick="favChat(event, '${escapeHTML(chat._id)}')" title="${lang().action.favorite}" aria-label="${lang().action.favorite}">
+        <div class="chat-op" onclick="favChat(event, '${escapeHTML(chat._id)}')" title="${lang().action.favorite}">
             ${favoritedChats.includes(chat._id) ? `
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path fill="currentColor" d="M3.05649 9.24618L0.635792 6.89056C0.363174 6.62527 0.264902 6.22838 0.382279 5.8667C0.499657 5.50502 0.812337 5.24125 1.1889 5.18626L5.27593 4.58943L7.10348 0.890366C7.27196 0.549372 7.61957 0.333496 8.00019 0.333496C8.38081 0.333496 8.72843 0.549372 8.8969 0.890366L9.72865 2.57387L3.05649 9.24618Z"/>
@@ -1240,7 +1263,7 @@ function renderChats() {
             </svg>
             `}
         </div>
-        <div class="chat-op" onclick="closeChatModal(event, '${escapeHTML(chat._id)}', '${escnickname || chat.members.find(v => v !== localStorage.getItem("username"))}')" title="${lang().action.close}" aria-label="${lang().action.close}">
+        <div class="chat-op" onclick="closeChatModal(event, '${escapeHTML(chat._id)}', '${escnickname || chat.members.find(v => v !== localStorage.getItem("username"))}')" title="${lang().action.close}">
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path fill="currentColor" d="M2.3352 13.6648C2.78215 14.1117 3.50678 14.1117 3.95372 13.6648L8 9.61851L12.0463 13.6648C12.4932 14.1117 13.2179 14.1117 13.6648 13.6648C14.1117 13.2179 14.1117 12.4932 13.6648 12.0463L9.61851 8L13.6648 3.95372C14.1117 3.50678 14.1117 2.78214 13.6648 2.3352C13.2179 1.88826 12.4932 1.88827 12.0463 2.33521L8 6.38149L3.95372 2.33521C3.50678 1.88827 2.78214 1.88827 2.3352 2.33521C1.88826 2.78215 1.88827 3.50678 2.33521 3.95372L6.38149 8L2.33521 12.0463C1.88827 12.4932 1.88827 13.2179 2.3352 13.6648Z"/>
             </svg>            
@@ -1263,7 +1286,7 @@ function loadstart() {
     pageContainer.innerHTML = `
     <div class="info"><h1>${lang().page_start}</h1></div>
     <div class="explore">
-        <h3>Online - ${lul}</h3>
+        <span class="span-h3">Online - ${lul}</span>
         <div class="start-users-online">
             <button class="ubtn button skeleton" aria-label="Skeleton"><div class="ubtnsa"><div class="start-pfp-outer"><div class="skeleton-avatar-small"></div></div></div></button>
             <button class="ubtn button skeleton" aria-label="Skeleton"><div class="ubtnsa"><div class="start-pfp-outer"><div class="skeleton-avatar-small"></div></div></div></button>
@@ -1317,15 +1340,15 @@ function loadstart() {
                     }
                     if (item.avatar) {
                         profilecont.innerHTML = `
-                        <img class="avatar-small" style="border: 3px solid #${item.avatar_color}; background-color:#${item.avatar_color};" src="https://uploads.meower.org/icons/${item.avatar}" alt="Avatar" title="${item._id}"></img>
+                        <div class="avatar-small pfp-inner" style="border: 3px solid #${item.avatar_color}; background-color:#${item.avatar_color}; background-image: url(https://uploads.meower.org/icons/${item.avatar});" alt="Avatar" title="${item._id}"></div>
                     `;
                     } else if (item.pfp_data) {
                         profilecont.innerHTML = `
-                        <img class="avatar-small svg-avatar" style="border: 3px solid #${item.avatar_color}"; src="images/avatars/icon_${item.pfp_data - 1}.svg" alt="Avatar" title="${item._id}"></img>
+                        <div class="avatar-small svg-avatar pfp-inner" style="border: 3px solid #${item.avatar_color}; background-image: url(images/avatars/icon_${item.pfp_data - 1}.svg)" alt="Avatar" title="${item._id}"></div>
                     `;
                     } else {
                         profilecont.innerHTML = `
-                        <img class="avatar-small svg-avatar" style="border: 3px solid #000"; src="images/avatars/icon_-4.svg" alt="Avatar" title="${item._id}"></img>
+                        <div class="avatar-small svg-avatar pfp-inner" style="border: 3px solid #000; background-image: url(images/avatars/icon_-4.svg)" alt="Avatar" title="${item._id}"></div>
                     `;
                     }
                     pl += `<button class="ubtn button" aria-label="${gr}"><div class="ubtnsa" onclick="openUsrModal('${gr}')">${profilecont.outerHTML}${gr}</div><div class="ubtnsb" onclick="opendm('${gr}')" id="username"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24"><path fill="currentColor" d="M12 22a10 10 0 1 0-8.45-4.64c.13.19.11.44-.04.61l-2.06 2.37A1 1 0 0 0 2.2 22H12Z" class=""></path></svg></div></button>`;
@@ -1602,22 +1625,40 @@ function logout(iskl) {
 function loadstgs() {
     page = "settings";
     pre = "settings";
-    const navc = document.querySelector(".nav-top");
+
+    let navc
+    const pageContainer = document.getElementById("main");
+    const settingsContent = `
+            <div class="settings-nav">
+            </div>
+            <div class="settings">
+                <div class="settings-inner"></div>
+            </div>
+            `
+    pageContainer.innerHTML = settingsContent;
+
+    navc = document.querySelector(".nav-top");
     navc.innerHTML = `
-    <input type='button' class='navigation-button button' id='submit' value='${lang().settings_general}' onclick='loadGeneral()' aria-label="general">
-    <input type='button' class='navigation-button button' id='submit' value='${lang().settings_appearance}' onclick='loadAppearance()' aria-label="appearance">
-    <input type="button" class="navigation-button button" id="submit" value='${lang().settings_languages}' onclick="loadLanguages()" aria-label="languages">
-    <input type="button" class="navigation-button button" id="submit" value='${lang().settings_plugins}' onclick="loadPlugins()" aria-label="plugins">
-    <input type='button' class='navigation-button button' id='logout' value='${lang().action.logout}' onclick='logout(false)' aria-label="logout">
-    `;
+        <button class="trans" id="submit" value="Home" onclick="loadstart()" aria-label="Home">
+            <svg width="32" height="32" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+                <g>
+                    <path fill="currentColor" d="M468.42 20.5746L332.997 65.8367C310.218 58.8105 284.517 55.049 255.499 55.6094C226.484 55.049 200.78 58.8105 178.004 65.8367L42.5803 20.5746C18.9102 16.3251 -1.81518 36.2937 2.5967 59.1025L38.7636 200.894C18.861 248.282 12.1849 296.099 12.1849 325.027C12.1849 399.343 44.6613 492 255.499 492C466.339 492 498.815 399.343 498.815 325.027C498.815 296.099 492.139 248.282 472.237 200.894L508.404 59.1025C512.814 36.2937 492.09 16.3251 468.42 20.5746Z"></path>
+                </g>
+            </svg>
+        </button>
+        <input type='button' class='settings-button button' id='submit' value='${lang().settings_general}' onclick='loadGeneral()' aria-label="general">
+        <input type='button' class='settings-button button' id='submit' value='${lang().settings_appearance}' onclick='loadAppearance()' aria-label="appearance">
+        <input type="button" class="settings-button button" id="submit" value='${lang().settings_languages}' onclick="loadLanguages()" aria-label="languages">
+        <input type="button" class="settings-button button" id="submit" value='${lang().settings_plugins}' onclick="loadPlugins()" aria-label="plugins">
+        <input type='button' class='settings-button button' id='logout' value='${lang().action.logout}' onclick='logout(false)' aria-label="logout">
+        `;
     loadGeneral();
 }
 
 function loadGeneral() {
     setTop();
-    const pageContainer = document.getElementById("main");
+    const pageContainer = document.querySelector(".settings");
     const settingsContent = `
-        <div class="settings">
             <h1>${lang().settings_general}</h1>
             <h3>${lang().general_sub.chat}</h3>
             <div class="msgs"></div>
@@ -1734,10 +1775,10 @@ function loadGeneral() {
             <div class="stg-section">
                 <label class="general-label">
                 <div class="general-desc">
-                ${lang().general_list.title.forceupdates}
-                <p class="subsubheader">${lang().general_list.desc.forceupdates}</p>
+                ${lang().general_list.title.widemode}
+                <p class="subsubheader">${lang().general_list.desc.widemode}</p>
                 </div>
-                <input type="checkbox" id="forceupdates" class="settingstoggle">
+                <input type="checkbox" id="widemode" class="settingstoggle">
                 </label>
             </div>
             <h3>${lang().general_sub.acc}</h3>
@@ -1755,16 +1796,11 @@ function loadGeneral() {
             </div>
             <h3>${lang().general_sub.about}</h3>
             <div class="stg-section">
-            <span>leo v1.2.0 <bridge id="outdated-tag" style="display: none;">Outdated</bridge><bridge id="beta-tag" style="display: none;">Beta</bridge><bridge id="current-tag" style="display: none;">Up to date!</bridge></span>
+            <span>leo v1.2.0</span>
             <br>
             </div>
             <div class="stg-section">
-            <span id="outdated-string" style="display: none;">You're using an outdated build of leo. Click the button below to update.</span>
-            <span id="current-string" style="display: none;">Yay! you're using an up to date version of leo :D</span>
-            <span id="beta-string" style="display: none;">You're using a beta build of leo. Beware of the bugs!</span>
             </div>
-            <button id="update-button" class="blockeduser button" style="display: none;" onclick="window.location.reload()">Update leo</button>
-            <button id="force-update-button" class="blockeduser button" style="display: none;" onclick="window.location.reload()">Force update</button>
             <h3>${lang().general_sub.credits}</h3>
             <div class="stg-section">
                 <div class="list">
@@ -1776,46 +1812,13 @@ function loadGeneral() {
                     <span class="credit">All the contributors and translators</span>
                 </div>
             </div>
-            </div>
             `;
 
     pageContainer.innerHTML = settingsContent;
 
-    const currentBuildNo = "7"; // replace with your current build number
-
-    fetch('https://leoextended.atticat.tech/data/version')
-        .then(response => response.json())
-        .then(data => {
-            if (parseInt(data.buildno) > parseInt(currentBuildNo)) {
-                setTimeout(() => {
-                    document.getElementById('outdated-tag').style.display = '';
-                    document.getElementById('outdated-string').style.display = '';
-                    document.getElementById('update-button').style.display = '';
-                }, 100);
-            } else if (parseInt(data.buildno) < parseInt(currentBuildNo)) {
-                setTimeout(() => {
-                    document.getElementById('beta-tag').style.display = '';
-                    document.getElementById('beta-string').style.display = '';
-                }, 100);
-            } else if (parseInt(data.buildno) == parseInt(currentBuildNo)) {
-                setTimeout(() => {
-                    document.getElementById('current-tag').style.display = '';
-                    document.getElementById('current-string').style.display = '';
-                }, 100);
-        }
-        })
-        .catch(error => console.error('Error:', error));
-
-        if (!settingsstuff().forceupdates) {
-            document.getElementById('force-update-button').style.display = 'none';
-        } else {
-            document.getElementById('force-update-button').style.display = '';
-        }
-
     const settings = {
         homepage: document.getElementById("homepage"),
         consolewarnings: document.getElementById("consolewarnings"),
-        forceupdates: document.getElementById("forceupdates"),
         blockedmessages: document.getElementById("blockedmessages"),
         invtyping: document.getElementById("invtyping"),
         imagewhitelist: document.getElementById("imagewhitelist"),
@@ -1825,8 +1828,38 @@ function loadGeneral() {
         showpostbuttons: document.getElementById("showpostbuttons"),
         underlinelinks: document.getElementById("underlinelinks"),
         entersend: document.getElementById("entersend"),
-        hideimages: document.getElementById("hideimages")
+        hideimages: document.getElementById("hideimages"),
+        widemode: document.getElementById("widemode")
     };
+
+    Object.values(settings).forEach((checkbox) => {
+        checkbox.addEventListener("change", () => {
+            localStorage.setItem('settings', JSON.stringify({
+                homepage: settings.homepage.checked,
+                consolewarnings: settings.consolewarnings.checked,
+                blockedmessages: settings.blockedmessages.checked,
+                invtyping: settings.invtyping.checked,
+                imagewhitelist: settings.imagewhitelist.checked,
+                censorwords: settings.censorwords.checked,
+                embeds: settings.embeds.checked,
+                reducemotion: settings.reducemotion.checked,
+                showpostbuttons: settings.showpostbuttons.checked,
+                underlinelinks: settings.underlinelinks.checked,
+                entersend: settings.entersend.checked,
+                hideimages: settings.hideimages.checked,
+                widemode: settings.widemode.checked
+            }));
+            setAccessibilitySettings();
+        });
+    });
+
+    const storedSettings = JSON.parse(localStorage.getItem('settings')) || {};
+    Object.entries(storedSettings).forEach(([setting, value]) => {
+        if (settings[setting]) {
+            settings[setting].checked = value;
+        }
+    });
+
 
     Object.values(settings).forEach((checkbox) => {
         checkbox.addEventListener("change", () => {
@@ -1849,12 +1882,6 @@ function loadGeneral() {
         });
     });
 
-    const storedSettings = JSON.parse(localStorage.getItem('settings')) || {};
-    Object.entries(storedSettings).forEach(([setting, value]) => {
-        if (settings[setting]) {
-            settings[setting].checked = value;
-        }
-    });
 
     const cont = document.querySelector('.blockedusers');
 
@@ -1893,9 +1920,8 @@ function loadGeneral() {
 
 async function loadPlugins() {
     setTop();
-    let pageContainer = document.getElementById("main");
+    let pageContainer = document.querySelector(".settings");
     let settingsContent = `
-        <div class="settings">
             <h1>${lang().settings_plugins}</h1>
             <div class="msgs"></div>
             <h3>${lang().plugins_sub.manage}</h3>
@@ -1912,7 +1938,6 @@ async function loadPlugins() {
             </div>
             <hr>
             <span>${lang().plugins_sub.desc} <a href='https://github.com/3r1s-s/meo-plugins' target="_blank" id='link'>${lang().plugins_sub.link}</a></span>
-        </div>
     `;
     pageContainer.innerHTML = settingsContent;
 
@@ -2008,9 +2033,8 @@ function resetPlugins() {
 
 function loadAppearance() {
     setTop();
-    let pageContainer = document.getElementById("main");
+    let pageContainer = document.querySelector(".settings");
     let settingsContent = `
-    <div class="settings">
         <h1>${lang().settings_appearance}</h1>
         <div class="msgs example-msg">
         <div id="example" class="post" style="margin-top: -2.8em;"><div class="pfp"><img src="https://uploads.meower.org/icons/o1KPbrqDXKV6BeqmbwLvZurG" alt="Avatar" class="avatar" style="border: 3px solid #ad3e00;"></div><div class="wrapper"><div class="buttonContainer">
@@ -2228,7 +2252,6 @@ function loadAppearance() {
         <div class='list'>
             <textarea class="editor" id='customcss' placeholder="// you put stuff here"></textarea>
         </div>
-    </div>
     `
 
     pageContainer.innerHTML = settingsContent;
@@ -2401,9 +2424,8 @@ function changeTheme(theme, button) {
 
 function loadLanguages() {
     setTop();
-    const pageContainer = document.getElementById("main");
+    const pageContainer = document.querySelector(".settings");
     const settingsContent = `
-    <div class="settings">
         <h1>${lang().settings_languages}</h1>
         <h3>${lang().languages_sub.title}</h3>
         <div class="msgs"></div>
@@ -2416,7 +2438,6 @@ function loadLanguages() {
         </div>
         <hr>
         <span>${lang().languages_sub.desc} <a href='https://github.com/3r1s-s/meo' target="_blank" id='link'>${lang().languages_sub.link}</a></span>
-    </div>
     `;
     pageContainer.innerHTML = settingsContent;
     document.getElementById(language).classList.add("language-selected");
@@ -3354,12 +3375,12 @@ function updateNote(postid) {
             notes: note
         })
     })
-    .then(response => response.json())
-    .then(data => {
-    })
-    .catch(error => {
-        console.error("Error updating note:", error);
-    });
+        .then(response => response.json())
+        .then(data => {
+        })
+        .catch(error => {
+            console.error("Error updating note:", error);
+        });
 }
 
 function sendAlert(userid) {
@@ -3375,12 +3396,12 @@ function sendAlert(userid) {
             content: note
         })
     })
-    .then(response => response.json())
-    .then(data => {
-    })
-    .catch(error => {
-        console.error("Error sending alert:", error);
-    });
+        .then(response => response.json())
+        .then(data => {
+        })
+        .catch(error => {
+            console.error("Error sending alert:", error);
+        });
 }
 
 function closeReport(postid, action) {
@@ -3395,12 +3416,12 @@ function closeReport(postid, action) {
                 status: "action.taken"
             })
         })
-        .then(response => response.json())
-        .then(data => {
-        })
-        .catch(error => {
-            console.error("Error updating report:", error);
-        });
+            .then(response => response.json())
+            .then(data => {
+            })
+            .catch(error => {
+                console.error("Error updating report:", error);
+            });
     } else {
         fetch(`https://api.meower.org/admin/reports/${postid}`, {
             method: "PATCH",
@@ -3412,12 +3433,12 @@ function closeReport(postid, action) {
                 status: "no_action_taken"
             })
         })
-        .then(response => response.json())
-        .then(data => {
-        })
-        .catch(error => {
-            console.error("Error updating report:", error);
-        });
+            .then(response => response.json())
+            .then(data => {
+            })
+            .catch(error => {
+                console.error("Error updating report:", error);
+            });
     }
 }
 
@@ -4156,12 +4177,12 @@ function blockUser(user) {
             state: toggle
         })
     })
-    .then(response => response.json())
-    .then(data => {
-    })
-    .catch(error => {
-        console.error("error:", error);
-    });
+        .then(response => response.json())
+        .then(data => {
+        })
+        .catch(error => {
+            console.error("error:", error);
+        });
     if (page = 'settings') {
         loadstgs();
     }
