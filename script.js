@@ -659,7 +659,7 @@ function loadPfp(username, button) {
                     if (userData.avatar) {
                         const pfpurl = `https://uploads.meower.org/icons/${userData.avatar}`;
 
-                        
+
                         pfpElement = document.createElement("div");
                         pfpElement.style.backgroundImage = `url(${pfpurl})`;
                         pfpElement.classList.add("pfp-inner");
@@ -679,7 +679,7 @@ function loadPfp(username, button) {
                             pfpElement.style.border = `3px solid #${userData.avatar_color}`;
                             pfpElement.style.backgroundColor = `#${userData.avatar_color}`;
                         }
-                        
+
                         pfpElement.addEventListener('error', function pngFallback() {
                             pfpElement.removeEventListener('error', pngFallback);
                             pfpElement.setAttribute("src", `${pfpurl}.png`);
@@ -693,7 +693,7 @@ function loadPfp(username, button) {
                         } else {
                             pfpurl = `images/avatars/icon_err.svg`;
                         }
-                        
+
                         pfpElement = document.createElement("div");
                         pfpElement.style.backgroundImage = `url(${pfpurl})`;
                         pfpElement.classList.add("pfp-inner");
@@ -711,7 +711,7 @@ function loadPfp(username, button) {
 
                     } else {
                         const pfpurl = `images/avatars/icon_-4.svg`;
-                        
+
                         pfpElement = document.createElement("div");
                         pfpElement.style.backgroundImage = `url(${pfpurl})`;
                         pfpElement.classList.add("pfp-inner");
@@ -1108,26 +1108,27 @@ function sidebars() {
     `;
 
     loadPfp(localStorage.getItem("username"))
-    .then(pfpElem => {
-        if (pfpElem) {
-            const userAvatar = document.getElementById("uav");
-            let bgImageUrl = pfpElem.style.backgroundImage;
-            if (bgImageUrl) {
-                bgImageUrl = bgImageUrl.slice(5, -2);
-            }
-            
-            userAvatar.style.backgroundImage = `url(${bgImageUrl})`;
-            userAvatar.style.border = pfpElem.style.border.replace("3px", "3px");
-            userAvatar.classList.add("pfp-inner");
+        .then(pfpElem => {
+            if (pfpElem) {
+                const userAvatar = document.getElementById("uav");
+                let bgImageUrl = pfpElem.style.backgroundImage;
+                if (bgImageUrl) {
+                    bgImageUrl = bgImageUrl.slice(5, -2);
+                }
 
-            if (pfpElem.classList.contains("svg-avatar")) {
-                userAvatar.classList.add("svg-avatar");
+                userAvatar.style.backgroundImage = `url(${bgImageUrl})`;
+                userAvatar.style.border = pfpElem.style.border.replace("3px", "3px");
+                userAvatar.classList.add("pfp-inner");
+
+                if (pfpElem.classList.contains("svg-avatar")) {
+                    userAvatar.classList.add("svg-avatar");
+                }
             }
         });
 
 
     if (localStorage.getItem("permissions") === "1") {
-    navlist = `
+        navlist = `
       <input type="button" class="navigation-button button" id="moderation" value="${lang().action.mod}" onclick="openModModal()" aria-label="moderate">` + navlist;
     }
 
@@ -1218,21 +1219,22 @@ function renderChats() {
             // this is so hacky :p
             // - Tnix
             loadPfp(chat.members.find(v => v !== localStorage.getItem("username")))
-            .then(pfpElem => {
-                if (pfpElem) {
-                    let bgImageUrl = pfpElem.style.backgroundImage;
-                    if (bgImageUrl) {
-                        bgImageUrl = bgImageUrl.slice(5, -2);
+                .then(pfpElem => {
+                    if (pfpElem) {
+                        let bgImageUrl = pfpElem.style.backgroundImage;
+                        if (bgImageUrl) {
+                            bgImageUrl = bgImageUrl.slice(5, -2); // Assuming the URL is wrapped in "url('')"
+                        }
+                        chatIconElem.style.border = pfpElem.style.border.replace("3px", "3px"); // This line seems redundant as it replaces "3px" with "3px"
+                        chatIconElem.style.backgroundColor = pfpElem.style.border.replace("3px solid", "");
+                        chatIconElem.style.backgroundImage = `url("${bgImageUrl}")`;
+                        chatIconElem.classList.add("pfp-inner");
+                        if (pfpElem.classList.contains("svg-avatar")) {
+                            chatIconElem.classList.add("svg-avatar");
+                            chatIconElem.style.backgroundColor = '#fff';
+                        }
                     }
-                    chatIconElem.style.border = pfpElem.style.border.replace("3px", "3px");
-                    chatIconElem.style.backgroundColor = pfpElem.style.border.replace("3px solid", "");
-                    chatIconElem.style.backgroundImage = `url("${bgImageUrl}")`;
-                    chatIconElem.classList.add("pfp-inner");
-                    if (pfpElem.classList.contains("svg-avatar")) {
-                        chatIconElem.classList.add("svg-avatar");
-                        chatIconElem.style.backgroundColor = '#fff';
-                    }
-                });
+                }); // Corrected the closing of the then block
         }
         r.appendChild(chatIconElem);
 
@@ -1325,27 +1327,27 @@ function loadstart() {
     loadTrending();
 
     fetch('https://api.meower.org/ulist?autoget')
-    .then(response => response.json())
-    .then(data => {
-        let pl = ''
-        data.autoget.forEach(item => {
-            const gr = item._id.trim();
-            if (gr !== localStorage.getItem("username")) {
-                const profilecont = document.createElement('div');
-                profilecont.classList.add('start-pfp-outer');
-                if (item.avatar_color !== "!color" && data.avatar_color) {
-                    profilecont.classList.add('custom-bg');
-                }
-                if (item.avatar) {
-                    profilecont.innerHTML = `
+        .then(response => response.json())
+        .then(data => {
+            let pl = ''
+            data.autoget.forEach(item => {
+                const gr = item._id.trim();
+                if (gr !== localStorage.getItem("username")) {
+                    const profilecont = document.createElement('div');
+                    profilecont.classList.add('start-pfp-outer');
+                    if (item.avatar_color !== "!color" && data.avatar_color) {
+                        profilecont.classList.add('custom-bg');
+                    }
+                    if (item.avatar) {
+                        profilecont.innerHTML = `
                         <div class="avatar-small pfp-inner" style="border: 3px solid #${item.avatar_color}; background-color:#${item.avatar_color}; background-image: url(https://uploads.meower.org/icons/${item.avatar});" alt="Avatar" title="${item._id}"></div>
                     `;
-                } else if (item.pfp_data) {
-                    profilecont.innerHTML = `
+                    } else if (item.pfp_data) {
+                        profilecont.innerHTML = `
                         <div class="avatar-small svg-avatar pfp-inner" style="border: 3px solid #${item.avatar_color}; background-image: url(images/avatars/icon_${item.pfp_data - 1}.svg)" alt="Avatar" title="${item._id}"></div>
                     `;
-                } else {
-                    profilecont.innerHTML = `
+                    } else {
+                        profilecont.innerHTML = `
                         <div class="avatar-small svg-avatar pfp-inner" style="border: 3px solid #000; background-image: url(images/avatars/icon_-4.svg)" alt="Avatar" title="${item._id}"></div>
                     `;
                     }
@@ -1625,18 +1627,18 @@ function loadstgs() {
     pre = "settings";
 
     let navc
-        const pageContainer = document.getElementById("main");
-        const settingsContent = `
+    const pageContainer = document.getElementById("main");
+    const settingsContent = `
             <div class="settings-nav">
             </div>
             <div class="settings">
                 <div class="settings-inner"></div>
             </div>
             `
-        pageContainer.innerHTML = settingsContent;
+    pageContainer.innerHTML = settingsContent;
 
-        navc = document.querySelector(".nav-top");
-        navc.innerHTML = `
+    navc = document.querySelector(".nav-top");
+    navc.innerHTML = `
         <button class="trans" id="submit" value="Home" onclick="loadstart()" aria-label="Home">
             <svg width="32" height="32" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
                 <g>
@@ -1794,16 +1796,11 @@ function loadGeneral() {
             </div>
             <h3>${lang().general_sub.about}</h3>
             <div class="stg-section">
-            <span>leo v1.2.0 <bridge id="outdated-tag" style="display: none;">Outdated</bridge><bridge id="beta-tag" style="display: none;">Beta</bridge><bridge id="current-tag" style="display: none;">Up to date!</bridge></span>
+            <span>leo v1.2.0</span>
             <br>
             </div>
             <div class="stg-section">
-            <span id="outdated-string" style="display: none;">You're using an outdated build of leo. Click the button below to update.</span>
-            <span id="current-string" style="display: none;">Yay! you're using an up to date version of leo :D</span>
-            <span id="beta-string" style="display: none;">You're using a beta build of leo. Beware of the bugs!</span>
             </div>
-            <button id="update-button" class="blockeduser button" style="display: none;" onclick="window.location.reload()">Update leo</button>
-            <button id="force-update-button" class="blockeduser button" style="display: none;" onclick="window.location.reload()">Force update</button>
             <h3>${lang().general_sub.credits}</h3>
             <div class="stg-section">
                 <div class="list">
@@ -1817,87 +1814,11 @@ function loadGeneral() {
             </div>
             `;
 
-            pageContainer.innerHTML = settingsContent;
-
-            const settings = {
-                homepage: document.getElementById("homepage"),
-                consolewarnings: document.getElementById("consolewarnings"),
-                blockedmessages: document.getElementById("blockedmessages"),
-                invtyping: document.getElementById("invtyping"),
-                imagewhitelist: document.getElementById("imagewhitelist"),
-                censorwords: document.getElementById("censorwords"),
-                embeds: document.getElementById("embeds"),
-                reducemotion: document.getElementById("reducemotion"),
-                showpostbuttons: document.getElementById("showpostbuttons"),
-                underlinelinks: document.getElementById("underlinelinks"),
-                entersend: document.getElementById("entersend"),
-                hideimages: document.getElementById("hideimages"),
-                widemode: document.getElementById("widemode")
-            };
-        
-            Object.values(settings).forEach((checkbox) => {
-                checkbox.addEventListener("change", () => {
-                    localStorage.setItem('settings', JSON.stringify({
-                        homepage: settings.homepage.checked,
-                        consolewarnings: settings.consolewarnings.checked,
-                        blockedmessages: settings.blockedmessages.checked,
-                        invtyping: settings.invtyping.checked,
-                        imagewhitelist: settings.imagewhitelist.checked,
-                        censorwords: settings.censorwords.checked,
-                        embeds: settings.embeds.checked,
-                        reducemotion: settings.reducemotion.checked,
-                        showpostbuttons: settings.showpostbuttons.checked,
-                        underlinelinks: settings.underlinelinks.checked,
-                        entersend: settings.entersend.checked,
-                        hideimages: settings.hideimages.checked,
-                        widemode: settings.widemode.checked
-                    }));
-                    setAccessibilitySettings();
-                });
-            });
-        
-            const storedSettings = JSON.parse(localStorage.getItem('settings')) || {};
-            Object.entries(storedSettings).forEach(([setting, value]) => {
-                if (settings[setting]) {
-                    settings[setting].checked = value;
-                }
-            });
-
-    const currentBuildNo = "7"; // replace with your current build number
-
-    fetch('https://leoextended.atticat.tech/data/version')
-        .then(response => response.json())
-        .then(data => {
-            if (parseInt(data.buildno) > parseInt(currentBuildNo)) {
-                setTimeout(() => {
-                    document.getElementById('outdated-tag').style.display = '';
-                    document.getElementById('outdated-string').style.display = '';
-                    document.getElementById('update-button').style.display = '';
-                }, 100);
-            } else if (parseInt(data.buildno) < parseInt(currentBuildNo)) {
-                setTimeout(() => {
-                    document.getElementById('beta-tag').style.display = '';
-                    document.getElementById('beta-string').style.display = '';
-                }, 100);
-            } else if (parseInt(data.buildno) == parseInt(currentBuildNo)) {
-                setTimeout(() => {
-                    document.getElementById('current-tag').style.display = '';
-                    document.getElementById('current-string').style.display = '';
-                }, 100);
-        }
-        })
-        .catch(error => console.error('Error:', error));
-
-        if (!settingsstuff().forceupdates) {
-            document.getElementById('force-update-button').style.display = 'none';
-        } else {
-            document.getElementById('force-update-button').style.display = '';
-        }
+    pageContainer.innerHTML = settingsContent;
 
     const settings = {
         homepage: document.getElementById("homepage"),
         consolewarnings: document.getElementById("consolewarnings"),
-        forceupdates: document.getElementById("forceupdates"),
         blockedmessages: document.getElementById("blockedmessages"),
         invtyping: document.getElementById("invtyping"),
         imagewhitelist: document.getElementById("imagewhitelist"),
@@ -1907,8 +1828,38 @@ function loadGeneral() {
         showpostbuttons: document.getElementById("showpostbuttons"),
         underlinelinks: document.getElementById("underlinelinks"),
         entersend: document.getElementById("entersend"),
-        hideimages: document.getElementById("hideimages")
+        hideimages: document.getElementById("hideimages"),
+        widemode: document.getElementById("widemode")
     };
+
+    Object.values(settings).forEach((checkbox) => {
+        checkbox.addEventListener("change", () => {
+            localStorage.setItem('settings', JSON.stringify({
+                homepage: settings.homepage.checked,
+                consolewarnings: settings.consolewarnings.checked,
+                blockedmessages: settings.blockedmessages.checked,
+                invtyping: settings.invtyping.checked,
+                imagewhitelist: settings.imagewhitelist.checked,
+                censorwords: settings.censorwords.checked,
+                embeds: settings.embeds.checked,
+                reducemotion: settings.reducemotion.checked,
+                showpostbuttons: settings.showpostbuttons.checked,
+                underlinelinks: settings.underlinelinks.checked,
+                entersend: settings.entersend.checked,
+                hideimages: settings.hideimages.checked,
+                widemode: settings.widemode.checked
+            }));
+            setAccessibilitySettings();
+        });
+    });
+
+    const storedSettings = JSON.parse(localStorage.getItem('settings')) || {};
+    Object.entries(storedSettings).forEach(([setting, value]) => {
+        if (settings[setting]) {
+            settings[setting].checked = value;
+        }
+    });
+
 
     Object.values(settings).forEach((checkbox) => {
         checkbox.addEventListener("change", () => {
@@ -1931,12 +1882,6 @@ function loadGeneral() {
         });
     });
 
-    const storedSettings = JSON.parse(localStorage.getItem('settings')) || {};
-    Object.entries(storedSettings).forEach(([setting, value]) => {
-        if (settings[setting]) {
-            settings[setting].checked = value;
-        }
-    });
 
     const cont = document.querySelector('.blockedusers');
 
@@ -3430,12 +3375,12 @@ function updateNote(postid) {
             notes: note
         })
     })
-    .then(response => response.json())
-    .then(data => {
-    })
-    .catch(error => {
-        console.error("Error updating note:", error);
-    });
+        .then(response => response.json())
+        .then(data => {
+        })
+        .catch(error => {
+            console.error("Error updating note:", error);
+        });
 }
 
 function sendAlert(userid) {
@@ -3451,12 +3396,12 @@ function sendAlert(userid) {
             content: note
         })
     })
-    .then(response => response.json())
-    .then(data => {
-    })
-    .catch(error => {
-        console.error("Error sending alert:", error);
-    });
+        .then(response => response.json())
+        .then(data => {
+        })
+        .catch(error => {
+            console.error("Error sending alert:", error);
+        });
 }
 
 function closeReport(postid, action) {
@@ -3471,12 +3416,12 @@ function closeReport(postid, action) {
                 status: "action.taken"
             })
         })
-        .then(response => response.json())
-        .then(data => {
-        })
-        .catch(error => {
-            console.error("Error updating report:", error);
-        });
+            .then(response => response.json())
+            .then(data => {
+            })
+            .catch(error => {
+                console.error("Error updating report:", error);
+            });
     } else {
         fetch(`https://api.meower.org/admin/reports/${postid}`, {
             method: "PATCH",
@@ -3488,12 +3433,12 @@ function closeReport(postid, action) {
                 status: "no_action_taken"
             })
         })
-        .then(response => response.json())
-        .then(data => {
-        })
-        .catch(error => {
-            console.error("Error updating report:", error);
-        });
+            .then(response => response.json())
+            .then(data => {
+            })
+            .catch(error => {
+                console.error("Error updating report:", error);
+            });
     }
 }
 
@@ -4232,12 +4177,12 @@ function blockUser(user) {
             state: toggle
         })
     })
-    .then(response => response.json())
-    .then(data => {
-    })
-    .catch(error => {
-        console.error("error:", error);
-    });
+        .then(response => response.json())
+        .then(data => {
+        })
+        .catch(error => {
+            console.error("error:", error);
+        });
     if (page = 'settings') {
         loadstgs();
     }
