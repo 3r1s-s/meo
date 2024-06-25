@@ -1799,8 +1799,6 @@ function loadGeneral() {
             <span>leo v1.2.0</span>
             <br>
             </div>
-            <div class="stg-section">
-            </div>
             <h3>${lang().general_sub.credits}</h3>
             <div class="stg-section">
                 <div class="list">
