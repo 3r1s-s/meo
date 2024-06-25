@@ -274,6 +274,8 @@ const enuk = {
             "underlinelinks": "Always underline links",
             "entersend": "Don't send on Enter",
             "hideimages": "Hide images",
+            "widemode": "Wide Mode",
+
         },
         "desc": {
             "homepage": "Instead of showing you the Start Page, you're taken directly to the Home.",
@@ -289,6 +291,7 @@ const enuk = {
             "underlinelinks": "Makes links to websites and other pages stand out more by underlining them.",
             "entersend": "Enter key creates newlines instead of sending the post",
             "hideimages": "Blurs images before opening them",
+            "widemode": "Removes the max width in the post area",
         },
     },
     "appearance_sub": {
