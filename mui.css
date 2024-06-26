@@ -7,7 +7,9 @@
     --button-padding: 12px;
 }
 
-:root {
+.dark-theme {
+    --dark-accent: #1e1c27;
+
     --primary: #765dee;
     --secondary: #503f98;
     --tertiary: #372b63;
@@ -51,10 +53,6 @@
     --button-padding: 12px;
     --button-margin: 10px;
     --color-scheme: dark;
-}
-
-.dark-theme {
-    --dark-accent: #1e1c27;
 }
 
 .light-theme {
