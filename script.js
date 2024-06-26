@@ -54,8 +54,27 @@ function replsh(rpl) {
 }
 
 if (settingsstuff().widemode) {
-    document.getElementById("page").classList.add("widemode");
+    document.querySelectorAll('.side').forEach(element => {
+        element.remove();
+    });
+
+    const stylesheet = document.createElement('link');
+    stylesheet.rel = 'stylesheet';
+    stylesheet.href = 'mui.css';
+    document.head.appendChild(stylesheet);
+
+    const page = document.getElementById('page');
+    if (page) {
+        const ex = document.createElement('div');
+        ex.classList.add('sidebar');
+        ex.innerHTML = `
+        <div id="nav" class="side"></div>
+        <div id="groups" class="side"></div>
+        `;
+        page.insertBefore(ex, page.firstChild);
+    }
 }
+
 
 // make it so when reconnect happens it goes back to the prev screen and not the start page
 function main() {
