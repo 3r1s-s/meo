@@ -296,6 +296,10 @@ pre {
     gap: 15px;
 }
 
+.user-area {
+    margin: 0;
+}
+
 .side {
     flex: 0.5;
     display: flex;
@@ -463,6 +467,7 @@ pre {
     .user-area .nav-button-label {
         display: none;
     }
+
     .user-area .avatar-small {
         margin: 0;
     }
