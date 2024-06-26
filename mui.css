@@ -294,6 +294,8 @@ pre {
     padding: 25px;
     box-sizing: border-box;
     gap: 15px;
+    width: 100%;
+    max-width: 500px;
 }
 
 .user-area {
