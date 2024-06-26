@@ -1324,17 +1324,10 @@ function loadstart() {
             <button class="ubtn button skeleton" aria-label="Skeleton"><div class="ubtnsa"><div class="start-pfp-outer"><div class="skeleton-avatar-small"></div></div></div></button>
         </div>
         <div class="quick-btns">
-        <div class="qc-bts-sc">
         <button class="qbtn button" aria-label="create chat" onclick="createChatModal()">${lang().action.creategc}</button>
         <button class="qbtn button" aria-label="home" onclick="loadhome();">${lang().action.gohome}</button>
-        </div>
-        <div class="qc-bts-sc">
         <button class="qbtn button" aria-label="explore" onclick="loadexplore();">${lang().page_explore}</button>
         <button class="qbtn button" aria-label="dm me" onclick="opendm('Eris')">${lang().action.dmme}</button>
-        </div>
-        <div class="qc-bts-sc">
-        <button class="qbtn button" aria-label="share" onclick="shareModal()" style="display:none;">${lang().action.invite}</button>
-        </div>
     </div>
     `;
     fetch('https://api.meower.org/ulist?autoget')

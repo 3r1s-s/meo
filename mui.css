@@ -145,6 +145,15 @@
 
 /* Elements */
 
+pre {
+    max-width: 520px;
+}
+
+.embed {
+    max-width: 500px;
+    max-height: 500px;
+}
+
 .ubtn {
     padding: 0;
     text-align: left;

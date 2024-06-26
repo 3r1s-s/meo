@@ -1649,21 +1649,34 @@ possible future styling
     display: flex;
 }
 
+.quick-btns {
+    display: grid;
+    gap: 10px;
+    grid-template-columns: 1fr 1fr;
+}
+
+.quick-btns .qbtn:first-child {
+    border-top-left-radius: 15px;
+}
+  
+.quick-btns .qbtn:nth-child(2) {
+    border-top-right-radius: 15px;
+}
+  
+.quick-btns .qbtn:nth-child(3) {
+    border-bottom-left-radius: 15px;
+}
+  
+.quick-btns .qbtn:last-child {
+    border-bottom-right-radius: 15px;
+}
+
 .qbtn {
     padding: var(--button-padding);
     text-align: left;
     display: flex;
     align-items: center;
     flex: 1;
-    margin-bottom: var(--button-margin);
-}
-
-.qbtn:first-child {
-    margin-right: calc(var(--button-margin) / 2);
-}
-
-.qbtn:nth-child(2) {
-    margin-left: calc(var(--button-margin) / 2);
 }
 
 .ubtnsa {
