@@ -56,7 +56,7 @@ const en = {
             "underlinelinks": "Always underline links",
             "entersend": "Don't send on Enter",
             "hideimages": "Hide images",
-            "widemode": "Wide Mode",
+            "widemode": "New Desktop Experience",
         },
         "desc": {
             "homepage": "Instead of showing you the Start Page you get directly taken to home",
@@ -71,7 +71,7 @@ const en = {
             "underlinelinks": "Make links to websites and other pages stand out more by underlining them",
             "entersend": "Enter key creates newlines instead of sending the post",
             "hideimages": "Blurs images before opening them",
-            "widemode": "Removes the max width in the post area",
+            "widemode": "Enables new desktop experience (Experiemental, Requires refresh)",
         }
     },
     "appearance_sub": {
@@ -263,6 +263,7 @@ const enuk = {
             "underlinelinks": "Always underline links",
             "entersend": "Don't send on Enter",
             "hideimages": "Hide images",
+            "widemode": "New Desktop Experience",
         },
         "desc": {
             "homepage": "Instead of showing you the Start Page, you're taken directly to the Home.",
@@ -277,6 +278,7 @@ const enuk = {
             "underlinelinks": "Makes links to websites and other pages stand out more by underlining them.",
             "entersend": "Enter key creates newlines instead of sending the post",
             "hideimages": "Blurs images before opening them",
+            "widemode": "Enables new desktop experience (Experiemental, Requires refresh)",
         },
     },
     "appearance_sub": {
@@ -442,7 +444,7 @@ const es = {
         "title": "Este mensaje ha sido puenteado desde otra plataforma."
     },
     "title_chats": "Chats",
-    "title_live": "Tiempo real (LiveChat)", // update - completed v1.1
+    "title_live": "Tiempo real", // update - completed v1.1
     "settings_general": "General",
     "settings_appearance": "Apariencia",
     "settings_plugins": "Plugins (expansiones)",
@@ -471,6 +473,7 @@ const es = {
             "underlinelinks": "Siempre subrayar enlaces",
             "entersend": "No enviar en Intro/Enter", // update - completed v1.1
             "hideimages": "Ocultar imágenes", // update - completed v1.1
+            "widemode": "New Desktop Experience", // update
         },
         "desc": {
             "homepage": "En lugar de mostrarte la página de inicio, navegar directamente a home",
@@ -485,6 +488,7 @@ const es = {
             "underlinelinks": "Subrayar los enlaces a sitios web y otras páginas para que destaquen más.",
             "entersend": "La tecla Intro crea nuevas líneas en lugar de enviar el mensaje", // update - completed v1.1
             "hideimages": "Difuminar imágenes antes de abrirlas", // update - completed v1.1
+            "widemode": "Enables new desktop experience (Experiemental, Requires refresh)", // update
         }
     },
     "appearance_sub": {
@@ -675,7 +679,8 @@ const es_es = {
             "showpostbuttons": "Mostrar siempre los botones de publicación",
             "underlinelinks": "Subrayar siempre los enlaces",
             "entersend": "No enviar con Enter",
-            "hideimages": "Ocultar imágenes"
+            "hideimages": "Ocultar imágenes",
+            "widemode": "New Desktop Experience" // update
         },
         "desc": {
             "homepage": "En lugar de mostrarte la Página de Inicio, serás llevado directamente a Inicio",
@@ -689,7 +694,8 @@ const es_es = {
             "showpostbuttons": "Los botones de publicación siempre permanecen visibles",
             "underlinelinks": "Hacer que los enlaces a sitios web y otras páginas resalten más subrayándolos",
             "entersend": "La tecla Enter crea nuevas líneas en lugar de enviar la publicación",
-            "hideimages": "Desenfoca las imágenes antes de abrirlas"
+            "hideimages": "Desenfoca las imágenes antes de abrirlas",
+            "widemode": "Enables new desktop experience (Experiemental)" // update
         }
     },
     "appearance_sub": {
@@ -882,6 +888,7 @@ const de = {
             "underlinelinks": "Links immer unterstreichen",
             "entersend": "Don't send on Enter", // update
             "hideimages": "Hide images", // update
+            "widemode": "New Desktop Experience" // update
         },
         "desc": {
             "homepage": "Direkt zu Home navigieren, statt die Startseite anzuzeigen",
@@ -896,6 +903,7 @@ const de = {
             "underlinelinks": "Links zu Websiten und anderen Seiten unterstreichen und damit hervorheben",
             "entersend": "Enter key creates newlines instead of sending the post", // update
             "hideimages": "Blurs images before opening them", // update
+            "widemode": "Enables new desktop experience (Experiemental)" // update
         }
     },
     "appearance_sub": {
