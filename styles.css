@@ -242,6 +242,15 @@ user-select: none;
     transition: var(--transition);
 }
 
+.blur {
+    filter: blur(15px);
+    transition: var(--transition);
+}
+
+.blur:hover {
+    filter: blur(0);
+}
+
 #content {
     margin: 0 !important;
 }
