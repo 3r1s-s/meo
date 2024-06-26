@@ -196,10 +196,6 @@ pre {
     box-sizing: border-box;
 }
 
-.groupheader {
-    /*! margin: 10px; */
-}
-
 .settings-button {
     padding: var(--button-padding);
     text-align: left;
@@ -368,7 +364,6 @@ pre {
 
 .posts, .settings, .explore {
     margin: 0 calc(var(--margin) / 2);
-    /*border: 1px solid var(--accent-color);*/
 }
 
 .settings {
@@ -409,4 +404,74 @@ pre {
     align-items: center;
     border-radius: 100px;
     box-shadow: 0px 1px 5px #00000050;
+}
+
+@media screen and (max-width: 720px) {
+    #page {
+        justify-content: unset;
+    }
+
+    #main {
+        padding: 0;
+        flex: none;
+        height: 100vh;
+    }
+
+    .sidebar {
+        width: 100vw;
+        scroll-snap-align: center;
+        z-index: 1;
+    }
+
+    .side {
+        scroll-snap-align: unset;
+    }
+
+    #nav {
+        position: fixed;
+        top: unset;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        width: 100vw;
+        max-width: 100%;
+        z-index: 1000;
+        height: 50px;
+    }
+
+    .navigation {
+        flex-direction: row;
+        padding: 0;
+        border-radius: 0;
+        padding: 5px;
+        box-sizing: border-box;
+    }
+
+    .navigation .button {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+    }
+
+    .user-area {
+        margin: 0;
+    }
+
+    .user-area .nav-button-label {
+        display: none;
+    }
+    .user-area .avatar-small {
+        margin: 0;
+    }
+
+    .nav-top {
+        display: none;
+    }
+
+    #groups {
+        flex: 1;
+        height: calc(100vh - 80px);
+    }
 }
