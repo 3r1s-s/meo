@@ -360,14 +360,6 @@
     margin-top: 200px;
 }
 
-.button:hover {
-    background-color: var(--hov-color);
-}
-
-.button:active {
-    background-color: var(--hov-accent-color);
-}
-
 .posts, .settings, .explore {
     margin: 0 calc(var(--margin) / 2);
     /*border: 1px solid var(--accent-color);*/
