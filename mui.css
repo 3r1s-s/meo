@@ -151,7 +151,6 @@ pre {
 
 .embed {
     max-width: 500px;
-    max-height: 500px;
 }
 
 .ubtn {
@@ -295,7 +294,7 @@ pre {
     padding: 25px;
     box-sizing: border-box;
     gap: 15px;
-    width: 100%;
+    width: 40%;
     max-width: 500px;
 }
 
