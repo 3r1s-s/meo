@@ -24,9 +24,9 @@
     --attachment-color-hover: #e9dff0;
     --button-color: #9a91af;
     --hov-button-color: #e9dff0;
-    --modal-color: #2f3040;
-    --modal-button-color: #4b4c66;
-    --hov-modal-button-color: #626386;
+    --modal-color: #1e1c27;
+    --modal-button-color: #393646;
+    --hov-modal-button-color: #59556b;
     --animation: none;
 
     --blue: #00abd2;
@@ -72,9 +72,9 @@
     --attachment-color-hover: #fefefe;
     --button-color: #7b7783;
     --hov-button-color: #43485b;
-    --modal-color: #dad9e9;
-    --modal-button-color: #c7c6d8;
-    --hov-modal-button-color: #bab9cb;
+    --modal-color: #f5f2ff;
+    --modal-button-color: #e5dbf9;
+    --hov-modal-button-color: #ddd4f0;
 
     --color-scheme: light;
 }
@@ -92,7 +92,7 @@
 }
 
 .grip-theme {
-    --dark-accent: #31313a;
+    --dark-accent: #09090a;
 }
 
 .cosmic-theme {
@@ -108,7 +108,7 @@
 }
 
 .darflen-theme {
-    --dark-accent: #1c1a22;
+    --dark-accent: #1c1a23;
 }
 
 .bsky-theme {
@@ -121,10 +121,6 @@
 
 .sage-theme {
     --dark-accent: #1c2019;
-}
-
-.teb-theme {
-    --dark-accent: #131a21;
 }
 
 .midnight-blurple-theme {
@@ -141,6 +137,10 @@
 
 .oldlight-theme {
     --dark-accent: #fff;
+}
+
+.pride-theme, .trans-theme, .teb-theme, .fabloo-theme {
+    --dark-accent: #00000050;
 }
 
 /* Elements */
@@ -261,7 +261,8 @@ pre {
     width: auto;
     box-sizing: border-box;
     text-align: left;
-    background-color: var(--background);
+    background-color: var(--accent-color);
+    border-radius: var(--border-radius);
 }
 
 .gcs {
