@@ -2731,6 +2731,8 @@ input[type="button"]:focus-visible {
 
 .widemode #main {
     max-width: 100%;
+}
+
 .trending-item {
     display: inline-table;
     margin-top: 10px;
