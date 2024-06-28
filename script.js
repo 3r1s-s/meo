@@ -1321,6 +1321,11 @@ function loadstart() {
         </div>
         <div class="trending">
         <span class="user-header"><span>Trending</span><bridge>Beta</bridge></span>
+        <div class="section">
+        <span><b>Notice of changes to Trending<bridge>Beta</bridge></b></span>
+        <p>Starting July 1st, Trending will transition from Beta to a fully-featured service. Additionally, new summaries will be generated every minute instead of every 30 seconds, resulting in slightly longer intervals between summary updates.</p>
+        </div>
+        <hr>
         <div class="section trending-topics">
         </div>
         <div class="section trending-inner">
@@ -3752,6 +3757,11 @@ function loadexplore() {
     </div>
     <div class="trending">
         <span class="user-header"><span>Trending</span><bridge>Beta</bridge></span>
+        <div class="section">
+        <span><b>Notice of changes to Trending<bridge>Beta</bridge></b></span>
+        <p>Starting July 1st, Trending will transition from Beta to a fully-featured service. Additionally, new summaries will be generated every minute instead of every 30 seconds, resulting in slightly longer intervals between summary updates.</p>
+        </div>
+        <hr>
         <div class="section trending-topics">
         </div>
         <div class="section trending-inner">
