@@ -75,7 +75,6 @@ if (settingsstuff().widemode) {
     }
 }
 
-
 // make it so when reconnect happens it goes back to the prev screen and not the start page
 function main() {
     meowerConnection = new WebSocket(server);
@@ -100,26 +99,15 @@ function main() {
         const sentdata = JSON.parse(event.data);
         let data
         if (sentdata.val == "I:112 | Trusted Access enabled") {
-            data = {
-                cmd: "direct",
-                val: {
-                    cmd: "type",
-                    val: "js"
-                }
-            };
-
-            meowerConnection.send(JSON.stringify(data));
-            console.log("OUT: " + JSON.stringify(data));
-
-            data = {
-                cmd: "direct",
-                val: "meower"
-            };
-
-            meowerConnection.send(JSON.stringify(data));
-            console.log("OUT: " + JSON.stringify(data));
             if (localStorage.getItem("token") != undefined && localStorage.getItem("username") != undefined) {
-                login(localStorage.getItem("username"), localStorage.getItem("token"));
+                meowerConnection.send(JSON.stringify({
+                    cmd: "authpswd",
+                    val: {
+                        username: localStorage.getItem("username"),
+                        pswd: localStorage.getItem("token"),
+                    },
+                    listener: "auth",
+                }));
             } else {
                 loadLogin();
             };
@@ -158,32 +146,10 @@ function main() {
                 }
                 console.log("Logged in!");
             } else if (sentdata.cmd == "statuscode" && sentdata.val != "I:100 | OK") {
-                toggleLogin(false);
-                if ("token" in localStorage)
-                    logout(false);
-                switch (sentdata.val) {
-                    case "I:015 | Account exists":
-                        openUpdate(lang().info.accexists);
-                        break;
-                    case "E:103 | ID not found":
-                        openUpdate(lang().info.invaliduser);
-                        break;
-                    case "I:011 | Invalid Password":
-                        openUpdate(lang().info.invalidpass);
-                        break;
-                    case "E:018 | Account Banned":
-                        openUpdate(lang().info.accbanned);
-                        break;
-                    case "E:025 | Deleted":
-                        openUpdate(lang().info.accdeleted);
-                        break;
-                    case "E:110 | ID conflict":
-                        openUpdate(lang().info.conflict);
-                        break;
-                    default:
-                        openUpdate(`${lang().info.unknown} ${sentdata.val}`);
-                        break;
-                }
+                if (sentdata.val === "E:018 | Account Banned")
+                    openUpdate(lang().info.accbanned);
+                console.error(`Failed logging in to Cloudlink: ${sentdata.val}`);
+                logout(false);
             }
         } else if (loggedin && sentdata.val.post_origin) {
             let postOrigin = sentdata.val.post_origin;
@@ -289,10 +255,6 @@ function main() {
                 console.log(sentdata.val.id, "deleted successfully.");
             } else {
                 console.warn(sentdata.val.id, "not found.");
-            }
-        } else if (sentdata.listener == "chpw") {
-            if (sentdata.val === 'I:100 | OK') {
-                closemodal(lang().info.passupdate)
             }
         }
     };
@@ -941,39 +903,70 @@ function toggleLogin(yn) {
     }
 }
 
-function login(user, pass) {
-        const data = {
-        cmd: "direct",
-        val: {
-            cmd: "authpswd",
-            val: {
-                username: user,
-                pswd: pass
+function login(username, password) {
+    fetch("https://api.meower.org/auth/login", {
+        method: "POST",
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+            username,
+            password,
+        }),
+    }).then(resp => resp.json().then(resp => {
+        if (resp.error) {
+            toggleLogin(false);
+            if (resp.type === "Unauthorized") {
+                openUpdate(lang().info.invalidcreds);
+            } else if (resp.type === "accountDeleted") {
+                openUpdate(lang().info.accdeleted);
+            } else {
+                openUpdate(`${lang().info.unknown} ${resp.type}`);
             }
-        },
-        listener: "auth"
-    };
-    meowerConnection.send(JSON.stringify(data));
-    console.log(user);
-    console.log("User is logging in, details will not be logged for security reasons.");
+        } else {
+            meowerConnection.send(JSON.stringify({
+                cmd: "authpswd",
+                val: {
+                    username,
+                    pswd: resp.token,
+                },
+                listener: "auth",
+            }));
+            console.log("User is logging in, details will not be logged for security reasons.");
+            closemodal();
+        }
+    }));
 }
 
-function signup(user, pass) {
-    const data = {
-        cmd: "direct",
-        val: {
-            cmd: "gen_account",
-            val: {
-                username: user,
-                pswd: pass
+function signup(username, password, captcha) {
+    fetch("https://api.meower.org/auth/register", {
+        method: "POST",
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+            username,
+            password,
+            captcha,
+        }),
+    }).then(resp => resp.json().then(resp => {
+        if (resp.error) {
+            toggleLogin(false);
+            if (resp.type === "usernameExists") {
+                openUpdate(lang().info.accexists);
+            } else {
+                openUpdate(`${lang().info.unknown} ${resp.type}`);
             }
-        },
-        listener: "auth"
-    };
-    meowerConnection.send(JSON.stringify(data));
-    console.log("User is signing up, details will not be logged for security reasons.");
-    openprofile = true;
-    closemodal();
+        } else {
+            meowerConnection.send(JSON.stringify({
+                cmd: "authpswd",
+                val: {
+                    username,
+                    pswd: resp.token,
+                },
+                listener: "auth",
+            }));
+            console.log("User is signing up, details will not be logged for security reasons.");
+            openprofile = true;
+            closemodal();
+        }
+    }));
 }
 
 async function sendpost() {
@@ -2835,19 +2828,17 @@ function reportModal(id) {
 }
 
 function sendReport(id) {
-    const data = {
-        cmd: "direct",
-        val: {
-            cmd: "report",
-            val: {
-                type: 0,
-                id: id,
-                reason: document.getElementById('report-reason').value,
-                comment: document.getElementById('report-comment').value
-            }
-        }
-    };
-    meowerConnection.send(JSON.stringify(data));
+    fetch(`https://api.meower.org/posts/${id}/report`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            token: localStorage.getItem("token")
+        },
+        body: JSON.stringify({
+            reason: document.getElementById('report-reason').value,
+            comment: document.getElementById('report-comment').value,
+        }),
+    });
     closemodal(lang().info.reportsent);
 }
 
@@ -4258,9 +4249,24 @@ function agreementModal() {
             }
             const mdbt = mdl.querySelector('.modal-bottom');
             if (mdbt) {
-                mdbt.innerHTML = `
-                <button class="modal-back-btn" onclick="toggleLogin(true);signup(document.getElementById('userinput').value, document.getElementById('passinput').value)" aria-label="log in">${lang().action.signup}</button>
-                `;
+                mdbt.innerHTML = `<div style="margin-bottom: var(--margin);"><div id="hcaptcha-widget"></div></div>`;
+                fetch("https://api.meower.org/").then(resp => resp.json().then(resp => {
+                    if (resp.captcha.enabled) {
+                        hcaptcha.render("hcaptcha-widget", {
+                            sitekey: resp.captcha.sitekey,
+                            theme: getComputedStyle(document.body).getPropertyValue('--color-scheme'),
+                            callback: (token) => {
+                                mdbt.innerHTML = `
+                                <button class="modal-back-btn" onclick="toggleLogin(true);signup(document.getElementById('userinput').value, document.getElementById('passinput').value, '${token}')" aria-label="log in">${lang().action.signup}</button>
+                                `;
+                            },
+                        });
+                    } else {
+                        mdbt.innerHTML = `
+                        <button class="modal-back-btn" onclick="toggleLogin(true);signup(document.getElementById('userinput').value, document.getElementById('passinput').value, '')" aria-label="log in">${lang().action.signup}</button>
+                        `;
+                    }
+                }));
             }
         }
     }
@@ -4280,43 +4286,54 @@ function errorModal(header, text) {
 }
 
 function changePassword() {
-    const data = {
-        cmd: "change_pswd",
-        val: {
-            old: document.getElementById("oldpass-input").value,
-            new: document.getElementById("newpass-input").value
+    fetch("https://api.meower.org/me/password", {
+        method: "PATCH",
+        headers: {
+            "Content-Type": "application/json",
+            token: localStorage.getItem("token")
         },
-        listener: "chpw"
-    };
-    meowerConnection.send(JSON.stringify(data));
+        body: JSON.stringify({
+            old: document.getElementById("oldpass-input").value,
+            new: document.getElementById("newpass-input").value,
+        }),
+    }).then(resp => {
+        if (resp.status === 200) {
+            closemodal(lang().info.passupdate);
+        }
+    });
     document.getElementById("changepw").disabled = true;
 }
 
 function deleteTokens() {
     closemodal();
     launchscreen();
-    const data = {
-        cmd: "direct",
-        val: {
-            cmd: "del_tokens",
-            val: ""
+    fetch("https://api.meower.org/me/tokens", {
+        method: "DELETE",
+        headers: { token: localStorage.getItem("token") },
+    }).then(resp => {
+        if (resp.status === 200) {
+            logout(true);
+            closemodal(lang().info.tokenscleared);
         }
-    };
-    meowerConnection.send(JSON.stringify(data));
-    logout(true);
-    closemodal(lang().info.tokenscleared);
+    });
 }
 
-function deleteAccount(pass) {
-    const data = {
-        cmd: "direct",
-        val: {
-            cmd: "del_account",
-            val: pass
+function deleteAccount(password) {
+    closemodal();
+    launchscreen();
+    fetch("https://api.meower.org/me", {
+        method: "DELETE",
+        headers: {
+            "Content-Type": "application/json",
+            token: localStorage.getItem("token")
+        },
+        body: JSON.stringify({ password }),
+    }).then(resp => {
+        if (resp.status === 200) {
+            logout(true);
+            closemodal(lang().info.accscheduled);
         }
-    };
-    meowerConnection.send(JSON.stringify(data));
-    closemodal(lang().info.accscheduled);
+    });
 }
 
 function DeleteAccountModal() {

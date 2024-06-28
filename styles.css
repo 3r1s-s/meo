@@ -837,8 +837,6 @@ user-select: none;
     gap: var(--button-margin);
 }
 
-
-
 .gcs {
     display: flex;
     flex-direction: column;
@@ -1698,16 +1696,6 @@ possible future styling
     overflow-y: scroll;
     margin-bottom: var(--button-margin);
 }
-
-.titlebar {
-    position: fixed;
-    left: env(titlebar-area-x, 0);
-    top: env(titlebar-area-y, 0);
-    width: env(titlebar-area-width, 100%);
-    height: env(titlebar-area-height, 33px);
-    -webkit-app-region: drag;
-    app-region: drag;
-}
   
 .search-input {
     margin: var(--margin);
@@ -2221,6 +2209,16 @@ possible future styling
 .download-button:hover {
     cursor: pointer;
     color: var(--color);
+}
+
+#hcaptcha-widget {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.titlebar, .titlebar-back {
+    display: none;
 }
 
 @media screen and (max-width: 720px) {
