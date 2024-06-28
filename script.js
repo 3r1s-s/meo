@@ -54,8 +54,27 @@ function replsh(rpl) {
 }
 
 if (settingsstuff().widemode) {
-    document.getElementById("page").classList.add("widemode");
+    document.querySelectorAll('.side').forEach(element => {
+        element.remove();
+    });
+
+    const stylesheet = document.createElement('link');
+    stylesheet.rel = 'stylesheet';
+    stylesheet.href = 'mui.css';
+    document.head.appendChild(stylesheet);
+
+    const page = document.getElementById('page');
+    if (page) {
+        const ex = document.createElement('div');
+        ex.classList.add('sidebar');
+        ex.innerHTML = `
+        <div id="nav" class="side"></div>
+        <div id="groups" class="side"></div>
+        `;
+        page.insertBefore(ex, page.firstChild);
+    }
 }
+
 
 // make it so when reconnect happens it goes back to the prev screen and not the start page
 function main() {
@@ -1310,17 +1329,10 @@ function loadstart() {
         <p style="font-size: 12px;">Powered by AtticusAI | Trending (Beta) updates every 30 seconds | AI can make things up, take everything with a grain of salt.</p>
         </div>
         <div class="quick-btns">
-        <div class="qc-bts-sc">
         <button class="qbtn button" aria-label="create chat" onclick="createChatModal()">${lang().action.creategc}</button>
         <button class="qbtn button" aria-label="home" onclick="loadhome();">${lang().action.gohome}</button>
-        </div>
-        <div class="qc-bts-sc">
         <button class="qbtn button" aria-label="explore" onclick="loadexplore();">${lang().page_explore}</button>
         <button class="qbtn button" aria-label="dm me" onclick="opendm('Eris')">${lang().action.dmme}</button>
-        </div>
-        <div class="qc-bts-sc">
-        <button class="qbtn button" aria-label="share" onclick="shareModal()" style="display:none;">${lang().action.invite}</button>
-        </div>
     </div>
     `;
 
