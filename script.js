@@ -877,6 +877,7 @@ function loadtheme() {
     const theme = localStorage.getItem("theme");
     
     if (theme) {
+        document.documentElement.classList.remove("dark-theme");
         document.documentElement.classList.add(theme + "-theme");
     }
     
