@@ -2772,9 +2772,15 @@ function openUsrModal(uId) {
                     if (data.avatar_color !== "!color") {
                         const clr1 = darkenColour(data.avatar_color, 3);
                         const clr2 = darkenColour(data.avatar_color, 5);
-                        mdl.style.background = `linear-gradient(180deg, ${clr1} 0%, ${clr2} 100%`;
-                        mdl.style.setProperty('--accent', clr1);
-                        mdl.classList.add('custom-bg');
+                        if (settingsstuff().widemode) {
+                            mdl.style.background = `${clr1}`;
+                            mdl.style.setProperty('--accent', clr1);
+                            mdl.classList.add('custom-bg');
+                        } else {
+                            mdl.style.background = `linear-gradient(180deg, ${clr1} 0%, ${clr2} 100%`;
+                            mdl.style.setProperty('--accent', clr1);
+                            mdl.classList.add('custom-bg');
+                        }
                     }
                 })
                 .catch(error => console.error('Error fetching user profile:', error));

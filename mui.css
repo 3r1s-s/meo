@@ -416,6 +416,10 @@ pre {
     border-radius: 12px;
 }
 
+.custom-bg > button, .sec {
+    border: none !important;
+}
+
 @media screen and (max-width: 720px) {
     #page {
         justify-content: unset;

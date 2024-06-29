@@ -123,6 +123,13 @@ function fetchprofile() {
         if (t) {
             document.documentElement.classList.add(t + "-theme");
         }
+
+        if (settingsstuff().widemode) {
+            const stylesheet = document.createElement('link');
+            stylesheet.rel = 'stylesheet';
+            stylesheet.href = '../mui.css';
+            document.head.appendChild(stylesheet);
+        }
 }
 
 fetchprofile();
@@ -276,4 +283,18 @@ function lightenColour(hex, amount) {
     const nh = `#${(nr << 16 | ng << 8 | nb).toString(16).padStart(6, '0')}`;
 
     return nh;
+}
+
+function settingsstuff() {
+    const storedsettings = localStorage.getItem('settings');
+    if (!storedsettings) {
+        const defaultSettings = {
+            "homepage": "false",
+            "consolewarnings": "false",
+        };
+        localStorage.setItem('settings', JSON.stringify(defaultSettings));
+        return defaultSettings;
+    }
+
+    return JSON.parse(storedsettings);
 }
