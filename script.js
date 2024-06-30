@@ -1162,7 +1162,13 @@ function renderChats() {
 
 
     groupsdiv.innerHTML = `
-    <h1 class="groupheader">${lang().title_chats}</h1>
+    <div class="groupheader">
+        <h1>${lang().title_chats}</h1>
+        <button class="addgc button" onclick="createChatModal()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g clip-path="url(#clip0_318_2)"><path d="M13.6653 13.6777L21.4322 13.6777C22.3528 13.6782 23.099 12.932 23.0986 12.0113C23.0986 11.0902 22.3528 10.3444 21.4322 10.3449H13.6653L13.6653 2.57804C13.6658 1.65739 12.9191 0.910682 11.9989 0.911622C11.0782 0.911155 10.332 1.65739 10.3325 2.57804L10.3325 10.3449L2.54674 10.3449C1.62563 10.3449 0.879848 11.0907 0.880371 12.0113C0.880322 12.4714 1.06705 12.8881 1.36874 13.1898C1.67044 13.4915 2.08712 13.6782 2.54726 13.6782L10.3335 13.6777V21.4446C10.3334 21.9047 10.5201 22.3214 10.8218 22.623C11.1235 22.9248 11.5397 23.111 12.0003 23.1114C12.9214 23.1114 13.6672 22.3657 13.6667 21.4451L13.6653 13.6777Z" fill="currentColor"/></g></svg>
+        </button>
+    </div>
+
     <button class="search-input button" id="search" aria-label="search" onclick="goAnywhere();"><span class="srchtx">${lang().action.search}</span></button
     
     `;

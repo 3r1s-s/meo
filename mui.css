@@ -420,6 +420,10 @@ pre {
     border: none !important;
 }
 
+.groupheader {
+    width: auto;
+}
+
 @media screen and (max-width: 720px) {
     #page {
         justify-content: unset;
