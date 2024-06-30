@@ -307,31 +307,9 @@ function main() {
     addEventListener("DOMContentLoaded", () => {
         document.onpaste = (event) => {
             if (!document.getElementById("msg")) return;
-    
-            const files = Array.from(event.clipboardData.files);
-            if (files.some(file => file.size > (25 << 20))) {
-                errorModal("File too large", "Please upload files smaller than 25MiB.");
-                return;
+            for (const file of event.clipboardData.files) {
+                addAttachment(file);
             }
-    
-            for (const file of files) {
-                const formData = new FormData();
-                formData.append('file', file);
-                pendingAttachments.push({
-                    id: Math.random(),
-                    file,
-                    req: fetch('https://uploads.meower.org/attachments', {
-                        method: 'POST',
-                        headers: { Authorization: localStorage.getItem("token") },
-                        body: formData
-                    })
-                    .then(response => {
-                        return response.json();
-                    })
-                    .catch(error => errorModal("Error uploading attachment", error))
-                });
-            }
-            setAttachmentContainer();
         };
     });
     addEventListener("keydown", (event) => {
@@ -364,7 +342,7 @@ function main() {
                 event.preventDefault();
                 const editIndicator = document.getElementById("edit-indicator");
                 if (!editIndicator.hasAttribute("data-postid")) {
-                    addAttachment();
+                    selectFiles();
                 }
             }
         } else if ((event.ctrlKey || event.metaKey) && event.key === 'k') {
@@ -976,7 +954,6 @@ async function sendpost() {
     const message = msgbox.value;
     msgbox.value = "";
 
-    const attachmentCont = document.getElementById("images-container");
     const editIndicator = document.getElementById("edit-indicator");
 
     if (!message.trim() && (editIndicator.hasAttribute("data-postid") || pendingAttachments.length < 1)) {
@@ -998,15 +975,18 @@ async function sendpost() {
         document.getElementById("attach").hidden = false;
     } else {
         // Wait for attachments to upload and get attachment IDs
-        msgbox.placeholder = `Uploading ${pendingAttachments.length} ${pendingAttachments.length > 1 ? 'files' : 'file'}...`;
         msgbox.disabled = true;
-        const attachments = await Promise.all(pendingAttachments.map(attachment => attachment.req));
+        const attachmentIds = [];
+        for (const attachment of pendingAttachments) {
+            msgbox.placeholder = `Uploading ${attachment.file.name}...`;
+            attachmentResp = await attachment.req;
+            attachmentIds.push(attachmentResp.id);
+        }
         pendingAttachments.length = 0;
+        document.getElementById('images-container').innerHTML = '';
         msgbox.placeholder = lang().meo_messagebox;
         msgbox.disabled = false;
-        attachmentCont.innerHTML = '';
         
-
         fetch(`https://api.meower.org/${page === "home" ? "home" : `posts/${page}`}`, {
             method: "POST",
             headers: {
@@ -1015,7 +995,7 @@ async function sendpost() {
             },
             body: JSON.stringify({
                 content: message,
-                attachments: attachments.map(attachment => attachment.id),
+                attachments: attachmentIds,
             })
         });
     }
@@ -1082,7 +1062,9 @@ function loadhome() {
         e.preventDefault();
         e.stopPropagation();
         attachButton.classList.remove('dragover');
-        dropFiles(e.dataTransfer.files);
+        for (const file of e.dataTransfer.files) {
+            addAttachment(file);
+        }
     });
 
     const jumpButton = document.querySelector('.jump');
@@ -1471,7 +1453,9 @@ function loadchat(chatId) {
         e.preventDefault();
         e.stopPropagation();
         attachButton.classList.remove('dragover');
-        dropFiles(e.dataTransfer.files);
+        for (const file of e.dataTransfer.files) {
+            addAttachment(file);
+        }
     });
 
     const jumpButton = document.querySelector('.jump');
@@ -1527,7 +1511,9 @@ function loadlive() {
         e.preventDefault();
         e.stopPropagation();
         attachButton.classList.remove('dragover');
-        dropFiles(e.dataTransfer.files);
+        for (const file of e.dataTransfer.files) {
+            addAttachment(file);
+        }
     });
 
     const jumpButton = document.querySelector('.jump');
@@ -3809,128 +3795,109 @@ function createDate(tsmp) {
     return new Date(tsrb).toLocaleString([], { month: '2-digit', day: '2-digit', year: '2-digit', hour: 'numeric', minute: 'numeric' });
 }
 
-function addAttachment() {
+function addAttachment(file) {
+    const xhr = new XMLHttpRequest();
+    const formData = new FormData();
+    const element = document.createElement('div');
+
+    const attachment = {file};
+    attachment.req = new Promise((resolve, reject) => {
+        attachment.cancel = (message) => {
+            if (message) errorModal(`Failed uploading ${file.name}`, message);
+            xhr.abort();
+            element.remove();
+            pendingAttachments = pendingAttachments.filter(item => item !== attachment);
+            reject(message);
+        };
+        pendingAttachments.push(attachment);
+
+        if (file.size > (25 << 20)) {
+            attachment.cancel("Files must not exceed 25MiB.");
+            return;
+        }
+
+        element.classList.add("attach-pre-outer");
+        element.title = file.name;
+        element.innerHTML = `
+        <div class="attachment-wrapper">
+        <div class="attachment-progress" style="--pre: 0%;">
+        <span>0%</span>
+        </div>
+        <div class="attachment-name">
+        <span>${file.name}</span>
+        </div>
+        <div class="delete-attach">
+        <svg width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M15 3.999V2H9V3.999H3V5.999H21V3.999H15Z"></path><path fill="currentColor" d="M5 6.99902V18.999C5 20.101 5.897 20.999 7 20.999H17C18.103 20.999 19 20.101 19 18.999V6.99902H5ZM11 17H9V11H11V17ZM15 17H13V11H15V17Z"></path></svg>
+        </div>
+        </div>
+        `;
+        element.querySelector(".attachment-wrapper").querySelector(".delete-attach").onclick = () => { attachment.cancel(""); };
+        if (['image/png', 'image/jpeg', 'image/webp', 'image/gif'].includes(file.type)) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                const img = document.createElement("img");
+                img.classList.add("image-pre");
+                img.src = reader.result;
+                img.onclick = () => {
+                    openImage(reader.result);
+                };
+    
+                const attachmentMedia = document.createElement("div");
+                attachmentMedia.classList.add("attachment-media");
+                attachmentMedia.appendChild(img);
+
+                const attachmentWrapper = element.querySelector(".attachment-wrapper")
+                attachmentWrapper.insertBefore(attachmentMedia, attachmentWrapper.querySelector(".attachment-name"));
+            };
+            reader.readAsDataURL(file);
+        } else {
+            const fileType = document.createElement("span");
+            fileType.classList.add("other-in");
+            fileType.innerText = file.name.split('.').pop().toLowerCase();
+
+            const otherPre = document.createElement("div");
+            otherPre.classList.add("other-pre");
+            otherPre.appendChild(fileType);
+
+            const attachmentOther = document.createElement("div");
+            attachmentOther.classList.add("attachment-other");
+            attachmentOther.appendChild(otherPre);
+
+            const attachmentWrapper = element.querySelector(".attachment-wrapper")
+            attachmentWrapper.insertBefore(attachmentOther, attachmentWrapper.querySelector(".attachment-name"));
+        }
+        
+        document.getElementById('images-container').appendChild(element);
+
+        xhr.open("POST", "https://uploads.meower.org/attachments");
+        xhr.setRequestHeader("Authorization", localStorage.getItem("token"));
+        xhr.upload.onprogress = (ev) => {
+            const percentage = `${Number((ev.loaded / ev.total) * 100).toFixed(2)}%`;
+            element.querySelector(".attachment-progress").style.setProperty('--pre', `${percentage}`);
+        };
+        xhr.onload = () => {
+            const attachmentProgress = element.querySelector(".attachment-progress").querySelector("span");
+            attachmentProgress.remove();
+            resolve(JSON.parse(xhr.response));
+        };
+        xhr.onerror = (error) => {
+            attachment.cancel(error);
+        };
+        formData.append("file", file);
+        xhr.send(formData);
+    });
+}
+
+function selectFiles() {
     const input = document.createElement('input');
     input.type = 'file';
     input.multiple = true;
     input.click();
-
     input.onchange = function(e) {
-        const files = Array.from(e.target.files);
-        if (files.some(file => file.size > (25 << 20))) {
-            errorModal("File too large", "Please upload files smaller than 25MiB."); // add a lang prop to this
-            return;
+        for (const file of e.target.files) {
+            addAttachment(file);
         }
-
-        for (const file of files) {
-            const formData = new FormData();
-            formData.append('file', file);
-            pendingAttachments.push({
-                id: Math.random(),
-                file,
-                req: fetch('https://uploads.meower.org/attachments', {
-                    method: 'POST',
-                    headers: { Authorization: localStorage.getItem("token") },
-                    body: formData
-                })
-                .then(response => {
-                    return response.json();
-                })
-                .catch(error => errorModal("Error uploading attachment", error))
-            });
-        }
-        setAttachmentContainer();
     };
-}
-
-function deleteAttachment(id) {
-    pendingAttachments = pendingAttachments.filter(item => item.id.toString() !== id);
-    console.debug(id.toString());
-    setAttachmentContainer();
-}
-
-function setAttachmentContainer() {
-    const container = document.getElementById('images-container');
-    container.innerHTML = '';    
-    //reminder to check if all the drag stuff was removed
-    pendingAttachments.forEach((item, index) => {
-        item.req.then(data => {
-            const filetype = data.filename.split('.').pop().toLowerCase();
-
-            if (['png', 'jpg', 'jpeg', 'webp', 'gif'].includes(filetype)) {
-                const element = document.createElement('div');
-                element.classList.add("attach-pre-outer");
-                element.title = data.filename;
-                element.id = data.id;
-                element.innerHTML = `
-                <div class="attachment-wrapper">
-                <div class="attachment-media">
-                <img src="https://uploads.meower.org/attachments/${data.id}/${data.filename}" onclick="openImage('https://uploads.meower.org/attachments/${data.id}/${data.filename}')" class="image-pre">
-                </div>
-                <div class="attachment-name">
-                <span>${data.filename}</span>
-                </div>
-                <div class="delete-attach" onclick="deleteAttachment('${item.id.toString()}')">
-                <svg width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M15 3.999V2H9V3.999H3V5.999H21V3.999H15Z"></path><path fill="currentColor" d="M5 6.99902V18.999C5 20.101 5.897 20.999 7 20.999H17C18.103 20.999 19 20.101 19 18.999V6.99902H5ZM11 17H9V11H11V17ZM15 17H13V11H15V17Z"></path></svg>
-                </div>
-                </div>
-                `;
-                container.appendChild(element);
-            } else {
-                const element = document.createElement('div');
-                element.classList.add("attach-pre-outer");
-                element.title = data.filename;
-                element.id = data.id;
-                element.innerHTML = `
-                <div class="attachment-wrapper">
-                <div class="attachment-other">
-                <div class="other-pre">
-                <span class="other-in">.${filetype.toLowerCase()}</span>
-                </div>
-                </div>
-                <div class="attachment-name">
-                <span>${data.filename}</span>
-                </div>
-                <div class="delete-attach" onclick="deleteAttachment('${item.id.toString()}')">
-                <svg height="24" viewBox="0 0 24 24" style="width: 100%;"><path fill="currentColor" d="M15 3.999V2H9V3.999H3V5.999H21V3.999H15Z"></path><path fill="currentColor" d="M5 6.99902V18.999C5 20.101 5.897 20.999 7 20.999H17C18.103 20.999 19 20.101 19 18.999V6.99902H5ZM11 17H9V11H11V17ZM15 17H13V11H15V17Z"></path></svg>                </div>
-                </div>
-                `;
-                container.appendChild(element);
-            }
-// remember to fix delete button alignment
-
-            console.debug("item added" + index);
-            console.debug(data);
-            console.debug(filetype);
-        });
-    });
-}
-
-function dropFiles(files) {
-    const fileArray = Array.from(files);
-    if (fileArray.some(file => file.size > (25 << 20))) {
-        errorModal("File too large", "Please upload files smaller than 25MiB."); // add a lang prop to this
-        return;
-    }
-
-    for (const file of fileArray) {
-        const formData = new FormData();
-        formData.append('file', file);
-        pendingAttachments.push({
-            id: Math.random(),
-            file,
-            req: fetch('https://uploads.meower.org/attachments', {
-                method: 'POST',
-                headers: { Authorization: localStorage.getItem("token") },
-                body: formData
-            })
-            .then(response => {
-                return response.json();
-            })
-            .catch(error => errorModal("Error uploading attachment", error))
-        });
-    }
-    setAttachmentContainer();
 }
 
 function goAnywhere() {
@@ -4288,6 +4255,7 @@ function errorModal(header, text) {
     const mdbt = mdl.querySelector('.modal-bottom');
 
     if (mdlbck) mdlbck.style.display = 'flex';
+    if (mdl) mdl.id = 'mdl-uptd';
     if (mdlt) mdlt.innerHTML = `<h3>${header}</h3><hr class="mdl-hr"><span class="subheader">${text}</span>`;
     if (mdbt) mdbt.innerHTML = ``;
 }
