@@ -2230,6 +2230,10 @@ possible future styling
     bottom: 0;
 }
 
+.attachment-progress span { 
+    opacity: 0;
+}
+
 .attachment-progress span::before {
     content: '';
     position: absolute;
