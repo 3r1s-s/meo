@@ -269,7 +269,7 @@ user-select: none;
 }
 
 .subtitle {
-    margin-left: var(--margin);
+    margin-left: 0;
 }
 
 .header-top {
@@ -1827,6 +1827,8 @@ possible future styling
 .gctitle {
     display: flex;
     align-items: baseline;
+    flex-wrap: wrap;
+    gap: 10px;
 }
 
 .chat-ops {
