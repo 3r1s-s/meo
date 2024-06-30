@@ -1407,7 +1407,7 @@ function loadchat(chatId) {
 
     const mainContainer = document.getElementById("main");
     if (data.nickname) {
-        mainContainer.innerHTML = `<div class='info'><div class="gctitle"><h1 id='nickname' class='header-top'>${escapeHTML(data.nickname)}</h1><i class="subtitle">${chatId}</i></div>
+        mainContainer.innerHTML = `<div class='info'><div class="gctitle"><h1 id='nickname' onclick="openGcModal('${chatId}')" class='header-top'>${escapeHTML(data.nickname)}</h1><i class="subtitle">${chatId}</i></div>
         <p id='info'></p></div>` + loadinputs();
     } else {
         mainContainer.innerHTML = `<div class='info'><div class="gctitle"><h1 id='username' class='header-top' onclick="openUsrModal('${data.members.find(v => v !== localStorage.getItem("username"))}')">${data.members.find(v => v !== localStorage.getItem("username"))}</h1><i class="subtitle">${chatId}</i></div><p id='info'></p></div>` + loadinputs();
@@ -3880,10 +3880,13 @@ function addAttachment(file) {
         xhr.upload.onprogress = (ev) => {
             const percentage = `${Number((ev.loaded / ev.total) * 100).toFixed(2)}%`;
             element.querySelector(".attachment-progress").style.setProperty('--pre', `${percentage}`);
+            element.querySelector(".attachment-progress span").innerText = `${percentage}`;
         };
         xhr.onload = () => {
+            element.querySelector(".attachment-progress").style.setProperty('--pre', `0`);
             const attachmentProgress = element.querySelector(".attachment-progress").querySelector("span");
             attachmentProgress.remove();
+
             resolve(JSON.parse(xhr.response));
         };
         xhr.onerror = (error) => {
@@ -4445,11 +4448,36 @@ function setTop() {
     }
 }
 
-function openGcModal() {
+function openGcModal(chatId) {
+    if (!chatCache[chatId]) {
+        fetch(`https://api.meower.org/chats/${chatId}`, {
+            headers: {token: localStorage.getItem("token")}
+        })
+        .then(response => {
+            if (!response.ok) {
+                if (response.status === 404) {
+                    throw new Error("Chat not found");
+                } else {
+                    throw new Error('Network response was not ok');
+                }
+            }
+            return response.json();
+        })
+        .then(data => {
+            chatCache[chatId] = data;
+            loadchat(chatId);
+        })
+        .catch(e => {
+            openUpdate(`Unable to open chat: ${e}`);
+        });
+        return;
+    }
+
+    const data = chatCache[chatId];
+    
     document.documentElement.style.overflow = "hidden";
     
     const mdlbck = document.querySelector('.modal-back');
-
     if (mdlbck) {
         mdlbck.style.display = 'flex';
 
@@ -4458,34 +4486,186 @@ function openGcModal() {
         if (mdl) {
             const mdlt = mdl.querySelector('.modal-top');
             if (mdlt) {
-                mdlt.innerHTML = `
-                <img class="avatar-big" style="border: 6px solid rgb(31, 88, 49);" src="images/GC.svg">
-                <div class="gctitle">
-                <h2 class="gcn">Chat</h2> <i class="subtitle">7d48d687-ab68-4fe1-96a1-4aacbff36a12</i>
-                </div>
-                <hr class="mdl-hr">
-                <span class="subheader">${lang().profile.persona}</span>
-                <div class="duo-cl">
-                <div class="gcsec">
-                <span>Chat Color:</span>
-                        <input id="gc-clr" type="color" value="#1f5831">
+                let url
+                if (data.icon) {
+                    url = `url(https://uploads.meower.org/icons/${data.icon})`;
+                } else {
+                    url = `url(images/GC.svg)`;
+                }
+                let color
+                if (!data.icon) {
+                    color = '1f5831';
+                } else if (data.icon_color) {
+                    color = data.icon_color;
+                } else {
+                    color = '000';
+                }
+                console.log(data.owner)
+                if (data.owner === localStorage.getItem("username")) {
+                    mdlt.innerHTML = `
+                    <div class="avatar-big pfp-inner" style="border: 6px solid #${color}; background-color: #${color}; background-image: ${url};"></div>
+                    <div class="gctitle">
+                    <h2 class="gcn">${data.nickname}</h2> <i class="subtitle">${chatId}</i>
                     </div>
+                    <hr class="mdl-hr">
+                    <span class="subheader">${lang().profile.persona}</span>
+                    <div class="duo-cl">
                     <div class="gcsec">
-                        <label for="gc-photo" class="filesel">Chat Icon</label>
-                        <input type="file" id="gc-photo" accept="image/png,image/jpeg,image/webp,image/gif">
-                    </div>        
-                </div>
-                <span class="subheader">${lang().chats.members}</span>
-
-                `;
+                    <span>Chat Color:</span>
+                            <input id="gc-clr" type="color" value="#${data.icon_color}">
+                        </div>
+                        <div class="gcsec">
+                            <label for="gc-photo" class="filesel">Chat Icon</label>
+                            <input type="file" id="gc-photo" accept="image/png,image/jpeg,image/webp,image/gif">
+                        </div>        
+                    </div>
+                    <span class="subheader">${lang().chats.members}</span>
+                    <span>Coming Soon:tm:</span>
+                    <div class="member-list">
+                    <button class="member button" onclick="addMembertoGCModal('${chatId}')">Add Member</button>
+                    </div>
+                    `;
+                } else {
+                    mdlt.innerHTML = `
+                    <div class="avatar-big pfp-inner" style="border: 6px solid #${color}; background-color: #${color}; background-image: ${url};"></div>
+                    <div class="gctitle">
+                    <h2 class="gcn">${data.nickname}</h2> <i class="subtitle">${chatId}</i>
+                    </div>
+                    <hr class="mdl-hr">
+                    <span class="subheader">${lang().chats.members}</span>
+                    <span>Coming Soon:tm:</span>
+                    <div class="member-list">
+                    <button class="member button" onclick="addMembertoGCModal('${chatId}')">Add Member</button>
+                    </div>
+                    `;
+                }
             }
             const mdbt = mdl.querySelector('.modal-bottom');
             if (mdbt) {
-                mdbt.innerHTML = ``;
+                if (data.owner === localStorage.getItem("username")) {
+                    mdbt.innerHTML = `
+                    <button class="modal-back-btn" onclick="updateGC('${chatId}')">Update Chat</button>
+                    `;
+                } else {
+                    mdbt.innerHTML = `
+                    `;
+                }
             }
         }
     }
 }
+
+function updateGC(chatId) {
+    const fileInput = document.getElementById("gc-photo");
+    const file = fileInput.files[0];
+    const token = localStorage.getItem("token");
+    const avtrclr = document.getElementById("gc-clr").value.substring(1);
+
+    const xhttp = new XMLHttpRequest();
+
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4) {
+            if (this.status == 200) {
+                console.log('GC updated successfully.');
+                parent.closemodal("Chat Updated!");
+            } else {
+                console.error('Failed to update chat. HTTP ' + this.status.toString());
+            }
+        }
+    };
+
+    xhttp.open("PATCH", `https://api.meower.org/chats/${chatId}`);
+
+    xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    xhttp.setRequestHeader("token", token);
+
+    const data = {
+        icon_color: avtrclr
+    };
+
+    if (file) {
+        const formData = new FormData();
+        formData.append("file", file);
+
+        fetch("https://api.meower.org/uploads/token/icon", {
+            method: "GET",
+            headers: {
+                "token": token
+            }
+        })
+        .then(response => response.json())
+        .then(tokenData => {
+            fetch("https://uploads.meower.org/icons", {
+                method: "POST",
+                headers: {
+                    "Authorization": tokenData.token
+                },
+                body: formData
+            })
+            .then(uploadResponse => uploadResponse.json())
+            .then(uploadData => {
+                const avatarId = uploadData.id;
+                data.icon = avatarId;
+                xhttp.send(JSON.stringify(data));
+            })
+            .catch(error => console.error('Error uploading file:', error));
+        })
+        .catch(error => console.error('Error fetching uploads token:', error));
+    } else {
+        xhttp.send(JSON.stringify(data));
+    }
+}
+
+function addMembertoGCModal(chatId) {
+    document.documentElement.style.overflow = "hidden";
+    
+    const mdlbck = document.querySelector('.modal-back');
+    if (mdlbck) {
+        mdlbck.style.display = 'flex';
+        
+        const mdl = mdlbck.querySelector('.modal');
+        mdl.id = 'mdl-uptd';
+        if (mdl) {
+            const mdlt = mdl.querySelector('.modal-top');
+            if (mdlt) {
+                mdlt.innerHTML = `
+                <h3>${lang().action.adduser}</h3>
+                <input id="chat-mem-input" class="mdl-inp" placeholder="Tnix">
+                `;
+            }
+            const mdbt = mdl.querySelector('.modal-bottom');
+            if (mdbt) {
+                mdbt.innerHTML = `
+                <button class="modal-back-btn" onclick="addMembertoGC('${chatId}')">${lang().action.add}</button>
+                `;
+            }
+        }
+    }
+}
+
+function addMembertoGC(chatId) {
+    const user = document.getElementById("chat-mem-input").value;
+    fetch(`https://api.meower.org/chats/${chatId}/members/${user}`, {
+        method: "PUT",
+        headers: {
+            token: localStorage.getItem("token"),
+            "Content-Type": "application/json"
+        }
+    })
+    .then(response => {
+        if (!response.ok) throw new Error('Network response was not ok');
+        return response.json();
+    })
+    .then(data => {
+        chatCache[data._id] = data;
+        closemodal();
+        openGcModal(chatId);
+    })
+    .catch(e => {
+        openUpdate(`Failed to add member: ${e}`);
+    });
+}
+
 // work on this
 main();
 setInterval(ping, 25000);

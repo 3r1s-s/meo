@@ -175,6 +175,8 @@ const en = {
         "resetplugins": "Disable All",
         "favorite": "Favorite",
         "download": "Download",
+        "add": "Add",
+        "adduser": "Add Member",
     },
     "info": {
         "accexists": "Username Already Taken!",
