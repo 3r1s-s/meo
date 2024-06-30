@@ -2242,6 +2242,7 @@ possible future styling
     height: 100%;
     width: var(--pre);
     border-bottom: 2px solid var(--primary);
+    opacity: 1;
 }
 
 @media screen and (max-width: 720px) {
