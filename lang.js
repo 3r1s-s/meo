@@ -176,7 +176,8 @@ const en = {
         "favorite": "Favorite",
         "download": "Download",
         "add": "Add",
-        "adduser": "Add Member",
+        "adduser": "Add Member", // update
+        "transfer": "Transfer Ownership", // update
     },
     "info": {
         "accexists": "Username Already Taken!",
@@ -238,6 +239,7 @@ const en = {
         "profilepic": "Profile Picture",
     },
     "chats": { // update
+        "owner": "Ownership",
         "members": "Members"
     }
 }

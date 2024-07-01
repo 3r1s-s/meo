@@ -4474,7 +4474,6 @@ function openGcModal(chatId) {
     }
 
     const data = chatCache[chatId];
-    
     document.documentElement.style.overflow = "hidden";
     
     const mdlbck = document.querySelector('.modal-back');
@@ -4519,6 +4518,10 @@ function openGcModal(chatId) {
                             <input type="file" id="gc-photo" accept="image/png,image/jpeg,image/webp,image/gif">
                         </div>        
                     </div>
+                    <span class="subheader">${lang().chats.owner}</span>
+                    <div class="owner">
+                        <button onclick="transferOwnershipModal('${chatId}')" class="button ow-btn">Transfer Ownership</button>
+                    </div>
                     <span class="subheader">${lang().chats.members}</span>
                     <span>Coming Soon:tm:</span>
                     <div class="member-list">
@@ -4532,12 +4535,44 @@ function openGcModal(chatId) {
                     <h2 class="gcn">${data.nickname}</h2> <i class="subtitle">${chatId}</i>
                     </div>
                     <hr class="mdl-hr">
+                    <span class="subheader">${lang().chats.owner}</span>
+                    <div class="owner">
+                    <span>${data.owner} is the owner</span>
+                    </div>
                     <span class="subheader">${lang().chats.members}</span>
-                    <span>Coming Soon:tm:</span>
                     <div class="member-list">
                     <button class="member button" onclick="addMembertoGCModal('${chatId}')">Add Member</button>
                     </div>
                     `;
+                }
+                const memberList = mdl.querySelector('.member-list');
+                if (memberList) {
+                    if (data.owner === localStorage.getItem("username")) {
+                        data.members.forEach(member => {
+                            const memberItem = document.createElement('div');
+                            memberItem.className = 'member-in';
+                            memberItem.innerHTML = `
+                            <span>@${member}</span>
+                            <div class="mem-ops">
+                                <div class="mem-op" onclick="removeMemberFromGC('${chatId}', '${member}')" title="Remove">
+                                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path fill="currentColor" d="M2.3352 13.6648C2.78215 14.1117 3.50678 14.1117 3.95372 13.6648L8 9.61851L12.0463 13.6648C12.4932 14.1117 13.2179 14.1117 13.6648 13.6648C14.1117 13.2179 14.1117 12.4932 13.6648 12.0463L9.61851 8L13.6648 3.95372C14.1117 3.50678 14.1117 2.78214 13.6648 2.3352C13.2179 1.88826 12.4932 1.88827 12.0463 2.33521L8 6.38149L3.95372 2.33521C3.50678 1.88827 2.78214 1.88827 2.3352 2.33521C1.88826 2.78215 1.88827 3.50678 2.33521 3.95372L6.38149 8L2.33521 12.0463C1.88827 12.4932 1.88827 13.2179 2.3352 13.6648Z"></path>
+                                    </svg>
+                                </div>
+                            </div>
+                            `;
+                            memberList.appendChild(memberItem);
+                        });
+                    } else {
+                        data.members.forEach(member => {
+                            const memberItem = document.createElement('div');
+                            memberItem.className = 'member-in';
+                            memberItem.innerHTML = `
+                            <span>@${member}</span>
+                            `;
+                            memberList.appendChild(memberItem);
+                        });
+                    }
                 }
             }
             const mdbt = mdl.querySelector('.modal-bottom');
@@ -4643,6 +4678,56 @@ function addMembertoGCModal(chatId) {
     }
 }
 
+function transferOwnershipModal(chatId) {
+    document.documentElement.style.overflow = "hidden";
+    
+    const mdlbck = document.querySelector('.modal-back');
+    if (mdlbck) {
+        mdlbck.style.display = 'flex';
+        
+        const mdl = mdlbck.querySelector('.modal');
+        mdl.id = 'mdl-uptd';
+        if (mdl) {
+            const mdlt = mdl.querySelector('.modal-top');
+            if (mdlt) {
+                mdlt.innerHTML = `
+                <h3>${lang().action.transfer}</h3>
+                <input id="chat-mem-input" class="mdl-inp" placeholder="Tnix">
+                `;
+            }
+            const mdbt = mdl.querySelector('.modal-bottom');
+            if (mdbt) {
+                mdbt.innerHTML = `
+                <button class="modal-back-btn" onclick="transferOwnership('${chatId}')">${lang().action.confirm}</button>
+                `;
+            }
+        }
+    }
+}
+
+function transferOwnership(chatId) {
+    const user = document.getElementById("chat-mem-input").value;
+    fetch(`https://api.meower.org/chats/${chatId}/members/${user}/transfer`, {
+        method: "POST",
+        headers: {
+            token: localStorage.getItem("token"),
+            "Content-Type": "application/json"
+        }
+    })
+    .then(response => {
+        if (!response.ok) throw new Error('Network response was not ok');
+        return response.json();
+    })
+    .then(data => {
+        chatCache[data._id] = data;
+        closemodal();
+        openGcModal(chatId);
+    })
+    .catch(e => {
+        openUpdate(`Failed to add member: ${e}`);
+    });
+}
+
 function addMembertoGC(chatId) {
     const user = document.getElementById("chat-mem-input").value;
     fetch(`https://api.meower.org/chats/${chatId}/members/${user}`, {
@@ -4663,6 +4748,28 @@ function addMembertoGC(chatId) {
     })
     .catch(e => {
         openUpdate(`Failed to add member: ${e}`);
+    });
+}
+
+function removeMemberFromGC(chatId, user) {
+    fetch(`https://api.meower.org/chats/${chatId}/members/${user}`, {
+        method: "DELETE",
+        headers: {
+            token: localStorage.getItem("token"),
+            "Content-Type": "application/json"
+        }
+    })
+    .then(response => {
+        if (!response.ok) throw new Error('Network response was not ok');
+        return response.json();
+    })
+    .then(data => {
+        chatCache[data._id] = data;
+        closemodal();
+        openUpdate(`Removed ${user}`);
+    })
+    .catch(e => {
+        openUpdate(`Failed to remove member: ${e}`);
     });
 }
 
