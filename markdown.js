@@ -55,7 +55,7 @@ function loadinputs() {
     const inputs = `
     <div class="message-outer">
         <div class="message-container">
-            <button class="message-tool button" id="attach" value="Attachments" onclick="addAttachment()" aria-label="Attachments">
+            <button class="message-tool button" id="attach" value="Attachments" onclick="selectFiles()" aria-label="Attachments">
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path fill-rule="evenodd" clip-rule="evenodd" d="M8 16C12.4185 16 16 12.4185 16 8C16 3.58154 12.4185 0 8 0C3.58154 0 0 3.58154 0 8C0 12.4185 3.58154 16 8 16ZM7.06055 11.3604C7.06055 11.8794 7.48145 12.3003 8.00049 12.3003C8.51953 12.3003 8.94043 11.8794 8.94043 11.3604V8.94043H11.3604C11.8794 8.94043 12.3003 8.51953 12.3003 8C12.3003 7.48096 11.8794 7.06006 11.3604 7.06006H8.94043V4.64014C8.94043 4.12109 8.51953 3.7002 8.00049 3.7002C7.48145 3.7002 7.06055 4.12109 7.06055 4.64014V7.06006H4.64014C4.12109 7.06006 3.7002 7.48096 3.7002 8C3.7002 8.51953 4.12109 8.94043 4.64014 8.94043H7.06055V11.3604Z" fill="currentColor"/>
                 </svg>

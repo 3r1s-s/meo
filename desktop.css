@@ -1,0 +1,110 @@
+.modal-button-s {
+    padding: 10px var(--button-padding);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    box-sizing: border-box;
+    text-wrap: nowrap;
+    background: var(--modal-button-color);
+    border-radius: var(--border-radius);
+    font-size: 12px;
+    text-align: left;
+}
+
+.updt-inside {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin: var(--text-margin) 0;
+}
+
+.modal-button-s:hover {
+    background: var(--hov-modal-button-color);
+}
+
+.modal-button-s:active {
+    background: var(--modal-button-color);
+}
+
+.desktop #page {
+    margin-top: 30px;
+}
+
+.desktop .sidebar {
+    height: calc(100vh - 30px);
+    top: 30px;
+}
+
+.desktop .message-outer {
+    top: 30px;
+}
+
+.desktop .titlebar {
+    -webkit-app-region: drag;
+    height: 30px;
+    background: var(--background);
+    -webkit-user-select: none;
+    user-select: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 500;
+    margin-top: 1px;
+}
+
+.titlebar-button {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 30px;
+    height: 30px;
+    transition: background 75ms ease-in;
+}
+
+.titlebar-button:hover {
+    background: var(--accent-color);
+    cursor: pointer;
+}
+
+#titlebar-close:hover {
+    background: var(--red);
+}
+
+.titlebar-buttons {
+    transform: translateY(-1px);
+    display: flex;
+    justify-content: end;
+    -webkit-app-region: no-drag;
+}
+
+.titlebar-name {
+    margin-left: 10px;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.desktop .titlebar-back {
+    display: block;
+    height: 30px;
+    background: var(--background);
+    -webkit-user-select: none;
+    user-select: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+}
+
+.desktop ::-webkit-scrollbar {
+    width: 0;
+    background: transparent;
+}
+
+.desktop * {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}

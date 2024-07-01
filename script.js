@@ -75,7 +75,6 @@ if (settingsstuff().widemode) {
     }
 }
 
-
 // make it so when reconnect happens it goes back to the prev screen and not the start page
 function main() {
     meowerConnection = new WebSocket(server);
@@ -100,26 +99,15 @@ function main() {
         const sentdata = JSON.parse(event.data);
         let data
         if (sentdata.val == "I:112 | Trusted Access enabled") {
-            data = {
-                cmd: "direct",
-                val: {
-                    cmd: "type",
-                    val: "js"
-                }
-            };
-
-            meowerConnection.send(JSON.stringify(data));
-            console.log("OUT: " + JSON.stringify(data));
-
-            data = {
-                cmd: "direct",
-                val: "meower"
-            };
-
-            meowerConnection.send(JSON.stringify(data));
-            console.log("OUT: " + JSON.stringify(data));
             if (localStorage.getItem("token") != undefined && localStorage.getItem("username") != undefined) {
-                login(localStorage.getItem("username"), localStorage.getItem("token"));
+                meowerConnection.send(JSON.stringify({
+                    cmd: "authpswd",
+                    val: {
+                        username: localStorage.getItem("username"),
+                        pswd: localStorage.getItem("token"),
+                    },
+                    listener: "auth",
+                }));
             } else {
                 loadLogin();
             };
@@ -158,32 +146,10 @@ function main() {
                 }
                 console.log("Logged in!");
             } else if (sentdata.cmd == "statuscode" && sentdata.val != "I:100 | OK") {
-                toggleLogin(false);
-                if ("token" in localStorage)
-                    logout(false);
-                switch (sentdata.val) {
-                    case "I:015 | Account exists":
-                        openUpdate(lang().info.accexists);
-                        break;
-                    case "E:103 | ID not found":
-                        openUpdate(lang().info.invaliduser);
-                        break;
-                    case "I:011 | Invalid Password":
-                        openUpdate(lang().info.invalidpass);
-                        break;
-                    case "E:018 | Account Banned":
-                        openUpdate(lang().info.accbanned);
-                        break;
-                    case "E:025 | Deleted":
-                        openUpdate(lang().info.accdeleted);
-                        break;
-                    case "E:110 | ID conflict":
-                        openUpdate(lang().info.conflict);
-                        break;
-                    default:
-                        openUpdate(`${lang().info.unknown} ${sentdata.val}`);
-                        break;
-                }
+                if (sentdata.val === "E:018 | Account Banned")
+                    openUpdate(lang().info.accbanned);
+                console.error(`Failed logging in to Cloudlink: ${sentdata.val}`);
+                logout(false);
             }
         } else if (loggedin && sentdata.val.post_origin) {
             let postOrigin = sentdata.val.post_origin;
@@ -290,10 +256,6 @@ function main() {
             } else {
                 console.warn(sentdata.val.id, "not found.");
             }
-        } else if (sentdata.listener == "chpw") {
-            if (sentdata.val === 'I:100 | OK') {
-                closemodal(lang().info.passupdate)
-            }
         }
     };
     document.addEventListener("keydown", function (event) {
@@ -345,31 +307,9 @@ function main() {
     addEventListener("DOMContentLoaded", () => {
         document.onpaste = (event) => {
             if (!document.getElementById("msg")) return;
-
-            const files = Array.from(event.clipboardData.files);
-            if (files.some(file => file.size > (25 << 20))) {
-                errorModal("File too large", "Please upload files smaller than 25MiB.");
-                return;
+            for (const file of event.clipboardData.files) {
+                addAttachment(file);
             }
-
-            for (const file of files) {
-                const formData = new FormData();
-                formData.append('file', file);
-                pendingAttachments.push({
-                    id: Math.random(),
-                    file,
-                    req: fetch('https://uploads.meower.org/attachments', {
-                        method: 'POST',
-                        headers: { Authorization: localStorage.getItem("token") },
-                        body: formData
-                    })
-                        .then(response => {
-                            return response.json();
-                        })
-                        .catch(error => errorModal("Error uploading attachment", error))
-                });
-            }
-            setAttachmentContainer();
         };
     });
     addEventListener("keydown", (event) => {
@@ -402,7 +342,7 @@ function main() {
                 event.preventDefault();
                 const editIndicator = document.getElementById("edit-indicator");
                 if (!editIndicator.hasAttribute("data-postid")) {
-                    addAttachment();
+                    selectFiles();
                 }
             }
         } else if ((event.ctrlKey || event.metaKey) && event.key === 'k') {
@@ -911,6 +851,7 @@ function loadtheme() {
     const theme = localStorage.getItem("theme");
 
     if (theme) {
+        document.documentElement.classList.remove("dark-theme");
         document.documentElement.classList.add(theme + "-theme");
     }
 
@@ -937,39 +878,70 @@ function toggleLogin(yn) {
     }
 }
 
-function login(user, pass) {
-    const data = {
-        cmd: "direct",
-        val: {
-            cmd: "authpswd",
-            val: {
-                username: user,
-                pswd: pass
+function login(username, password) {
+    fetch("https://api.meower.org/auth/login", {
+        method: "POST",
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+            username,
+            password,
+        }),
+    }).then(resp => resp.json().then(resp => {
+        if (resp.error) {
+            toggleLogin(false);
+            if (resp.type === "Unauthorized") {
+                openUpdate(lang().info.invalidcreds);
+            } else if (resp.type === "accountDeleted") {
+                openUpdate(lang().info.accdeleted);
+            } else {
+                openUpdate(`${lang().info.unknown} ${resp.type}`);
             }
-        },
-        listener: "auth"
-    };
-    meowerConnection.send(JSON.stringify(data));
-    console.log(user);
-    console.log("User is logging in, details will not be logged for security reasons.");
+        } else {
+            meowerConnection.send(JSON.stringify({
+                cmd: "authpswd",
+                val: {
+                    username,
+                    pswd: resp.token,
+                },
+                listener: "auth",
+            }));
+            console.log("User is logging in, details will not be logged for security reasons.");
+            closemodal();
+        }
+    }));
 }
 
-function signup(user, pass) {
-    const data = {
-        cmd: "direct",
-        val: {
-            cmd: "gen_account",
-            val: {
-                username: user,
-                pswd: pass
+function signup(username, password, captcha) {
+    fetch("https://api.meower.org/auth/register", {
+        method: "POST",
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+            username,
+            password,
+            captcha,
+        }),
+    }).then(resp => resp.json().then(resp => {
+        if (resp.error) {
+            toggleLogin(false);
+            if (resp.type === "usernameExists") {
+                openUpdate(lang().info.accexists);
+            } else {
+                openUpdate(`${lang().info.unknown} ${resp.type}`);
             }
-        },
-        listener: "auth"
-    };
-    meowerConnection.send(JSON.stringify(data));
-    console.log("User is signing up, details will not be logged for security reasons.");
-    openprofile = true;
-    closemodal();
+        } else {
+            meowerConnection.send(JSON.stringify({
+                cmd: "authpswd",
+                val: {
+                    username,
+                    pswd: resp.token,
+                },
+                listener: "auth",
+            }));
+            console.log("User is signing up, details will not be logged for security reasons.");
+            openprofile = true;
+            closemodal();
+        }
+    }));
 }
 
 async function sendpost() {
@@ -978,7 +950,6 @@ async function sendpost() {
     const message = msgbox.value;
     msgbox.value = "";
 
-    const attachmentCont = document.getElementById("images-container");
     const editIndicator = document.getElementById("edit-indicator");
 
     if (!message.trim() && (editIndicator.hasAttribute("data-postid") || pendingAttachments.length < 1)) {
@@ -1000,15 +971,17 @@ async function sendpost() {
         document.getElementById("attach").hidden = false;
     } else {
         // Wait for attachments to upload and get attachment IDs
-        msgbox.placeholder = `Uploading ${pendingAttachments.length} ${pendingAttachments.length > 1 ? 'files' : 'file'}...`;
         msgbox.disabled = true;
-        const attachments = await Promise.all(pendingAttachments.map(attachment => attachment.req));
+        const attachmentIds = [];
+        for (const attachment of pendingAttachments) {
+            msgbox.placeholder = `Uploading ${attachment.file.name}...`;
+            attachmentResp = await attachment.req;
+            attachmentIds.push(attachmentResp.id);
+        }
         pendingAttachments.length = 0;
+        document.getElementById('images-container').innerHTML = '';
         msgbox.placeholder = lang().meo_messagebox;
         msgbox.disabled = false;
-        attachmentCont.innerHTML = '';
-
-
         fetch(`https://api.meower.org/${page === "home" ? "home" : `posts/${page}`}`, {
             method: "POST",
             headers: {
@@ -1017,7 +990,7 @@ async function sendpost() {
             },
             body: JSON.stringify({
                 content: message,
-                attachments: attachments.map(attachment => attachment.id),
+                attachments: attachmentIds,
             })
         });
     }
@@ -1084,7 +1057,9 @@ function loadhome() {
         e.preventDefault();
         e.stopPropagation();
         attachButton.classList.remove('dragover');
-        dropFiles(e.dataTransfer.files);
+        for (const file of e.dataTransfer.files) {
+            addAttachment(file);
+        }
     });
 
     const jumpButton = document.querySelector('.jump');
@@ -1182,7 +1157,13 @@ function renderChats() {
 
 
     groupsdiv.innerHTML = `
-    <h1 class="groupheader">${lang().title_chats}</h1>
+    <div class="groupheader">
+        <h1>${lang().title_chats}</h1>
+        <button class="addgc button" onclick="createChatModal()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g clip-path="url(#clip0_318_2)"><path d="M13.6653 13.6777L21.4322 13.6777C22.3528 13.6782 23.099 12.932 23.0986 12.0113C23.0986 11.0902 22.3528 10.3444 21.4322 10.3449H13.6653L13.6653 2.57804C13.6658 1.65739 12.9191 0.910682 11.9989 0.911622C11.0782 0.911155 10.332 1.65739 10.3325 2.57804L10.3325 10.3449L2.54674 10.3449C1.62563 10.3449 0.879848 11.0907 0.880371 12.0113C0.880322 12.4714 1.06705 12.8881 1.36874 13.1898C1.67044 13.4915 2.08712 13.6782 2.54726 13.6782L10.3335 13.6777V21.4446C10.3334 21.9047 10.5201 22.3214 10.8218 22.623C11.1235 22.9248 11.5397 23.111 12.0003 23.1114C12.9214 23.1114 13.6672 22.3657 13.6667 21.4451L13.6653 13.6777Z" fill="currentColor"/></g></svg>
+        </button>
+    </div>
+
     <button class="search-input button" id="search" aria-label="search" onclick="goAnywhere();"><span class="srchtx">${lang().action.search}</span></button
     
     `;
@@ -1438,7 +1419,7 @@ function loadchat(chatId) {
 
     const mainContainer = document.getElementById("main");
     if (data.nickname) {
-        mainContainer.innerHTML = `<div class='info'><div class="gctitle"><h1 id='nickname' class='header-top'>${escapeHTML(data.nickname)}</h1><i class="subtitle">${chatId}</i></div>
+        mainContainer.innerHTML = `<div class='info'><div class="gctitle"><h1 id='nickname' onclick="openGcModal('${chatId}')" class='header-top'>${escapeHTML(data.nickname)}</h1><i class="subtitle">${chatId}</i></div>
         <p id='info'></p></div>` + loadinputs();
     } else {
         mainContainer.innerHTML = `<div class='info'><div class="gctitle"><h1 id='username' class='header-top' onclick="openUsrModal('${data.members.find(v => v !== localStorage.getItem("username"))}')">${data.members.find(v => v !== localStorage.getItem("username"))}</h1><i class="subtitle">${chatId}</i></div><p id='info'></p></div>` + loadinputs();
@@ -1490,7 +1471,9 @@ function loadchat(chatId) {
         e.preventDefault();
         e.stopPropagation();
         attachButton.classList.remove('dragover');
-        dropFiles(e.dataTransfer.files);
+        for (const file of e.dataTransfer.files) {
+            addAttachment(file);
+        }
     });
 
     const jumpButton = document.querySelector('.jump');
@@ -1546,7 +1529,9 @@ function loadlive() {
         e.preventDefault();
         e.stopPropagation();
         attachButton.classList.remove('dragover');
-        dropFiles(e.dataTransfer.files);
+        for (const file of e.dataTransfer.files) {
+            addAttachment(file);
+        }
     });
 
     const jumpButton = document.querySelector('.jump');
@@ -2810,18 +2795,24 @@ function openUsrModal(uId) {
                 `;
 
                 fetch(`https://api.meower.org/users/${uId}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.avatar_color !== "!color") {
-                            const clr1 = darkenColour(data.avatar_color, 3);
-                            const clr2 = darkenColour(data.avatar_color, 5);
+                .then(response => response.json())
+                .then(data => {
+                    if (data.avatar_color !== "!color") {
+                        const clr1 = darkenColour(data.avatar_color, 3);
+                        const clr2 = darkenColour(data.avatar_color, 5);
+                        if (settingsstuff().widemode) {
+                            mdl.style.background = `${clr1}`;
+                            mdl.style.setProperty('--accent', clr1);
+                            mdl.classList.add('custom-bg');
+                        } else {
                             mdl.style.background = `linear-gradient(180deg, ${clr1} 0%, ${clr2} 100%`;
                             mdl.style.setProperty('--accent', clr1);
                             mdl.classList.add('custom-bg');
                         }
-                    })
-                    .catch(error => console.error('Error fetching user profile:', error));
-            }
+                    }
+                })
+                .catch(error => console.error('Error fetching user profile:', error));
+                }
         }
         const mdbt = mdl.querySelector('.modal-bottom');
         if (mdbt) {
@@ -2872,19 +2863,17 @@ function reportModal(id) {
 }
 
 function sendReport(id) {
-    const data = {
-        cmd: "direct",
-        val: {
-            cmd: "report",
-            val: {
-                type: 0,
-                id: id,
-                reason: document.getElementById('report-reason').value,
-                comment: document.getElementById('report-comment').value
-            }
-        }
-    };
-    meowerConnection.send(JSON.stringify(data));
+    fetch(`https://api.meower.org/posts/${id}/report`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            token: localStorage.getItem("token")
+        },
+        body: JSON.stringify({
+            reason: document.getElementById('report-reason').value,
+            comment: document.getElementById('report-comment').value,
+        }),
+    });
     closemodal(lang().info.reportsent);
 }
 
@@ -3901,128 +3890,112 @@ function createDate(tsmp) {
     return new Date(tsrb).toLocaleString([], { month: '2-digit', day: '2-digit', year: '2-digit', hour: 'numeric', minute: 'numeric' });
 }
 
-function addAttachment() {
+function addAttachment(file) {
+    const xhr = new XMLHttpRequest();
+    const formData = new FormData();
+    const element = document.createElement('div');
+
+    const attachment = {file};
+    attachment.req = new Promise((resolve, reject) => {
+        attachment.cancel = (message) => {
+            if (message) errorModal(`Failed uploading ${file.name}`, message);
+            xhr.abort();
+            element.remove();
+            pendingAttachments = pendingAttachments.filter(item => item !== attachment);
+            reject(message);
+        };
+        pendingAttachments.push(attachment);
+
+        if (file.size > (25 << 20)) {
+            attachment.cancel("Files must not exceed 25MiB.");
+            return;
+        }
+
+        element.classList.add("attach-pre-outer");
+        element.title = file.name;
+        element.innerHTML = `
+        <div class="attachment-wrapper">
+        <div class="attachment-progress" style="--pre: 0%;">
+        <span>0%</span>
+        </div>
+        <div class="attachment-name">
+        <span>${file.name}</span>
+        </div>
+        <div class="delete-attach">
+        <svg width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M15 3.999V2H9V3.999H3V5.999H21V3.999H15Z"></path><path fill="currentColor" d="M5 6.99902V18.999C5 20.101 5.897 20.999 7 20.999H17C18.103 20.999 19 20.101 19 18.999V6.99902H5ZM11 17H9V11H11V17ZM15 17H13V11H15V17Z"></path></svg>
+        </div>
+        </div>
+        `;
+        element.querySelector(".attachment-wrapper").querySelector(".delete-attach").onclick = () => { attachment.cancel(""); };
+        if (['image/png', 'image/jpeg', 'image/webp', 'image/gif'].includes(file.type)) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                const img = document.createElement("img");
+                img.classList.add("image-pre");
+                img.src = reader.result;
+                img.onclick = () => {
+                    openImage(reader.result);
+                };
+    
+                const attachmentMedia = document.createElement("div");
+                attachmentMedia.classList.add("attachment-media");
+                attachmentMedia.appendChild(img);
+
+                const attachmentWrapper = element.querySelector(".attachment-wrapper")
+                attachmentWrapper.insertBefore(attachmentMedia, attachmentWrapper.querySelector(".attachment-name"));
+            };
+            reader.readAsDataURL(file);
+        } else {
+            const fileType = document.createElement("span");
+            fileType.classList.add("other-in");
+            fileType.innerText = file.name.split('.').pop().toLowerCase();
+
+            const otherPre = document.createElement("div");
+            otherPre.classList.add("other-pre");
+            otherPre.appendChild(fileType);
+
+            const attachmentOther = document.createElement("div");
+            attachmentOther.classList.add("attachment-other");
+            attachmentOther.appendChild(otherPre);
+
+            const attachmentWrapper = element.querySelector(".attachment-wrapper")
+            attachmentWrapper.insertBefore(attachmentOther, attachmentWrapper.querySelector(".attachment-name"));
+        }
+        
+        document.getElementById('images-container').appendChild(element);
+
+        xhr.open("POST", "https://uploads.meower.org/attachments");
+        xhr.setRequestHeader("Authorization", localStorage.getItem("token"));
+        xhr.upload.onprogress = (ev) => {
+            const percentage = `${Number((ev.loaded / ev.total) * 100).toFixed(2)}%`;
+            element.querySelector(".attachment-progress").style.setProperty('--pre', `${percentage}`);
+            element.querySelector(".attachment-progress span").innerText = `${percentage}`;
+        };
+        xhr.onload = () => {
+            element.querySelector(".attachment-progress").style.setProperty('--pre', `0`);
+            const attachmentProgress = element.querySelector(".attachment-progress").querySelector("span");
+            attachmentProgress.remove();
+
+            resolve(JSON.parse(xhr.response));
+        };
+        xhr.onerror = (error) => {
+            attachment.cancel(error);
+        };
+        formData.append("file", file);
+        xhr.send(formData);
+    });
+}
+
+function selectFiles() {
     const input = document.createElement('input');
     input.type = 'file';
     input.multiple = true;
     input.click();
-
-    input.onchange = function (e) {
-        const files = Array.from(e.target.files);
-        if (files.some(file => file.size > (25 << 20))) {
-            errorModal("File too large", "Please upload files smaller than 25MiB."); // add a lang prop to this
-            return;
+    input.onchange = function(e) {
+        for (const file of e.target.files) {
+            addAttachment(file);
         }
-
-        for (const file of files) {
-            const formData = new FormData();
-            formData.append('file', file);
-            pendingAttachments.push({
-                id: Math.random(),
-                file,
-                req: fetch('https://uploads.meower.org/attachments', {
-                    method: 'POST',
-                    headers: { Authorization: localStorage.getItem("token") },
-                    body: formData
-                })
-                    .then(response => {
-                        return response.json();
-                    })
-                    .catch(error => errorModal("Error uploading attachment", error))
-            });
-        }
-        setAttachmentContainer();
     };
-}
-
-function deleteAttachment(id) {
-    pendingAttachments = pendingAttachments.filter(item => item.id.toString() !== id);
-    console.debug(id.toString());
-    setAttachmentContainer();
-}
-
-function setAttachmentContainer() {
-    const container = document.getElementById('images-container');
-    container.innerHTML = '';
-    //reminder to check if all the drag stuff was removed
-    pendingAttachments.forEach((item, index) => {
-        item.req.then(data => {
-            const filetype = data.filename.split('.').pop().toLowerCase();
-
-            if (['png', 'jpg', 'jpeg', 'webp', 'gif'].includes(filetype)) {
-                const element = document.createElement('div');
-                element.classList.add("attach-pre-outer");
-                element.title = data.filename;
-                element.id = data.id;
-                element.innerHTML = `
-                <div class="attachment-wrapper">
-                <div class="attachment-media">
-                <img src="https://uploads.meower.org/attachments/${data.id}/${data.filename}" onclick="openImage('https://uploads.meower.org/attachments/${data.id}/${data.filename}')" class="image-pre">
-                </div>
-                <div class="attachment-name">
-                <span>${data.filename}</span>
-                </div>
-                <div class="delete-attach" onclick="deleteAttachment('${item.id.toString()}')">
-                <svg width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M15 3.999V2H9V3.999H3V5.999H21V3.999H15Z"></path><path fill="currentColor" d="M5 6.99902V18.999C5 20.101 5.897 20.999 7 20.999H17C18.103 20.999 19 20.101 19 18.999V6.99902H5ZM11 17H9V11H11V17ZM15 17H13V11H15V17Z"></path></svg>
-                </div>
-                </div>
-                `;
-                container.appendChild(element);
-            } else {
-                const element = document.createElement('div');
-                element.classList.add("attach-pre-outer");
-                element.title = data.filename;
-                element.id = data.id;
-                element.innerHTML = `
-                <div class="attachment-wrapper">
-                <div class="attachment-other">
-                <div class="other-pre">
-                <span class="other-in">.${filetype.toLowerCase()}</span>
-                </div>
-                </div>
-                <div class="attachment-name">
-                <span>${data.filename}</span>
-                </div>
-                <div class="delete-attach" onclick="deleteAttachment('${item.id.toString()}')">
-                <svg height="24" viewBox="0 0 24 24" style="width: 100%;"><path fill="currentColor" d="M15 3.999V2H9V3.999H3V5.999H21V3.999H15Z"></path><path fill="currentColor" d="M5 6.99902V18.999C5 20.101 5.897 20.999 7 20.999H17C18.103 20.999 19 20.101 19 18.999V6.99902H5ZM11 17H9V11H11V17ZM15 17H13V11H15V17Z"></path></svg>                </div>
-                </div>
-                `;
-                container.appendChild(element);
-            }
-            // remember to fix delete button alignment
-
-            console.debug("item added" + index);
-            console.debug(data);
-            console.debug(filetype);
-        });
-    });
-}
-
-function dropFiles(files) {
-    const fileArray = Array.from(files);
-    if (fileArray.some(file => file.size > (25 << 20))) {
-        errorModal("File too large", "Please upload files smaller than 25MiB."); // add a lang prop to this
-        return;
-    }
-
-    for (const file of fileArray) {
-        const formData = new FormData();
-        formData.append('file', file);
-        pendingAttachments.push({
-            id: Math.random(),
-            file,
-            req: fetch('https://uploads.meower.org/attachments', {
-                method: 'POST',
-                headers: { Authorization: localStorage.getItem("token") },
-                body: formData
-            })
-                .then(response => {
-                    return response.json();
-                })
-                .catch(error => errorModal("Error uploading attachment", error))
-        });
-    }
-    setAttachmentContainer();
 }
 
 function goAnywhere() {
@@ -4347,9 +4320,24 @@ function agreementModal() {
             }
             const mdbt = mdl.querySelector('.modal-bottom');
             if (mdbt) {
-                mdbt.innerHTML = `
-                <button class="modal-back-btn" onclick="toggleLogin(true);signup(document.getElementById('userinput').value, document.getElementById('passinput').value)" aria-label="log in">${lang().action.signup}</button>
-                `;
+                mdbt.innerHTML = `<div style="margin-bottom: var(--margin);"><div id="hcaptcha-widget"></div></div>`;
+                fetch("https://api.meower.org/").then(resp => resp.json().then(resp => {
+                    if (resp.captcha.enabled) {
+                        hcaptcha.render("hcaptcha-widget", {
+                            sitekey: resp.captcha.sitekey,
+                            theme: getComputedStyle(document.body).getPropertyValue('--color-scheme'),
+                            callback: (token) => {
+                                mdbt.innerHTML = `
+                                <button class="modal-back-btn" onclick="toggleLogin(true);signup(document.getElementById('userinput').value, document.getElementById('passinput').value, '${token}')" aria-label="log in">${lang().action.signup}</button>
+                                `;
+                            },
+                        });
+                    } else {
+                        mdbt.innerHTML = `
+                        <button class="modal-back-btn" onclick="toggleLogin(true);signup(document.getElementById('userinput').value, document.getElementById('passinput').value, '')" aria-label="log in">${lang().action.signup}</button>
+                        `;
+                    }
+                }));
             }
         }
     }
@@ -4364,48 +4352,60 @@ function errorModal(header, text) {
     const mdbt = mdl.querySelector('.modal-bottom');
 
     if (mdlbck) mdlbck.style.display = 'flex';
+    if (mdl) mdl.id = 'mdl-uptd';
     if (mdlt) mdlt.innerHTML = `<h3>${header}</h3><hr class="mdl-hr"><span class="subheader">${text}</span>`;
     if (mdbt) mdbt.innerHTML = ``;
 }
 
 function changePassword() {
-    const data = {
-        cmd: "change_pswd",
-        val: {
-            old: document.getElementById("oldpass-input").value,
-            new: document.getElementById("newpass-input").value
+    fetch("https://api.meower.org/me/password", {
+        method: "PATCH",
+        headers: {
+            "Content-Type": "application/json",
+            token: localStorage.getItem("token")
         },
-        listener: "chpw"
-    };
-    meowerConnection.send(JSON.stringify(data));
+        body: JSON.stringify({
+            old: document.getElementById("oldpass-input").value,
+            new: document.getElementById("newpass-input").value,
+        }),
+    }).then(resp => {
+        if (resp.status === 200) {
+            closemodal(lang().info.passupdate);
+        }
+    });
     document.getElementById("changepw").disabled = true;
 }
 
 function deleteTokens() {
     closemodal();
     launchscreen();
-    const data = {
-        cmd: "direct",
-        val: {
-            cmd: "del_tokens",
-            val: ""
+    fetch("https://api.meower.org/me/tokens", {
+        method: "DELETE",
+        headers: { token: localStorage.getItem("token") },
+    }).then(resp => {
+        if (resp.status === 200) {
+            logout(true);
+            closemodal(lang().info.tokenscleared);
         }
-    };
-    meowerConnection.send(JSON.stringify(data));
-    logout(true);
-    closemodal(lang().info.tokenscleared);
+    });
 }
 
-function deleteAccount(pass) {
-    const data = {
-        cmd: "direct",
-        val: {
-            cmd: "del_account",
-            val: pass
+function deleteAccount(password) {
+    closemodal();
+    launchscreen();
+    fetch("https://api.meower.org/me", {
+        method: "DELETE",
+        headers: {
+            "Content-Type": "application/json",
+            token: localStorage.getItem("token")
+        },
+        body: JSON.stringify({ password }),
+    }).then(resp => {
+        if (resp.status === 200) {
+            logout(true);
+            closemodal(lang().info.accscheduled);
         }
-    };
-    meowerConnection.send(JSON.stringify(data));
-    closemodal(lang().info.accscheduled);
+    });
 }
 
 function DeleteAccountModal() {
@@ -4536,11 +4536,35 @@ function setTop() {
     }
 }
 
-function openGcModal() {
+function openGcModal(chatId) {
+    if (!chatCache[chatId]) {
+        fetch(`https://api.meower.org/chats/${chatId}`, {
+            headers: {token: localStorage.getItem("token")}
+        })
+        .then(response => {
+            if (!response.ok) {
+                if (response.status === 404) {
+                    throw new Error("Chat not found");
+                } else {
+                    throw new Error('Network response was not ok');
+                }
+            }
+            return response.json();
+        })
+        .then(data => {
+            chatCache[chatId] = data;
+            loadchat(chatId);
+        })
+        .catch(e => {
+            openUpdate(`Unable to open chat: ${e}`);
+        });
+        return;
+    }
+
+    const data = chatCache[chatId];
     document.documentElement.style.overflow = "hidden";
 
     const mdlbck = document.querySelector('.modal-back');
-
     if (mdlbck) {
         mdlbck.style.display = 'flex';
 
@@ -4549,34 +4573,294 @@ function openGcModal() {
         if (mdl) {
             const mdlt = mdl.querySelector('.modal-top');
             if (mdlt) {
-                mdlt.innerHTML = `
-                <img class="avatar-big" style="border: 6px solid rgb(31, 88, 49);" src="images/GC.svg">
-                <div class="gctitle">
-                <h2 class="gcn">Chat</h2> <i class="subtitle">7d48d687-ab68-4fe1-96a1-4aacbff36a12</i>
-                </div>
-                <hr class="mdl-hr">
-                <span class="subheader">${lang().profile.persona}</span>
-                <div class="duo-cl">
-                <div class="gcsec">
-                <span>Chat Color:</span>
-                        <input id="gc-clr" type="color" value="#1f5831">
+                let url
+                if (data.icon) {
+                    url = `url(https://uploads.meower.org/icons/${data.icon})`;
+                } else {
+                    url = `url(images/GC.svg)`;
+                }
+                let color
+                if (!data.icon) {
+                    color = '1f5831';
+                } else if (data.icon_color) {
+                    color = data.icon_color;
+                } else {
+                    color = '000';
+                }
+                console.log(data.owner)
+                if (data.owner === localStorage.getItem("username")) {
+                    mdlt.innerHTML = `
+                    <div class="avatar-big pfp-inner" style="border: 6px solid #${color}; background-color: #${color}; background-image: ${url};"></div>
+                    <div class="gctitle">
+                    <h2 class="gcn">${data.nickname}</h2> <i class="subtitle">${chatId}</i>
                     </div>
+                    <hr class="mdl-hr">
+                    <span class="subheader">${lang().profile.persona}</span>
+                    <div class="duo-cl">
                     <div class="gcsec">
-                        <label for="gc-photo" class="filesel">Chat Icon</label>
-                        <input type="file" id="gc-photo" accept="image/png,image/jpeg,image/webp,image/gif">
-                    </div>        
-                </div>
-                <span class="subheader">${lang().chats.members}</span>
-
-                `;
+                    <span>Chat Color:</span>
+                            <input id="gc-clr" type="color" value="#${data.icon_color}">
+                        </div>
+                        <div class="gcsec">
+                            <label for="gc-photo" class="filesel">Chat Icon</label>
+                            <input type="file" id="gc-photo" accept="image/png,image/jpeg,image/webp,image/gif">
+                        </div>        
+                    </div>
+                    <span class="subheader">${lang().chats.owner}</span>
+                    <div class="owner">
+                        <button onclick="transferOwnershipModal('${chatId}')" class="button ow-btn">Transfer Ownership</button>
+                    </div>
+                    <span class="subheader">${lang().chats.members}</span>
+                    <span>Coming Soon:tm:</span>
+                    <div class="member-list">
+                    <button class="member button" onclick="addMembertoGCModal('${chatId}')">Add Member</button>
+                    </div>
+                    `;
+                } else {
+                    mdlt.innerHTML = `
+                    <div class="avatar-big pfp-inner" style="border: 6px solid #${color}; background-color: #${color}; background-image: ${url};"></div>
+                    <div class="gctitle">
+                    <h2 class="gcn">${data.nickname}</h2> <i class="subtitle">${chatId}</i>
+                    </div>
+                    <hr class="mdl-hr">
+                    <span class="subheader">${lang().chats.owner}</span>
+                    <div class="owner">
+                    <span>${data.owner} is the owner</span>
+                    </div>
+                    <span class="subheader">${lang().chats.members}</span>
+                    <div class="member-list">
+                    <button class="member button" onclick="addMembertoGCModal('${chatId}')">Add Member</button>
+                    </div>
+                    `;
+                }
+                const memberList = mdl.querySelector('.member-list');
+                if (memberList) {
+                    if (data.owner === localStorage.getItem("username")) {
+                        data.members.forEach(member => {
+                            const memberItem = document.createElement('div');
+                            memberItem.className = 'member-in';
+                            memberItem.innerHTML = `
+                            <span>@${member}</span>
+                            <div class="mem-ops">
+                                <div class="mem-op" onclick="removeMemberFromGC('${chatId}', '${member}')" title="Remove">
+                                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path fill="currentColor" d="M2.3352 13.6648C2.78215 14.1117 3.50678 14.1117 3.95372 13.6648L8 9.61851L12.0463 13.6648C12.4932 14.1117 13.2179 14.1117 13.6648 13.6648C14.1117 13.2179 14.1117 12.4932 13.6648 12.0463L9.61851 8L13.6648 3.95372C14.1117 3.50678 14.1117 2.78214 13.6648 2.3352C13.2179 1.88826 12.4932 1.88827 12.0463 2.33521L8 6.38149L3.95372 2.33521C3.50678 1.88827 2.78214 1.88827 2.3352 2.33521C1.88826 2.78215 1.88827 3.50678 2.33521 3.95372L6.38149 8L2.33521 12.0463C1.88827 12.4932 1.88827 13.2179 2.3352 13.6648Z"></path>
+                                    </svg>
+                                </div>
+                            </div>
+                            `;
+                            memberList.appendChild(memberItem);
+                        });
+                    } else {
+                        data.members.forEach(member => {
+                            const memberItem = document.createElement('div');
+                            memberItem.className = 'member-in';
+                            memberItem.innerHTML = `
+                            <span>@${member}</span>
+                            `;
+                            memberList.appendChild(memberItem);
+                        });
+                    }
+                }
             }
             const mdbt = mdl.querySelector('.modal-bottom');
             if (mdbt) {
-                mdbt.innerHTML = ``;
+                if (data.owner === localStorage.getItem("username")) {
+                    mdbt.innerHTML = `
+                    <button class="modal-back-btn" onclick="updateGC('${chatId}')">Update Chat</button>
+                    `;
+                } else {
+                    mdbt.innerHTML = `
+                    `;
+                }
             }
         }
     }
 }
+
+function updateGC(chatId) {
+    const fileInput = document.getElementById("gc-photo");
+    const file = fileInput.files[0];
+    const token = localStorage.getItem("token");
+    const avtrclr = document.getElementById("gc-clr").value.substring(1);
+
+    const xhttp = new XMLHttpRequest();
+
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4) {
+            if (this.status == 200) {
+                console.log('GC updated successfully.');
+                parent.closemodal("Chat Updated!");
+            } else {
+                console.error('Failed to update chat. HTTP ' + this.status.toString());
+            }
+        }
+    };
+
+    xhttp.open("PATCH", `https://api.meower.org/chats/${chatId}`);
+
+    xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    xhttp.setRequestHeader("token", token);
+
+    const data = {
+        icon_color: avtrclr
+    };
+
+    if (file) {
+        const formData = new FormData();
+        formData.append("file", file);
+
+        fetch("https://api.meower.org/uploads/token/icon", {
+            method: "GET",
+            headers: {
+                "token": token
+            }
+        })
+        .then(response => response.json())
+        .then(tokenData => {
+            fetch("https://uploads.meower.org/icons", {
+                method: "POST",
+                headers: {
+                    "Authorization": tokenData.token
+                },
+                body: formData
+            })
+            .then(uploadResponse => uploadResponse.json())
+            .then(uploadData => {
+                const avatarId = uploadData.id;
+                data.icon = avatarId;
+                xhttp.send(JSON.stringify(data));
+            })
+            .catch(error => console.error('Error uploading file:', error));
+        })
+        .catch(error => console.error('Error fetching uploads token:', error));
+    } else {
+        xhttp.send(JSON.stringify(data));
+    }
+}
+
+function addMembertoGCModal(chatId) {
+    document.documentElement.style.overflow = "hidden";
+    
+    const mdlbck = document.querySelector('.modal-back');
+    if (mdlbck) {
+        mdlbck.style.display = 'flex';
+        
+        const mdl = mdlbck.querySelector('.modal');
+        mdl.id = 'mdl-uptd';
+        if (mdl) {
+            const mdlt = mdl.querySelector('.modal-top');
+            if (mdlt) {
+                mdlt.innerHTML = `
+                <h3>${lang().action.adduser}</h3>
+                <input id="chat-mem-input" class="mdl-inp" placeholder="Tnix">
+                `;
+            }
+            const mdbt = mdl.querySelector('.modal-bottom');
+            if (mdbt) {
+                mdbt.innerHTML = `
+                <button class="modal-back-btn" onclick="addMembertoGC('${chatId}')">${lang().action.add}</button>
+                `;
+            }
+        }
+    }
+}
+
+function transferOwnershipModal(chatId) {
+    document.documentElement.style.overflow = "hidden";
+    
+    const mdlbck = document.querySelector('.modal-back');
+    if (mdlbck) {
+        mdlbck.style.display = 'flex';
+        
+        const mdl = mdlbck.querySelector('.modal');
+        mdl.id = 'mdl-uptd';
+        if (mdl) {
+            const mdlt = mdl.querySelector('.modal-top');
+            if (mdlt) {
+                mdlt.innerHTML = `
+                <h3>${lang().action.transfer}</h3>
+                <input id="chat-mem-input" class="mdl-inp" placeholder="Tnix">
+                `;
+            }
+            const mdbt = mdl.querySelector('.modal-bottom');
+            if (mdbt) {
+                mdbt.innerHTML = `
+                <button class="modal-back-btn" onclick="transferOwnership('${chatId}')">${lang().action.confirm}</button>
+                `;
+            }
+        }
+    }
+}
+
+function transferOwnership(chatId) {
+    const user = document.getElementById("chat-mem-input").value;
+    fetch(`https://api.meower.org/chats/${chatId}/members/${user}/transfer`, {
+        method: "POST",
+        headers: {
+            token: localStorage.getItem("token"),
+            "Content-Type": "application/json"
+        }
+    })
+    .then(response => {
+        if (!response.ok) throw new Error('Network response was not ok');
+        return response.json();
+    })
+    .then(data => {
+        chatCache[data._id] = data;
+        closemodal();
+        openGcModal(chatId);
+    })
+    .catch(e => {
+        openUpdate(`Failed to add member: ${e}`);
+    });
+}
+
+function addMembertoGC(chatId) {
+    const user = document.getElementById("chat-mem-input").value;
+    fetch(`https://api.meower.org/chats/${chatId}/members/${user}`, {
+        method: "PUT",
+        headers: {
+            token: localStorage.getItem("token"),
+            "Content-Type": "application/json"
+        }
+    })
+    .then(response => {
+        if (!response.ok) throw new Error('Network response was not ok');
+        return response.json();
+    })
+    .then(data => {
+        chatCache[data._id] = data;
+        closemodal();
+        openGcModal(chatId);
+    })
+    .catch(e => {
+        openUpdate(`Failed to add member: ${e}`);
+    });
+}
+
+function removeMemberFromGC(chatId, user) {
+    fetch(`https://api.meower.org/chats/${chatId}/members/${user}`, {
+        method: "DELETE",
+        headers: {
+            token: localStorage.getItem("token"),
+            "Content-Type": "application/json"
+        }
+    })
+    .then(response => {
+        if (!response.ok) throw new Error('Network response was not ok');
+        return response.json();
+    })
+    .then(data => {
+        chatCache[data._id] = data;
+        closemodal();
+        openUpdate(`Removed ${user}`);
+    })
+    .catch(e => {
+        openUpdate(`Failed to remove member: ${e}`);
+    });
+}
+
 // work on this
 main();
 setInterval(ping, 25000);

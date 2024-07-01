@@ -57,6 +57,23 @@
     <style id="customstyle"></style>
 </head>
 <body>
+  <div class="titlebar-back"></div>
+  <div class="titlebar">
+    <div class="titlebar-name">
+      <span>meo</span>
+    </div>
+    <div class="titlebar-buttons">
+      <div class="titlebar-button" id="titlebar-minimize">
+        <svg role="img" width="12" height="12" viewBox="0 0 12 12"><rect fill="currentColor" width="10" height="1" x="1" y="6"></rect></svg>
+      </div>
+      <div class="titlebar-button" id="titlebar-maximize">
+        <svg width="12" height="12" viewBox="0 0 12 12"><rect width="9" height="9" x="1.5" y="1.5" fill="none" stroke="currentColor"></rect></svg>
+      </div>
+      <div class="titlebar-button" id="titlebar-close">
+        <svg width="12" height="12" viewBox="0 0 12 12"><polygon fill="currentColor" fill-rule="evenodd" points="11 1.576 6.583 6 11 10.424 10.424 11 6 6.583 1.576 11 1 10.424 5.417 6 1 1.576 1.576 1 6 5.417 10.424 1"></polygon></svg>
+      </div>
+    </div>
+  </div>
   <div id="page">
     <div id="nav" class="side">
     </div>
@@ -69,7 +86,6 @@
           </svg>
       </div>
       <div id="msg">
-
       </div>
     </div>
     <div id="groups" class="side">
@@ -94,6 +110,7 @@
     <script src="lang.js" type="text/javascript"></script>
     <script src="https://cdn.jsdelivr.net/npm/markdown-it@14.1.0/dist/markdown-it.min.js" type="text/javascript"></script>
     <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js" type="text/javascript"></script>
+    <script src="https://js.hcaptcha.com/1/api.js?render=explicit" type="text/javascript" defer></script>
     <script type="text/javascript">
       window.md = new markdownit("default", {
         breaks: true,

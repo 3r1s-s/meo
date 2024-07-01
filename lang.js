@@ -7,7 +7,28 @@ if (localStorage.getItem("language")) {
 }
 
 function lang() {
-    return  eval(language);
+    return eval(language);
+}
+
+function langex() {
+    // thanks tnix and chatgpt
+    // does not work good but will leave here for later
+    let baseLang = {};
+
+    baseLang = Object.assign(baseLang, en);
+
+    let evalLang;
+    try {
+        evalLang = eval(language);
+    } catch (e) {
+        evalLang = {};
+    }
+
+    if (typeof evalLang !== 'undefined' && evalLang !== null) {
+        baseLang = Object.assign(baseLang, evalLang);
+    }
+
+    return baseLang;
 }
 
 function currentlang() {
@@ -15,6 +36,7 @@ function currentlang() {
 }
 
 const en = {
+    "reh": "English, US",
     "language": "English, US",
     "page_home": "Home",
     "page_start": "Start",
@@ -162,11 +184,15 @@ const en = {
         "resetplugins": "Disable All",
         "favorite": "Favorite",
         "download": "Download",
+        "add": "Add",
+        "adduser": "Add Member", // update
+        "transfer": "Transfer Ownership", // update
     },
     "info": {
         "accexists": "Username Already Taken!",
         "invaliduser": "Invalid Username!",
         "invalidpass": "Invalid Password!",
+        "invalidcreds": "Invalid username or password!",
         "accbanned": "Account Banned!",
         "accdeleted": "Account Deleted!",
         "conflict": "You probably logged in on another client. Refresh the page and log back in to continue.",
@@ -223,6 +249,7 @@ const en = {
         "profilepic": "Profile Picture",
     },
     "chats": { // update
+        "owner": "Ownership",
         "members": "Members"
     }
 }
@@ -380,6 +407,7 @@ const enuk = {
         "accexists": "Username Already Taken!",
         "invaliduser": "Invalid Username!",
         "invalidpass": "Invalid Password!",
+        "invalidcreds": "Invalid username or password!",
         "accbanned": "Account Banned!",
         "accdeleted": "Account Deleted!",
         "conflict": "You probably logged in on another client. Refresh the page and log back in to continue.",
@@ -591,6 +619,7 @@ const es = {
         "accexists": "¡Nombre de Usuario ya Ocupado!",
         "invaliduser": "¡Nombre de Usuario Inválido!",
         "invalidpass": "¡Contraseña Inválida!",
+        "invalidcreds": "Invalid username or password!", // update
         "accbanned": "¡Cuenta Vetada!",
         "accdeleted": "¡Cuenta eliminada!",
         "conflict": "Es probable que hayas iniciado una sesión en otro servicio/ciber cliente. Refresque la página y vuelva a iniciar una sesión para continuar.",
@@ -803,6 +832,7 @@ const es_es = {
         "accexists": "¡Nombre de usuario ya tomado!",
         "invaliduser": "¡Nombre de usuario inválido!",
         "invalidpass": "¡Contraseña inválida!",
+        "invalidcreds": "Invalid username or password!", // update
         "accbanned": "¡Cuenta bloqueada!",
         "accdeleted": "¡Cuenta eliminada!",
         "conflict": "Probablemente iniciaste sesión en otro cliente. Refresca la página e inicia sesión nuevamente para continuar.",
@@ -1017,6 +1047,7 @@ const de = {
         "accexists": "Der Benutzername wird schon benutzt!",
         "invaliduser": "Ungültiger Benutzername!",
         "invalidpass": "Ungültiges Passwort!",
+        "invalidcreds": "Invalid username or password!", // update
         "accbanned": "Konto gebannt!",
         "accdeleted": "Konto gelöscht!",
         "conflict": "Du hast dich vermutlich bei einem anderen Client angemeldet. Lade die Seite neu und melde dich wieder ein, um weiterzumachen.",
