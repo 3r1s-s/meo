@@ -2273,8 +2273,16 @@ possible future styling
     padding: var(--button-padding);
     box-sizing: border-box;
     font-size: 0.813em;
-    background: var(--accent-color);
+    background: var(--modal-button-color);
     border-radius: var(--border-radius);
+}
+
+.member:hover {
+    background: var(--hov-modal-button-color);
+}
+
+.member:active {
+    background: var(--hov-accent-color);
 }
 
 .member-in {
@@ -2282,7 +2290,7 @@ possible future styling
     padding: var(--button-padding);
     box-sizing: border-box;
     font-size: 0.813em;
-    background: var(--accent-color);
+    background: var(--modal-button-color);
     border-radius: var(--border-radius);
     display: flex;
     justify-content: space-between;
@@ -2314,7 +2322,7 @@ possible future styling
 }
 
 .member-in:hover {
-    background: var(--hov-color);
+    background: var(--hov-modal-button-color);
 }
 
 .member-in:hover .mem-ops {
@@ -2339,11 +2347,15 @@ possible future styling
     text-overflow: ellipsis;
     box-sizing: border-box;
     text-wrap: nowrap;
-    background: var(--accent-color);
+    background: var(--modal-button-color);
     border-radius: var(--border-radius);
     margin-bottom: 5px;
     font-size: 12px;
     text-align: left;
+}
+
+.ow-btn:hover {
+    background: var(--hov-modal-button-color);
 }
 
 @media screen and (max-width: 720px) {
