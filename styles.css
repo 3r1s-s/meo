@@ -2030,7 +2030,7 @@ possible future styling
 .blockeduser:hover {
     color: #fff;
     text-decoration: none;
-    cursor: auto;
+    cursor: default;
 }
 
 .credit {
