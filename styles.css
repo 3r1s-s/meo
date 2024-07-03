@@ -2758,6 +2758,10 @@ possible future styling
         position: sticky;
         bottom: var(--margin);
     }
+
+    .mem-ops {
+        display: flex;
+    }
 }
 
 .reduced-ani.modal, .reduced-ani.image-mdl > .embed-large {
