@@ -63,6 +63,8 @@ const en = {
         "blockedwords": "Blacklisted Words",
         "about": "About",
         "credits": "Credits",
+        "contrib": "Contribute",
+        "privacy": "Privacy & Safety",
     },
     "general_list": {
         "title": {
@@ -178,6 +180,8 @@ const en = {
         "add": "Add",
         "adduser": "Add Member", // update
         "transfer": "Transfer Ownership", // update
+        "bug": "Report Bug", // update
+        "datarequest": "Request Data", // update
     },
     "info": {
         "accexists": "Username Already Taken!",

@@ -2020,6 +2020,17 @@ possible future styling
     margin-bottom: 5px;
     font-size: 12px;
     text-align: left;
+    color: #fff;
+    text-decoration: none;
+    -webkit-user-select: none;
+    user-select: none;
+    display: inline-block;
+}
+
+.blockeduser:hover {
+    color: #fff;
+    text-decoration: none;
+    cursor: auto;
 }
 
 .credit {
