@@ -974,6 +974,7 @@ async function sendpost() {
         msgbox.disabled = true;
         const attachmentIds = [];
         for (const attachment of pendingAttachments) {
+            autoresize();
             msgbox.placeholder = `Uploading ${attachment.file.name}...`;
             attachmentResp = await attachment.req;
             attachmentIds.push(attachmentResp.id);
@@ -4066,6 +4067,8 @@ function goTo() {
         loadinbox();
     } else if (place === "livechat") {
         loadlive();
+    } else if (place === "groupcat" || place === "atticus") {
+        groupcat();
     }
 }
 
