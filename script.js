@@ -3986,6 +3986,8 @@ function goTo() {
         loadinbox();
     } else if (place === "livechat") {
         loadlive();
+    } else if (place === "groupcat") {
+        groupcat();
     }
 }
 
