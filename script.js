@@ -2762,7 +2762,7 @@ function openUsrModal(uId) {
             const mdlt = mdl.querySelector('.modal-top');
             if (mdlt) {
                 mdlt.innerHTML = `
-                <iframe class="profile" src="profile/?u=${uId}"></iframe>
+                <iframe class="profile" src="profile/index.html?u=${uId}"></iframe>
                 `;
                 
                 fetch(`https://api.meower.org/users/${uId}`)
@@ -4532,7 +4532,7 @@ function openGcModal(chatId) {
                         <button onclick="transferOwnershipModal('${chatId}')" class="button ow-btn">Transfer Ownership</button>
                     </div>
                     <span class="subheader">${lang().chats.members}</span>
-                    <span>Coming Soon:tm:</span>
+                    <span id="member-count"></span>
                     <div class="member-list">
                     <button class="member button" onclick="addMembertoGCModal('${chatId}')">Add Member</button>
                     </div>
@@ -4549,6 +4549,7 @@ function openGcModal(chatId) {
                     <span>${data.owner} is the owner</span>
                     </div>
                     <span class="subheader">${lang().chats.members}</span>
+                    <span id="member-count"></span>
                     <div class="member-list">
                     <button class="member button" onclick="addMembertoGCModal('${chatId}')">Add Member</button>
                     </div>
@@ -4572,6 +4573,7 @@ function openGcModal(chatId) {
                             `;
                             memberList.appendChild(memberItem);
                         });
+                        document.getElementById("member-count").innerText = `(${data.members.length})`
                     } else {
                         data.members.forEach(member => {
                             const memberItem = document.createElement('div');
@@ -4581,6 +4583,7 @@ function openGcModal(chatId) {
                             `;
                             memberList.appendChild(memberItem);
                         });
+                        document.getElementById("member-count").innerText = `(${data.members.length})`
                     }
                 }
             }

@@ -1,18 +1,22 @@
 function fetchprofile() {
     const urlParams = new URLSearchParams(window.location.search);
     const username = urlParams.get('u');
-    
+
     fetch(`https://api.meower.org/users/${username}`)
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('User not found');
+            }
+            return response.json();
+        })
         .then(data => {
-            
             const profilecont = document.createElement('div');
             profilecont.classList.add('mdl-sec');
             if (data.avatar_color !== "!color" && data.avatar_color) {
                 profilecont.classList.add('custom-bg');
                 profilecont.style.setProperty('--accent', lightenColour(data.avatar_color, 2));
             }
-            
+
             if (data.avatar) {
                 profilecont.innerHTML = `
                 <div class="avatar-big pfp-inner" style="border: 6px solid #${data.avatar_color}; background-color:#${data.avatar_color}; background-image: url(https://uploads.meower.org/icons/${data.avatar});"></div>
@@ -29,13 +33,13 @@ function fetchprofile() {
 
             let quote;
             if (typeof md !== 'undefined') {
-                md.disable(['image'])
+                md.disable(['image']);
                 quote = md.render(data.quote).replace(/<a(.*?)>/g, '<a$1 target="_blank">');
             } else {
                 // fallback for when md doenst work
                 // figure this issue OUT
                 quote = oldMarkdown(data.quote);
-                console.error("Parsed with old markdown, fix later :)")
+                console.error("Parsed with old markdown, fix later :)");
             }
 
             if (data._id === localStorage.getItem('username')) {
@@ -116,20 +120,25 @@ function fetchprofile() {
                     console.warn('Error fetching profile picture:', error);
                 });
         })
-        .catch(error => console.warn('Error fetching user profile:', error));
+        .catch(error => {
+            const profilecont = document.createElement('div');
+            profilecont.classList.add('mdl-sec');
+            profilecont.innerHTML = '<h2>404: User not found</h2>';
+            document.getElementById('page').appendChild(profilecont);
+            console.error('Error fetching user profile:', error);
+        });
 
+    var t = localStorage.getItem('theme');
+    if (t) {
+        document.documentElement.classList.add(t + "-theme");
+    }
 
-        var t = localStorage.getItem('theme');
-        if (t) {
-            document.documentElement.classList.add(t + "-theme");
-        }
-
-        if (settingsstuff().widemode) {
-            const stylesheet = document.createElement('link');
-            stylesheet.rel = 'stylesheet';
-            stylesheet.href = '../mui.css';
-            document.head.appendChild(stylesheet);
-        }
+    if (settingsstuff().widemode) {
+        const stylesheet = document.createElement('link');
+        stylesheet.rel = 'stylesheet';
+        stylesheet.href = '../mui.css';
+        document.head.appendChild(stylesheet);
+    }
 }
 
 fetchprofile();

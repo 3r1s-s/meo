@@ -2,6 +2,7 @@ html {
     transition: none;
     background-color: transparent;
     scrollbar-width: none;
+    scrollbar-gutter: auto;
 }
 
 p {
