@@ -1301,18 +1301,14 @@ function loadstart() {
             <button class="ubtn button skeleton" aria-label="Skeleton"><div class="ubtnsa"><div class="start-pfp-outer"><div class="skeleton-avatar-small"></div></div></div></button>
         </div>
         <div class="trending">
-        <span class="user-header"><span>Trending</span><bridge>Beta</bridge></span>
-        <div class="section">
-        <span><b>Notice of changes to Trending<bridge>Beta</bridge></b></span>
-        <p>Starting July 1st, Trending will transition from Beta to a fully-featured service. Additionally, new summaries will be generated every minute instead of every 30 seconds, resulting in slightly longer intervals between summary updates.</p>
-        </div>
+        <span class="user-header"><span>Trending</span></span>
         <hr>
         <div class="section trending-topics">
         </div>
         <div class="section trending-inner">
         </div>
         <hr>
-        <p style="font-size: 12px;">Powered by AtticusAI | Trending (Beta) updates every 30 seconds | AI can make things up, take everything with a grain of salt.</p>
+        <p style="font-size: 12px;">Powered by AtticusAI | Trending updates once every minute | AI can make things up, take everything with a grain of salt.</p>
         </div>
         <div class="quick-btns">
         <button class="qbtn button" aria-label="create chat" onclick="createChatModal()">${lang().action.creategc}</button>
@@ -3746,17 +3742,13 @@ function loadexplore() {
     </div>
     <div class="trending">
         <span class="user-header"><span>Trending</span><bridge>Beta</bridge></span>
-        <div class="section">
-        <span><b>Notice of changes to Trending<bridge>Beta</bridge></b></span>
-        <p>Starting July 1st, Trending will transition from Beta to a fully-featured service. Additionally, new summaries will be generated every minute instead of every 30 seconds, resulting in slightly longer intervals between summary updates.</p>
-        </div>
         <hr>
         <div class="section trending-topics">
         </div>
         <div class="section trending-inner">
         </div>
         <hr>
-        <p style="font-size: 12px;">Powered by AtticusAI | Trending (Beta) updates every 30 seconds | AI can make things up, take everything with a grain of salt.</p>
+        <p style="font-size: 12px;">Powered by AtticusAI | Trending updates once every minute | AI can make things up, take everything with a grain of salt.</p>
     </div>
     </div>
     <br>
