@@ -74,6 +74,23 @@
     --color-scheme: light;
 }
 
+.darker-theme {
+    --background: #191b1b;
+    --color: #faf9f8;
+    --accent-color: #262829;
+    --hov-accent-color: #212222;
+    --hov-color: #3c3e3f;
+    --link-color: #00abd2;
+    --dark-accent: #141515;
+    --button-color: #a5abb3;
+    --hov-button-color: #fefefe;
+    --modal-color: #0f1011;
+    --modal-button-color: #333739;
+    --hov-modal-button-color: #3b4042;
+
+    --color-scheme: dark;
+}
+
 .oled-theme {
     --background: #000;
     --color: #fefefe;

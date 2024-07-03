@@ -1777,7 +1777,7 @@ function loadGeneral() {
             <a href="https://github.com/3r1s-s/meo/issues" target="_blank" class="button blockeduser">${lang().action.bug}</a>
             <a href="https://meower.org/export/" target="_blank" class="button blockeduser">${lang().action.datarequest}</a>
             </div>
-            <a style="font-size: 12px" href="https://meower.org/legal">${lang().login_sub.agreement}</a>
+            <a style="font-size: 12px" href="https://meower.org/legal" target="_blank">${lang().login_sub.agreement}</a>
             <h3>${lang().general_sub.acc}</h3>
             <button onclick="deleteTokensModal()" class="button blockeduser">${lang().action.cleartokens}</button>
             <button onclick="changePasswordModal()" class="button blockeduser">${lang().action.changepw}</button>
