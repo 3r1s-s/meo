@@ -1804,7 +1804,7 @@ function loadGeneral() {
             </div>
             <h3>${lang().general_sub.privacy}</h3>
             <div class="fun-buttons">
-            <a href="https://github.com/3r1s-s/meo/issues" target="_blank" class="button blockeduser">${lang().action.bug}</a>
+            <a href="https://github.com/JoshAtticus/leo/issues" target="_blank" class="button blockeduser">${lang().action.bug}</a>
             <a href="https://meower.org/export/" target="_blank" class="button blockeduser">${lang().action.datarequest}</a>
             </div>
             <a style="font-size: 12px" href="https://meower.org/legal" target="_blank">${lang().login_sub.agreement}</a>
