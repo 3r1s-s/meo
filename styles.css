@@ -323,6 +323,15 @@ user-select: none;
     margin-bottom: 10px;
 }
 
+.settings > h1 {
+    position: sticky;
+    top: 0;
+    margin: 0;
+    padding: 20px 0;
+    background: var(--background);
+    z-index: 1;
+}
+
 .reply {
     border: 1px solid var(--background);
     padding-left: 10px;
@@ -2020,6 +2029,17 @@ possible future styling
     margin-bottom: 5px;
     font-size: 12px;
     text-align: left;
+    color: #fff;
+    text-decoration: none;
+    -webkit-user-select: none;
+    user-select: none;
+    display: inline-block;
+}
+
+.blockeduser:hover {
+    color: #fff;
+    text-decoration: none;
+    cursor: default;
 }
 
 .credit {
@@ -2757,6 +2777,10 @@ possible future styling
     .jump {
         position: sticky;
         bottom: var(--margin);
+    }
+
+    .mem-ops {
+        display: flex;
     }
 }
 

@@ -93,6 +93,12 @@ function main() {
     if ('windowControlsOverlay' in navigator) {
     }
 
+    if (settingsstuff().notifications) {
+        if (Notification.permission !== "granted") {
+            Notification.requestPermission();
+        }
+    }
+      
     meowerConnection.onmessage = (event) => {
         console.log("INC: " + event.data);
 
@@ -159,6 +165,11 @@ function main() {
                     loadpost(sentdata.val);
                 } else if (postCache[postOrigin].length >= 24) {
                     postCache[postOrigin].shift();
+                }
+            }
+            if (settingsstuff().notifications) {
+                if (page !== sentdata.val.post_origin || document.hidden) {
+                    notify(sentdata.val.u, sentdata.val.p, sentdata.val.post_origin, sentdata.val);
                 }
             }
         } else if (end) {
@@ -315,7 +326,9 @@ function main() {
     addEventListener("keydown", (event) => {
         if (!event.ctrlKey && event.keyCode >= 48 && event.keyCode <= 90) {
             if (!document.activeElement || (document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA')) {
-                document.getElementById("msg").focus();
+                if (page !== "settings" && page !== "explore" && page !== "login" && page !== "start") {
+                    document.getElementById("msg").focus();
+                }
             }
         } else if ((event.ctrlKey || event.metaKey) && event.key === 's') {
             if (page !== "settings" && page !== "explore" && page !== "login" && page !== "start") {
@@ -413,8 +426,8 @@ function loadpost(p) {
 
     if (bridged) {
         const rcon = p.p;
-        const match = rcon.match(/^([a-zA-Z0-9_-]{1,20})?: ([\s\S]+)?/m);
-
+        const match = rcon.match(/^([a-zA-Z0-9_-]{1,20})?:([\s\S]+)?/m);
+        
         if (match) {
             user = match[1];
             content = match[2] || "";
@@ -1733,6 +1746,15 @@ function loadGeneral() {
                 <input type="checkbox" id="censorwords" class="settingstoggle">
                 </label>
             </div>
+            <div class="stg-section">
+                <label class="general-label">
+                <div class="general-desc">
+                ${lang().general_list.title.notifications}
+                <p class="subsubheader">${lang().general_list.desc.notifications}</p>
+                </div>
+                <input type="checkbox" id="notifications" class="settingstoggle">
+                </label>
+            </div>
             <h3>${lang().general_sub.accessibility}</h3>
             <div class="stg-section">
                 <label class="general-label">
@@ -1780,6 +1802,12 @@ function loadGeneral() {
                 <input type="checkbox" id="widemode" class="settingstoggle">
                 </label>
             </div>
+            <h3>${lang().general_sub.privacy}</h3>
+            <div class="fun-buttons">
+            <a href="https://github.com/3r1s-s/meo/issues" target="_blank" class="button blockeduser">${lang().action.bug}</a>
+            <a href="https://meower.org/export/" target="_blank" class="button blockeduser">${lang().action.datarequest}</a>
+            </div>
+            <a style="font-size: 12px" href="https://meower.org/legal" target="_blank">${lang().login_sub.agreement}</a>
             <h3>${lang().general_sub.acc}</h3>
             <button onclick="deleteTokensModal()" class="button blockeduser">${lang().action.cleartokens}</button>
             <button onclick="changePasswordModal()" class="button blockeduser">${lang().action.changepw}</button>
@@ -1813,49 +1841,56 @@ function loadGeneral() {
 
     pageContainer.innerHTML = settingsContent;
 
-    const settings = {
-        homepage: document.getElementById("homepage"),
-        consolewarnings: document.getElementById("consolewarnings"),
-        blockedmessages: document.getElementById("blockedmessages"),
-        invtyping: document.getElementById("invtyping"),
-        imagewhitelist: document.getElementById("imagewhitelist"),
-        censorwords: document.getElementById("censorwords"),
-        embeds: document.getElementById("embeds"),
-        reducemotion: document.getElementById("reducemotion"),
-        showpostbuttons: document.getElementById("showpostbuttons"),
-        underlinelinks: document.getElementById("underlinelinks"),
-        entersend: document.getElementById("entersend"),
-        hideimages: document.getElementById("hideimages"),
-        widemode: document.getElementById("widemode")
-    };
-
-    Object.values(settings).forEach((checkbox) => {
-        checkbox.addEventListener("change", () => {
-            localStorage.setItem('settings', JSON.stringify({
-                homepage: settings.homepage.checked,
-                consolewarnings: settings.consolewarnings.checked,
-                blockedmessages: settings.blockedmessages.checked,
-                invtyping: settings.invtyping.checked,
-                imagewhitelist: settings.imagewhitelist.checked,
-                censorwords: settings.censorwords.checked,
-                embeds: settings.embeds.checked,
-                reducemotion: settings.reducemotion.checked,
-                showpostbuttons: settings.showpostbuttons.checked,
-                underlinelinks: settings.underlinelinks.checked,
-                entersend: settings.entersend.checked,
-                hideimages: settings.hideimages.checked,
-                widemode: settings.widemode.checked
-            }));
-            setAccessibilitySettings();
-        });
-    });
-
-    const storedSettings = JSON.parse(localStorage.getItem('settings')) || {};
-    Object.entries(storedSettings).forEach(([setting, value]) => {
-        if (settings[setting]) {
-            settings[setting].checked = value;
-        }
-    });
+            const settings = {
+                homepage: document.getElementById("homepage"),
+                consolewarnings: document.getElementById("consolewarnings"),
+                blockedmessages: document.getElementById("blockedmessages"),
+                invtyping: document.getElementById("invtyping"),
+                imagewhitelist: document.getElementById("imagewhitelist"),
+                censorwords: document.getElementById("censorwords"),
+                embeds: document.getElementById("embeds"),
+                reducemotion: document.getElementById("reducemotion"),
+                showpostbuttons: document.getElementById("showpostbuttons"),
+                underlinelinks: document.getElementById("underlinelinks"),
+                entersend: document.getElementById("entersend"),
+                hideimages: document.getElementById("hideimages"),
+                notifications: document.getElementById("notifications"),
+                widemode: document.getElementById("widemode")
+            };
+        
+            Object.values(settings).forEach((checkbox) => {
+                checkbox.addEventListener("change", () => {
+                    localStorage.setItem('settings', JSON.stringify({
+                        homepage: settings.homepage.checked,
+                        consolewarnings: settings.consolewarnings.checked,
+                        blockedmessages: settings.blockedmessages.checked,
+                        invtyping: settings.invtyping.checked,
+                        imagewhitelist: settings.imagewhitelist.checked,
+                        censorwords: settings.censorwords.checked,
+                        embeds: settings.embeds.checked,
+                        reducemotion: settings.reducemotion.checked,
+                        showpostbuttons: settings.showpostbuttons.checked,
+                        underlinelinks: settings.underlinelinks.checked,
+                        entersend: settings.entersend.checked,
+                        hideimages: settings.hideimages.checked,
+                        notifications: settings.notifications.checked,
+                        widemode: settings.widemode.checked
+                    }));
+                    setAccessibilitySettings();
+                    if (settingsstuff().notifications) {
+                        if (Notification.permission !== "granted") {
+                            Notification.requestPermission();
+                        }
+                    }
+                });
+            });
+        
+            const storedSettings = JSON.parse(localStorage.getItem('settings')) || {};
+            Object.entries(storedSettings).forEach(([setting, value]) => {
+                if (settings[setting]) {
+                    settings[setting].checked = value;
+                }
+            });
 
 
     Object.values(settings).forEach((checkbox) => {
@@ -2157,8 +2192,8 @@ function loadAppearance() {
                     <button onclick='changeTheme(\"oldlight\", this)' class='theme-button oldlight-theme'>Old Light</button>
                     <button onclick='changeTheme(\"old\", this)' class='theme-button old-theme'>Old Dark</button>
                 </div>
-            <h3>${lang().appearance_sub.glthemes}</h3>
-                <div class="theme-buttons-inner">
+            <h3 style="display:none;">${lang().appearance_sub.glthemes}</h3>
+                <div class="theme-buttons-inner" style="display:none;">
                     <button onclick='changeTheme(\"glight\", this)' class='theme-button glight-theme'>Light</button>
                     <button onclick='changeTheme(\"gdark\", this)' class='theme-button gdark-theme'>Dark</button>
                     <button onclick='imagemodal()' class='theme-button upload-button'>Add Image</button>
@@ -2788,7 +2823,7 @@ function openUsrModal(uId) {
             const mdlt = mdl.querySelector('.modal-top');
             if (mdlt) {
                 mdlt.innerHTML = `
-                <iframe class="profile" src="profile/?u=${uId}"></iframe>
+                <iframe class="profile" src="profile/index.html?u=${uId}"></iframe>
                 `;
 
                 fetch(`https://api.meower.org/users/${uId}`)
@@ -4606,7 +4641,7 @@ function openGcModal(chatId) {
                         <button onclick="transferOwnershipModal('${chatId}')" class="button ow-btn">Transfer Ownership</button>
                     </div>
                     <span class="subheader">${lang().chats.members}</span>
-                    <span>Coming Soon:tm:</span>
+                    <span id="member-count"></span>
                     <div class="member-list">
                     <button class="member button" onclick="addMembertoGCModal('${chatId}')">Add Member</button>
                     </div>
@@ -4623,6 +4658,7 @@ function openGcModal(chatId) {
                     <span>${data.owner} is the owner</span>
                     </div>
                     <span class="subheader">${lang().chats.members}</span>
+                    <span id="member-count"></span>
                     <div class="member-list">
                     <button class="member button" onclick="addMembertoGCModal('${chatId}')">Add Member</button>
                     </div>
@@ -4646,6 +4682,7 @@ function openGcModal(chatId) {
                             `;
                             memberList.appendChild(memberItem);
                         });
+                        document.getElementById("member-count").innerText = `(${data.members.length})`
                     } else {
                         data.members.forEach(member => {
                             const memberItem = document.createElement('div');
@@ -4655,6 +4692,7 @@ function openGcModal(chatId) {
                             `;
                             memberList.appendChild(memberItem);
                         });
+                        document.getElementById("member-count").innerText = `(${data.members.length})`
                     }
                 }
             }
@@ -4854,6 +4892,93 @@ function removeMemberFromGC(chatId, user) {
     .catch(e => {
         openUpdate(`Failed to remove member: ${e}`);
     });
+}
+
+function notify(u, p, location, val) {
+    let loc
+    if (location === "home" || location === "livechat") {
+        loc = location
+    } else {
+        if (!chatCache[location]) {
+            fetch(`https://api.meower.org/chats/${location}`, {
+                headers: {token: localStorage.getItem("token")}
+            })
+            .then(response => {
+                if (!response.ok) {
+                    if (response.status === 404) {
+                        throw new Error("Chat not found");
+                    } else {
+                        throw new Error('Network response was not ok');
+                    }
+                }
+                return response.json();
+            })
+            .then(data => {
+                chatCache[location] = data;
+            })
+            .catch(e => {
+                console.error(e);
+            });
+        }
+        if (chatCache[location].nickname) {
+            loc = chatCache[location].nickname;
+        } else {
+            loc = "you"
+        }
+    }
+    let user;
+    let content;
+    let bridged = (u && bridges.includes(u));
+    
+    if (bridged) {
+        const rcon = p;
+        const match = rcon.match(/^([a-zA-Z0-9_-]{1,20})?:([\s\S]+)?/m);
+        
+        if (match) {
+            user = match[1];
+            content = match[2] || "";
+        } else {
+            user = u;
+            content = rcon;
+        }
+    } else {
+        if (p.u === "Webhooks") {
+            const rcon = p;
+            const parts = rcon.split(': ');
+            user = parts[0];
+            content = parts.slice(1).join(': ');
+        } else {
+            content = p;
+            user = u;
+        }
+    }
+    if (content == "") {
+        content = "[Attachment]";
+    }
+    if (user !== localStorage.getItem("username")) {
+        if (location !== "livechat") {
+            if (Notification.permission === "granted") {
+                const notification = new Notification(`@${user} > ${loc}`, { body: content });
+
+                notification.addEventListener('click', () => {
+                    switch (location) {
+                        case "home":
+                            loadhome();
+                            break;
+                        case "livechat":
+                            loadlive();
+                            break;
+                        case "inbox":
+                            loadinbox();
+                            break;
+                        default:
+                            loadchat(location);
+                            break;
+                    }
+                });
+            }
+        }
+    }
 }
 
 // work on this
