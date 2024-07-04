@@ -168,10 +168,9 @@ function main() {
                 }
             }
             if (settingsstuff().notifications) {
-                console.log(page !== sentdata.val.post_origin)
                 if (page !== sentdata.val.post_origin) {
                 if (localStorage.getItem("username") !== sentdata.val.u)
-                    notify(sentdata.val.u, sentdata.val.p, sentdata.val.post_origin);
+                    notify(sentdata.val.u, sentdata.val.p, sentdata.val.post_origin, sentdata.val);
                 }
             }
         } else if (end) {
@@ -4816,7 +4815,7 @@ function removeMemberFromGC(chatId, user) {
     });
 }
 
-function notify(u, p, location) {
+function notify(u, p, location, val) {
     let loc
     if (location === "home" || location === "livechat") {
         loc = location
@@ -4848,8 +4847,37 @@ function notify(u, p, location) {
             loc = "you"
         }
     }
+    let user;
+    let content;
+    let bridged = (u && bridges.includes(u));
+    
+    if (bridged) {
+        const rcon = p;
+        const match = rcon.match(/^([a-zA-Z0-9_-]{1,20})?:([\s\S]+)?/m);
+        
+        if (match) {
+            user = match[1];
+            content = match[2] || "";
+        } else {
+            user = u;
+            content = rcon;
+        }
+    } else {
+        if (p.u === "Webhooks") {
+            const rcon = p;
+            const parts = rcon.split(': ');
+            user = parts[0];
+            content = parts.slice(1).join(': ');
+        } else {
+            content = p;
+            user = u;
+        }
+    }
+    if (content == "") {
+        content = "[Attachment]";
+    }
     if (Notification.permission === "granted") {
-        const notification = new Notification(`@${u} > ${loc}`, { body: p });
+        const notification = new Notification(`@${user} > ${loc}`, { body: content });
 
         notification.addEventListener('click', () => {
             switch (location) {
