@@ -168,7 +168,9 @@ function main() {
                 }
             }
             if (settingsstuff().notifications) {
-                if (page !== sentdata.val.post_origin || page !== "livechat") {
+                console.log(page !== sentdata.val.post_origin)
+                if (page !== sentdata.val.post_origin) {
+                if (localStorage.getItem("username") !== sentdata.val.u)
                     notify(sentdata.val.u, sentdata.val.p, sentdata.val.post_origin);
                 }
             }
