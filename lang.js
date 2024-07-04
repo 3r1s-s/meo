@@ -1,34 +1,66 @@
 let language = 'en';
-
-if (localStorage.getItem("language")) {
-    language = localStorage.getItem("language");
-} else {
-    localStorage.setItem("language", "en");
-}
-
-function langex() {
-    return eval(language);
-}
+let loadedLang = {};
 
 function lang() {
-    // thanks tnix and chatgpt
-    // does not work good but will leave here for later
-    let baseLang = {};
+    return loadedLang;
+}
 
-    baseLang = Object.assign(baseLang, en);
-
-    let evalLang;
-    try {
-        evalLang = eval(language);
-    } catch (e) {
-        evalLang = {};
+// thanks ChatGPT :)
+// - Tnix
+function deepCopy(obj) {
+    if (obj === null || typeof obj !== 'object') {
+      return obj;
     }
-
-    if (typeof evalLang !== 'undefined' && evalLang !== null) {
-        baseLang = Object.assign(baseLang, evalLang);
+  
+    if (Array.isArray(obj)) {
+      const arrCopy = [];
+      for (let i = 0; i < obj.length; i++) {
+        arrCopy[i] = deepCopy(obj[i]);
+      }
+      return arrCopy;
     }
+  
+    const objCopy = {};
+    for (let key in obj) {
+      if (obj.hasOwnProperty(key)) {
+        objCopy[key] = deepCopy(obj[key]);
+      }
+    }
+    return objCopy;
+}
+function deepMerge(target, source) {
+    if (typeof target !== 'object' || target === null) {
+      return source;
+    }
+    
+    if (typeof source !== 'object' || source === null) {
+      return target;
+    }
+  
+    for (let key in source) {
+      if (source.hasOwnProperty(key)) {
+        if (typeof source[key] === 'object' && source[key] !== null) {
+          if (!target[key] || typeof target[key] !== 'object') {
+            target[key] = Array.isArray(source[key]) ? [] : {};
+          }
+          deepMerge(target[key], source[key]);
+        } else {
+          target[key] = source[key];
+        }
+      }
+    }
+  
+    return target;
+}
 
-    return baseLang;
+function setlang(lang) {
+    localStorage.setItem("language", lang);
+    language = lang;
+    if (lang === "en") {
+        loadedLang = en;
+    } else {
+        loadedLang = deepMerge(deepCopy(en), deepCopy(eval(lang)));
+    }
 }
 
 const en = {
@@ -1085,4 +1117,10 @@ const de = {
     "chats": { // update
         "members": "Members"
     }
+}
+
+if (localStorage.getItem("language")) {
+    setlang(localStorage.getItem("language"));
+} else {
+    setlang("en");
 }
