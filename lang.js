@@ -80,6 +80,7 @@ const en = {
             "underlinelinks": "Always underline links",
             "entersend": "Don't send on Enter",
             "hideimages": "Hide images",
+            "notifications": "Allow Notifications",
             "widemode": "New Desktop Experience",
         },
         "desc": {
@@ -95,6 +96,7 @@ const en = {
             "underlinelinks": "Make links to websites and other pages stand out more by underlining them",
             "entersend": "Enter key creates newlines instead of sending the post",
             "hideimages": "Blurs images before opening them",
+            "notifications": "This will ask for notification permissions (Experimental)",
             "widemode": "Enables new desktop experience (Experiemental, Requires refresh)",
         }
     },

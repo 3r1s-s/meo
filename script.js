@@ -92,6 +92,12 @@ function main() {
     
     if ('windowControlsOverlay' in navigator) {
     }
+
+    if (settingsstuff().notifications) {
+        if (Notification.permission !== "granted") {
+            Notification.requestPermission();
+        }
+    }
       
     meowerConnection.onmessage = (event) => {
         console.log("INC: " + event.data);
@@ -159,6 +165,11 @@ function main() {
                     loadpost(sentdata.val);
                 } else if (postCache[postOrigin].length >= 24) {
                     postCache[postOrigin].shift();
+                }
+            }
+            if (settingsstuff().notifications) {
+                if (page !== sentdata.val.post_origin) {
+                    notify(sentdata.val.u, sentdata.val.p, sentdata.val.post_origin);
                 }
             }
         } else if (end) {
@@ -315,7 +326,9 @@ function main() {
     addEventListener("keydown", (event) => {
         if (!event.ctrlKey && event.keyCode >= 48 && event.keyCode <= 90) {
             if (!document.activeElement || (document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA')) {
-                document.getElementById("msg").focus();
+                if (page !== "settings" && page !== "explore" && page !== "login" && page !== "start") {
+                    document.getElementById("msg").focus();
+                }
             }
         } else if ((event.ctrlKey || event.metaKey) && event.key === 's') {
             if (page !== "settings" && page !== "explore" && page !== "login" && page !== "start") {
@@ -1725,6 +1738,15 @@ function loadGeneral() {
                 <input type="checkbox" id="censorwords" class="settingstoggle">
                 </label>
             </div>
+            <div class="stg-section">
+                <label class="general-label">
+                <div class="general-desc">
+                ${lang().general_list.title.notifications}
+                <p class="subsubheader">${lang().general_list.desc.notifications}</p>
+                </div>
+                <input type="checkbox" id="notifications" class="settingstoggle">
+                </label>
+            </div>
             <h3>${lang().general_sub.accessibility}</h3>
             <div class="stg-section">
                 <label class="general-label">
@@ -1823,6 +1845,7 @@ function loadGeneral() {
                 underlinelinks: document.getElementById("underlinelinks"),
                 entersend: document.getElementById("entersend"),
                 hideimages: document.getElementById("hideimages"),
+                notifications: document.getElementById("notifications"),
                 widemode: document.getElementById("widemode")
             };
         
@@ -1841,9 +1864,15 @@ function loadGeneral() {
                         underlinelinks: settings.underlinelinks.checked,
                         entersend: settings.entersend.checked,
                         hideimages: settings.hideimages.checked,
+                        notifications: settings.notifications.checked,
                         widemode: settings.widemode.checked
                     }));
                     setAccessibilitySettings();
+                    if (settingsstuff().notifications) {
+                        if (Notification.permission !== "granted") {
+                            Notification.requestPermission();
+                        }
+                    }
                 });
             });
         
@@ -4783,6 +4812,43 @@ function removeMemberFromGC(chatId, user) {
     .catch(e => {
         openUpdate(`Failed to remove member: ${e}`);
     });
+}
+
+function notify(u, p, location) {
+    let loc
+    if (location === "home" || location === "livechat") {
+        loc = location
+    } else {
+        if (!chatCache[location]) {
+            fetch(`https://api.meower.org/chats/${location}`, {
+                headers: {token: localStorage.getItem("token")}
+            })
+            .then(response => {
+                if (!response.ok) {
+                    if (response.status === 404) {
+                        throw new Error("Chat not found");
+                    } else {
+                        throw new Error('Network response was not ok');
+                    }
+                }
+                return response.json();
+            })
+            .then(data => {
+                chatCache[location] = data;
+            })
+            .catch(e => {
+                console.error(e);
+            });
+        }
+        if (chatCache[location].nickname) {
+            loc = chatCache[location].nickname;
+        } else {
+            loc = "you"
+        }
+    }
+    if (Notification.permission === "granted") {
+        new Notification(`@${u} > ${loc}`, { body: p });
+    }
 }
 
 // work on this
