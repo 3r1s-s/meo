@@ -2132,7 +2132,7 @@ function loadAppearance() {
                     <button onclick='changeTheme(\"old\", this)' class='theme-button old-theme'>Old Dark</button>
                 </div>
             <h3>${lang().appearance_sub.glthemes}</h3>
-                <div class="theme-buttons-inner">
+                <div class="theme-buttons-inner" style="display:none;">
                     <button onclick='changeTheme(\"glight\", this)' class='theme-button glight-theme'>Light</button>
                     <button onclick='changeTheme(\"gdark\", this)' class='theme-button gdark-theme'>Dark</button>
                     <button onclick='imagemodal()' class='theme-button upload-button'>Add Image</button>

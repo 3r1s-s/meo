@@ -182,6 +182,7 @@ const en = {
         "transfer": "Transfer Ownership", // update
         "bug": "Report Bug", // update
         "datarequest": "Request Data", // update
+        "discuss": "Discuss", // update
     },
     "info": {
         "accexists": "Username Already Taken!",
