@@ -168,8 +168,7 @@ function main() {
                 }
             }
             if (settingsstuff().notifications) {
-                if (page !== sentdata.val.post_origin) {
-                if (localStorage.getItem("username") !== sentdata.val.u)
+                if (page !== sentdata.val.post_origin || document.hidden) {
                     notify(sentdata.val.u, sentdata.val.p, sentdata.val.post_origin, sentdata.val);
                 }
             }
@@ -4876,25 +4875,29 @@ function notify(u, p, location, val) {
     if (content == "") {
         content = "[Attachment]";
     }
-    if (Notification.permission === "granted") {
-        const notification = new Notification(`@${user} > ${loc}`, { body: content });
+    if (user !== localStorage.getItem("username")) {
+        if (location !== "livechat") {
+            if (Notification.permission === "granted") {
+                const notification = new Notification(`@${user} > ${loc}`, { body: content });
 
-        notification.addEventListener('click', () => {
-            switch (location) {
-                case "home":
-                    loadhome();
-                    break;
-                case "livechat":
-                    loadlive();
-                    break;
-                case "inbox":
-                    loadinbox();
-                    break;
-                default:
-                    loadchat(location);
-                    break;
+                notification.addEventListener('click', () => {
+                    switch (location) {
+                        case "home":
+                            loadhome();
+                            break;
+                        case "livechat":
+                            loadlive();
+                            break;
+                        case "inbox":
+                            loadinbox();
+                            break;
+                        default:
+                            loadchat(location);
+                            break;
+                    }
+                });
             }
-        });
+        }
     }
 }
 
