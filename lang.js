@@ -6,11 +6,11 @@ if (localStorage.getItem("language")) {
     localStorage.setItem("language", "en");
 }
 
-function lang() {
+function langex() {
     return eval(language);
 }
 
-function langex() {
+function lang() {
     // thanks tnix and chatgpt
     // does not work good but will leave here for later
     let baseLang = {};
