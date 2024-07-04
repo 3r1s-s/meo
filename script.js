@@ -168,7 +168,7 @@ function main() {
                 }
             }
             if (settingsstuff().notifications) {
-                if (page !== sentdata.val.post_origin) {
+                if (page !== sentdata.val.post_origin || page !== "livechat") {
                     notify(sentdata.val.u, sentdata.val.p, sentdata.val.post_origin);
                 }
             }
@@ -4847,7 +4847,24 @@ function notify(u, p, location) {
         }
     }
     if (Notification.permission === "granted") {
-        new Notification(`@${u} > ${loc}`, { body: p });
+        const notification = new Notification(`@${u} > ${loc}`, { body: p });
+
+        notification.addEventListener('click', () => {
+            switch (location) {
+                case "home":
+                    loadhome();
+                    break;
+                case "livechat":
+                    loadlive();
+                    break;
+                case "inbox":
+                    loadinbox();
+                    break;
+                default:
+                    loadchat(location);
+                    break;
+            }
+        });
     }
 }
 
