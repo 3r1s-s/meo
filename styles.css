@@ -323,6 +323,15 @@ user-select: none;
     margin-bottom: 10px;
 }
 
+.settings > h1 {
+    position: sticky;
+    top: 0;
+    margin: 0;
+    padding: 20px 0;
+    background: var(--background);
+    z-index: 1;
+}
+
 .reply {
     border: 1px solid var(--background);
     padding-left: 10px;
