@@ -2491,11 +2491,6 @@ function loginLang(lang) {
     loadLogin();
 }
 
-function setlang(lang) {
-    localStorage.setItem("language", lang);
-    language = lang;
-}
-
 function settingsstuff() {
     const storedsettings = localStorage.getItem('settings');
     if (!storedsettings) {
