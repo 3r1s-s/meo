@@ -71,6 +71,7 @@
 
 #titlebar-close:hover {
     background: var(--red);
+    color: var(--color-on)
 }
 
 .titlebar-buttons {
@@ -107,4 +108,8 @@
 .desktop * {
     scrollbar-width: none;
     -ms-overflow-style: none;
+}
+
+.settings > h1 {
+    top: 30px;
 }

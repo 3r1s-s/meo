@@ -11,7 +11,12 @@ const sidediv = document.querySelectorAll(".side");
 let lul = 0;
 let eul;
 let sul = "";
-let pre = settingsstuff().homepage ? 'home' : 'start';
+let pre;
+if (settingsstuff().homepage) {
+    pre = "home"
+} else {
+    pre = "start"
+}
 
 let bridges = ['Discord', 'SplashBridge', 'gc'];
 
@@ -798,22 +803,25 @@ async function loadreply(postOrigin, replyid) {
                 scroll = "smooth";
             }
 
+            const desktopOffset = document.documentElement.classList.contains('desktop') ? 30 + navbarOffset : navbarOffset;
+
             if (window.innerWidth < 720) {
                 const containerRect = outer.getBoundingClientRect();
                 const elementRect = targetElement.getBoundingClientRect();
-                const elementPosition = elementRect.top - containerRect.top + outer.scrollTop - navbarOffset;
+                const elementPosition = elementRect.top - containerRect.top + outer.scrollTop - desktopOffset;
 
                 outer.scrollTo({
                     top: elementPosition,
                     behavior: scroll
                 });
             } else {
-                const elementPosition = targetElement.getBoundingClientRect().top + window.scrollY - navbarOffset;
+                const elementPosition = targetElement.getBoundingClientRect().top + window.scrollY - desktopOffset;
                 window.scrollTo({
                     top: elementPosition,
                     behavior: scroll
                 });
             }
+
             setTimeout(() => {
                 targetElement.style.backgroundColor = '';
             }, 1000);
@@ -2463,8 +2471,8 @@ function settingsstuff() {
     const storedsettings = localStorage.getItem('settings');
     if (!storedsettings) {
         const defaultSettings = {
-            "homepage": "false",
-            "consolewarnings": "false",
+            "homepage": false,
+            "consolewarnings": false,
         };
         localStorage.setItem('settings', JSON.stringify(defaultSettings));
         return defaultSettings;
@@ -4870,30 +4878,39 @@ function notify(u, p, location, val) {
     if (content == "") {
         content = "[Attachment]";
     }
-    if (user !== localStorage.getItem("username")) {
-        if (location !== "livechat") {
-            if (Notification.permission === "granted") {
-                const notification = new Notification(`@${user} > ${loc}`, { body: content });
-
-                notification.addEventListener('click', () => {
-                    switch (location) {
-                        case "home":
-                            loadhome();
-                            break;
-                        case "livechat":
-                            loadlive();
-                            break;
-                        case "inbox":
-                            loadinbox();
-                            break;
-                        default:
-                            loadchat(location);
-                            break;
-                    }
-                });
+    let pfp
+    fetch(`https://api.meower.org/users/${user}`)
+    .then(response => response.json())
+    .then(data => {
+        pfp = `https://uploads.meower.org/icons/${data.avatar}`;
+        if (user !== localStorage.getItem("username")) {
+            if (location !== "livechat" || location !== "home") {
+                if (Notification.permission === "granted") {
+                    const notification = new Notification(`@${user} > ${loc}`, {
+                        body: content,
+                        icon: pfp,
+                    });
+    
+                    notification.addEventListener('click', () => {
+                        switch (location) {
+                            case "home":
+                                loadhome();
+                                break;
+                            case "livechat":
+                                loadlive();
+                                break;
+                            case "inbox":
+                                loadinbox();
+                                break;
+                            default:
+                                loadchat(location);
+                                break;
+                        }
+                    });
+                }
             }
         }
-    }
+    })
 }
 
 // work on this
