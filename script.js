@@ -1012,7 +1012,7 @@ async function sendpost() {
             },
             body: JSON.stringify({
                 content: message,
-                attachments: attachmentIds,
+                attachments: attachmentIds.reverse(),
             })
         });
     }
