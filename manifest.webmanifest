@@ -46,7 +46,8 @@
     "preferred_width": 400
   },
   "display_override": [
+    "window-controls-overlay",
     "standalone",
-    "window-controls-overlay"
+    "borderless"
   ]
 }
