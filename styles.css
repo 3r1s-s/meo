@@ -173,7 +173,11 @@ bridge {
     font-weight: bold;
     color: #fff;
     -webkit-user-select: none;
-user-select: none;
+    user-select: none;
+}
+
+h6 {
+    margin: 5px 0;
 }
 
 .list {
@@ -2907,6 +2911,10 @@ input[type="button"]:focus-visible {
     -webkit-user-select:none;
     user-select:none;
     animation: groupcat 10s infinite ease-in-out;
+}
+
+.post hr {
+    border-color: var(--background);
 }
 
 @keyframes groupcat {
