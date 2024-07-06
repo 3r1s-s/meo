@@ -2495,8 +2495,8 @@ function settingsstuff() {
     const storedsettings = localStorage.getItem('settings');
     if (!storedsettings) {
         const defaultSettings = {
-            "homepage": "false",
-            "consolewarnings": "false",
+            "homepage": false,
+            "consolewarnings": false,
         };
         localStorage.setItem('settings', JSON.stringify(defaultSettings));
         return defaultSettings;
