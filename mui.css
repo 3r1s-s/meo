@@ -307,9 +307,9 @@ pre {
     display: flex;
     max-width: 300px;
     position: sticky;
-    top: 0;
+    top: 0 !important;
     margin: 0;
-    height: auto;
+    height: auto !important;
 }
 
 #groups {

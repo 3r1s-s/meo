@@ -4884,29 +4884,31 @@ function notify(u, p, location, val) {
     .then(data => {
         pfp = `https://uploads.meower.org/icons/${data.avatar}`;
         if (user !== localStorage.getItem("username")) {
-            if (location !== "livechat" || location !== "home") {
-                if (Notification.permission === "granted") {
-                    const notification = new Notification(`@${user} > ${loc}`, {
-                        body: content,
-                        icon: pfp,
-                    });
-    
-                    notification.addEventListener('click', () => {
-                        switch (location) {
-                            case "home":
-                                loadhome();
-                                break;
-                            case "livechat":
-                                loadlive();
-                                break;
-                            case "inbox":
-                                loadinbox();
-                                break;
-                            default:
-                                loadchat(location);
-                                break;
-                        }
-                    });
+            if (location !== "livechat") {
+                if (location !== "home" || content.includes(`@${localStorage.getItem("username")}`)) {
+                    if (Notification.permission === "granted") {
+                        const notification = new Notification(`@${user} > ${loc}`, {
+                            body: content,
+                            icon: pfp,
+                        });
+        
+                        notification.addEventListener('click', () => {
+                            switch (location) {
+                                case "home":
+                                    loadhome();
+                                    break;
+                                case "livechat":
+                                    loadlive();
+                                    break;
+                                case "inbox":
+                                    loadinbox();
+                                    break;
+                                default:
+                                    loadchat(location);
+                                    break;
+                            }
+                        });
+                    }
                 }
             }
         }
