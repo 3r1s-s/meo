@@ -38,6 +38,11 @@
     top: 30px;
 }
 
+.desktop .side {
+    height: calc(100vh - 30px);
+    top: 30px;
+}
+
 .desktop .titlebar {
     -webkit-app-region: drag;
     height: 30px;
