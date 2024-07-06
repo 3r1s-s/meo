@@ -159,7 +159,7 @@ ul, ol {
 }
 
 li::marker, code, kbd, samp, pre {
-    font-family: Reddit Mono, monospace;
+    font-family: Reddit Mono, monospace, consolas;
 }
 
 bridge {

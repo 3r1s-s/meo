@@ -103,3 +103,8 @@
     font-family: notoc;
     src: url(fonts/noto/notoc.ttf) format('truetype');
   }
+
+  @font-face {
+    font-family: Reddit Mono;
+    src: url(fonts/Reddit_Mono/RedditMono-VariableFont_wght.ttf) format('truetype');
+  }
