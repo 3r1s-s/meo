@@ -307,9 +307,9 @@ pre {
     display: flex;
     max-width: 300px;
     position: sticky;
-    top: 0 !important;
+    top: 0;
     margin: 0;
-    height: auto !important;
+    height: auto;
 }
 
 #groups {
@@ -324,7 +324,6 @@ pre {
     height: auto;
     border-top: none;
     padding-right: 10px;
-
     max-width: 100%;
 }
 
@@ -443,6 +442,7 @@ pre {
 
     .side {
         scroll-snap-align: unset;
+        height: auto;
     }
 
     #nav {
