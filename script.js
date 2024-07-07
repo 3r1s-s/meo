@@ -971,7 +971,7 @@ function signup(username, password, captcha) {
 
 async function sendpost() {
     const msgbox = document.getElementById('msg');
-    if (msgbox.disabled) return;
+    if (msgbox.disabled || msgbox.value.trim() === "") return;
     const message = msgbox.value;
     msgbox.value = "";
 
