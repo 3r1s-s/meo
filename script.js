@@ -2273,6 +2273,10 @@ function loadAppearance() {
                     <label for="hov-modal-button-color" class="custom-label">Modal Button Hover Color:</label>
                     <input type="color" class="cstcolinpc" id="hov-modal-button-color" name="hov-modal-button-color" value="#4d576a">
                     </div>
+                    <div class="cstmeinp">
+                    <label for="dark-accent" class="custom-label">Sidebar Color:</label>
+                    <input type="color" class="cstcolinpc" id="dark-accent" name="dark-accent" value="#232730">
+                    </div>
                 </div>
                 <button onclick="applyCustomTheme()" class="cstpgbt button">${lang().action.apply}</button>
                 <button onclick="saveCustomTheme()" class="cstpgbt button">${lang().action.savetheme}</button>
@@ -3879,8 +3883,8 @@ function addAttachment(file) {
         };
         pendingAttachments.push(attachment);
 
-        if (file.size > (25 << 20)) {
-            attachment.cancel("Files must not exceed 25MiB.");
+        if (file.size > (50 << 20)) {
+            attachment.cancel("Files must not exceed 50MiB.");
             return;
         }
 

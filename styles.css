@@ -2039,7 +2039,7 @@ possible future styling
     margin-bottom: 5px;
     font-size: 12px;
     text-align: left;
-    color: #fff;
+    color: var(--color);
     text-decoration: none;
     -webkit-user-select: none;
     user-select: none;
@@ -2047,7 +2047,7 @@ possible future styling
 }
 
 .blockeduser:hover {
-    color: #fff;
+    color: var(--color);
     text-decoration: none;
     cursor: default;
 }
