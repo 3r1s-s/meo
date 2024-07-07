@@ -4852,6 +4852,9 @@ function notify(u, p, location, val) {
             loc = "you"
         }
     }
+    const roarRegex = /^@[\w-]+ (.+?) \(([^)]+)\)/;
+    const betterMeowerRegex = /@([\w-]+)\[([a-zA-Z0-9]+)\]/g;
+
     let user;
     let content;
     let bridged = (u && bridges.includes(u));
@@ -4880,6 +4883,13 @@ function notify(u, p, location, val) {
     }
     if (content == "") {
         content = "[Attachment]";
+    } else {
+        let match = content.replace(roarRegex, "").trim();
+        match = match.replace(betterMeowerRegex, "").trim();
+
+        if (match) {
+            content = match;
+        }
     }
     let pfp
     fetch(`https://api.meower.org/users/${user}`)
