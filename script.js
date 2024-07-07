@@ -1835,7 +1835,7 @@ function loadGeneral() {
             </div>
             <h3>${lang().general_sub.about}</h3>
             <div class="stg-section">
-            <span>meo <span class="version"></span></span><br>
+            <span>leo <span class="version"></span></span><br>
             <span class="yeah subsubheader"></span>
             </div>
             <h3>${lang().general_sub.credits}</h3>
@@ -1965,7 +1965,7 @@ function loadGeneral() {
 
 async function gitstuff() {
     try {
-        const response = await fetch('https://api.github.com/repos/3r1s-s/meo/commits/main');
+        const response = await fetch('https://api.github.com/repos/JoshAtticus/leo/commits/main');
         const data = await response.json();
         console.log(data.sha);
         document.querySelector('.version').innerHTML = `
