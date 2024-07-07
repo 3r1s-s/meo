@@ -41,6 +41,14 @@ function fetchprofile() {
                 quote = oldMarkdown(data.quote);
                 console.error("Parsed with old markdown, fix later :)");
             }
+            if (data._id === "Discord") {
+                quote = md.render(`
+### Please, do not use the bridge.
+Using the Discord Bridge can hinder Meower's development by allowing users to bypass the app and its feature improvements.
+***
+This message was created by meo.
+                `).replace(/<a(.*?)>/g, '<a$1 target="_blank">');
+            }
 
             if (data._id === localStorage.getItem('username')) {
                 profilecont.innerHTML += `
