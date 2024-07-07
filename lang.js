@@ -279,6 +279,7 @@ const en = {
         "deleteacc": "Delete Account?",
         "share": "Share",
         "plugin": "Refresh Required!",
+        "shortcuts": "Shortcuts",
         "uploadimage": "Upload an image",
     },
     "profile": {

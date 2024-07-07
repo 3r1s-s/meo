@@ -128,7 +128,7 @@ function buttonbadges(content) {
                 'instagram': /instagram\.com\/(\w+)/,
                 'facebook': /facebook\.com\/(\w+)/,
                 'scratch': /scratch\.mit.edu\/users\/(\w+)/,
-                'meower_share': /meo-32r\.pages\.dev\/share\?id=([\w-]+)/
+                'meower_share': /eris\.pages\.dev\/meo\/share\?id=([\w-]+)/
             };
             
             const socialmedicns = {
