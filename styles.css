@@ -2382,6 +2382,59 @@ possible future styling
     background: var(--hov-modal-button-color);
 }
 
+.mdl-title-stick {
+    position: sticky;
+    top: 0;
+    margin: 0;
+    margin-bottom: 10px;
+    padding: 10px 0;
+    background: var(--modal-color);
+    z-index: 1;
+    border-bottom: 1px solid var(--modal-button-color);
+}
+
+.shr-div {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.shr-section {
+    background-color: var(--accent-color);
+    color: var(--color);
+    border: none;
+    border-radius: var(--button-radius);
+    padding: var(--button-padding);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.shr-section h4 {
+    margin: 0;
+}
+
+.shortcut {
+    display: flex;
+    gap: 5px;
+}
+
+.key {
+    padding: 2px 5px;
+    font-size: 12px;
+    background: var(--hov-accent-color);
+    border-radius: 3px;
+    box-shadow: 0 0 1px var(--color-on);
+    border-bottom: 3px solid var(--accent-color);
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+.key:active {
+    margin-top: 2px;
+    border-bottom: none;
+}
+
 @media screen and (max-width: 720px) {
     html {
         scrollbar-gutter: none;

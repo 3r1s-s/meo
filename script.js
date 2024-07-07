@@ -369,6 +369,9 @@ function main() {
         } else if ((event.ctrlKey || event.metaKey) && event.key === '/') {
             event.preventDefault();
             document.getElementById("msg").focus();
+        } else if ((event.ctrlKey || event.metaKey) && event.key === '.') {
+            event.preventDefault();
+            shortcutsModal();
         }
     });
 }
@@ -971,7 +974,8 @@ function signup(username, password, captcha) {
 
 async function sendpost() {
     const msgbox = document.getElementById('msg');
-    if (msgbox.disabled || msgbox.value.trim() === "") return;
+    if (msgbox.disabled) return;
+    if (msgbox.value.trim() === "" && pendingAttachments.length === 0) return;
     const message = msgbox.value;
     msgbox.value = "";
 
@@ -4912,6 +4916,88 @@ function notify(u, p, location, val) {
             }
         }
     })
+}
+
+function shortcutsModal() {
+    document.documentElement.style.overflow = "hidden";
+    
+    const mdlbck = document.querySelector('.modal-back');
+    if (mdlbck) {
+        mdlbck.style.display = 'flex';
+        
+        const mdl = mdlbck.querySelector('.modal');
+        mdl.id = '';
+        if (mdl) {
+            const mdlt = mdl.querySelector('.modal-top');
+            if (mdlt) {
+                mdlt.innerHTML = `
+                <h3 class="mdl-title-stick">${lang().modals.shortcuts}</h3>
+                <div class="shr-div">
+                    <div class="shr-section">
+                        <h4>Upload file</h4>
+                        <div class="shortcut">
+                            <span class="key">CTRL</span>
+                            <span class="key">U</span>
+                        </div>
+                    </div>
+                    <div class="shr-section">
+                        <h4>Edit message</h4>
+                        <div class="shortcut">
+                            <span class="key">CTRL</span>
+                            <span class="key">E</span>
+                        </div>
+                    </div>
+                    <div class="shr-section">
+                        <h4>Open Quickswitcher</h4>
+                        <div class="shortcut">
+                            <span class="key">CTRL</span>
+                            <span class="key">K</span>
+                        </div>
+                    </div>
+                    <div class="shr-section">
+                        <h4>Emoji picker</h4>
+                        <div class="shortcut">
+                            <span class="key">CTRL</span>
+                            <span class="key">S</span>
+                        </div>
+                    </div>
+                    <div class="shr-section">
+                        <h4>Focus message input</h4>
+                        <div class="shortcut">
+                            <span class="key">CTRL</span>
+                            <span class="key">/</span>
+                        </div>
+                    </div>
+                    <div class="shr-section">
+                        <h4>Unfocus / Close</h4>
+                        <div class="shortcut">
+                            <span class="key">ESC</span>
+                        </div>
+                    </div>
+                    <div class="shr-section">
+                        <h4>Paste</h4>
+                        <div class="shortcut">
+                            <span class="key">CTRL</span>
+                            <span class="key">V</span>
+                        </div>
+                    </div>
+                    <div class="shr-section">
+                        <h4>Shortcuts Menu</h4>
+                        <div class="shortcut">
+                            <span class="key">CTRL</span>
+                            <span class="key">.</span>
+                        </div>
+                    </div>
+                </div>
+                `;
+            }
+            const mdbt = mdl.querySelector('.modal-bottom');
+            if (mdbt) {
+                mdbt.innerHTML = `
+                `;
+            }
+        }
+    }
 }
 
 // work on this

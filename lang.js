@@ -270,6 +270,7 @@ const en = {
         "deleteacc": "Delete Account?",
         "share": "Share",
         "plugin": "Refresh Required!",
+        "shortcuts": "Shortcuts",
     },
     "profile": {
         "quote": "Quote",
