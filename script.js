@@ -1827,7 +1827,8 @@ function loadGeneral() {
             </div>
             <h3>${lang().general_sub.about}</h3>
             <div class="stg-section">
-            <span>meo v1.2.0</span>
+            <span>meo <span class="version"></span></span><br>
+            <span class="yeah subsubheader"></span>
             </div>
             <h3>${lang().general_sub.credits}</h3>
             <div class="stg-section">
@@ -1928,6 +1929,24 @@ function loadGeneral() {
                 bwcont.appendChild(item);
             }
         }
+        gitstuff()
+}
+
+async function gitstuff() {
+    try {
+        const response = await fetch('https://api.github.com/repos/3r1s-s/meo/commits/main');
+        const data = await response.json();
+        console.log(data.sha);
+        document.querySelector('.version').innerHTML = `
+        (${data.sha.substring(0, 7)})
+        `
+        document.querySelector('.yeah').innerHTML = `
+        ${data.commit.message}
+        `
+    } catch (error) {
+        console.error('Error checking for updates:', error);
+        alert('Failed to check for updates.');
+    }
 }
 
 async function loadPlugins() {
