@@ -1,5 +1,10 @@
-# Imagine a Meower client...
+# leo
+meo but better:tm:
 
-![meo banner](https://raw.githubusercontent.com/3r1s-s/3r1s-s.github.io/main/images/github/meo-banner.png)
+## changes
+leo has the following additions to meo so far
 
-Visit https://eris.pages.dev/meo/about for more info!
+- Trending powered by AtticusAI on Start Page and the Explore tab that summarises home into a few topics and dot points. (English only)
+- Double border radius for rounder buttons and other elements
+- Easy PWA install when using Chrome for Android or ChromeOS
+- Collapsable window bar on ChromeOS
