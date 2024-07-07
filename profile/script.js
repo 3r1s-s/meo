@@ -44,7 +44,9 @@ function fetchprofile() {
             if (data._id === "Discord") {
                 quote = md.render(`
 ### Please, do not use the bridge.
-Using the Discord Bridge can hinder Meower's development by allowing users to bypass the app and its feature improvements.
+This is used to bridge posts from the Meower Discord server.
+This is harmful to Meower, Features that Meower lacks are compensated for using this feature.
+Because of this, Meower never gets a chance to improve.
 ***
 This message was created by meo.
                 `).replace(/<a(.*?)>/g, '<a$1 target="_blank">');
