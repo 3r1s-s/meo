@@ -3959,8 +3959,8 @@ function addAttachment(file) {
         };
         pendingAttachments.push(attachment);
 
-        if (file.size > (25 << 20)) {
-            attachment.cancel("Files must not exceed 25MiB.");
+        if (file.size > (50 << 20)) {
+            attachment.cancel("Files must not exceed 50MiB.");
             return;
         }
 
