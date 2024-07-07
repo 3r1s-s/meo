@@ -4927,6 +4927,8 @@ function notify(u, p, location, val) {
                             body: content,
                             icon: pfp,
                         });
+
+                        new Audio('audio/purr.wav').play();
         
                         notification.addEventListener('click', () => {
                             switch (location) {
