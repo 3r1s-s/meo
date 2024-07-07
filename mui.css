@@ -312,6 +312,12 @@ pre {
     height: auto;
 }
 
+.desktop .side {
+    top: 30px;
+    margin: 0;
+    height: auto;
+}
+
 #groups {
   flex-direction: column;
   min-width: 0;
