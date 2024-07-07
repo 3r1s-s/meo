@@ -1835,8 +1835,8 @@ function loadGeneral() {
             </div>
             <h3>${lang().general_sub.about}</h3>
             <div class="stg-section">
-            <span>leo v1.2.0</span>
-            <br>
+            <span>leo <span class="version"></span></span><br>
+            <span class="yeah subsubheader"></span>
             </div>
             <h3>${lang().general_sub.credits}</h3>
             <div class="stg-section">
@@ -1946,19 +1946,37 @@ function loadGeneral() {
 
     const bwcont = document.querySelector('.blockedwords');
 
-    for (const word in blockedWords) {
-        if (blockedWords.hasOwnProperty(word)) {
-            const item = document.createElement('button');
-
-            item.innerText = word;
-
-            item.classList.add('blockedword');
-            item.classList.add('button');
-
-            item.setAttribute("onclick", `unblockWord('${word}')`);
-
-            bwcont.appendChild(item);
+        for (const word in blockedWords) {
+            if (blockedWords.hasOwnProperty(word)) {
+                const item = document.createElement('button');
+                
+                item.innerText = word;
+                
+                item.classList.add('blockedword');
+                item.classList.add('button');
+                
+                item.setAttribute("onclick", `unblockWord('${word}')`);
+                
+                bwcont.appendChild(item);
+            }
         }
+        gitstuff()
+}
+
+async function gitstuff() {
+    try {
+        const response = await fetch('https://api.github.com/repos/JoshAtticus/leo/commits/main');
+        const data = await response.json();
+        console.log(data.sha);
+        document.querySelector('.version').innerHTML = `
+        (${data.sha.substring(0, 7)})
+        `
+        document.querySelector('.yeah').innerHTML = `
+        ${data.commit.message}
+        `
+    } catch (error) {
+        console.error('Error checking for updates:', error);
+        alert('Failed to check for updates.');
     }
 }
 
@@ -4934,6 +4952,9 @@ function notify(u, p, location, val) {
             loc = "you"
         }
     }
+    const roarRegex = /^@[\w-]+ (.+?) \(([^)]+)\)/;
+    const betterMeowerRegex = /@([\w-]+)\[([a-zA-Z0-9]+)\]/g;
+
     let user;
     let content;
     let bridged = (u && bridges.includes(u));
@@ -4962,6 +4983,13 @@ function notify(u, p, location, val) {
     }
     if (content == "") {
         content = "[Attachment]";
+    } else {
+        let match = content.replace(roarRegex, "").trim();
+        match = match.replace(betterMeowerRegex, "").trim();
+
+        if (match) {
+            content = match;
+        }
     }
     let pfp
     fetch(`https://api.meower.org/users/${user}`)
