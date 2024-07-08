@@ -1946,7 +1946,7 @@ function loadGeneral() {
                 showpostbuttons: settings.showpostbuttons.checked,
                 underlinelinks: settings.underlinelinks.checked,
                 entersend: settings.entersend.checked,
-                hideimages: settings.hideimages.checked
+                hideimages: settings.hideimages.checked,
                 notifications: settings.notifications.checked
             }));
             setAccessibilitySettings();
