@@ -33,6 +33,7 @@ body {
     background: transparent;
     gap: 32px;
     flex-direction: column;
+    color: #fefefe;
 }
 
 .section {
