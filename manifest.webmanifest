@@ -47,6 +47,7 @@
   },
   "display_override": [
     "standalone",
-    "window-controls-overlay"
+    "window-controls-overlay",
+    "borderless"
   ]
 }
