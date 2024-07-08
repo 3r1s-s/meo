@@ -4614,6 +4614,10 @@ function openGcModal(chatId) {
                             <input type="file" id="gc-photo" accept="image/png,image/jpeg,image/webp,image/gif">
                         </div>        
                     </div>
+                    <span class="subheader">${lang().action.nick}</span>
+                    <div class="nick">
+                        <input id="chat-nick-input" class="mdl-inp" placeholder="${data.nickname}" minlength="1" maxlength="20">
+                    </div>
                     <span class="subheader">${lang().chats.owner}</span>
                     <div class="owner">
                         <button onclick="transferOwnershipModal('${chatId}')" class="button ow-btn">Transfer Ownership</button>
@@ -4694,6 +4698,7 @@ function updateGC(chatId) {
     const file = fileInput.files[0];
     const token = localStorage.getItem("token");
     const avtrclr = document.getElementById("gc-clr").value.substring(1);
+    const nick = document.getElementById("chat-nick-input").value;
 
     const xhttp = new XMLHttpRequest();
 
@@ -4738,6 +4743,9 @@ function updateGC(chatId) {
             })
             .then(uploadResponse => uploadResponse.json())
             .then(uploadData => {
+                if (nick) {
+                    data.nickname = nick;
+                }
                 const avatarId = uploadData.id;
                 data.icon = avatarId;
                 xhttp.send(JSON.stringify(data));
@@ -4746,6 +4754,9 @@ function updateGC(chatId) {
         })
         .catch(error => console.error('Error fetching uploads token:', error));
     } else {
+        if (nick) {
+            data.nickname = nick;
+        }
         xhttp.send(JSON.stringify(data));
     }
 }
