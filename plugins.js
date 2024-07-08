@@ -1,14 +1,23 @@
 const plugins = {
-    disable: function(pluginName) {
+    disable: function(pluginName, reload = true) {
         let enabledPlugins = JSON.parse(localStorage.getItem('enabledPlugins')) || {};
+        if (!enabledPlugins.hasOwnProperty(pluginName) || enabledPlugins[pluginName] === false) {
+            throw new Error(`Plugin "${pluginName}" is not enabled or does not exist.`);
+        }
         enabledPlugins[pluginName] = false;
         localStorage.setItem('enabledPlugins', JSON.stringify(enabledPlugins));
+        if (reload) {
+            location.reload();
+        }
     },
-
-    enable: function(pluginName) {
+    
+    enable: function(pluginName, reload = true) {
         let enabledPlugins = JSON.parse(localStorage.getItem('enabledPlugins')) || {};
         enabledPlugins[pluginName] = true;
         localStorage.setItem('enabledPlugins', JSON.stringify(enabledPlugins));
+        if (reload) {
+            location.reload();
+        }
     }
 };
 

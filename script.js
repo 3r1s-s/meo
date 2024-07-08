@@ -1937,7 +1937,6 @@ function loadGeneral() {
             localStorage.setItem('settings', JSON.stringify({
                 homepage: settings.homepage.checked,
                 consolewarnings: settings.consolewarnings.checked,
-                forceupdates: settings.forceupdates.checked,
                 blockedmessages: settings.blockedmessages.checked,
                 invtyping: settings.invtyping.checked,
                 imagewhitelist: settings.imagewhitelist.checked,
@@ -2566,6 +2565,18 @@ function settingsstuff() {
         const defaultSettings = {
             "homepage": false,
             "consolewarnings": false,
+            "blockedmessages": false,
+            "invtyping": false,
+            "imagewhitelist": false,
+            "censorwords": false,
+            "embeds": false,
+            "reducemotion": false,
+            "showpostbuttons": false,
+            "underlinelinks": false,
+            "entersend": false,
+            "hideimages": false,
+            "notifications": false,
+            "widemode": false
         };
         localStorage.setItem('settings', JSON.stringify(defaultSettings));
         return defaultSettings;
