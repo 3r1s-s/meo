@@ -2188,18 +2188,14 @@ function loadAppearance() {
                 <button onclick='changeTheme(\"dark\", this)' class='theme-button dark-theme'>Dark</button>
                 <button onclick='changeTheme(\"oled\", this)' class='theme-button oled-theme'>Black</button>
             </div>
-            <h3>Pride Themes</h3>
-                <div class="theme-buttons-inner">
-                    <button onclick='changeTheme(\"pride\", this)' class='theme-button pride-theme'>Pride</button>
-                    <button onclick='changeTheme(\"trans\", this)' class='theme-button trans-theme'>Trans</button>
-                </div>
             <h3>${lang().appearance_sub.spthemes}</h3>
                 <div class="theme-buttons-inner">
                     <button onclick='changeTheme(\"cosmic\", this)' class='theme-button cosmic-theme'>Cosmic Latte</button>
                     <button onclick='changeTheme(\"lime\", this)' class='theme-button lime-theme'>Lime</button>
-                    <button onclick='changeTheme(\"bsky\", this)' class='theme-button bsky-theme'>Midnight</button>
+                    <button onclick='changeTheme(\"midnight\", this)' class='theme-button midnight-theme'>Midnight</button>
                     <button onclick='changeTheme(\"grain\", this)' class='theme-button grain-theme'>Grain</button>
                     <button onclick='changeTheme(\"sage\", this)' class='theme-button sage-theme'>Sage</button>
+                    <div style="display:none;">
                     <button onclick='changeTheme(\"meower\", this)' class='theme-button meower-theme'>Meower</button>
                     <button onclick='changeTheme(\"roarer\", this)' class='theme-button roarer-theme'>Roarer</button>
                     <button onclick='changeTheme(\"flamingo\", this)' class='theme-button flamingo-theme'>Flamingo</button>
@@ -2208,6 +2204,7 @@ function loadAppearance() {
                     <button onclick='changeTheme(\"teb\", this)' class='theme-button teb-theme'>Blue</button>
                     <button onclick='changeTheme(\"fabloo\", this)' class='theme-button fabloo-theme'>Fabloo</button>
                     <button onclick='changeTheme(\"midnight-blurple\", this)' class='theme-button midnight-blurple-theme'>Blurple</button>
+                    </div>
                 </div>
             <h3>${lang().appearance_sub.acthemes}</h3>
                 <div class="theme-buttons-inner">
@@ -2223,6 +2220,11 @@ function loadAppearance() {
                     <button onclick='changeTheme(\"glight\", this)' class='theme-button glight-theme'>Light</button>
                     <button onclick='changeTheme(\"gdark\", this)' class='theme-button gdark-theme'>Dark</button>
                     <button onclick='imagemodal()' class='theme-button upload-button'>Add Image</button>
+                </div>
+            <h3>Pride Themes</h3>
+                <div class="theme-buttons-inner">
+                    <button onclick='changeTheme(\"pride\", this)' class='theme-button pride-theme'>Pride</button>
+                    <button onclick='changeTheme(\"trans\", this)' class='theme-button trans-theme'>Trans</button>
                 </div>
             <h3>${lang().appearance_sub.cstheme}</h3>
                 <div class="theme-buttons-inner">
