@@ -982,6 +982,32 @@ async function sendpost() {
         return;
     }
 
+    // Check for substitution pattern s/old/new
+    const subregex = /^s\/(.+?)\/(.+)$/;
+    const match = message.match(subregex);
+
+    if (match) {
+        const old = match[1];
+        const newtx = match[2];
+
+        const repst = [...postCache[page]].reverse().find(post => post.u === localStorage.getItem("username"));
+
+        if (repst) {
+            const newCont = repst.p.replace(new RegExp(old, 'g'), newtx);
+            
+            fetch(`https://api.meower.org/posts?id=${repst._id}`, {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json",
+                    token: localStorage.getItem("token")
+                },
+                body: JSON.stringify({ content: newCont })
+            });
+        }
+
+        return;
+    }
+
     if (editIndicator.hasAttribute("data-postid")) {
         fetch(`https://api.meower.org/posts?id=${editIndicator.getAttribute("data-postid")}`, {
             method: "PATCH",
@@ -1024,6 +1050,7 @@ async function sendpost() {
     autoresize();
     closepicker();
 }
+
 
 function loadhome() {
     page = "home";
