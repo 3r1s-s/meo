@@ -200,6 +200,13 @@
     background-size: cover;
 }
 
+.pride-theme .settings > h1,
+.trans-theme .settings > h1
+ {
+    background: transparent;
+    position: static;
+}
+
 .midnight-blurple-theme #page::after {
     content: '';
     position: fixed;
