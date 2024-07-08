@@ -985,7 +985,33 @@ async function sendpost() {
         console.log("The message is blank.");
         return;
     }
-    
+
+    // Check for substitution pattern s/old/new
+    const subregex = /^s\/(.+?)\/(.+)$/;
+    const match = message.match(subregex);
+
+    if (match) {
+        const old = match[1];
+        const newtx = match[2];
+
+        const repst = [...postCache[page]].reverse().find(post => post.u === localStorage.getItem("username"));
+
+        if (repst) {
+            const newCont = repst.p.replace(new RegExp(old, 'g'), newtx);
+            
+            fetch(`https://api.meower.org/posts?id=${repst._id}`, {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json",
+                    token: localStorage.getItem("token")
+                },
+                body: JSON.stringify({ content: newCont })
+            });
+        }
+
+        return;
+    }
+
     if (editIndicator.hasAttribute("data-postid")) {
         fetch(`https://api.meower.org/posts?id=${editIndicator.getAttribute("data-postid")}`, {
             method: "PATCH",
@@ -993,7 +1019,7 @@ async function sendpost() {
                 "Content-Type": "application/json",
                 token: localStorage.getItem("token")
             },
-            body: JSON.stringify({content: message})
+            body: JSON.stringify({ content: message })
         });
         editIndicator.removeAttribute("data-postid");
         editIndicator.innerText = "";
@@ -1012,7 +1038,7 @@ async function sendpost() {
         document.getElementById('images-container').innerHTML = '';
         msgbox.placeholder = lang().meo_messagebox;
         msgbox.disabled = false;
-        
+
         fetch(`https://api.meower.org/${page === "home" ? "home" : `posts/${page}`}`, {
             method: "POST",
             headers: {
@@ -1029,6 +1055,7 @@ async function sendpost() {
     autoresize();
     closepicker();
 }
+
 
 function loadhome() {
     page = "home";

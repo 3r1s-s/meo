@@ -7,26 +7,25 @@
 }
 
 .dark-theme {
-    --dark-accent: #1e1c27;
-
+    --dark-accent: #171421;
     --primary: #765dee;
     --secondary: #503f98;
     --tertiary: #372b63;
-    --background: #14121b;
-    --color: #e5e0ed;
-    --accent-color: #393646;
-    --hov-accent-color: #444152;
-    --hov-color: #59556b;
+    --background: #121019;
+    --color: #e0d6ea;
+    --accent-color: #272037;
+    --hov-accent-color: #3b3153;
+    --hov-color: #564779;
     --link-color: #9a86ff;
     --attachment-background-color: #4d3d94;
     --attachment-color: #c5b9ff;
     --attachment-background-color-hover: #765dee;
     --attachment-color-hover: #e9dff0;
-    --button-color: #9a91af;
-    --hov-button-color: #e9dff0;
-    --modal-color: #1e1c27;
-    --modal-button-color: #393646;
-    --hov-modal-button-color: #59556b;
+    --button-color: #7b6c9f;
+    --hov-button-color: #e0d6ea;
+    --modal-color: #121019;
+    --modal-button-color: #272037;
+    --hov-modal-button-color: #3b3153;
     --animation: none;
 
     --blue: #00abd2;
@@ -174,7 +173,27 @@
 }
 
 .old-theme {
-    --dark-accent: #1a1b1e;
+    --dark-accent: #1e1c27;
+
+    --primary: #765dee;
+    --secondary: #503f98;
+    --tertiary: #372b63;
+    --background: #14121b;
+    --color: #e5e0ed;
+    --accent-color: #393646;
+    --hov-accent-color: #444152;
+    --hov-color: #59556b;
+    --link-color: #9a86ff;
+    --attachment-background-color: #4d3d94;
+    --attachment-color: #c5b9ff;
+    --attachment-background-color-hover: #765dee;
+    --attachment-color-hover: #e9dff0;
+    --button-color: #9a91af;
+    --hov-button-color: #e9dff0;
+    --modal-color: #1e1c27;
+    --modal-button-color: #393646;
+    --hov-modal-button-color: #59556b;
+    --animation: none;
 }
 
 .oldlight-theme {
