@@ -8,4 +8,4 @@ leo has the following additions to meo so far
 - Double border radius for rounder buttons and other elements
 - Easy PWA install when using Chrome for Android or ChromeOS
 - Collapsable window bar on ChromeOS
-- Plugins.js library for easier plugin interactions. Documentation coming soon.
+- Plugins.js library for easier plugin interactions. Documentation available [here](https://github.com/JoshAtticus/leo/wiki/Plugins.js-Documentation)
