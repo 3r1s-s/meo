@@ -1991,6 +1991,12 @@ function loadGeneral() {
 }
 
 async function gitstuff() {
+    // terrible fix
+    if (!document.querySelector('.version') || !document.querySelector('.yeah')) {
+        console.log('Required elements not found, skipping gitstuff execution.');
+        return;
+    }
+
     try {
         const response = await fetch('https://api.github.com/repos/JoshAtticus/leo/commits/main');
         const data = await response.json();
