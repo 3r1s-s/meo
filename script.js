@@ -2219,18 +2219,14 @@ function loadAppearance() {
                 <button onclick='changeTheme(\"dark\", this)' class='theme-button dark-theme'>Dark</button>
                 <button onclick='changeTheme(\"oled\", this)' class='theme-button oled-theme'>Black</button>
             </div>
-            <h3>Pride Themes</h3>
-                <div class="theme-buttons-inner">
-                    <button onclick='changeTheme(\"pride\", this)' class='theme-button pride-theme'>Pride</button>
-                    <button onclick='changeTheme(\"trans\", this)' class='theme-button trans-theme'>Trans</button>
-                </div>
             <h3>${lang().appearance_sub.spthemes}</h3>
                 <div class="theme-buttons-inner">
                     <button onclick='changeTheme(\"cosmic\", this)' class='theme-button cosmic-theme'>Cosmic Latte</button>
                     <button onclick='changeTheme(\"lime\", this)' class='theme-button lime-theme'>Lime</button>
-                    <button onclick='changeTheme(\"bsky\", this)' class='theme-button bsky-theme'>Midnight</button>
+                    <button onclick='changeTheme(\"midnight\", this)' class='theme-button midnight-theme'>Midnight</button>
                     <button onclick='changeTheme(\"grain\", this)' class='theme-button grain-theme'>Grain</button>
                     <button onclick='changeTheme(\"sage\", this)' class='theme-button sage-theme'>Sage</button>
+                    <div style="display:none;">
                     <button onclick='changeTheme(\"meower\", this)' class='theme-button meower-theme'>Meower</button>
                     <button onclick='changeTheme(\"roarer\", this)' class='theme-button roarer-theme'>Roarer</button>
                     <button onclick='changeTheme(\"flamingo\", this)' class='theme-button flamingo-theme'>Flamingo</button>
@@ -2239,6 +2235,7 @@ function loadAppearance() {
                     <button onclick='changeTheme(\"teb\", this)' class='theme-button teb-theme'>Blue</button>
                     <button onclick='changeTheme(\"fabloo\", this)' class='theme-button fabloo-theme'>Fabloo</button>
                     <button onclick='changeTheme(\"midnight-blurple\", this)' class='theme-button midnight-blurple-theme'>Blurple</button>
+                    </div>
                 </div>
             <h3>${lang().appearance_sub.acthemes}</h3>
                 <div class="theme-buttons-inner">
@@ -2254,6 +2251,11 @@ function loadAppearance() {
                     <button onclick='changeTheme(\"glight\", this)' class='theme-button glight-theme'>Light</button>
                     <button onclick='changeTheme(\"gdark\", this)' class='theme-button gdark-theme'>Dark</button>
                     <button onclick='imagemodal()' class='theme-button upload-button'>Add Image</button>
+                </div>
+            <h3>Pride Themes</h3>
+                <div class="theme-buttons-inner">
+                    <button onclick='changeTheme(\"pride\", this)' class='theme-button pride-theme'>Pride</button>
+                    <button onclick='changeTheme(\"trans\", this)' class='theme-button trans-theme'>Trans</button>
                 </div>
             <h3>${lang().appearance_sub.cstheme}</h3>
                 <div class="theme-buttons-inner">
@@ -4693,6 +4695,10 @@ function openGcModal(chatId) {
                             <input type="file" id="gc-photo" accept="image/png,image/jpeg,image/webp,image/gif">
                         </div>        
                     </div>
+                    <span class="subheader">${lang().action.nick}</span>
+                    <div class="nick">
+                        <input id="chat-nick-input" class="mdl-inp" placeholder="${data.nickname}" minlength="1" maxlength="20">
+                    </div>
                     <span class="subheader">${lang().chats.owner}</span>
                     <div class="owner">
                         <button onclick="transferOwnershipModal('${chatId}')" class="button ow-btn">Transfer Ownership</button>
@@ -4773,6 +4779,7 @@ function updateGC(chatId) {
     const file = fileInput.files[0];
     const token = localStorage.getItem("token");
     const avtrclr = document.getElementById("gc-clr").value.substring(1);
+    const nick = document.getElementById("chat-nick-input").value;
 
     const xhttp = new XMLHttpRequest();
 
@@ -4780,7 +4787,8 @@ function updateGC(chatId) {
         if (this.readyState == 4) {
             if (this.status == 200) {
                 console.log('GC updated successfully.');
-                parent.closemodal("Chat Updated!");
+                closemodal("Chat Updated!");
+                loadchat(chatId);
             } else {
                 console.error('Failed to update chat. HTTP ' + this.status.toString());
             }
@@ -4817,6 +4825,9 @@ function updateGC(chatId) {
             })
             .then(uploadResponse => uploadResponse.json())
             .then(uploadData => {
+                if (nick) {
+                    data.nickname = nick;
+                }
                 const avatarId = uploadData.id;
                 data.icon = avatarId;
                 xhttp.send(JSON.stringify(data));
@@ -4825,6 +4836,9 @@ function updateGC(chatId) {
         })
         .catch(error => console.error('Error fetching uploads token:', error));
     } else {
+        if (nick) {
+            data.nickname = nick;
+        }
         xhttp.send(JSON.stringify(data));
     }
 }
