@@ -1947,6 +1947,7 @@ function loadGeneral() {
                 underlinelinks: settings.underlinelinks.checked,
                 entersend: settings.entersend.checked,
                 hideimages: settings.hideimages.checked
+                notifications: settings.notifications.checked
             }));
             setAccessibilitySettings();
         });
