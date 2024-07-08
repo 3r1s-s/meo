@@ -4706,7 +4706,8 @@ function updateGC(chatId) {
         if (this.readyState == 4) {
             if (this.status == 200) {
                 console.log('GC updated successfully.');
-                parent.closemodal("Chat Updated!");
+                closemodal("Chat Updated!");
+                loadchat(chatId);
             } else {
                 console.error('Failed to update chat. HTTP ' + this.status.toString());
             }
