@@ -112,7 +112,49 @@
 }
 
 .bsky-theme {
-    --dark-accent: #141c2b;
+    --dark-accent: #181825;
+
+    --primary: #6a78ec;
+    --background: #1e1e2e;
+    --color: #cdd6f4;
+    --accent-color: #313244;
+    --hov-accent-color: #45475a;
+    --hov-color: #585b70;
+    --link-color: #89b4fa;
+    --attachment-background-color: #5161ca;
+    --attachment-color: #cdd6f4;
+    --attachment-background-color-hover: #6a78ec;
+    --attachment-color-hover: #e9dff0;
+    --button-color: #7f849c;
+    --hov-button-color: #cdd6f4;
+    --modal-color: #181825;
+    --modal-button-color: #313244;
+    --hov-modal-button-color: #45475a;
+    --animation: none;
+
+    --blue: #1e66f5;
+    --hov-blue: #4080ff;
+    --green: #40a02b;
+    --hov-green: #51b93b;
+    --orange: #df8e1d;
+    --hov-orange: #f3a332;
+    --red: #d20f39;
+    --hov-red: #e92e56;
+    --magenta: #ee3c8c;
+    --hov-magenta: #f74796;
+
+    --color-on: #fefefe;
+
+    --transition: all 0.05s ease;
+    --border: none;
+    --border-radius: 6px;
+    --button-radius: 6px;
+    --margin: 10px;
+    --text-margin: 10px;
+    --padding: 10px;
+    --button-padding: 12px;
+    --button-margin: 10px;
+    --color-scheme: dark;
 }
 
 .lime-theme {
