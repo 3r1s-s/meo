@@ -7,6 +7,9 @@
 // replace ulist with typing indicator
 // load more button at the end of post list
 // have it be automatic after the first load more
+// Modal close animation
+// Fix the sidebar and it's resizing
+// Add a sidebar to the right side for Member list and replace the current ulist with typing indicator
 
 let end = false;
 let page = "load";
@@ -78,6 +81,7 @@ if (settingsstuff().widemode) {
     if (page) {
         const ex = document.createElement('div');
         ex.classList.add('sidebar');
+        ex.classList.add('hidden');
         ex.innerHTML = `
         <div id="nav" class="side"></div>
         <div id="groups" class="side"></div>
@@ -1209,6 +1213,11 @@ function sidebars() {
 
     const sidediv = document.querySelectorAll(".side");
     sidediv.forEach(function(sidediv) {
+        sidediv.classList.remove("hidden");
+    });
+
+    const sidebar = document.querySelectorAll(".sidebar");
+    sidebar.forEach(function(sidediv) {
         sidediv.classList.remove("hidden");
     });
 }
