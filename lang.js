@@ -114,6 +114,7 @@ const en = {
             "hideimages": "Hide images",
             "notifications": "Allow Notifications",
             "widemode": "New Desktop Experience",
+            "discord": "Discord Post Layout",
         },
         "desc": {
             "homepage": "Instead of showing you the Start Page you get directly taken to home",
@@ -130,6 +131,7 @@ const en = {
             "hideimages": "Blurs images before opening them",
             "notifications": "This will ask for notification permissions (Experimental)",
             "widemode": "Enables new desktop experience (Experiemental, Requires refresh)",
+            "discord": "Reverses the post order to be more like Discord (Experiemental, Requires refresh)",
         }
     },
     "appearance_sub": {

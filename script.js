@@ -91,6 +91,10 @@ if (settingsstuff().widemode) {
     }
 }
 
+if (settingsstuff().discord) {
+    document.querySelector('body').classList.add("discord");
+}
+
 // make it so when reconnect happens it goes back to the prev screen and not the start page
 function main() {
     meowerConnection = new WebSocket(server);
@@ -1849,6 +1853,15 @@ function loadGeneral() {
                 <input type="checkbox" id="widemode" class="settingstoggle">
                 </label>
             </div>
+            <div class="stg-section">
+                <label class="general-label">
+                <div class="general-desc">
+                ${lang().general_list.title.discord}
+                <p class="subsubheader">${lang().general_list.desc.discord}</p>
+                </div>
+                <input type="checkbox" id="discord" class="settingstoggle">
+                </label>
+            </div>
             <h3>${lang().general_sub.privacy}</h3>
             <div class="fun-buttons">
             <a href="https://github.com/3r1s-s/meo/issues" target="_blank" class="button blockeduser">${lang().action.bug}</a>
@@ -1902,7 +1915,8 @@ function loadGeneral() {
                 entersend: document.getElementById("entersend"),
                 hideimages: document.getElementById("hideimages"),
                 notifications: document.getElementById("notifications"),
-                widemode: document.getElementById("widemode")
+                widemode: document.getElementById("widemode"),
+                discord: document.getElementById("discord")
             };
         
             Object.values(settings).forEach((checkbox) => {
@@ -1921,7 +1935,8 @@ function loadGeneral() {
                         entersend: settings.entersend.checked,
                         hideimages: settings.hideimages.checked,
                         notifications: settings.notifications.checked,
-                        widemode: settings.widemode.checked
+                        widemode: settings.widemode.checked,
+                        discord: settings.discord.checked
                     }));
                     setAccessibilitySettings();
                     if (settingsstuff().notifications) {
