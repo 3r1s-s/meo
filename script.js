@@ -2,6 +2,12 @@
 // no i wont do anything about it
 // - Eris
 
+// To-Do
+// make windows 7 theme
+// replace ulist with typing indicator
+// load more button at the end of post list
+// have it be automatic after the first load more
+
 let end = false;
 let page = "load";
 const sidediv = document.querySelectorAll(".side");
