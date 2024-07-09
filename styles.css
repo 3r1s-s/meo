@@ -1909,6 +1909,7 @@ possible future styling
     border-radius: var(--border-radius);
     -webkit-user-select: none;
     user-select: none;
+    position: relative;
 }
 
 .user-area {
