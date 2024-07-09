@@ -10,6 +10,7 @@
 // Modal close animation
 // Fix the sidebar and it's resizing
 // Add a sidebar to the right side for Member list and replace the current ulist with typing indicator
+// Discord mode where posts are on the bottom
 
 let end = false;
 let page = "load";

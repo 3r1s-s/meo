@@ -1690,6 +1690,8 @@ function pickerhtm() {
             <button class="emojibutton" title="marker" onclick="addemoji('<:marker:1238203265229914132>')"><img src="https://cdn.discordapp.com/emojis/1238203265229914132.webp?size=128&quality=lossless" alt="marker" height="32px"></button>
             <button class="emojibutton" title="ow" onclick="addemoji('<:ow:1251723597630931065>')"><img src="https://cdn.discordapp.com/emojis/1251723597630931065.webp?size=128&quality=lossless" alt="ow" height="32px"></button>
             <button class="emojibutton" title="scary" onclick="addemoji('<:scary:1259355757602672651>')"><img src="https://cdn.discordapp.com/emojis/1259355757602672651.webp?size=96&quality=lossless" alt="scary" height="32px"></button>
+            <button class="emojibutton" title="wink" onclick="addemoji('<:wink:1260356148968689704>')"><img src="https://cdn.discordapp.com/emojis/1260356148968689704.webp?size=96&quality=lossless" alt="wink" height="32px"></button>
+            <button class="emojibutton" title="roxy" onclick="addemoji('<:roxy:1260366574989348955>')"><img src="https://cdn.discordapp.com/emojis/1260366574989348955.webp?size=96&quality=lossless" alt="roxy" height="32px"></button>
             
             <button class="emojibutton" title="yippe" onclick="addemoji('<a:yippe:1226318495147495505>')"><img src="https://cdn.discordapp.com/emojis/1226318495147495505.gif?size=48&quality=lossless&name=yippe" alt="yippe" height="32px"></button>
             <button class="emojibutton" title="hooray" onclick="addemoji('<a:hooray:1230023947777609808>')"><img src="https://cdn.discordapp.com/emojis/1230023947777609808.gif?size=48&quality=lossless&name=hooray" alt="hooray" height="32px"></button>
