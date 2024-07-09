@@ -2535,6 +2535,18 @@ function settingsstuff() {
         const defaultSettings = {
             "homepage": false,
             "consolewarnings": false,
+            "blockedmessages": false,
+            "invtyping": false,
+            "imagewhitelist": false,
+            "censorwords": false,
+            "embeds": false,
+            "reducemotion": false,
+            "showpostbuttons": false,
+            "underlinelinks": false,
+            "entersend": false,
+            "hideimages": false,
+            "notifications": false,
+            "widemode": false
         };
         localStorage.setItem('settings', JSON.stringify(defaultSettings));
         return defaultSettings;
