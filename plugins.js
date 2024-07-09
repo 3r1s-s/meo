@@ -42,11 +42,11 @@ const plugins = {
             console.warn("Local development build; some functions may not work");
             return "Unknown local development build";
         } else if (url.includes('mybearworld.github.io')) {
-            console.error("Roarer; incompatible with Plugins.js")
-            return "Error: Roarer; incompatible with Plugins.js";
+            console.error("Roarer/Jeow; incompatible with Plugins.js")
+            return "Roarer/Jeow";
         } else {
             console.error("Unknown client; Plugins.js only supports meo/leo and derivatives")
-            return "Error: Unknown client; Plugins.js only supports meo/leo and derivatives";
+            return "Unknown Client";
         }
     }
 };
