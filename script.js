@@ -1981,7 +1981,9 @@ function loadGeneral() {
                 underlinelinks: settings.underlinelinks.checked,
                 entersend: settings.entersend.checked,
                 hideimages: settings.hideimages.checked,
-                notifications: settings.notifications.checked
+                notifications: settings.notifications.checked,
+                widemode: settings.widemode.checked,
+                discord: settings.discord.checked
             }));
             setAccessibilitySettings();
         });
