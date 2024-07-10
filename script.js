@@ -1688,7 +1688,10 @@ function logout(iskl) {
         document.getElementById("groups").innerHTML = "";
     document.querySelectorAll(".side").forEach(function (element) {
         element.classList.add("hidden");
-    });
+    });    
+    document.querySelectorAll(".sidebar").forEach(function(element) {
+        element.classList.add("hidden");
+    });    
     end = false;
     main();
 }
