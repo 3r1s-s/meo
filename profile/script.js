@@ -207,19 +207,10 @@ function updateprofile() {
     if (file) {
         const formData = new FormData();
         formData.append("file", file);
-
-        fetch("https://api.meower.org/uploads/token/icon", {
-            method: "GET",
-            headers: {
-                "token": token
-            }
-        })
-        .then(response => response.json())
-        .then(tokenData => {
             fetch("https://uploads.meower.org/icons", {
                 method: "POST",
                 headers: {
-                    "Authorization": tokenData.token
+                    "Authorization": token
                 },
                 body: formData
             })
@@ -230,8 +221,6 @@ function updateprofile() {
                 xhttp.send(JSON.stringify(data));
             })
             .catch(error => console.error('Error uploading file:', error));
-        })
-        .catch(error => console.error('Error fetching uploads token:', error));
     } else {
         // If no file is selected, just send the data object
         xhttp.send(JSON.stringify(data));

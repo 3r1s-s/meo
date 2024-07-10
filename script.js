@@ -1681,6 +1681,9 @@ function logout(iskl) {
     document.querySelectorAll(".side").forEach(function(element) {
         element.classList.add("hidden");
     });    
+    document.querySelectorAll(".sidebar").forEach(function(element) {
+        element.classList.add("hidden");
+    });    
     end = false;
     main();
 }
