@@ -2613,7 +2613,8 @@ function settingsstuff() {
             "entersend": false,
             "hideimages": false,
             "notifications": false,
-            "widemode": false
+            "widemode": false,
+            "discord": false
         };
         localStorage.setItem('settings', JSON.stringify(defaultSettings));
         return defaultSettings;
