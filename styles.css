@@ -1447,10 +1447,6 @@ possible future styling
     margin-left: 5px;
 }
 
-.hidden {
-    display: none;
-}
-
 #header {
     display: none !important;
 }
@@ -3025,6 +3021,11 @@ input[type="button"]:focus-visible {
       margin-top:5.353373095343571px;
       margin-left:-.31948846929643615px
     }
+}
+
+.hidden {
+    display: none !important;
+}
   }
 
 .trending-item {

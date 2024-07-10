@@ -252,3 +252,41 @@
 .meower-theme .reply {
     border: 3px solid var(--primary);
 }
+
+.discord {
+    #main {
+        display: flex;
+        flex-direction: column-reverse;
+    }
+    
+    .message-outer {
+        bottom: 0;
+        position: sticky;
+        z-index: 1;
+    }
+
+    .posts {
+        flex-direction: column-reverse;
+        display: flex;
+        gap: 10px;
+    }
+    
+    .post {
+        margin-bottom: 0;
+    }
+
+    .jump.visible {
+        display: flex;
+        position: fixed;
+        right: 32px;
+        bottom: 64px;
+    }
+
+    .emojipicker {
+        bottom: 64px;
+    }
+
+    .info {
+        display: none;
+    }
+}
