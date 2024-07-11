@@ -91,6 +91,10 @@ if (settingsstuff().widemode) {
     }
 }
 
+if (settingsstuff().magnify) {
+    magnify();
+}
+
 if (settingsstuff().discord) {
     document.querySelector('body').classList.add("discord");
 }
@@ -1837,6 +1841,15 @@ function loadGeneral() {
                 <input type="checkbox" id="underlinelinks" class="settingstoggle">
                 </label>
             </div>
+            <div class="stg-section">
+                <label class="general-label">
+                <div class="general-desc">
+                ${lang().general_list.title.magnify}
+                <p class="subsubheader">${lang().general_list.desc.magnify}</p>
+                </div>
+                <input type="checkbox" id="magnify" class="settingstoggle">
+                </label>
+            </div>
             <h3>${lang().general_sub.misc}</h3>
             <div class="stg-section">
                 <label class="general-label">
@@ -1915,6 +1928,7 @@ function loadGeneral() {
                 reducemotion: document.getElementById("reducemotion"),
                 showpostbuttons: document.getElementById("showpostbuttons"),
                 underlinelinks: document.getElementById("underlinelinks"),
+                magnify: document.getElementById("magnify"),
                 entersend: document.getElementById("entersend"),
                 hideimages: document.getElementById("hideimages"),
                 notifications: document.getElementById("notifications"),
@@ -1935,6 +1949,7 @@ function loadGeneral() {
                         reducemotion: settings.reducemotion.checked,
                         showpostbuttons: settings.showpostbuttons.checked,
                         underlinelinks: settings.underlinelinks.checked,
+                        magnify: settings.magnify.checked,
                         entersend: settings.entersend.checked,
                         hideimages: settings.hideimages.checked,
                         notifications: settings.notifications.checked,
@@ -2638,7 +2653,7 @@ function launchscreen() {
 function autoresize() {
     const textarea = document.getElementById('msg');
     textarea.style.height = 'auto';
-    textarea.style.height = (((textarea.scrollHeight)) - 26) + 'px';
+    textarea.style.height = (((textarea.scrollHeight)) - parseFloat(window.getComputedStyle(textarea).fontSize) * 2) + 'px';
 }
 
 async function deletePost(postid) {
@@ -5120,6 +5135,10 @@ function shortcutsModal() {
             }
         }
     }
+}
+
+function magnify() {
+    document.body.classList.add("magnify");
 }
 
 // work on this

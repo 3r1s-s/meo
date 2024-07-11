@@ -290,3 +290,24 @@
         display: none;
     }
 }
+
+.magnify p,
+.magnify span,
+.magnify button,
+.magnify textarea,
+.magnify label,
+.magnify input,
+.magnify i,
+.magnify a 
+{
+    font-weight: 800;
+    font-size: 24px !important;
+}
+    
+.magnify h1,
+.magnify h2,
+.magnify h3,
+.magnify #username,
+.magnify h4 {
+    font-size: 36px !important;
+}
