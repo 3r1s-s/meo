@@ -128,7 +128,7 @@ const en = {
             "reducemotion": "Reduce the intensity of animations and other moving effects",
             "showpostbuttons": "Post buttons always remain visible",
             "underlinelinks": "Make links to websites and other pages stand out more by underlining them",
-            "magnify": "Enlargen text to be easier to read with poor eyesight (Requires refresh)",
+            "magnify": "Enlargens and bolds text to be easier to read with poor eyesight (Requires refresh)",
             "entersend": "Enter key creates newlines instead of sending the post",
             "hideimages": "Blurs images before opening them",
             "notifications": "This will ask for notification permissions (Experimental)",
