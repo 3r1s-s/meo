@@ -68,9 +68,9 @@
     --attachment-color-hover: #fefefe;
     --button-color: #756c85;
     --hov-button-color: #43485b;
-    --modal-color: #f5f2ff;
-    --modal-button-color: #e5dbf9;
-    --hov-modal-button-color: #ddd4f0;
+    --modal-color: #f8f0ff;
+    --modal-button-color: #ddd2f5;
+    --hov-modal-button-color: #cec1ea;
 
     --color-scheme: light;
 }
