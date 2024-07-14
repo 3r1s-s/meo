@@ -12,6 +12,7 @@
 // Add a sidebar to the right side for Member list and replace the current ulist with typing indicator
 // Discord mode where posts are on the bottom
 // Notification managment
+// Custom video and audio player, similar style as the file download preview
 
 let end = false;
 let page = "load";
