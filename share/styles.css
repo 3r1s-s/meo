@@ -243,3 +243,11 @@ textarea {
 .logo:hover {
     color: #fefefe;
 }
+
+.subsubheader {
+    font-size: 12px;
+    -webkit-user-select: none;
+    user-select: none;
+    opacity: 0.8;
+    margin: 2px 0;
+}

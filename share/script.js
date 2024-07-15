@@ -159,7 +159,7 @@ function loadPfp(username) {
                     });
                 } else {
                     pfpElement = document.createElement("img");
-                    pfpElement.setAttribute("src", `images/avatars/icon_err.svg`);
+                    pfpElement.setAttribute("src", `../images/avatars/icon_err.svg`);
                     pfpElement.setAttribute("alt", username);
                     pfpElement.classList.add("avatar");
                     pfpElement.classList.add("svg-avatar");

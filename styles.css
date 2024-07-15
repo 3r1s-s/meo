@@ -118,8 +118,8 @@ i {
 
 blockquote {
     border-left: 3px solid var(--color);
-    padding: 1px 1px 1px 5px;
-    margin: 2px 0 2px 5px;
+    padding: 0 5px;
+    margin: 2px 0;
 }
 
 textarea {
