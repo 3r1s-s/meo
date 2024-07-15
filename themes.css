@@ -6,6 +6,7 @@
     --background: #1f1d29;
     --color: #e5e1ff;
     --accent-color: #2f2c3d;
+    --accent-tint: #353246;
     --hov-accent-color: #4c4763;
     --hov-color: #696389;
     --link-color: #9a86ff;
@@ -18,6 +19,7 @@
     --modal-color: #1f1d29;
     --modal-button-color: #2f2c3d;
     --hov-modal-button-color: #4c4763;
+    --hov-tint-color: #514d6c;
 
     --animation: none;
 
@@ -59,6 +61,7 @@
     --background: #f8f0ff;
     --color: #43485b;
     --accent-color: #ddd2f5;
+    --accent-tint: #f1e6ff;
     --hov-accent-color: #cec1ea;
     --hov-color: #dfd0ff;
     --link-color: #765dee;
@@ -71,6 +74,7 @@
     --modal-color: #f8f0ff;
     --modal-button-color: #ddd2f5;
     --hov-modal-button-color: #cec1ea;
+    --hov-tint-color: #e3d2ff;
 
     --color-scheme: light;
 }
@@ -89,6 +93,9 @@
     --modal-button-color: #333739;
     --hov-modal-button-color: #3b4042;
 
+    --accent-tint: #232526;
+    --hov-tint-color: #333739;
+
     --color-scheme: dark;
 }
 
@@ -99,12 +106,15 @@
     --hov-accent-color: #111214;
     --hov-color: #16191e;
     --link-color: #00abd2;
-
+    
     --button-color: #a5abb3;
     --hov-button-color: #fefefe;
     --modal-color: #000;
     --modal-button-color: #0d0e0f;
     --hov-modal-button-color: #16191e;
+
+    --accent-tint: #070709;
+    --hov-tint-color: #0d0e0f;
 
     --color-scheme: dark;
 }
@@ -128,6 +138,9 @@
     --modal-button-color: #0c0c0c;
     --hov-modal-button-color: #00f;
 
+    --accent-tint: #0c0c0c;
+    --hov-tint-color: #00f;
+
     --blue: #0ff;
     --hov-blue: #3ff;
     --green: #0f0;
@@ -146,7 +159,7 @@
     --background: #0b0b0b;
     --color: #f0f0f0;
     --accent-color: #111;
-    --hov-accent-color: #1c1c1c;
+    --hov-accent-color: #1a1a1a;
     --hov-color: #252525;
     --link-color: #00abd2;
     --attachment-background-color: #413d3a;
@@ -156,8 +169,11 @@
     --button-color: #afa7a1;
     --hov-button-color: #f0f0f0;
     --modal-color: #111;
-    --modal-button-color: #1c1c1c;
+    --modal-button-color: #1a1a1a;
     --hov-modal-button-color: #252525;
+
+    --accent-tint: #131313;
+    --hov-tint-color: #1d1d1d;
 }
 
 .grip-theme {
@@ -178,6 +194,9 @@
     --modal-color: #1f1e24;
     --modal-button-color: #32313a;
     --hov-modal-button-color: #4a4854;
+
+    --accent-tint: #222127;
+    --hov-tint-color: #34333b;
 }
 
 .cosmic-theme {
@@ -198,6 +217,9 @@
     --modal-button-color: #f1ead9;
     --hov-modal-button-color: #e1daca;
 
+    --accent-tint: #f7f0de;
+    --hov-tint-color: #e2dbcc;
+
     --color-scheme: light;
 }
 
@@ -217,7 +239,7 @@
     --hov-button-color: #e2e8f0;
     --modal-color: #020617;
     --modal-button-color: #1e293b;
-    --hov-modal-button-color: #1e293b;
+    --hov-modal-button-color: #2b3b54;
     --border: none;
     --border-radius: 12px;
     --button-radius: 12px;
@@ -227,6 +249,9 @@
     --button-padding: 8px;
     --button-margin: 8px;
     --color-scheme: dark;
+    
+    --accent-tint: #1e293b;
+    --hov-tint-color: #2b3b54;
 }
 
 .midnight-theme {
@@ -236,7 +261,7 @@
     --color: #cdd6f4;
     --accent-color: #313244;
     --hov-accent-color: #45475a;
-    --hov-color: #585b70;
+    --hov-color: #595e7d;
     --link-color: #89b4fa;
     --attachment-background-color: #5161ca;
     --attachment-color: #cdd6f4;
@@ -247,6 +272,9 @@
     --modal-color: #181825;
     --modal-button-color: #313244;
     --hov-modal-button-color: #45475a;
+
+    --accent-tint: #2f3042;
+    --hov-tint-color: #4c4e6a;
 }
 
 .bsky-theme {
