@@ -383,9 +383,9 @@ h6 {
 .login-inner {
     display: flex;
     flex-direction: column;
-    background: var(--modal-color);
-    padding: 15px var(--padding);
-    border-radius: var(--border-radius);
+    background: var(--accent-tint);
+    padding: 15px;
+    border-radius: 12px;
     box-shadow: 0px 3px 10px #00000050;
     z-index: 1;
 }
@@ -393,7 +393,7 @@ h6 {
 .login-text, .login-button {
     padding: 1em;
     margin-bottom: .2cm;
-    background: var(--modal-button-color);
+    background: var(--hov-tint-color);
 }
 
 .login-text:disabled, .login-button:disabled {
@@ -401,15 +401,15 @@ h6 {
 }
 
 .login-text:focus {
-    background-color: var(--hov-modal-button-color);
+    background-color: var(--hov-color);
 }
 
 .login-button:hover {
-    background-color: var(--hov-modal-button-color);
+    background-color: var(--hov-color);
 }
 
 .login-button:active {
-    background-color: var(--hov-accent-color);
+    background-color: var(--hov-modal-button-color);
 }
 
 #login-language-sel {
