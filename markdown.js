@@ -78,6 +78,7 @@ function loadinputs() {
             <div id="emojipicker"></div>
             <div id="images-container"></div>
             <span id="edit-indicator"></span>
+            <span id="replies"></span>
         </div>
     </div>
     <div id="msgs" class="posts">
