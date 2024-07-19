@@ -2326,12 +2326,12 @@ function loadAppearance() {
                     <button onclick='changeTheme(\"midnight\", this)' class='theme-button midnight-theme'>Midnight</button>
                     <button onclick='changeTheme(\"grain\", this)' class='theme-button grain-theme'>Grain</button>
                     <button onclick='changeTheme(\"sage\", this)' class='theme-button sage-theme'>Sage</button>
+                    <button onclick='changeTheme(\"roarer\", this)' class='theme-button roarer-theme'>Roarer</button>
+                    <button onclick='changeTheme(\"grip\", this)' class='theme-button grip-theme'>9rip</button>
+                    <button onclick='changeTheme(\"darflen\", this)' class='theme-button darflen-theme'>Darflen</button>
                     <div style="display:none;">
                     <button onclick='changeTheme(\"meower\", this)' class='theme-button meower-theme'>Meower</button>
-                    <button onclick='changeTheme(\"roarer\", this)' class='theme-button roarer-theme'>Roarer</button>
                     <button onclick='changeTheme(\"flamingo\", this)' class='theme-button flamingo-theme'>Flamingo</button>
-                    <button onclick='changeTheme(\"darflen\", this)' class='theme-button darflen-theme'>Darflen</button>
-                    <button onclick='changeTheme(\"grip\", this)' class='theme-button grip-theme'>9rip</button>
                     <button onclick='changeTheme(\"teb\", this)' class='theme-button teb-theme'>Blue</button>
                     <button onclick='changeTheme(\"fabloo\", this)' class='theme-button fabloo-theme'>Fabloo</button>
                     <button onclick='changeTheme(\"midnight-blurple\", this)' class='theme-button midnight-blurple-theme'>Blurple</button>

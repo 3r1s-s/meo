@@ -1,53 +1,9 @@
-:root {
-
-    --border-radius: 6px;
-    --button-radius: 6px;
-
-    --button-padding: 12px;
-}
-
-.oled-theme {
-    --dark-accent: #000;
-}
-
-.contrast-theme {
-    --dark-accent: #0c0c0c;
-}
-
-.grain-theme {
-    --dark-accent: #1c1b1b;
-}
-
-.grip-theme {
-    --dark-accent: #09090a;
-}
-
-.cosmic-theme {
-    --dark-accent: #e2dcce;
-}
-
-.roarer-theme {
-    --dark-accent: #111827;
-}
-
 .flamingo-theme {
     --dark-accent: #16040a;
 }
 
-.darflen-theme {
-    --dark-accent: #1c1a23;
-}
-
 .bsky-theme {
     --dark-accent: #181825;
-}
-
-.lime-theme {
-    --dark-accent: #eef5ea;
-}
-
-.sage-theme {
-    --dark-accent: #1a2015;
 }
 
 .midnight-blurple-theme {
