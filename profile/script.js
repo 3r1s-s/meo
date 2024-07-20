@@ -15,6 +15,7 @@ function fetchprofile() {
             if (data.avatar_color !== "!color" && data.avatar_color) {
                 profilecont.classList.add('custom-bg');
                 profilecont.style.setProperty('--accent', lightenColour(data.avatar_color, 2));
+                profilecont.style.setProperty('--color', lightenColour(data.avatar_color, 1.25));
             }
 
             if (data.avatar) {

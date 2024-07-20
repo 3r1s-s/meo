@@ -337,7 +337,7 @@ h6 {
 }
 
 .reply {
-    border: 1px solid var(--background);
+    background-color: var(--accent-down);
     padding-left: 10px;
     padding-right: 10px;
     border-radius: var(--border-radius);

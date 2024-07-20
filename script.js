@@ -581,6 +581,11 @@ function loadpost(p) {
         });
     }
 
+    p.reply_to.forEach(function(item){
+        const replyContainer = loadreplyv(item);
+        pstinf.after(replyContainer);
+    });
+
     let postContentText = document.createElement("p");
     postContentText.className = "post-content";
     // tysm tni <3
@@ -855,6 +860,81 @@ async function loadreply(postOrigin, replyid) {
         errorElement.textContent = "Error fetching reply";
         return errorElement;
     }
+}
+
+function loadreplyv(item) {
+    console.log(item);
+    let bridged = (bridges.includes(item.u));
+
+    const replycontainer = document.createElement("div");
+    replycontainer.classList.add("reply");
+    replycontainer.id = `reply-${item._id}`;
+
+    let content;
+    let user;
+
+    if (item.p) {
+        content = item.p;
+    } else if (item.attachments) {
+        content = "[Attachment]";
+    } else {
+        content = '';
+    }
+
+    user = item.author._id || '';
+
+    if (bridged) {
+        const rcon = content;
+        const match = rcon.match(/^([a-zA-Z0-9_-]{1,20})?: ([\s\S]+)?/m);
+
+        if (match) {
+            user = match[1];
+            content = match[2] || "";
+        } else {
+            user = item.author._id;
+            content = rcon;
+        }
+    }
+
+    replycontainer.innerHTML = `<p style='font-weight:bold;margin: 10px 0 10px 0;'>${escapeHTML(user)}</p><p style='margin: 10px 0 10px 0;'>${escapeHTML(content)}</p>`;
+
+    const full = document.createElement("div");
+    full.classList.add("reply-outer");
+
+    full.addEventListener('click', (e) => {
+        e.preventDefault();
+
+        const targetElement = document.getElementById(`${item._id}`);
+        const outer = document.getElementById("main");
+        targetElement.style.backgroundColor = 'var(--hov-accent-color)';
+        const navbarOffset = document.querySelector('.message-container').offsetHeight;
+        let scroll = settingsstuff().reducemotion ? "auto" : "smooth";
+        const desktopOffset = document.documentElement.classList.contains('desktop') ? 30 + navbarOffset : navbarOffset;
+
+        if (window.innerWidth < 720) {
+            const containerRect = outer.getBoundingClientRect();
+            const elementRect = targetElement.getBoundingClientRect();
+            const elementPosition = elementRect.top - containerRect.top + outer.scrollTop - desktopOffset;
+
+            outer.scrollTo({
+                top: elementPosition,
+                behavior: scroll
+            });
+        } else {
+            const elementPosition = targetElement.getBoundingClientRect().top + window.scrollY - desktopOffset;
+            window.scrollTo({
+                top: elementPosition,
+                behavior: scroll
+            });
+        }
+
+        setTimeout(() => {
+            targetElement.style.backgroundColor = '';
+        }, 1000);
+    });
+
+    full.appendChild(replycontainer);
+    return full;
 }
 
 function reply(event) {
@@ -2286,12 +2366,12 @@ function loadAppearance() {
                     <button onclick='changeTheme(\"midnight\", this)' class='theme-button midnight-theme'>Midnight</button>
                     <button onclick='changeTheme(\"grain\", this)' class='theme-button grain-theme'>Grain</button>
                     <button onclick='changeTheme(\"sage\", this)' class='theme-button sage-theme'>Sage</button>
+                    <button onclick='changeTheme(\"roarer\", this)' class='theme-button roarer-theme'>Roarer</button>
+                    <button onclick='changeTheme(\"grip\", this)' class='theme-button grip-theme'>9rip</button>
+                    <button onclick='changeTheme(\"darflen\", this)' class='theme-button darflen-theme'>Darflen</button>
                     <div style="display:none;">
                     <button onclick='changeTheme(\"meower\", this)' class='theme-button meower-theme'>Meower</button>
-                    <button onclick='changeTheme(\"roarer\", this)' class='theme-button roarer-theme'>Roarer</button>
                     <button onclick='changeTheme(\"flamingo\", this)' class='theme-button flamingo-theme'>Flamingo</button>
-                    <button onclick='changeTheme(\"darflen\", this)' class='theme-button darflen-theme'>Darflen</button>
-                    <button onclick='changeTheme(\"grip\", this)' class='theme-button grip-theme'>9rip</button>
                     <button onclick='changeTheme(\"teb\", this)' class='theme-button teb-theme'>Blue</button>
                     <button onclick='changeTheme(\"fabloo\", this)' class='theme-button fabloo-theme'>Fabloo</button>
                     <button onclick='changeTheme(\"midnight-blurple\", this)' class='theme-button midnight-blurple-theme'>Blurple</button>
