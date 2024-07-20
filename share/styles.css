@@ -204,11 +204,13 @@ textarea {
 }
 
 .reply {
-    margin: 5px;
-    border: 1px solid var(--background);
+    background-color: var(--accent-down);
     padding-left: 10px;
     padding-right: 10px;
-    border-radius: 5px;
+    border-radius: var(--border-radius);
+    max-height: 100px;
+    overflow: hidden;
+    margin: var(--text-margin) 0;
 }
 
 .avatar {
