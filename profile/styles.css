@@ -86,6 +86,10 @@ p {
     border: 2px dashed #ffffff20;
 }
 
+.custom-bg {
+    color: var(--color);
+}
+
 .custom-bg a {
     color: var(--accent);
 }
