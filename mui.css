@@ -75,16 +75,6 @@ pre {
     border-radius: 6px;
 }
 
-.start-users-online .button:first-child {
-    border-top-left-radius: 15px;
-    border-top-right-radius: 15px;
-}
-
-.start-users-online .button:last-child {
-    border-bottom-right-radius: 15px;
-    border-bottom-left-radius: 15px;
-}
-
 .nav-top {
     position: absolute;
     top: 0;

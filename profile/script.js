@@ -152,6 +152,12 @@ This message was created by meo.
     }
 }
 
+if (window.self == window.top) {
+    const urlParams = new URLSearchParams(window.location.search);
+    const username = urlParams.get('u');
+    window.location.href = `../?openprofile=${username}`;
+}
+
 fetchprofile();
 
 function timeago(tstamp) {

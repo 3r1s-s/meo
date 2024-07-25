@@ -125,6 +125,12 @@ function main() {
             Notification.requestPermission();
         }
     }
+
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams) {
+        const username = urlParams.get('openprofile');
+        openUsrModal(username);
+    }
       
     meowerConnection.onmessage = (event) => {
         console.log("INC: " + event.data);
