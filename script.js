@@ -125,7 +125,7 @@ function main() {
             Notification.requestPermission();
         }
     }
-    
+
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.has('openprofile')) {
         const username = urlParams.get('openprofile');
@@ -890,11 +890,13 @@ function loadreplyv(item) {
     const replycontainer = document.createElement("div");
     if (item.author.avatar_color && item.author.avatar_color !== "!color") {
         replycontainer.style.setProperty('--reply-accent', `${darkenColour(item.author.avatar_color, 3)}`);
-        replycontainer.style.setProperty('--reply-border', `${lightenColour(item.author.avatar_color, 5)}`);
+        replycontainer.style.setProperty('--reply-border', `${lightenColour(item.author.avatar_color, 3)}`);
+        replycontainer.style.setProperty('--reply-color', `${lightenColour(item.author.avatar_color, 1.5)}`);
         replycontainer.classList.add("custom");
     } else {        
         replycontainer.style.setProperty('--reply-accent', `var(--accent-down)`);
         replycontainer.style.setProperty('--reply-border', `var(--accent-tint)`);
+        replycontainer.style.setProperty('--reply-color', `var(--color)`);
     }
     replycontainer.classList.add("reply");
     replycontainer.id = `reply-${item._id}`;

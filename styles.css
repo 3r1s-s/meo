@@ -350,7 +350,7 @@ h6 {
 .reply.custom {
     background-color: var(--reply-accent);
     border: 3px solid var(--reply-border);
-    color: var(--color-on);
+    color: var(--reply-color);
     padding-left: 10px;
     padding-right: 10px;
     border-radius: var(--border-radius);
@@ -2939,6 +2939,11 @@ possible future styling
 
     .mem-ops {
         display: flex;
+    }
+
+    .stg-section:hover .settingstoggle svg {
+        opacity: 0;
+        color: var(--hov-color);
     }
 }
 
