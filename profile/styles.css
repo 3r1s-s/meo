@@ -26,6 +26,10 @@ hr {
     flex: 1;
 }
 
+.username:hover {
+    cursor: pointer;
+}
+
 .dm-btn {
     flex: 0.1;
     background-color: transparent;

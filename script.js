@@ -125,12 +125,21 @@ function main() {
             Notification.requestPermission();
         }
     }
-
+    
     const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams) {
+    if (urlParams.has('openprofile')) {
         const username = urlParams.get('openprofile');
         openUsrModal(username);
+    
+        urlParams.delete('openprofile');
+        const newUrl = window.location.pathname + '?' + urlParams.toString();
+        if (urlParams.toString() === '') {
+            window.history.replaceState({}, document.title, window.location.pathname);
+        } else {
+            window.history.replaceState({}, document.title, newUrl);
+        }
     }
+    
       
     meowerConnection.onmessage = (event) => {
         console.log("INC: " + event.data);
