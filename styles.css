@@ -338,6 +338,19 @@ h6 {
 
 .reply {
     background-color: var(--accent-down);
+    border: 3px solid var(--accent-down);
+    padding-left: 10px;
+    padding-right: 10px;
+    border-radius: var(--border-radius);
+    max-height: 100px;
+    overflow: hidden;
+    margin: var(--text-margin) 0;
+}
+
+.reply.custom {
+    background-color: var(--reply-accent);
+    border: 3px solid var(--reply-border);
+    color: var(--color-on);
     padding-left: 10px;
     padding-right: 10px;
     border-radius: var(--border-radius);
@@ -1413,15 +1426,6 @@ possible future styling
     padding: var(--padding);
 }
 
-.stg-section {
-    background-color: var(--accent-color);
-    color: var(--color);
-    border: none;
-    border-radius: var(--button-radius);
-    padding: var(--padding);
-    margin: var(--margin) 0;
-}
-
 .section-form {
     width: 100%;
     display: flex;
@@ -1878,15 +1882,77 @@ possible future styling
     margin: 0 10px 0 0;
 }
 
+.settings-section-outer {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.stg-section {
+    background-color: var(--accent-color);
+    color: var(--color);
+    border: none;
+    border-radius: var(--button-radius);
+    padding: var(--button-padding);
+}
+
+.settings-section-outer .stg-section:first-child {
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+}
+
+.settings-section-outer .stg-section:last-child {
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+}
+
+.stg-section:hover, .general-label:hover {
+    cursor: pointer;
+}
+
 .general-label {
     -webkit-user-select: none;
     user-select: none;
     display: flex;
     position: relative;
+    align-items: center;
 }
 
 .general-desc {
     flex: 1;
+}
+
+.settingstoggle {
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--hov-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--border-radius);
+    background: var(--background);
+    transition: 100ms ease-in-out;
+}
+
+.settingstoggle svg {
+    transition: inherit;
+    opacity: 0;
+    color: var(--hov-color);
+}
+
+.stg-section:hover .settingstoggle svg {
+    opacity: 1;
+    color: var(--hov-color);
+}
+
+.stg-section.checked .settingstoggle svg {
+    opacity: 1;
+    color: var(--color-on);
+}
+
+.stg-section.checked .settingstoggle {
+    border: 2px solid var(--primary);
+    background-color: var(--primary);
 }
 
 .subsubheader {

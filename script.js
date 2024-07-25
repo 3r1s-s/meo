@@ -13,6 +13,7 @@
 // Discord mode where posts are on the bottom
 // Notification managment
 // Custom video and audio player, similar style as the file download preview
+// Add tooltips to icon buttons, emojis, and maybe some other things
 
 let end = false;
 let page = "load";
@@ -776,6 +777,7 @@ async function loadreply(postOrigin, replyid) {
         let bridged = (bridges.includes(replydata.u));
 
         const replycontainer = document.createElement("div");
+        replycontainer.style.setProperty('--reply-accent', "var(--accent-down)");
         replycontainer.classList.add("reply");
         replycontainer.id = `reply-${replyid}`;
 
@@ -871,6 +873,14 @@ function loadreplyv(item) {
     let bridged = (bridges.includes(item.u));
 
     const replycontainer = document.createElement("div");
+    if (item.author.avatar_color && item.author.avatar_color !== "!color") {
+        replycontainer.style.setProperty('--reply-accent', `${darkenColour(item.author.avatar_color, 3)}`);
+        replycontainer.style.setProperty('--reply-border', `${lightenColour(item.author.avatar_color, 5)}`);
+        replycontainer.classList.add("custom");
+    } else {        
+        replycontainer.style.setProperty('--reply-accent', `var(--accent-down)`);
+        replycontainer.style.setProperty('--reply-border', `var(--accent-tint)`);
+    }
     replycontainer.classList.add("reply");
     replycontainer.id = `reply-${item._id}`;
 
@@ -1811,284 +1821,170 @@ function loadGeneral() {
     setTop();
     const pageContainer = document.querySelector(".settings");
     const settingsContent = `
-            <h1>${lang().settings_general}</h1>
-            <h3>${lang().general_sub.chat}</h3>
-            <div class="msgs"></div>
-            <div class="stg-section">
-                <label class="general-label">
-                <div class="general-desc">
-                ${lang().general_list.title.homepage}
-                <p class="subsubheader">${lang().general_list.desc.homepage}</p>
-                </div>
-                <input type="checkbox" id="homepage" class="settingstoggle">
-                </label>
-            </div>
-            <div class="stg-section">
-                <label class="general-label">
-                <div class="general-desc">
-                ${lang().general_list.title.invtyping}
-                <p class="subsubheader">${lang().general_list.desc.invtyping}</p>
-                </div>
-                <input type="checkbox" id="invtyping" class="settingstoggle">
-                </label>
-            </div>
-            <div class="stg-section">
-                <label class="general-label">
-                <div class="general-desc">
-                ${lang().general_list.title.imagewhitelist}
-                <p class="subsubheader">${lang().general_list.desc.imagewhitelist}</p>
-                </div>
-                <input type="checkbox" id="imagewhitelist" class="settingstoggle">
-                </label>
-            </div>
-                <div class="stg-section">
-                <label class="general-label">
-                <div class="general-desc">
-                ${lang().general_list.title.hideimages}
-                <p class="subsubheader">${lang().general_list.desc.hideimages}</p>
-                </div>
-                <input type="checkbox" id="hideimages" class="settingstoggle">
-                </label>
-            </div>
-            <div class="stg-section">
-                <label class="general-label">
-                <div class="general-desc">
-                ${lang().general_list.title.embeds}
-                <p class="subsubheader">${lang().general_list.desc.embeds}</p>
-                </div>
-                <input type="checkbox" id="embeds" class="settingstoggle">
-                </label>
-            </div>
-            <div class="stg-section">
-                <label class="general-label">
-                <div class="general-desc">
-                ${lang().general_list.title.entersend}
-                <p class="subsubheader">${lang().general_list.desc.entersend}</p>
-                </div>
-                <input type="checkbox" id="entersend" class="settingstoggle">
-                </label>
-            </div>
-            <div class="stg-section">
-                <label class="general-label">
-                <div class="general-desc">
-                ${lang().general_list.title.blockedmessages}
-                <p class="subsubheader">${lang().general_list.desc.blockedmessages}</p>
-                </div>
-                <input type="checkbox" id="blockedmessages" class="settingstoggle">
-                </label>
-            </div>
-            <div class="stg-section">
-                <label class="general-label">
-                <div class="general-desc">
-                ${lang().general_list.title.censorwords}
-                <p class="subsubheader">${lang().general_list.desc.censorwords}</p>
-                </div>
-                <input type="checkbox" id="censorwords" class="settingstoggle">
-                </label>
-            </div>
-            <div class="stg-section">
-                <label class="general-label">
-                <div class="general-desc">
-                ${lang().general_list.title.notifications}
-                <p class="subsubheader">${lang().general_list.desc.notifications}</p>
-                </div>
-                <input type="checkbox" id="notifications" class="settingstoggle">
-                </label>
-            </div>
-            <h3>${lang().general_sub.accessibility}</h3>
-            <div class="stg-section">
-                <label class="general-label">
-                <div class="general-desc">
-                ${lang().general_list.title.reducemotion}
-                <p class="subsubheader">${lang().general_list.desc.reducemotion}</p>
-                </div>
-                <input type="checkbox" id="reducemotion" class="settingstoggle">
-                </label>
-            </div>
-            <div class="stg-section">
-                <label class="general-label">
-                <div class="general-desc">
-                ${lang().general_list.title.showpostbuttons}
-                <p class="subsubheader">${lang().general_list.desc.showpostbuttons}</p>
-                </div>
-                <input type="checkbox" id="showpostbuttons" class="settingstoggle">
-                </label>
-            </div>
-            <div class="stg-section">
-                <label class="general-label">
-                <div class="general-desc">
-                ${lang().general_list.title.underlinelinks}
-                <p class="subsubheader">${lang().general_list.desc.underlinelinks}</p>
-                </div>
-                <input type="checkbox" id="underlinelinks" class="settingstoggle">
-                </label>
-            </div>
-            <div class="stg-section">
-                <label class="general-label">
-                <div class="general-desc">
-                ${lang().general_list.title.magnify}
-                <p class="subsubheader">${lang().general_list.desc.magnify}</p>
-                </div>
-                <input type="checkbox" id="magnify" class="settingstoggle">
-                </label>
-            </div>
-            <h3>${lang().general_sub.misc}</h3>
-            <div class="stg-section">
-                <label class="general-label">
-                <div class="general-desc">
-                ${lang().general_list.title.consolewarnings}
-                <p class="subsubheader">${lang().general_list.desc.consolewarnings}</p>
-                </div>
-                <input type="checkbox" id="consolewarnings" class="settingstoggle">
-                </label>
-            </div>
-            <div class="stg-section">
-                <label class="general-label">
-                <div class="general-desc">
-                ${lang().general_list.title.widemode}
-                <p class="subsubheader">${lang().general_list.desc.widemode}</p>
-                </div>
-                <input type="checkbox" id="widemode" class="settingstoggle">
-                </label>
-            </div>
-            <div class="stg-section">
-                <label class="general-label">
-                <div class="general-desc">
-                ${lang().general_list.title.discord}
-                <p class="subsubheader">${lang().general_list.desc.discord}</p>
-                </div>
-                <input type="checkbox" id="discord" class="settingstoggle">
-                </label>
-            </div>
-            <h3>${lang().general_sub.privacy}</h3>
-            <div class="fun-buttons">
+        <h1>${lang().settings_general}</h1>
+        <h3>${lang().general_sub.chat}</h3>
+        <div class="msgs"></div>
+        <div class="settings-section-outer">
+        ${createSettingSection("homepage", lang().general_list.title.homepage, lang().general_list.desc.homepage)}
+        ${createSettingSection("invtyping", lang().general_list.title.invtyping, lang().general_list.desc.invtyping)}
+        ${createSettingSection("imagewhitelist", lang().general_list.title.imagewhitelist, lang().general_list.desc.imagewhitelist)}
+        ${createSettingSection("hideimages", lang().general_list.title.hideimages, lang().general_list.desc.hideimages)}
+        ${createSettingSection("embeds", lang().general_list.title.embeds, lang().general_list.desc.embeds)}
+        ${createSettingSection("entersend", lang().general_list.title.entersend, lang().general_list.desc.entersend)}
+        ${createSettingSection("blockedmessages", lang().general_list.title.blockedmessages, lang().general_list.desc.blockedmessages)}
+        ${createSettingSection("censorwords", lang().general_list.title.censorwords, lang().general_list.desc.censorwords)}
+        ${createSettingSection("notifications", lang().general_list.title.notifications, lang().general_list.desc.notifications)}
+        </div>
+        <h3>${lang().general_sub.accessibility}</h3>
+        <div class="settings-section-outer">
+        ${createSettingSection("reducemotion", lang().general_list.title.reducemotion, lang().general_list.desc.reducemotion)}
+        ${createSettingSection("showpostbuttons", lang().general_list.title.showpostbuttons, lang().general_list.desc.showpostbuttons)}
+        ${createSettingSection("underlinelinks", lang().general_list.title.underlinelinks, lang().general_list.desc.underlinelinks)}
+        ${createSettingSection("magnify", lang().general_list.title.magnify, lang().general_list.desc.magnify)}
+        </div>
+        <h3>${lang().general_sub.misc}</h3>
+        <div class="settings-section-outer">
+        ${createSettingSection("consolewarnings", lang().general_list.title.consolewarnings, lang().general_list.desc.consolewarnings)}
+        ${createSettingSection("widemode", lang().general_list.title.widemode, lang().general_list.desc.widemode)}
+        ${createSettingSection("discord", lang().general_list.title.discord, lang().general_list.desc.discord)}
+        </div>
+        <h3>${lang().general_sub.privacy}</h3>
+        <div class="fun-buttons">
             <a href="https://github.com/3r1s-s/meo/issues" target="_blank" class="button blockeduser">${lang().action.bug}</a>
             <a href="https://meower.org/export/" target="_blank" class="button blockeduser">${lang().action.datarequest}</a>
-            </div>
-            <a style="font-size: 12px" href="https://meower.org/legal" target="_blank">${lang().login_sub.agreement}</a>
-            <h3>${lang().general_sub.acc}</h3>
-            <button onclick="deleteTokensModal()" class="button blockeduser">${lang().action.cleartokens}</button>
-            <button onclick="changePasswordModal()" class="button blockeduser">${lang().action.changepw}</button>
-            <button onclick="clearLocalstorageModal()" class="button blockeduser">${lang().action.clearls}</button>
-            <button onclick="DeleteAccountModal()" class="button blockeduser red">${lang().action.deleteacc}</button>
-            <h3>${lang().general_sub.blockedusers}</h3>
-            <div class="blockedusers list">
+        </div>
+        <a style="font-size: 12px" href="https://meower.org/legal" target="_blank">${lang().login_sub.agreement}</a>
+        <h3>${lang().general_sub.acc}</h3>
+        <button onclick="deleteTokensModal()" class="button blockeduser">${lang().action.cleartokens}</button>
+        <button onclick="changePasswordModal()" class="button blockeduser">${lang().action.changepw}</button>
+        <button onclick="clearLocalstorageModal()" class="button blockeduser">${lang().action.clearls}</button>
+        <button onclick="DeleteAccountModal()" class="button blockeduser red">${lang().action.deleteacc}</button>
+        <h3>${lang().general_sub.blockedusers}</h3>
+        <div class="blockedusers list">
             <button class="blockeduser button" onclick="blockUserSel()">${lang().action.blockuser}</button>
-            </div>
-            <h3>${lang().general_sub.blockedwords}</h3>
-            <div class="blockedwords list">
+        </div>
+        <h3>${lang().general_sub.blockedwords}</h3>
+        <div class="blockedwords list">
             <button class="blockedword button" onclick="blockWordSel()">${lang().action.blockword}</button>
-            </div>
-            <h3>${lang().general_sub.about}</h3>
-            <div class="stg-section">
+        </div>
+        <h3>${lang().general_sub.about}</h3>
+        <div class="stg-section">
             <span>meo <span class="version"></span></span><br>
             <span class="yeah subsubheader"></span>
+        </div>
+        <h3>${lang().general_sub.credits}</h3>
+        <div class="stg-section">
+            <div class="list">
+                <span class="credit">Tnix, for helping out here and there</span>
+                <span class="credit">ethernet, moral support, and translating</span>
+                <span class="credit">melt, for the original webhook code</span>
+                <span class="credit">theotherhades, for the IP popup</span>
+                <span class="credit">You, ${localStorage.getItem("username")}, for using the client</span>
+                <span class="credit">All the contributors and translators</span>
             </div>
-            <h3>${lang().general_sub.credits}</h3>
-            <div class="stg-section">
-                <div class="list">
-                    <span class="credit">Tnix, for helping out here and there</span>
-                    <span class="credit">ethernet, moral support, and translating</span>
-                    <span class="credit">melt, for the original webhook code</span>
-                    <span class="credit">theotherhades, for the IP popup</span>
-                    <span class="credit">You, ${localStorage.getItem("username")}, for using the client</span>
-                    <span class="credit">All the contributors and translators</span>
-                </div>
-            </div>
-            `;
+        </div>
+    `;
 
-            pageContainer.innerHTML = settingsContent;
+    pageContainer.innerHTML = settingsContent;
 
-            const settings = {
-                homepage: document.getElementById("homepage"),
-                consolewarnings: document.getElementById("consolewarnings"),
-                blockedmessages: document.getElementById("blockedmessages"),
-                invtyping: document.getElementById("invtyping"),
-                imagewhitelist: document.getElementById("imagewhitelist"),
-                censorwords: document.getElementById("censorwords"),
-                embeds: document.getElementById("embeds"),
-                reducemotion: document.getElementById("reducemotion"),
-                showpostbuttons: document.getElementById("showpostbuttons"),
-                underlinelinks: document.getElementById("underlinelinks"),
-                magnify: document.getElementById("magnify"),
-                entersend: document.getElementById("entersend"),
-                hideimages: document.getElementById("hideimages"),
-                notifications: document.getElementById("notifications"),
-                widemode: document.getElementById("widemode"),
-                discord: document.getElementById("discord")
-            };
-        
-            Object.values(settings).forEach((checkbox) => {
-                checkbox.addEventListener("change", () => {
-                    localStorage.setItem('settings', JSON.stringify({
-                        homepage: settings.homepage.checked,
-                        consolewarnings: settings.consolewarnings.checked,
-                        blockedmessages: settings.blockedmessages.checked,
-                        invtyping: settings.invtyping.checked,
-                        imagewhitelist: settings.imagewhitelist.checked,
-                        censorwords: settings.censorwords.checked,
-                        embeds: settings.embeds.checked,
-                        reducemotion: settings.reducemotion.checked,
-                        showpostbuttons: settings.showpostbuttons.checked,
-                        underlinelinks: settings.underlinelinks.checked,
-                        magnify: settings.magnify.checked,
-                        entersend: settings.entersend.checked,
-                        hideimages: settings.hideimages.checked,
-                        notifications: settings.notifications.checked,
-                        widemode: settings.widemode.checked,
-                        discord: settings.discord.checked
-                    }));
-                    setAccessibilitySettings();
-                    if (settingsstuff().notifications) {
-                        if (Notification.permission !== "granted") {
-                            Notification.requestPermission();
-                        }
-                    }
-                });
-            });
-        
-            const storedSettings = JSON.parse(localStorage.getItem('settings')) || {};
-            Object.entries(storedSettings).forEach(([setting, value]) => {
-                if (settings[setting]) {
-                    settings[setting].checked = value;
+    const settings = {
+        homepage: document.getElementById("homepage"),
+        consolewarnings: document.getElementById("consolewarnings"),
+        blockedmessages: document.getElementById("blockedmessages"),
+        invtyping: document.getElementById("invtyping"),
+        imagewhitelist: document.getElementById("imagewhitelist"),
+        censorwords: document.getElementById("censorwords"),
+        embeds: document.getElementById("embeds"),
+        reducemotion: document.getElementById("reducemotion"),
+        showpostbuttons: document.getElementById("showpostbuttons"),
+        underlinelinks: document.getElementById("underlinelinks"),
+        magnify: document.getElementById("magnify"),
+        entersend: document.getElementById("entersend"),
+        hideimages: document.getElementById("hideimages"),
+        notifications: document.getElementById("notifications"),
+        widemode: document.getElementById("widemode"),
+        discord: document.getElementById("discord")
+    };
+
+    Object.values(settings).forEach((settingDiv) => {
+        settingDiv.addEventListener("click", () => {
+            const isChecked = settingDiv.classList.toggle("checked");
+            localStorage.setItem('settings', JSON.stringify({
+                homepage: settings.homepage.classList.contains("checked"),
+                consolewarnings: settings.consolewarnings.classList.contains("checked"),
+                blockedmessages: settings.blockedmessages.classList.contains("checked"),
+                invtyping: settings.invtyping.classList.contains("checked"),
+                imagewhitelist: settings.imagewhitelist.classList.contains("checked"),
+                censorwords: settings.censorwords.classList.contains("checked"),
+                embeds: settings.embeds.classList.contains("checked"),
+                reducemotion: settings.reducemotion.classList.contains("checked"),
+                showpostbuttons: settings.showpostbuttons.classList.contains("checked"),
+                underlinelinks: settings.underlinelinks.classList.contains("checked"),
+                magnify: settings.magnify.classList.contains("checked"),
+                entersend: settings.entersend.classList.contains("checked"),
+                hideimages: settings.hideimages.classList.contains("checked"),
+                notifications: settings.notifications.classList.contains("checked"),
+                widemode: settings.widemode.classList.contains("checked"),
+                discord: settings.discord.classList.contains("checked")
+            }));
+            setAccessibilitySettings();
+            if (settingsstuff().notifications) {
+                if (Notification.permission !== "granted") {
+                    Notification.requestPermission();
                 }
-            });
-
-        const cont = document.querySelector('.blockedusers');
-
-        for (var user in blockedUsers) {
-            if (blockedUsers.hasOwnProperty(user)) {
-                const item = document.createElement('button');
-                
-                item.innerText = '@' + user;
-                
-                item.classList.add('blockeduser');
-                item.classList.add('button');
-                
-                item.setAttribute("onclick", `blockUserModal('${user}')`);
-                
-                cont.appendChild(item);
             }
-        }
+        });
+    });
 
-        const bwcont = document.querySelector('.blockedwords');
-
-        for (const word in blockedWords) {
-            if (blockedWords.hasOwnProperty(word)) {
-                const item = document.createElement('button');
-                
-                item.innerText = word;
-                
-                item.classList.add('blockedword');
-                item.classList.add('button');
-                
-                item.setAttribute("onclick", `unblockWord('${word}')`);
-                
-                bwcont.appendChild(item);
-            }
+    const storedSettings = JSON.parse(localStorage.getItem('settings')) || {};
+    Object.entries(storedSettings).forEach(([setting, value]) => {
+        if (settings[setting]) {
+            settings[setting].classList.toggle("checked", value);
         }
-        gitstuff()
+    });
+
+    const cont = document.querySelector('.blockedusers');
+    for (const user in blockedUsers) {
+        if (blockedUsers.hasOwnProperty(user)) {
+            const item = document.createElement('button');
+            item.innerText = '@' + user;
+            item.classList.add('blockeduser', 'button');
+            item.setAttribute("onclick", `blockUserModal('${user}')`);
+            cont.appendChild(item);
+        }
+    }
+
+    const bwcont = document.querySelector('.blockedwords');
+    for (const word in blockedWords) {
+        if (blockedWords.hasOwnProperty(word)) {
+            const item = document.createElement('button');
+            item.innerText = word;
+            item.classList.add('blockedword', 'button');
+            item.setAttribute("onclick", `unblockWord('${word}')`);
+            bwcont.appendChild(item);
+        }
+    }
+    gitstuff();
 }
+
+function createSettingSection(id, title, desc) {
+    return `
+        <div class="stg-section" id="${id}">
+            <label class="general-label">
+                <div class="general-desc">
+                    ${title}
+                    <p class="subsubheader">${desc}</p>
+                </div>
+                <div class="settingstoggle">
+                    <svg viewBox="0 0 24 24" height="20" width="20" aria-hidden="true" focusable="false" fill="currentColor" xmlns="http://www.w3.org/2000/svg" class="check">
+                        <path d="m10 15.586-3.293-3.293-1.414 1.414L10 18.414l9.707-9.707-1.414-1.414z"></path>
+                    </svg>
+                </div>
+            </label>
+        </div>
+    `;
+}
+
 
 async function gitstuff() {
     try {
