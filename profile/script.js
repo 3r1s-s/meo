@@ -321,5 +321,5 @@ function copy(text) {
     t.select();
     document.execCommand('copy');
     document.body.removeChild(t);
-    parent.closemodal("Copied username to clipboard!");
+    parent.closemodal(`${lang().modals.copyuser}`);
 }

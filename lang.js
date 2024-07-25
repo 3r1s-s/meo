@@ -275,6 +275,7 @@ const en = {
         "share": "Share",
         "plugin": "Refresh Required!",
         "shortcuts": "Shortcuts",
+        "copyuser": "Copied username to clipboard!",
     },
     "profile": {
         "quote": "Quote",
