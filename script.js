@@ -2002,7 +2002,6 @@ function createSettingSection(id, title, desc) {
     `;
 }
 
-
 async function gitstuff() {
     try {
         const response = await fetch('https://api.github.com/repos/3r1s-s/meo/commits/main');
@@ -2015,8 +2014,7 @@ async function gitstuff() {
         ${data.commit.message}
         `
     } catch (error) {
-        console.error('Error checking for updates:', error);
-        alert('Failed to check for updates.');
+        console.log('Error checking for updates:', error);
     }
 }
 
@@ -2058,9 +2056,13 @@ function addPlugin(plugin, isEnabled) {
 
     pluginsList.insertAdjacentHTML('beforeend', `
         <div class='section plugin' ${plugin.flags === '1' ? `title="Use this plugin with caution."` : ''}>
-        <label>
+        <label class="general-label">
             ${plugin.name}
-            <input type="checkbox" id="${plugin.name}" class="plugintoggle" ${isEnabled ? 'checked' : ''}>
+                <div class="plugintoggle ${isEnabled ? 'checked' : ''}" id="${plugin.name}">
+                    <svg viewBox="0 0 24 24" height="20" width="20" aria-hidden="true" focusable="false" fill="currentColor" xmlns="http://www.w3.org/2000/svg" class="check">
+                        <path d="m10 15.586-3.293-3.293-1.414 1.414L10 18.414l9.707-9.707-1.414-1.414z"></path>
+                    </svg>
+                </div>
             <p class='pluginsub'>${plugin.description}</p>
             <p class='subsubheader'>Created by <a href='https://github.com/${plugin.creator}' target='_blank'>${plugin.creator}</a></p>
             </label>
@@ -2073,22 +2075,29 @@ function addPlugin(plugin, isEnabled) {
         </div>
     `);
 
-    const checkbox = document.getElementById(plugin.name);
-    checkbox.addEventListener('change', function() {
+    const pluginToggle = document.getElementById(plugin.name);
+    pluginToggle.addEventListener('click', function() {
+        const isChecked = pluginToggle.classList.toggle('checked');
         const enabledPlugins = JSON.parse(localStorage.getItem('enabledPlugins')) || {};
-        enabledPlugins[plugin.name] = checkbox.checked;
+        enabledPlugins[plugin.name] = isChecked;
         localStorage.setItem('enabledPlugins', JSON.stringify(enabledPlugins));
 
-
-        if (!checkbox.checked) {
+        if (!isChecked) {
             const existingScript = document.querySelector(`script[src="${plugin.script}"]`);
             if (existingScript) {
                 existingScript.remove();
             }
-        };
+        }
+
         modalPluginup();
     });
+
+    // Set initial state
+    if (isEnabled) {
+        pluginToggle.classList.add('checked');
+    }
 }
+
 
 async function fetchPlugins() {
     try {
@@ -2236,6 +2245,7 @@ function loadAppearance() {
                 <div class="theme-buttons-inner">
                     <button onclick='changeTheme(\"cosmic\", this)' class='theme-button cosmic-theme'>Cosmic Latte</button>
                     <button onclick='changeTheme(\"lime\", this)' class='theme-button lime-theme'>Lime</button>
+                    <button onclick='changeTheme(\"evening\", this)' class='theme-button evening-theme'>Evening</button>
                     <button onclick='changeTheme(\"midnight\", this)' class='theme-button midnight-theme'>Midnight</button>
                     <button onclick='changeTheme(\"grain\", this)' class='theme-button grain-theme'>Grain</button>
                     <button onclick='changeTheme(\"sage\", this)' class='theme-button sage-theme'>Sage</button>

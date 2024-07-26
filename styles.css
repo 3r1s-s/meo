@@ -1949,6 +1949,7 @@ possible future styling
 .settingstoggle {
     width: 20px;
     height: 20px;
+    margin: 5px;
     border: 2px solid var(--hov-color);
     display: flex;
     align-items: center;
@@ -2026,6 +2027,36 @@ possible future styling
 
 .plugintoggle {
     float: right;
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--hov-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--border-radius);
+    background: var(--background);
+    transition: 100ms ease-in-out;
+}
+
+.plugintoggle svg {
+    transition: inherit;
+    opacity: 0;
+    color: var(--hov-color);
+}
+
+.plugintoggle:hover svg {
+    opacity: 1;
+    color: var(--hov-color);
+}
+
+.plugintoggle.checked svg {
+    opacity: 1;
+    color: var(--color-on);
+}
+
+.plugintoggle.checked {
+    border: 2px solid var(--primary);
+    background-color: var(--primary);
 }
 
 .plugin-flag {
@@ -2944,6 +2975,11 @@ possible future styling
     .stg-section:hover .settingstoggle svg {
         opacity: 0;
         color: var(--hov-color);
+    }
+
+    .stg-section.checked .settingstoggle svg {
+        opacity: 1;
+        color: var(--color-on);
     }
 }
 
