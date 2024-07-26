@@ -2056,13 +2056,13 @@ function addPlugin(plugin, isEnabled) {
 
     pluginsList.insertAdjacentHTML('beforeend', `
         <div class='section plugin' ${plugin.flags === '1' ? `title="Use this plugin with caution."` : ''}>
-        <label class="general-label">
+        <div class="plugintoggle ${isEnabled ? 'checked' : ''}" id="${plugin.name}">
+            <svg viewBox="0 0 24 24" height="20" width="20" aria-hidden="true" focusable="false" fill="currentColor" xmlns="http://www.w3.org/2000/svg" class="check">
+                <path d="m10 15.586-3.293-3.293-1.414 1.414L10 18.414l9.707-9.707-1.414-1.414z"></path>
+            </svg>
+        </div>
+        <label>
             ${plugin.name}
-                <div class="plugintoggle ${isEnabled ? 'checked' : ''}" id="${plugin.name}">
-                    <svg viewBox="0 0 24 24" height="20" width="20" aria-hidden="true" focusable="false" fill="currentColor" xmlns="http://www.w3.org/2000/svg" class="check">
-                        <path d="m10 15.586-3.293-3.293-1.414 1.414L10 18.414l9.707-9.707-1.414-1.414z"></path>
-                    </svg>
-                </div>
             <p class='pluginsub'>${plugin.description}</p>
             <p class='subsubheader'>Created by <a href='https://github.com/${plugin.creator}' target='_blank'>${plugin.creator}</a></p>
             </label>

@@ -2015,8 +2015,11 @@ possible future styling
 }
 
 .plugin {
-    padding: 15px var(--padding);
+    padding: 12px;
     position: relative;
+    display: flex;
+    flex-direction: row-reverse;
+    gap: 12px;
 }
 
 .plugin label {
@@ -2044,6 +2047,10 @@ possible future styling
     color: var(--hov-color);
 }
 
+.plugintoggle:hover {
+    cursor: pointer;
+}
+
 .plugintoggle:hover svg {
     opacity: 1;
     color: var(--hov-color);
@@ -2061,7 +2068,7 @@ possible future styling
 
 .plugin-flag {
     position: absolute;
-    margin: var(--margin);
+    margin: 12px;
     bottom: 0;
     right: 0;
     color: var(--color);
