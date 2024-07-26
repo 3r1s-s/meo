@@ -338,6 +338,19 @@ h6 {
 
 .reply {
     background-color: var(--accent-down);
+    border: 3px solid var(--accent-down);
+    padding-left: 10px;
+    padding-right: 10px;
+    border-radius: var(--border-radius);
+    max-height: 100px;
+    overflow: hidden;
+    margin: var(--text-margin) 0;
+}
+
+.reply.custom {
+    background-color: var(--reply-accent);
+    border: 3px solid var(--reply-border);
+    color: var(--reply-color);
     padding-left: 10px;
     padding-right: 10px;
     border-radius: var(--border-radius);
@@ -618,6 +631,15 @@ h6 {
     z-index: 1;
     border-radius: var(--border-radius);
     gap: 10px;
+    --br: 15px;
+}
+
+.message-container .button:first-child {
+    border-top-left-radius: var(--br);
+}
+
+.message-container .button:last-child {
+    border-top-right-radius: var(--br);
 }
 
 .sub-msg-cnt {
@@ -854,6 +876,10 @@ h6 {
     gap: var(--button-margin);
 }
 
+.navigation .button {
+    border-radius: 100px;
+}
+
 .gcs {
     display: flex;
     flex-direction: column;
@@ -878,7 +904,7 @@ h6 {
 }
 
 .navigation-button {
-    /*border-radius: 100rem;*/
+    border-radius: 100px;
     padding: var(--button-padding);
     text-align: left;
     display: flex;
@@ -1026,7 +1052,7 @@ possible future styling
     display: flex;
     flex-direction: column;
     align-items: center;
-    border-radius: var(--border-radius);
+    border-radius: calc(var(--border-radius)*2);
     animation: open cubic-bezier(.2,-.25,0,1) 0.2s forwards;
 }
 
@@ -1413,15 +1439,6 @@ possible future styling
     padding: var(--padding);
 }
 
-.stg-section {
-    background-color: var(--accent-color);
-    color: var(--color);
-    border: none;
-    border-radius: var(--button-radius);
-    padding: var(--padding);
-    margin: var(--margin) 0;
-}
-
 .section-form {
     width: 100%;
     display: flex;
@@ -1570,9 +1587,9 @@ possible future styling
     margin: calc(var(--margin)/2);
     right: 80px;
     box-shadow: 0px 3px 10px #00000050;
-    border-radius: var(--border-radius);
+    border-radius: calc(var(--border-radius)*2);
     display: flex;
-    width: 570px;
+    width: 314px;
     min-width: 314px;
     max-width: 629px;
     overflow: auto;
@@ -1666,7 +1683,6 @@ possible future styling
 
 .ubtn {
     padding: 0;
-    margin-bottom: var(--button-margin);
     text-align: left;
     display: flex;
     align-items: center;
@@ -1724,6 +1740,18 @@ possible future styling
     height: 30vh;
     overflow-y: scroll;
     margin-bottom: var(--button-margin);
+    gap: 8px;
+    border-radius: 6px;
+}
+
+.start-users-online .button:first-child {
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+}
+
+.start-users-online .button:last-child {
+    border-bottom-right-radius: 15px;
+    border-bottom-left-radius: 15px;
 }
   
 .search-input {
@@ -1731,7 +1759,7 @@ possible future styling
     padding: var(--button-padding) 20px;
     width: 70%;
     box-sizing: border-box;
-    border-radius: 100px;
+    border-radius: var(--border-radius);
     text-align: left;
 }
 
@@ -1832,7 +1860,7 @@ possible future styling
 }
 
 .gcbtn {
-    padding: 4px 10px;
+    padding: calc(var(--button-padding)/2) var(--button-padding);
 }
 
 .gctitle {
@@ -1878,15 +1906,78 @@ possible future styling
     margin: 0 10px 0 0;
 }
 
+.settings-section-outer {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.stg-section {
+    background-color: var(--accent-color);
+    color: var(--color);
+    border: none;
+    border-radius: var(--button-radius);
+    padding: var(--button-padding);
+}
+
+.settings-section-outer .stg-section:first-child {
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+}
+
+.settings-section-outer .stg-section:last-child {
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+}
+
+.stg-section:hover, .general-label:hover {
+    cursor: pointer;
+}
+
 .general-label {
     -webkit-user-select: none;
     user-select: none;
     display: flex;
     position: relative;
+    align-items: center;
 }
 
 .general-desc {
     flex: 1;
+}
+
+.settingstoggle {
+    width: 20px;
+    height: 20px;
+    margin: 5px;
+    border: 2px solid var(--hov-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--border-radius);
+    background: var(--background);
+    transition: 100ms ease-in-out;
+}
+
+.settingstoggle svg {
+    transition: inherit;
+    opacity: 0;
+    color: var(--hov-color);
+}
+
+.stg-section:hover .settingstoggle svg {
+    opacity: 1;
+    color: var(--hov-color);
+}
+
+.stg-section.checked .settingstoggle svg {
+    opacity: 1;
+    color: var(--color-on);
+}
+
+.stg-section.checked .settingstoggle {
+    border: 2px solid var(--primary);
+    background-color: var(--primary);
 }
 
 .subsubheader {
@@ -1912,7 +2003,7 @@ possible future styling
     display: flex;
     align-items: center;
     margin-bottom: var(--button-margin);
-    border-radius: var(--button-radius);
+    border-radius: 100px;
     background-color: var(--accent-color);
     padding: calc(var(--button-padding)/2) var(--button-padding);
 }
@@ -1924,8 +2015,11 @@ possible future styling
 }
 
 .plugin {
-    padding: 15px var(--padding);
+    padding: 12px;
     position: relative;
+    display: flex;
+    flex-direction: row-reverse;
+    gap: 12px;
 }
 
 .plugin label {
@@ -1936,11 +2030,45 @@ possible future styling
 
 .plugintoggle {
     float: right;
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--hov-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--border-radius);
+    background: var(--background);
+    transition: 100ms ease-in-out;
+}
+
+.plugintoggle svg {
+    transition: inherit;
+    opacity: 0;
+    color: var(--hov-color);
+}
+
+.plugintoggle:hover {
+    cursor: pointer;
+}
+
+.plugintoggle:hover svg {
+    opacity: 1;
+    color: var(--hov-color);
+}
+
+.plugintoggle.checked svg {
+    opacity: 1;
+    color: var(--color-on);
+}
+
+.plugintoggle.checked {
+    border: 2px solid var(--primary);
+    background-color: var(--primary);
 }
 
 .plugin-flag {
     position: absolute;
-    margin: var(--margin);
+    margin: 12px;
     bottom: 0;
     right: 0;
     color: var(--color);
@@ -2023,6 +2151,11 @@ possible future styling
   
 .post.blocked:focus-visible::before {
     opacity: 0;
+}
+
+.posts .post:last-child {
+    border-bottom-right-radius: 15px;
+    border-bottom-left-radius: 15px;
 }
 
 .blockeduser, .blockedword {
@@ -2844,6 +2977,16 @@ possible future styling
 
     .mem-ops {
         display: flex;
+    }
+
+    .stg-section:hover .settingstoggle svg {
+        opacity: 0;
+        color: var(--hov-color);
+    }
+
+    .stg-section.checked .settingstoggle svg {
+        opacity: 1;
+        color: var(--color-on);
     }
 }
 

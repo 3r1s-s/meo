@@ -2,10 +2,6 @@
     --dark-accent: #16040a;
 }
 
-.bsky-theme {
-    --dark-accent: #181825;
-}
-
 .midnight-blurple-theme {
     --dark-accent: #100f20;
 }
@@ -73,16 +69,6 @@ pre {
     margin-bottom: var(--button-margin);
     gap: 8px;
     border-radius: 6px;
-}
-
-.start-users-online .button:first-child {
-    border-top-left-radius: 15px;
-    border-top-right-radius: 15px;
-}
-
-.start-users-online .button:last-child {
-    border-bottom-right-radius: 15px;
-    border-bottom-left-radius: 15px;
 }
 
 .nav-top {

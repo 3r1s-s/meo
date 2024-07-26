@@ -284,6 +284,7 @@ const en = {
         "share": "Share",
         "plugin": "Refresh Required!",
         "shortcuts": "Shortcuts",
+        "copyuser": "Copied username to clipboard!",
         "uploadimage": "Upload an image",
     },
     "profile": {
