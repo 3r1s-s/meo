@@ -1178,9 +1178,7 @@ async function sendpost() {
                 attachments: attachmentIds.reverse(),
             })
         });
-        
-        const newPost = await response.json();
-        
+                
         placeholder.remove();
     }
 
@@ -2590,11 +2588,11 @@ function loadLanguages() {
         <h3>${lang().languages_sub.title}</h3>
         <div class="msgs"></div>
         <div class="languages">
-            <button class="language button" id="en" onclick="changeLanguage('en')"><span class="language-l">${en.language}</span><span class="language-r">English, US</span></button>
-            <button class="language button" id="enuk" onclick="changeLanguage('enuk')"><span class="language-l">${enuk.language}</span><span class="language-r">English, UK</span></button>
-            <button class="language button" id="es" onclick="changeLanguage('es')"><span class="language-l">${es.language}</span><span class="language-r">Spanish (Latin American)</span></button>
-            <button class="language button" id="es_es" onclick="changeLanguage('es_es')"><span class="language-l">${es_es.language}</span><span class="language-r">Spanish (Spain)</span></button>
-            <button class="language button" id="de" onclick="changeLanguage('de')"><span class="language-l">${de.language}</span><span class="language-r">German</span></button>
+            <button class="language button" id="en" onclick="changeLanguage('en')"><span class="language-l">${en.language}</span><span class="language-r">English, US</span><div class="radio"></div></button>
+            <button class="language button" id="enuk" onclick="changeLanguage('enuk')"><span class="language-l">${enuk.language}</span><span class="language-r">English, UK</span><div class="radio"></div></button>
+            <button class="language button" id="es" onclick="changeLanguage('es')"><span class="language-l">${es.language}</span><span class="language-r">Spanish (Latin American)</span><div class="radio"></div></button>
+            <button class="language button" id="es_es" onclick="changeLanguage('es_es')"><span class="language-l">${es_es.language}</span><span class="language-r">Spanish (Spain)</span><div class="radio"></div></button>
+            <button class="language button" id="de" onclick="changeLanguage('de')"><span class="language-l">${de.language}</span><span class="language-r">German</span><div class="radio"></div></button>
         </div>
         <hr>
         <span>${lang().languages_sub.desc} <a href='https://github.com/3r1s-s/meo' target="_blank" id='link'>${lang().languages_sub.link}</a></span>
