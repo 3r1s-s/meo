@@ -6,7 +6,7 @@
 // make windows 7 theme
 // replace ulist with typing indicator
 // load more button at the end of post list
-// have it be automatic after the first load more
+// have it be automatic after the first load more, make sure reply jumping works
 // Modal close animation
 // Fix the sidebar and it's resizing
 // Add a sidebar to the right side for Member list and replace the current ulist with typing indicator
@@ -14,6 +14,7 @@
 // Notification managment
 // Custom video and audio player, similar style as the file download preview
 // Add tooltips to icon buttons, emojis, and maybe some other things
+// Fix Desktop Mode
 
 let end = false;
 let page = "load";
@@ -1114,31 +1115,30 @@ async function sendpost() {
         return;
     }
 
-    // Check for substitution pattern s/old/new
-    const subregex = /^s\/(.+?)\/(.+)$/;
-    const match = message.match(subregex);
+    // Create a placeholder post element
+    const placeholder = document.createElement("div");
+    placeholder.classList.add("post");
+    placeholder.style.opacity = "0.5";
 
-    if (match) {
-        const old = match[1];
-        const newtx = match[2];
+    placeholder.innerHTML = `
+    <div class="pfp">
+    </div>
+    <div class="wrapper">
+    <span class="user-header"><span id='username'>${localStorage.getItem("username")}</span><i class="date">sending...</i></span>
+    <p class="post-content">
+    <p>${message}</p>
+    </p>
+    </div>
+    `
 
-        const repst = [...postCache[page]].reverse().find(post => post.u === localStorage.getItem("username"));
+    document.getElementById("msgs").prepend(placeholder);
 
-        if (repst) {
-            const newCont = repst.p.replace(new RegExp(old, 'g'), newtx);
-            
-            fetch(`https://api.meower.org/posts?id=${repst._id}`, {
-                method: "PATCH",
-                headers: {
-                    "Content-Type": "application/json",
-                    token: localStorage.getItem("token")
-                },
-                body: JSON.stringify({ content: newCont })
-            });
-        }
-
-        return;
-    }
+    loadPfp(localStorage.getItem("username"), 0)
+        .then(pfpElement => {
+            if (pfpElement) {
+                placeholder.querySelector(".pfp").appendChild(pfpElement);
+            }
+        });
 
     if (editIndicator.hasAttribute("data-postid")) {
         fetch(`https://api.meower.org/posts?id=${editIndicator.getAttribute("data-postid")}`, {
@@ -1167,7 +1167,7 @@ async function sendpost() {
         msgbox.placeholder = lang().meo_messagebox;
         msgbox.disabled = false;
 
-        fetch(`https://api.meower.org/${page === "home" ? "home" : `posts/${page}`}`, {
+        const response = await fetch(`https://api.meower.org/${page === "home" ? "home" : `posts/${page}`}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -1178,12 +1178,54 @@ async function sendpost() {
                 attachments: attachmentIds.reverse(),
             })
         });
+        
+        const newPost = await response.json();
+        
+        placeholder.remove();
     }
 
     autoresize();
     closepicker();
 }
 
+
+function createPlaceholderPost(id, message) {
+    const postContainer = document.createElement("div");
+    postContainer.classList.add("post");
+    postContainer.setAttribute("tabindex", "0");
+    postContainer.id = id;
+    postContainer.style.opacity = "0.5";
+
+    const wrapperDiv = document.createElement("div");
+    wrapperDiv.classList.add("wrapper");
+
+    const pfpDiv = document.createElement("div");
+    pfpDiv.classList.add("pfp");
+
+    const pstdte = document.createElement("i");
+    pstdte.classList.add("date");
+    pstdte.innerText = "sending...";
+
+    const pstinf = document.createElement("span");
+    pstinf.classList.add("user-header");
+    pstinf.innerHTML = `<span id='username'>${localStorage.getItem("username")}</span>`;
+    pstinf.appendChild(pstdte);
+    wrapperDiv.appendChild(pstinf);
+
+    const postContentText = document.createElement("p");
+    postContentText.className = "post-content";
+    postContentText.innerText = message;
+
+    wrapperDiv.appendChild(postContentText);
+    postContainer.appendChild(wrapperDiv);
+
+    const pageContainer = document.getElementById("msgs");
+    if (pageContainer.firstChild) {
+        pageContainer.insertBefore(postContainer, pageContainer.firstChild);
+    } else {
+        pageContainer.appendChild(postContainer);
+    }
+}
 
 function loadhome() {
     page = "home";
