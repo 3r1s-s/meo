@@ -1954,9 +1954,10 @@ possible future styling
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: var(--border-radius);
+    border-radius: 6px;
     background: var(--background);
     transition: 100ms ease-in-out;
+    box-sizing: border-box;
 }
 
 .settingstoggle svg {
@@ -2039,6 +2040,7 @@ possible future styling
     border-radius: var(--border-radius);
     background: var(--background);
     transition: 100ms ease-in-out;
+    box-sizing: border-box;
 }
 
 .plugintoggle svg {
