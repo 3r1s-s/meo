@@ -1063,6 +1063,7 @@ possible future styling
     border-radius: var(--border-radius);
     align-self: end;
     transition: var(--transition);
+    user-select: none;
 }
 
 .modal-close:hover {
@@ -1101,12 +1102,22 @@ possible future styling
     width: 100%;
     padding: var(--button-padding);
     border-radius: var(--border-radius);
-    margin-top: var(--margin);
     margin-bottom: var(--margin);
     text-align: left;
     display: flex;
     align-items: center;
     transition: var(--transition);
+    justify-content: space-between;
+}
+
+.modal-button:first-child {
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+}
+
+.modal-button:last-child {
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
 }
 
 .modal-button:hover {
@@ -1142,7 +1153,6 @@ possible future styling
 }
 
 .modal-icon {
-    width: 100%;
     height: 30px;
     display: flex;
     align-items: center;
@@ -2658,7 +2668,6 @@ possible future styling
     }
     
     .modal-button {
-        border-radius: 100px;
         padding: 10px 15px 10px 15px;
     }
 
