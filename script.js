@@ -1131,14 +1131,15 @@ async function sendpost() {
     </div>
     `
 
-    document.getElementById("msgs").prepend(placeholder);
-
-    loadPfp(localStorage.getItem("username"), 0)
+//    document.getElementById("msgs").prepend(placeholder);
+    if (placeholder) {
+        loadPfp(localStorage.getItem("username"), 0)
         .then(pfpElement => {
             if (pfpElement) {
                 placeholder.querySelector(".pfp").appendChild(pfpElement);
             }
         });
+    }
 
     if (editIndicator.hasAttribute("data-postid")) {
         fetch(`https://api.meower.org/posts?id=${editIndicator.getAttribute("data-postid")}`, {
