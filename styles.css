@@ -1649,6 +1649,28 @@ possible future styling
     background-color: var(--hov-modal-button-color);
 }
 
+.emoji-button-mobile {
+    display: none;
+}
+
+.emojibuttonm {
+    background-color: var(--modal-button-color);
+    font-size: 32px;
+    padding: 0;
+    width: 100%; /* Make the button width responsive */
+    aspect-ratio: 1 / 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font);
+}
+
+.emojimodal {
+    display: grid;
+    gap: 10px;
+    grid-template-columns: repeat(auto-fit, minmax(56px, 1fr));
+}
+
 .emojisearch {
     position: sticky;
     display: flex;
@@ -2882,6 +2904,10 @@ possible future styling
 
     .launch-logo {
         animation: none;
+    }
+
+    .emoji-button-mobile {
+        display: flex;
     }
 
     .emoji-button {

@@ -951,7 +951,7 @@ const de = {
 const eh = {
     "language": "Enchantment Table",
     "page_home": "⍑𝙹ᒲᒷ",
-    "page_start": "Start",
+    "page_start": "↸╎ᓭᓵ𝙹⍊ᒷ∷",
     "page_explore": "↸╎ᓭᓵ𝙹⍊ᒷ∷",
     "page_inbox": "リ𝙹ℸ╎⎓╎ᓵᔑℸ╎𝙹リᓭ",
     "page_settings": "ᓭᒷℸℸ╎リ⊣ᓭ",

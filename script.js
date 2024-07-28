@@ -775,7 +775,6 @@ async function loadreplies(postOrigin, replyIds) {
 
 async function loadreply(postOrigin, replyid) {
     const roarRegex = /^@[\w-]+ (.+?) \(([^)]+)\)/;
-    const betterMeowerRegex = /@([\w-]+)\[([a-zA-Z0-9]+)\]/g;
 
     try {
         let replydata = postCache[postOrigin].find(post => post._id === replyid);
@@ -804,7 +803,6 @@ async function loadreply(postOrigin, replyid) {
             content = replydata.p;
 
             let match = replydata.p.replace(roarRegex, "").trim();
-            match = match.replace(betterMeowerRegex, "").trim();
 
             if (match) {
                 content = match;
@@ -885,7 +883,6 @@ async function loadreply(postOrigin, replyid) {
 }
 
 function loadreplyv(item) {
-    console.log(item);
     let bridged = (bridges.includes(item.u));
 
     const replycontainer = document.createElement("div");
