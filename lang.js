@@ -64,7 +64,7 @@ function setlang(lang) {
 }
 
 const en = {
-    "reh": "English, US",
+    "reh": "English, US", // future reference for people adding languages disregard the reh
     "language": "English, US",
     "page_home": "Home",
     "page_start": "Start",
