@@ -65,7 +65,7 @@ function setlang(lang) {
 
 const en = {
     "reh": "English, US", // future reference for people adding languages disregard the reh
-    "language": "English, US",
+    "language": "English, US", // Replace this with that the language is called in that language (ie: "Español" instead of "Spanish")
     "page_home": "Home",
     "page_start": "Start",
     "page_explore": "Explore",
