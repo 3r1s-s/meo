@@ -164,6 +164,7 @@ function emojimodal() {
                     <button class="emojibuttonm" title="scary" onclick="addemojim('<:scary:1259355757602672651>')"><img src="https://cdn.discordapp.com/emojis/1259355757602672651.webp?size=96&quality=lossless" alt="scary" height="32px"></button>
                     <button class="emojibuttonm" title="wink" onclick="addemojim('<:wink:1260356148968689704>')"><img src="https://cdn.discordapp.com/emojis/1260356148968689704.webp?size=96&quality=lossless" alt="wink" height="32px"></button>
                     <button class="emojibuttonm" title="roxy" onclick="addemojim('<:roxy:1260366574989348955>')"><img src="https://cdn.discordapp.com/emojis/1260366574989348955.webp?size=96&quality=lossless" alt="roxy" height="32px"></button>
+                    <button class="emojibuttonm" title="doinkus" onclick="addemojim('<:doinkus:1267307216000782457>')"><img src="https://cdn.discordapp.com/emojis/1267307216000782457.webp?size=96&quality=lossless" alt="doinkus" height="32px"></button>
                     
                     <button class="emojibuttonm" title="yippe" onclick="addemojim('<a:yippe:1226318495147495505>')"><img src="https://cdn.discordapp.com/emojis/1226318495147495505.gif?size=48&quality=lossless&name=yippe" alt="yippe" height="32px"></button>
                     <button class="emojibuttonm" title="hooray" onclick="addemojim('<a:hooray:1230023947777609808>')"><img src="https://cdn.discordapp.com/emojis/1230023947777609808.gif?size=48&quality=lossless&name=hooray" alt="hooray" height="32px"></button>
@@ -1769,7 +1770,8 @@ function pickerhtm() {
             <button class="emojibutton" title="scary" onclick="addemoji('<:scary:1259355757602672651>')"><img src="https://cdn.discordapp.com/emojis/1259355757602672651.webp?size=96&quality=lossless" alt="scary" height="32px"></button>
             <button class="emojibutton" title="wink" onclick="addemoji('<:wink:1260356148968689704>')"><img src="https://cdn.discordapp.com/emojis/1260356148968689704.webp?size=96&quality=lossless" alt="wink" height="32px"></button>
             <button class="emojibutton" title="roxy" onclick="addemoji('<:roxy:1260366574989348955>')"><img src="https://cdn.discordapp.com/emojis/1260366574989348955.webp?size=96&quality=lossless" alt="roxy" height="32px"></button>
-            
+            <button class="emojibuttonm" title="doinkus" onclick="addemojim('<:doinkus:1267307216000782457>')"><img src="https://cdn.discordapp.com/emojis/1267307216000782457.webp?size=96&quality=lossless" alt="doinkus" height="32px"></button>
+
             <button class="emojibutton" title="yippe" onclick="addemoji('<a:yippe:1226318495147495505>')"><img src="https://cdn.discordapp.com/emojis/1226318495147495505.gif?size=48&quality=lossless&name=yippe" alt="yippe" height="32px"></button>
             <button class="emojibutton" title="hooray" onclick="addemoji('<a:hooray:1230023947777609808>')"><img src="https://cdn.discordapp.com/emojis/1230023947777609808.gif?size=48&quality=lossless&name=hooray" alt="hooray" height="32px"></button>
             <button class="emojibutton" title="boogie" onclick="addemoji('<a:boogie:1226311710818959401>')"><img src="https://cdn.discordapp.com/emojis/1226311710818959401.gif?size=96&amp;quality=lossless" alt="boogie" height="32px"></button>
