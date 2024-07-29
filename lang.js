@@ -2137,7 +2137,6 @@ const eris = {
 }
 
 const goobert = {
-    "reh": "goobert",
     "language": "goobert",
     "page_home": "goobert",
     "page_start": "goobert",
@@ -2290,11 +2289,11 @@ const goobert = {
         "favorite": "goobert",
         "download": "goobert",
         "add": "goobert",
-        "adduser": "goobert", // update
-        "transfer": "goobert", // update
-        "bug": "goobert", // update
-        "datarequest": "goobert", // update
-        "discuss": "goobert", // update
+        "adduser": "goobert",
+        "transfer": "goobert",
+        "bug": "goobert",
+        "datarequest": "goobert",
+        "discuss": "goobert",
     },
     "info": {
         "accexists": "goobert",
@@ -2321,7 +2320,7 @@ const goobert = {
         "tryagain": "goobert",
         "cleared": "goobert",
         "plugin": "goobert",
-        "replieslimit": "goobert", // update
+        "replieslimit": "goobert",
     },
     "reports": {
         "spam": "goobert",
@@ -2358,11 +2357,12 @@ const goobert = {
         "profilecolor": "goobert",
         "profilepic": "goobert",
     },
-    "chats": { // update
+    "chats": {
         "owner": "goobert",
         "members": "goobert"
     }
 }
+
 if (localStorage.getItem("language")) {
     setlang(localStorage.getItem("language"));
 } else {
