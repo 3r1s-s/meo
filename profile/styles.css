@@ -78,6 +78,11 @@ hr {
     border: 2px dashed;
 }
 
+.updt-prfl {
+    margin-top: 10px;
+    margin-bottom: 0;
+}
+
 .profile-qt,
 p {
     margin: 0;
