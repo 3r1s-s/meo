@@ -447,6 +447,7 @@ function loadLogin() {
             <option value="enuk" ${language === "enuk" ? "selected" : ""}>${enuk.language}</option>
             <option value="es" ${language === "es" ? "selected" : ""}>${es.language}</option>
             <option value="de" ${language === "de" ? "selected" : ""}>${de.language}</option>
+            <option value="ua" ${language === "ua" ? "selected" : ""}>${ua.language}</option>
         </select>
         </div>
         <div class="login-back">
@@ -2636,6 +2637,7 @@ function loadLanguages() {
             <button class="language button" id="es" onclick="changeLanguage('es')"><span class="language-l">${es.language}</span><span class="language-r">Spanish (Latin American)</span><div class="radio"></div></button>
             <button class="language button" id="es_es" onclick="changeLanguage('es_es')"><span class="language-l">${es_es.language}</span><span class="language-r">Spanish (Spain)</span><div class="radio"></div></button>
             <button class="language button" id="de" onclick="changeLanguage('de')"><span class="language-l">${de.language}</span><span class="language-r">German</span><div class="radio"></div></button>
+            <button class="language button" id="ua" onclick="changeLanguage('ua')"><span class="language-l">${ua.language}</span><span class="language-r">Ukrainian</span><div class="radio"></div></button>
             <h3>${lang().languages_sub.other}</h3>
             <button class="language button" id="eh" onclick="changeLanguage('eh')"><span class="language-l">${eh.language}</span><span class="language-r">Enchantment Table</span><div class="radio"></div></button>
             <button class="language button" id="b" onclick="changeLanguage('b')"><span class="language-l">${b.language}</span><span class="language-r">Bottom</span><div class="radio"></div></button>
