@@ -949,6 +949,8 @@ const de = {
     }
 }
 
+// silly languages
+
 const eh = {
     "language": "Enchantment Table",
     "page_home": "⍑𝙹ᒲᒷ",
