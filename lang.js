@@ -73,7 +73,7 @@ const en = {
     "page_settings": "Settings",
     "meo_username": "Username",
     "meo_password": "Password",
-    "meo_messagebox": "What's on your mind?",
+    "meo_messagebox": Math.random() < 1/25 ? "Whar's on your mind?" : "What's on your mind?",
     "meo_goanywhere": "Where would you like to go?",
     "meo_welcome": "Welcome!",
     "meo_bridged": {
