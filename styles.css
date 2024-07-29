@@ -345,6 +345,10 @@ h6 {
     max-height: 100px;
     overflow: hidden;
     margin: var(--text-margin) 0;
+
+    display: flex;
+    text-wrap: nowrap;
+    gap: 10px;
 }
 
 .reply.custom {
@@ -495,6 +499,32 @@ h6 {
 #edit-indicator {
     margin: 0 calc(var(--margin)/2);
     display: flex;
+}
+
+#replies {
+    display: flex;
+    flex-direction: column;
+}
+
+.replyinner > span {
+    padding: 0 10px;
+}
+
+.replyinner {
+    display: flex;
+    gap: 10px;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.reply-pre {
+    flex: 1;
+    overflow: hidden;
+}
+
+.reply-pre .reply {
+    margin: 0;
 }
 
 #images-container {
@@ -839,8 +869,8 @@ h6 {
 #main {
     flex: 1;
     max-width: 700px;
-    overflow: none;
-    height: auto;
+    overflow: auto;
+    height: 100vh;
     border-top: none;
 }
 

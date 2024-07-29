@@ -38,7 +38,6 @@ let ipBlocked = false;
 let openprofile = false;
 
 const communityDiscordLink = "https://discord.com/invite/THgK9CgyYJ";
-const forumLink = "https://forums.meower.org";
 const server = "wss://server.meower.org/";
 
 const pfpCache = {};
@@ -348,6 +347,10 @@ function main() {
                 if (editIndicator.hasAttribute("data-postid")) {
                     cancelEdit();
                 }
+                const replies = document.getElementById("replies");
+                if (replies) {
+                    replies.innerHTML = "";
+                }
                 textarea.blur();
             } else if (event.keyCode >= 48 && event.keyCode <= 90 && textarea === document.activeElement && !settingsstuff().invtyping && lastTyped+3000 < Date.now()) {
                 lastTyped = Date.now();
@@ -538,7 +541,7 @@ function loadpost(p) {
     mobileButtonContainer.classList.add("mobileContainer");
     mobileButtonContainer.innerHTML = `
     <div class='toolbarContainer'>
-        <div class='toolButton mobileButton' onclick='reply(event)' aria-label="reply" title="reply" tabindex="0">
+        <div class='toolButton mobileButton' onclick='reply("${p._id}")' aria-label="reply" title="reply" tabindex="0">
             <svg width='24' height='24' viewBox='0 0 24 24'><path d='M10 8.26667V4L3 11.4667L10 18.9333V14.56C15 14.56 18.5 16.2667 21 20C20 14.6667 17 9.33333 10 8.26667Z' fill='currentColor'></path></svg>
         </div>    
         <div class='toolButton mobileButton' onclick='openModal("${p._id}");'>
@@ -613,6 +616,7 @@ function loadpost(p) {
     if (typeof md !== 'undefined') {
         md.disable(['image']);
         postContentText.innerHTML = erimd(md.render(content.replace(/&/g, '&amp;')));
+        postContentText.innerHTML = meowerEmojis(postContentText.innerHTML, p.emojis || []);
         postContentText.innerHTML = buttonbadges(postContentText);
     } else {
         // fallback for when md doenst work
@@ -621,8 +625,9 @@ function loadpost(p) {
         console.error("Parsed with old markdown, fix later :)")
     }
     const emojiRgx = /^(?:(?!\d)(?:\p{Emoji}|[\u200d\ufe0f\u{E0061}-\u{E007A}\u{E007F}]))+$/u;
+    const meowerRgx = /^<:[a-zA-Z0-9]{24}>$/g;
     const discordRgx = /^<(a)?:\w+:\d+>$/gi;
-    if (emojiRgx.test(content) || discordRgx.test(content)) {
+    if (emojiRgx.test(content) || meowerRgx.test(content) || discordRgx.test(content)) {
         postContentText.classList.add('big');
     }
     
@@ -850,22 +855,14 @@ async function loadreply(postOrigin, replyid) {
 
             const desktopOffset = document.documentElement.classList.contains('desktop') ? 30 + navbarOffset : navbarOffset;
 
-            if (window.innerWidth < 720) {
-                const containerRect = outer.getBoundingClientRect();
-                const elementRect = targetElement.getBoundingClientRect();
-                const elementPosition = elementRect.top - containerRect.top + outer.scrollTop - desktopOffset;
+            const containerRect = outer.getBoundingClientRect();
+            const elementRect = targetElement.getBoundingClientRect();
+            const elementPosition = elementRect.top - containerRect.top + outer.scrollTop - desktopOffset;
 
-                outer.scrollTo({
-                    top: elementPosition,
-                    behavior: scroll
-                });
-            } else {
-                const elementPosition = targetElement.getBoundingClientRect().top + window.scrollY - desktopOffset;
-                window.scrollTo({
-                    top: elementPosition,
-                    behavior: scroll
-                });
-            }
+            outer.scrollTo({
+                top: elementPosition,
+                behavior: scroll
+            });
 
             setTimeout(() => {
                 targetElement.style.backgroundColor = '';
@@ -929,6 +926,7 @@ function loadreplyv(item) {
 
     const full = document.createElement("div");
     full.classList.add("reply-outer");
+    full.setAttribute("data-post-id", item._id);
 
     full.addEventListener('click', (e) => {
         e.preventDefault();
@@ -940,22 +938,14 @@ function loadreplyv(item) {
         let scroll = settingsstuff().reducemotion ? "auto" : "smooth";
         const desktopOffset = document.documentElement.classList.contains('desktop') ? 30 + navbarOffset : navbarOffset;
 
-        if (window.innerWidth < 720) {
-            const containerRect = outer.getBoundingClientRect();
-            const elementRect = targetElement.getBoundingClientRect();
-            const elementPosition = elementRect.top - containerRect.top + outer.scrollTop - desktopOffset;
+        const containerRect = outer.getBoundingClientRect();
+        const elementRect = targetElement.getBoundingClientRect();
+        const elementPosition = elementRect.top - containerRect.top + outer.scrollTop - desktopOffset;
 
-            outer.scrollTo({
-                top: elementPosition,
-                behavior: scroll
-            });
-        } else {
-            const elementPosition = targetElement.getBoundingClientRect().top + window.scrollY - desktopOffset;
-            window.scrollTo({
-                top: elementPosition,
-                behavior: scroll
-            });
-        }
+        outer.scrollTo({
+            top: elementPosition,
+            behavior: scroll
+        });
 
         setTimeout(() => {
             targetElement.style.backgroundColor = '';
@@ -966,27 +956,37 @@ function loadreplyv(item) {
     return full;
 }
 
-function reply(event) {
-    let postcont = "";
-    const postContainer = event.target.closest('.post');
-    if (postContainer) {
-        const username = postContainer.querySelector('#username').innerText;
-        if (postContainer.querySelector('p')) {
-            postcont = postContainer.querySelector('p').innerText
-            .replace(/\n/g, ' ')
-            .replace(/@\w+/g, '')
-            .split(' ')
-            .slice(0, 6)
-            .join(' ');
-        } else {
-            postcont = "";
-        }
-        const ogmsg = document.getElementById('msg').value
+function reply(postId) {
+    const post = postCache[page].find(post => post._id === postId);
+    if (post) {
+        const replies = document.getElementById("replies");
+        const box = document.createElement("div");
+        box.classList.add('replyinner');
+        box.dataset.replyId = postId; // Add a data attribute to uniquely identify the reply
+
+        const replyContainer = document.createElement("div");
+        replyContainer.appendChild(loadreplyv(post));
+        replyContainer.classList.add("reply-pre");
         
-        const postId = postContainer.id;
-        document.getElementById('msg').value = `@${username} "${postcont}..." (${postId})\n${ogmsg}`;
+        box.appendChild(replyContainer);
+    
+        const removeButton = document.createElement("span");
+        removeButton.onclick = () => removeReply(box); // Pass the box element to removeReply
+        removeButton.innerHTML = `
+            <svg width="16" height="16" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M2.05026 11.9497C4.78394 14.6834 9.21607 14.6834 11.9497 11.9497C14.6834 9.21607 14.6834 4.78394 11.9497 2.05026C9.21607 -0.683419 4.78394 -0.683419 2.05026 2.05026C-0.683419 4.78394 -0.683419 9.21607 2.05026 11.9497ZM9.3065 10.2946L7.00262 7.99112L4.69914 10.295C4.42624 10.5683 3.98395 10.5683 3.71065 10.295C3.43754 10.0219 3.43754 9.5788 3.71065 9.3065L6.01432 7.00282L3.7048 4.69371C3.4317 4.4206 3.4317 3.97791 3.7048 3.7048C3.97751 3.4317 4.4202 3.4317 4.6933 3.7048L7.00262 6.01412L9.3065 3.71065C9.4791 3.53764 9.71978 3.4742 9.94253 3.52012C10.0718 3.5467 10.1949 3.61014 10.2952 3.71044C10.5683 3.98315 10.5683 4.42624 10.2952 4.69894L7.99132 7.00242L10.295 9.30609C10.5683 9.579 10.5683 10.0213 10.295 10.2946C10.0221 10.5679 9.5794 10.5679 9.3065 10.2946Z" fill="currentColor"></path>
+            </svg>
+        `;
+        box.appendChild(removeButton);
+    
+        replies.appendChild(box);
         document.getElementById('msg').focus();
-        autoresize();
+    }
+}
+
+function removeReply(element) {
+    if (element && element.parentNode) {
+        element.parentNode.removeChild(element); // Remove the reply element from its parent
     }
 }
 
@@ -1112,6 +1112,31 @@ async function sendpost() {
         return;
     }
 
+    const subregex = /^s\/(.+?)\/(.+)$/;
+    const match = message.match(subregex);
+   
+    if (match) {
+        const old = match[1];
+        const newtx = match[2];
+    
+        const repst = [...postCache[page]].reverse().find(post => post.u === localStorage.getItem("username"));
+    
+        if (repst) {
+            const newCont = repst.p.replace(new RegExp(old, 'g'), newtx);
+
+            fetch(`https://api.meower.org/posts?id=${repst._id}`, {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json",
+                    token: localStorage.getItem("token")
+                },
+                body: JSON.stringify({ content: newCont })
+            });
+        }
+    
+        return;
+    }
+
     // Create a placeholder post element
     const placeholder = document.createElement("div");
     placeholder.classList.add("post");
@@ -1165,6 +1190,11 @@ async function sendpost() {
         msgbox.placeholder = lang().meo_messagebox;
         msgbox.disabled = false;
 
+        // Get post IDs from replies
+        const replies = document.getElementById("replies");
+        const replyToIds = Array.from(replies.childNodes).map(replyContainer => replyContainer.getAttribute("data-post-id"));
+        replies.innerHTML = "";
+
         const response = await fetch(`https://api.meower.org/${page === "home" ? "home" : `posts/${page}`}`, {
             method: "POST",
             headers: {
@@ -1172,6 +1202,7 @@ async function sendpost() {
                 token: localStorage.getItem("token")
             },
             body: JSON.stringify({
+                reply_to: replyToIds,
                 content: message,
                 attachments: attachmentIds.reverse(),
             })
@@ -1454,7 +1485,7 @@ function renderChats() {
                     if (bgImageUrl) {
                         bgImageUrl = bgImageUrl.slice(5, -2);
                     }
-                    chatIconElem.style.border = pfpElem.style.border.replace("3px", "3px");
+                    chatIconElem.style.border = pfpElem.style.border;
                     chatIconElem.style.backgroundColor = pfpElem.style.border.replace("3px solid", "");
                     chatIconElem.style.backgroundImage = `url("${bgImageUrl}")`;
                     chatIconElem.classList.add("pfp-inner");
@@ -3830,7 +3861,7 @@ function ipBlockedModal() {
                 modaltop.innerHTML = `
                 <h3>${lang().modals.blockedip}</h3>
                 <hr class="mdl-hr">
-                <span class="subheader">Your current IP address is blocked from accessing Meower.<br /><br />If you think this is a mistake, please contact the moderation team via <a href="${communityDiscordLink}" target="_blank">Discord</a> or email us <a href="${forumLink}" target="_blank">${forumLink}</a>, or try a different network.</span>
+                <span class="subheader">Your current IP address is blocked from accessing Meower.<br /><br />If you think this is a mistake, please contact the moderation team via <a href='mailto:support@meower.org' target='_blank'>support@meower.org</a>, or try a different network.</span>
                 `
             }
         }
