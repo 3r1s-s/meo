@@ -337,6 +337,7 @@ h6 {
 }
 
 .reply {
+    font-size: 16px;
     background-color: var(--accent-down);
     border: 3px solid var(--accent-down);
     padding-left: 10px;
@@ -506,6 +507,7 @@ h6 {
 #replies {
     display: flex;
     flex-direction: column;
+    font-size: 16px;
 }
 
 .replyinner > span {

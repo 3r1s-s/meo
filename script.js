@@ -15,6 +15,8 @@
 // Custom video and audio player, similar style as the file download preview
 // Add tooltips to icon buttons, emojis, and maybe some other things
 // Fix Desktop Mode
+// make @Tnix have tnix colour ect
+
 //
 // Tnix stuff:
 // Limit replies to 10
