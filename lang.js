@@ -248,6 +248,7 @@ const en = {
         "tryagain": "Try again",
         "cleared": "Cleared!",
         "plugin": "Restart now to apply new plugins and their settings",
+        "replieslimit": "You can only reply up to 10 posts at a time!", // update
     },
     "reports": {
         "spam": "Spam",
