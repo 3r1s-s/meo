@@ -298,6 +298,11 @@ function main() {
                 }
             }
 
+            const replies = document.querySelectorAll(`#reply-${sentdata.val.id}`);
+            for (const reply of replies) {
+                reply.replaceWith(loadreplyv(null));
+            }
+
             const divToDelete = document.getElementById(sentdata.val.id);
             if (divToDelete) {
                 divToDelete.parentNode.removeChild(divToDelete);
@@ -609,10 +614,9 @@ function loadpost(p) {
         });
     }
 
-    p.reply_to.forEach(function(item){
-        const replyContainer = loadreplyv(item);
-        pstinf.after(replyContainer);
-    });
+    const repliesContainer = document.createElement("div");
+    p.reply_to.forEach((item) => repliesContainer.appendChild(loadreplyv(item)));
+    pstinf.after(repliesContainer);
 
     let postContentText = document.createElement("p");
     postContentText.className = "post-content";
@@ -884,6 +888,8 @@ async function loadreply(postOrigin, replyid) {
 }
 
 function loadreplyv(item) {
+    if (!item) item = { _id: "", author: {} };
+
     let bridged = (bridges.includes(item.u));
 
     const replycontainer = document.createElement("div");
@@ -926,11 +932,10 @@ function loadreplyv(item) {
         }
     }
 
-    replycontainer.innerHTML = `<p style='font-weight:bold;margin: 10px 0 10px 0;'>${escapeHTML(user)}</p><p style='margin: 10px 0 10px 0;'>${escapeHTML(content)}</p>`;
+    replycontainer.innerHTML = `<p style='font-weight:bold;margin: 10px 0 10px 0;'>${escapeHTML(user)}</p><p style='margin: 10px 0 10px 0;'>${content ? escapeHTML(content) : '<i>Deleted post</i>'}</p>`;
 
     const full = document.createElement("div");
     full.classList.add("reply-outer");
-    full.setAttribute("data-post-id", item._id);
 
     full.addEventListener('click', (e) => {
         e.preventDefault();
@@ -961,9 +966,13 @@ function loadreplyv(item) {
 }
 
 function reply(postId) {
+    const replies = document.getElementById("replies");
+    if (replies.childNodes.length >= 10) {
+        openUpdate(lang().info.replieslimit);
+        return;
+    }
     const post = postCache[page].find(post => post._id === postId);
     if (post) {
-        const replies = document.getElementById("replies");
         const box = document.createElement("div");
         box.classList.add('replyinner');
         box.dataset.replyId = postId; // Add a data attribute to uniquely identify the reply
@@ -1196,7 +1205,7 @@ async function sendpost() {
 
         // Get post IDs from replies
         const replies = document.getElementById("replies");
-        const replyToIds = Array.from(replies.childNodes).map(replyContainer => replyContainer.getAttribute("data-post-id"));
+        const replyToIds = Array.from(replies.childNodes).map(replyContainer => replyContainer.getAttribute("data-reply-id"));
         replies.innerHTML = "";
 
         const response = await fetch(`https://api.meower.org/${page === "home" ? "home" : `posts/${page}`}`, {
