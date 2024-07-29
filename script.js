@@ -912,7 +912,7 @@ function loadreplyv(item) {
     if (item.p) {
         content = item.p;
     } else if (item.attachments) {
-        content = "[Attachment]";
+        content = "Attachment";
     } else {
         content = '';
     }
@@ -1117,6 +1117,7 @@ async function sendpost() {
     if (msgbox.value.trim() === "" && pendingAttachments.length === 0) return;
     const message = msgbox.value;
     msgbox.value = "";
+    autoresize();
 
     const editIndicator = document.getElementById("edit-indicator");
 

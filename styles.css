@@ -349,6 +349,8 @@ h6 {
     display: flex;
     text-wrap: nowrap;
     gap: 10px;
+    align-items: center;
+    height: 42px;
 }
 
 .reply.custom {
@@ -507,7 +509,13 @@ h6 {
 }
 
 .replyinner > span {
-    padding: 0 10px;
+    padding-right: 15px;
+    padding-left: 10px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .replyinner {
