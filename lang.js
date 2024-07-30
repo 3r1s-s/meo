@@ -951,13 +951,14 @@ const de = {
 
 const ua = {
     // made by barney86 (alt - meowy95), the unfunny ukrainian
+    // edited by wlodekm :> the second unfunny ukranian
     // btw if i actually finish this before tommorow, i am banned until like six am tommorow so contact me in steam lmao
-    "language": "Українець",
+    "language": "Українська",
     "page_home": "Головна",
     "page_start": "Почати",
     "page_explore": "Досліджувати",
     "page_inbox": "Вхідні",
-    "page_settings": "Налаштунки",
+    "page_settings": "Налаштування",
     "meo_username": "Логін",
     "meo_password": "Пароль",
     "meo_messagebox": "Що на вашій думці?",
@@ -1024,9 +1025,9 @@ const ua = {
         }
     },
     "appearance_sub": {
-        "theme": "Теми",
-        "spthemes": "Спеціальні Теми", // < ----------------------------------------------------------------------------------------------\
-        "acthemes": "Теми зі спеціальними можливостями", //uh oh, goofy ah translation, since it's basically the same as this goofy goober \ so uh... fix later?!?!?!
+        "theme": "Теми", //NOTE - Translation still kinda goofy ahh but a bit less
+        "spthemes": "Розширені Теми", // < ----------------------------------------------------------------------------------------------\
+        "acthemes": "Теми зі розширеними можливостями", //uh oh, goofy ah translation, since it's basically the same as this goofy goober \ so uh... fix later?!?!?!
         "ogthemes": "Оригінальні Теми",
         "glthemes": "Скляні Теми",
         "cstheme": "Користувацька тема",
@@ -1038,7 +1039,7 @@ const ua = {
         "link": "тут!"
     },
     "languages_sub": {
-        "title": "Ви",
+        "title": "Ви", //lmao
         "desc": "Ти, ухилянт, не бачиш свою мову? Тоді переклади на",
         "link": "Github!",
         "other": "Інші мови"
@@ -1051,7 +1052,7 @@ const ua = {
     },
     "login_sub": {
         "title": "Ввійти",
-        "desc": "Цей клієнт зроблений eri (my beloved)",
+        "desc": "Цей клієнт зроблений eri",
         "oldpass": "Старий пароль",
         "newpass": "Новий пароль",
         "agreement": "Умови використання та політика конфіденційності",
@@ -1131,7 +1132,7 @@ const ua = {
         "tokenscleared": "Токени видалено, перезайдіть",
         "accscheduled": "Аккаунт запланований на видалення.",
         "deletewarn": "Він буде видалений без вороття.", //minecraft reference im so funny!!! haha
-        "changepwwarn": "Він буде негайно оновлений.",
+        "changepwwarn": "Він буде негайно оновлений.",   // What is bro talking about? ^
         "tryagain": "Спробуйте ще раз",
         "cleared": "Очищено!",
         "plugin": "Перезапустіть зараз, щоб застосувати нові плагіни та їхні налаштування",
