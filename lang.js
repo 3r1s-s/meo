@@ -1193,18 +1193,18 @@ const sj = {
     "meo_welcome": "Bonbeveg!",
     "meo_bridged": {
         "start": "Bridged",
-        "title": "This post has been bridged from another platform."
+        "title": "Jenliti mesago'st d'un pado jorana."
     },
     "title_chats": "Tenmesagoj",
-    "title_live": "Livechat",
+    "title_live": "Temtenmesago",
     "settings_general": "Prinsa",
-    "settings_appearance": "Appearance",
-    "settings_plugins": "Plugins",
+    "settings_appearance": "Oga",
+    "settings_plugins": "Linos",
     "settings_languages": "Liroj",
     "general_sub": {
         "chat": "Tenmesago",
         "accessibility": "Accessibility",
-        "misc": "Miscellaneous",
+        "misc": "Joran",
         "acc": "Elesnomo",
         "blockedusers": "Blocks",
         "blockedwords": "Blacklisted Words",
@@ -1262,8 +1262,8 @@ const sj = {
     },
     "plugins_sub": {
         "manage": "Manage",
-        "desc": "The plugins repo can be found ",
-        "link": "here!"
+        "desc": "La linos por la linoj'st en ",
+        "link": "jenliti!"
     },
     "languages_sub": {
         "title": "Selecu liro",
@@ -1272,10 +1272,10 @@ const sj = {
         "other": "Joran Liroj"
     },
     "inbox_sub": {
-        "desc": "Notifications are displayed here.",
+        "desc": "J'est por leteroj de Meower-o.",
     },
     "live_sub": {
-        "desc": "Messages won't be saved here."
+        "desc": "Mesagoj an jenliti, ter setdatu."
     },
     "login_sub": {
         "title": "Elesnomu",
@@ -1285,7 +1285,7 @@ const sj = {
         "agreement": "Terms of Use & Privacy Policy",
     },
     "leave_sub": {
-        "desc": "Are you sure you want to leave",
+        "desc": "Us dalu fi",
         "end": "?",
     },
     "action": {
@@ -1295,8 +1295,8 @@ const sj = {
         "search": "Sucu",
         "mod": "Moderate",
         "creategc": "Novu Tenmesago",
-        "leavegc": "Leave Chat?",
-        "dmme": "DM Me :)",
+        "leavegc": "Us Dalu Fi?",
+        "dmme": "UM Mi :)",
         "invite": "Invite People",
         "gohome": "Ud Pado Prinsa",
         "cleartokens": "Clear Tokens",
@@ -1307,44 +1307,44 @@ const sj = {
         "blockuser": "Block User",
         "blockword": "Blacklist Word",
         "run": "Run",
-        "close": "Sjaonu",
+        "close": "Sjaon",
         "back": "Lonu",
         "opennewtab": "Open in Browser",
-        "reply": "Reply",
-        "mention": "Mention",
+        "reply": "Gibu mesago por jenliti",
+        "mention": "Gibo mesage lade nomo de suji",
         "report": "Report",
         "delete": "Terdatu",
         "edit": "Edit",
         "share": "Share",
         "comment": "Comment",
-        "nick": "Nickname",
+        "nick": "Nomo",
         "create": "Novu",
         "reason": "Reason",
         "sendreport": "Send Report",
         "yes": "Bon",
         "confirm": "Confirm",
         "update": "Update",
-        "go": "Go",
+        "go": "Oce",
         "apply": "Apply",
         "savetheme": "Save Theme",
         "loadtheme": "Load Theme",
         "resetplugins": "Disable All",
         "favorite": "Favorite",
         "download": "Download",
-        "add": "Add",
-        "adduser": "Add Member", // update
+        "add": "Gibu",
+        "adduser": "Vosinu ce vui gru mimi?", // update
         "transfer": "Transfer Ownership", // update
         "bug": "Report Bug", // update
         "datarequest": "Request Data", // update
         "discuss": "Discuss", // update
     },
     "info": {
-        "accexists": "Username Already Taken!",
-        "invaliduser": "Invalid Username!",
-        "invalidpass": "Invalid Password!",
-        "invalidcreds": "Invalid username or password!",
-        "accbanned": "Account Banned!",
-        "accdeleted": "Account Deleted!",
+        "accexists": "Jenliti'st un nomo ce estus!",
+        "invaliduser": "Terbona Nomo!",
+        "invalidpass": "Terbona Cuflaverto!",
+        "invalidcreds": "Terbona nomo ejan cuflaverto!",
+        "accbanned": "Elesnomo morta!",
+        "accdeleted": "Elesnomo terdata!",
         "conflict": "You probably logged in on another client. Refresh the page and log back in to continue.",
         "unknown": "Unknown Login Status:",
         "chatremoved": "You have been removed from the chat you were in.",
@@ -1395,14 +1395,14 @@ const sj = {
         "copyuser": "Copied username to clipboard!",
     },
     "profile": {
-        "quote": "Quote",
-        "persona": "Personalization",
-        "profilecolor": "Profile Color",
-        "profilepic": "Profile Picture",
+        "quote": "Libo",
+        "persona": "Personanisus",
+        "profilecolor": "Coloro d'Personopado",
+        "profilepic": "Bildo d'Personopado",
     },
     "chats": { // update
         "owner": "Ownership",
-        "members": "Members"
+        "members": "Jamoj d'Gro"
     }
 }
 
