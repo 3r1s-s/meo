@@ -1626,6 +1626,9 @@ possible future styling
 .emojisidebar {
     display: flex;
     flex-direction: column;
+    max-height: 500px;
+    overflow: scroll;
+    scrollbar-width: none;
 }
 
 #emojipicker {
@@ -1648,6 +1651,9 @@ possible future styling
     resize: horizontal;
     animation: slidedown cubic-bezier(.2,-.25,0,1) 0.2s forwards;
     z-index: 1;
+
+    display: flex;
+    gap: 10px;
 }
 
 .emojisec {
@@ -1656,11 +1662,10 @@ possible future styling
 }
 
 .emojicont {
-    padding-left: var(--padding);
     overflow-y: scroll;
-    max-height: 460px;
+    max-height: 500px;
     scrollbar-width: none;
-    width: 100%;
+    flex: 1;
 }
 
 .emojiheader {
@@ -1695,6 +1700,8 @@ possible future styling
     font-size: 16px;
     padding: var(--padding);
     margin: calc(var(--margin)/2);
+    width: 42px;
+    aspect-ratio: 1/1;
 }
 
 .emojibuttonside:hover {

@@ -70,7 +70,6 @@ function loadpicker() {
     }
 
     // Custom emojis from chats
-    /*
     for (const chat of Object.values(chatCache)) {
         const customEmojis = chat.emojis;
         if (!customEmojis.length) continue;
@@ -78,11 +77,60 @@ function loadpicker() {
         const sidebarButton = document.createElement("button");
         sidebarButton.classList.add("emojibuttonside");
         sidebarButton.onclick = () => emjpage(chat._id);
+
+        const chatIconElem = document.createElement("div");
+        chatIconElem.classList.add("avatar-small");
+        chatIconElem.classList.add("pfp-inner");
+        chatIconElem.setAttribute("alt", "Avatar");
+        if (chat.type === 0) {
+            if (chat.icon) {
+                chatIconElem.style.backgroundImage = `url(https://uploads.meower.org/icons/${chat.icon})`;
+            } else {
+                chatIconElem.style.backgroundImage = `url(images/GC.svg)`;
+            }
+            if (!chat.icon) {
+                chatIconElem.style.border = "1.5px solid #" + '1f5831';
+            } else if (chat.icon_color) {
+                chatIconElem.style.border = "1.5px solid #" + chat.icon_color;
+            } else {
+                chatIconElem.style.border = "1.5px solid #" + '000';
+            }
+        } else {
+            // this is so hacky :p
+            // - Tnix
+            loadPfp(chat.members.find(v => v !== localStorage.getItem("username")))
+            .then(pfpElem => {
+                if (pfpElem) {
+                    let bgImageUrl = pfpElem.style.backgroundImage;
+                    if (bgImageUrl) {
+                        bgImageUrl = bgImageUrl.slice(5, -2);
+                    }
+                    chatIconElem.style.border = pfpElem.style.border.replace("3px", "1.5px");
+                    chatIconElem.style.backgroundColor = pfpElem.style.border.replace("3px solid", "");
+                    chatIconElem.style.backgroundImage = `url("${bgImageUrl}")`;
+                    chatIconElem.classList.add("pfp-inner");
+                    if (pfpElem.classList.contains("svg-avatar")) {
+                        chatIconElem.classList.add("svg-avatar");
+                        chatIconElem.style.backgroundColor = '#fff';
+                    }
+                }
+            });
+        }
+        chatIconElem.style.width = "100%";
+        chatIconElem.style.height = "auto";
+        sidebarButton.appendChild(chatIconElem);
+
         document.querySelector(".emojisidebar").appendChild(sidebarButton);
 
         const section = document.createElement("div");
         section.classList.add("emojisec");
         section.id = chat._id;
+        const headerContainer = document.createElement("div");
+        headerContainer.classList.add("emojiheader");
+        const header = document.createElement("h3");
+        header.innerText = chat.nickname || `@${chat.members.find(v => v !== localStorage.getItem("username"))}`;
+        headerContainer.appendChild(header);
+        section.appendChild(headerContainer);
         for (const emoji of customEmojis) {
             const addButton = document.createElement("button");
             addButton.classList.add("emojibutton");
@@ -96,7 +144,7 @@ function loadpicker() {
             section.appendChild(addButton);
         }
         document.querySelector(".emojicont").appendChild(section);
-    }*/
+    }
 
     document.getElementById("emojin").focus();
 }

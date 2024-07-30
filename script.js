@@ -3,12 +3,9 @@
 // - Eris
 
 // To-Do
-// make windows 7 theme
 // replace ulist with typing indicator
-// load more button at the end of post list
 // have it be automatic after the first load more, make sure reply jumping works
 // Modal close animation
-// Fix the sidebar and it's resizing
 // Add a sidebar to the right side for Member list and replace the current ulist with typing indicator
 // Discord mode where posts are on the bottom
 // Notification managment
@@ -16,11 +13,6 @@
 // Add tooltips to icon buttons, emojis, and maybe some other things
 // Fix Desktop Mode
 // make @Tnix have tnix colour ect
-
-//
-// Tnix stuff:
-// Limit replies to 10
-// De-dupe reply IDs
 
 let end = false;
 let page = "load";
@@ -267,6 +259,27 @@ function main() {
                     sentdata.val.payload
                 );
                 renderChats();
+            }
+        } else if (sentdata.val.mode == "create_emoji") {
+            const chatId = sentdata.val.payload.chat_id;
+            if (chatId in chatCache) {
+                chatCache[chatId].emojis.push(sentdata.val.payload);
+            }
+        } else if (sentdata.val.mode == "update_emoji") {
+            const chatId = sentdata.val.payload.chat_id;
+            if (chatId in chatCache) {
+                const emojiI = chatCache[chatId].emojis.findIndex(emoji => emoji._id === sentdata.val.payload._id);
+                if (emojiI && emojiI !== -1) {
+                    chatCache[chatId].emojis[emojiI] = Object.assign(
+                        chatCache[chatId].emojis[emojiI],
+                        sentdata.val.payload,
+                    );
+                }
+            }
+        } else if (sentdata.val.mode == "delete_emoji") {
+            const chatId = sentdata.val.payload.chat_id;
+            if (chatId in chatCache) {
+                chatCache[chatId].emojis = chatCache[chatId].emojis.filter(emoji => emoji._id !== sentdata.val.payload._id);
             }
         } else if (sentdata.cmd == "ulist") {
             const iul = sentdata.val;
@@ -638,7 +651,7 @@ function loadpost(p) {
     const emojiRgx = /^(?:(?!\d)(?:\p{Emoji}|[\u200d\ufe0f\u{E0061}-\u{E007A}\u{E007F}]))+$/u;
     const meowerRgx = /^<:[a-zA-Z0-9]{24}>$/g;
     const discordRgx = /^<(a)?:\w+:\d+>$/gi;
-    if (emojiRgx.test(content) || meowerRgx.test(content) || discordRgx.test(content)) {
+    if (emojiRgx.test(content) || (meowerRgx.test(content) && p.emojis.length) || discordRgx.test(content)) {
         postContentText.classList.add('big');
     }
     
@@ -682,7 +695,7 @@ function loadpost(p) {
     postContainer.id = p._id;
     if (existingPost) {
         existingPost.replaceWith(postContainer);
-    } else if (pageContainer.firstChild) {
+    } else if (pageContainer.firstChild && !p._reverse) {
         pageContainer.insertBefore(postContainer, pageContainer.firstChild);
     } else {
         pageContainer.appendChild(postContainer);
@@ -1859,6 +1872,40 @@ function loadinbox() {
         document.getElementById("msg").style.display = "block";
     };
     xhttp.send();
+}
+
+function loadmore() {
+    const chatId = page.valueOf();
+    if (!postCache[chatId]) return;
+
+    var path;
+    if (chatId === "home") path = "/home"
+    else if (chatId === "inbox") path = "/inbox"
+    else path = `/posts/${chatId}`;
+
+    const pageNo = Math.floor(postCache[chatId].length / 25) + 1;
+    if (pageNo < 2) return;
+
+    const xhttpPosts = new XMLHttpRequest();
+    xhttpPosts.open("GET", `https://api.meower.org${path}?page=${pageNo}`);
+    xhttpPosts.setRequestHeader("token", localStorage.getItem('token'));
+    xhttpPosts.onload = () => {
+        const postsData = JSON.parse(xhttpPosts.response);
+        const postsarray = postsData.autoget || [];
+        postsarray.forEach(post => {
+            if (page !== chatId) {
+                return;
+            }
+            if (postCache[chatId].findIndex(_post => _post._id === post._id) !== -1) {
+                return
+            }
+            postCache[chatId].unshift(post);
+            post._reverse = true;
+            loadpost(post);
+        });
+        document.getElementById("skeleton-msgs").style.display = "none";
+    };
+    xhttpPosts.send();
 }
 
 function logout(iskl) {
