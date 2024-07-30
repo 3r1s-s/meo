@@ -1874,7 +1874,7 @@ function loadinbox() {
     xhttp.send();
 }
 
-function loadmore() {
+function loadmore() { // finish
     const chatId = page.valueOf();
     if (!postCache[chatId]) return;
 
