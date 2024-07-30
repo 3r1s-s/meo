@@ -2219,7 +2219,7 @@ function loadPluginScript(scriptUrl) {
     })
     .then(response => response.text())
     .then(data =>{
-        eval(data);
+        window.eval(data);
     })
     .catch(error => console.error('Error:', error));
 }
