@@ -4889,7 +4889,7 @@ function openGcModal(chatId) {
             if (mdbt) {
                 if (data.owner === localStorage.getItem("username")) {
                     mdbt.innerHTML = `
-                    <button class="modal-back-btn" onclick="updateGC('${chatId}')">Update Chat</button>
+                    <button id="updategc" class="modal-back-btn" onclick="updateGC('${chatId}')">Update Chat</button>
                     `;
                 } else {
                     mdbt.innerHTML = `
@@ -4906,6 +4906,10 @@ function updateGC(chatId) {
     const token = localStorage.getItem("token");
     const avtrclr = document.getElementById("gc-clr").value.substring(1);
     const nick = document.getElementById("chat-nick-input").value;
+
+    const update = document.getElementById("updategc");
+    update.disabled = true;
+    update.textContent = "Uploading...";
 
     const xhttp = new XMLHttpRequest();
 
@@ -4934,33 +4938,23 @@ function updateGC(chatId) {
         const formData = new FormData();
         formData.append("file", file);
 
-        fetch("https://api.meower.org/uploads/token/icon", {
-            method: "GET",
+        fetch("https://uploads.meower.org/icons", {
+            method: "POST",
             headers: {
-                "token": token
+                "Authorization": token
+            },
+            body: formData
+        })
+        .then(uploadResponse => uploadResponse.json())
+        .then(uploadData => {
+            if (nick) {
+                data.nickname = nick;
             }
+            const avatarId = uploadData.id;
+            data.icon = avatarId;
+            xhttp.send(JSON.stringify(data));
         })
-        .then(response => response.json())
-        .then(tokenData => {
-            fetch("https://uploads.meower.org/icons", {
-                method: "POST",
-                headers: {
-                    "Authorization": tokenData.token
-                },
-                body: formData
-            })
-            .then(uploadResponse => uploadResponse.json())
-            .then(uploadData => {
-                if (nick) {
-                    data.nickname = nick;
-                }
-                const avatarId = uploadData.id;
-                data.icon = avatarId;
-                xhttp.send(JSON.stringify(data));
-            })
-            .catch(error => console.error('Error uploading file:', error));
-        })
-        .catch(error => console.error('Error fetching uploads token:', error));
+        .catch(error => console.error('Error uploading file:', error));
     } else {
         if (nick) {
             data.nickname = nick;

@@ -112,7 +112,7 @@ This message was created by meo.
             
             if (data._id === localStorage.getItem('username')) {
                 profilecont.innerHTML += `
-                <button class="modal-button updt-prfl" onclick="updateprofile()" aria-label="update profile"><div>${lang().action.update}</div></button>      
+                <button id="updt-prfl" class="modal-button updt-prfl" onclick="updateprofile()" aria-label="update profile"><div>${lang().action.update}</div></button>      
                 `;
             }                    
             
@@ -187,6 +187,10 @@ function updateprofile() {
     const fileInput = document.getElementById("profile-photo");
     const file = fileInput.files[0];
     const token = localStorage.getItem("token");
+
+    const update = document.getElementById("updt-prfl");
+    update.disabled = true;
+    update.textContent = "Uploading...";
 
     const xhttp = new XMLHttpRequest();
 
