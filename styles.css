@@ -2108,7 +2108,11 @@ possible future styling
     gap: 12px;
 }
 
-.plugin label {
+.plugin:hover {
+    cursor: pointer;
+}
+
+.plugin-label {
     display: inline-block;
     width: 100%;
     height: 100%;
@@ -2132,10 +2136,6 @@ possible future styling
     transition: inherit;
     opacity: 0;
     color: var(--hov-color);
-}
-
-.plugintoggle:hover {
-    cursor: pointer;
 }
 
 .plugintoggle:hover svg {

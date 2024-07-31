@@ -2194,11 +2194,11 @@ function addPlugin(plugin, isEnabled) {
                 <path d="m10 15.586-3.293-3.293-1.414 1.414L10 18.414l9.707-9.707-1.414-1.414z"></path>
             </svg>
         </div>
-        <label>
+        <div class="plugin-label">
             ${plugin.name}
             <p class='pluginsub'>${plugin.description}</p>
             <p class='subsubheader'>Created by <a href='https://github.com/${plugin.creator}' target='_blank'>${plugin.creator}</a></p>
-            </label>
+        </div>
             ${plugin.flags === '1' ? `
             <svg class="plugin-flag" width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path fill="currentColor" d="M20 6.00201H14V3.00201C14 2.45001 13.553 2.00201 13 2.00201H4C3.447 2.00201 3 2.45001 3 3.00201V22.002H5V14.002H10.586L8.293 16.295C8.007 16.581 7.922 17.011 8.076 17.385C8.23 17.759 8.596 18.002 9 18.002H20C20.553 18.002 21 17.554 21 17.002V7.00201C21 6.45001 20.553 6.00201 20 6.00201Z">
@@ -2209,21 +2209,23 @@ function addPlugin(plugin, isEnabled) {
     `);
 
     const pluginToggle = document.getElementById(plugin.name);
-    pluginToggle.addEventListener('click', function() {
+    const parentElement = pluginToggle.parentElement;
+    parentElement.addEventListener('click', function() {
         const isChecked = pluginToggle.classList.toggle('checked');
         const enabledPlugins = JSON.parse(localStorage.getItem('enabledPlugins')) || {};
         enabledPlugins[plugin.name] = isChecked;
         localStorage.setItem('enabledPlugins', JSON.stringify(enabledPlugins));
-
+    
         if (!isChecked) {
             const existingScript = document.querySelector(`script[src="${plugin.script}"]`);
             if (existingScript) {
                 existingScript.remove();
             }
         }
-
+    
         modalPluginup();
     });
+    
 
     // Set initial state
     if (isEnabled) {
