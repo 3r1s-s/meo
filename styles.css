@@ -1619,6 +1619,10 @@ possible future styling
     height: 16px;
 }
 
+.emoji:hover {
+    cursor: pointer;
+}
+
 .big > p > .emoji {
     height: 46px;
 }
