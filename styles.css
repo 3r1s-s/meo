@@ -2138,7 +2138,7 @@ possible future styling
     color: var(--hov-color);
 }
 
-.plugintoggle:hover svg {
+.plugin:hover .plugintoggle svg {
     opacity: 1;
     color: var(--hov-color);
 }
