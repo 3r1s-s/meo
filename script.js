@@ -500,30 +500,22 @@ function loadpost(p) {
     let user;
     let content;
     let bridged = (p.u && bridges.includes(p.u));
-    
-    if (bridged) {
-        const rcon = p.p;
-        const match = rcon.match(/^([a-zA-Z0-9_-]{1,20})?:([\s\S]+)?/m);
-        
-        if (match) {
-            user = match[1];
-            content = match[2] || "";
-        } else {
-            user = p.u;
-            content = rcon;
-        }
+    let crown = (p.u === eul[0])
+    if (p.u === "Webhooks") {
+        const rcon = p.p; 
+        const parts = rcon.split(': ');
+        user = parts[0];
+        content = parts.slice(1).join(': ');
     } else {
-        if (p.u === "Webhooks") {
-            const rcon = p.p;
-            const parts = rcon.split(': ');
-            user = parts[0];
-            content = parts.slice(1).join(': ');
+        if (p.u === eul[0]) {
+            content = p.p
+            user = p.u + "👑"
         } else {
-            content = p.p;
-            user = p.u;
+            content = p.p
+            user = p.u
         }
     }
-    
+}
     const postContainer = document.createElement("div");
     postContainer.classList.add("post");
     postContainer.setAttribute("tabindex", "0");
@@ -588,7 +580,12 @@ function loadpost(p) {
 
     const pstinf = document.createElement("span");
     pstinf.classList.add("user-header")
-    pstinf.innerHTML = `<span id='username' onclick='openUsrModal("${user}")'>${user}</span>`;
+    if crown {
+    pstinf.innerHTML = <span id='username' onclick='openUsrModal("${user}👑")'>${user}</span>;
+    }else{
+        pstinf.innerHTML = <span id='username' onclick='openUsrModal("${user}")'>${user}</span>;
+    }
+
 
     if (bridged || p.u == "Webhooks") {
         const bridged = document.createElement("bridge");
