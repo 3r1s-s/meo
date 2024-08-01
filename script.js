@@ -13,6 +13,7 @@
 // Add tooltips to icon buttons, emojis, and maybe some other things
 // Fix Desktop Mode
 // make @Tnix have tnix colour ect
+// Online indicators
 
 let end = false;
 let page = "load";
