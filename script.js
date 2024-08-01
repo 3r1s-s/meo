@@ -520,11 +520,16 @@ function loadpost(p) {
             user = parts[0];
             content = parts.slice(1).join(': ');
         } else {
-            content = p.p;
-            user = p.u;
+            if (p.u === eul[0]){
+                user = p.u + "👑"
+                content = p.p
+            } else {
+                content = p.p
+                user = p.p
+            }
         }
     }
-    
+}
     const postContainer = document.createElement("div");
     postContainer.classList.add("post");
     postContainer.setAttribute("tabindex", "0");
