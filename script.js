@@ -706,7 +706,6 @@ function loadpost(p) {
     } else {
         pageContainer.appendChild(postContainer);
     }
-}
 
 function loadPfp(username, button) {
     return new Promise((resolve, reject) => {
