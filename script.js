@@ -510,7 +510,7 @@ function loadpost(p) {
         content = p.p;
         user = p.u;
         }
-    }
+ }
     const postContainer = document.createElement("div");
     postContainer.classList.add("post");
     postContainer.setAttribute("tabindex", "0");
