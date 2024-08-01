@@ -179,6 +179,24 @@ h6 {
     margin: 5px 0;
 }
 
+table {
+    border-spacing: 0px;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+td, th {
+    padding: 2px;
+}
+
+tr:nth-child(even) {
+    background-color: var(--accent-color);
+}
+
+tr:nth-child(odd) {
+  background-color: var(--accent-down);
+}
+
 .list {
     display: flex;
     flex-direction: column;
