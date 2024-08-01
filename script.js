@@ -13,7 +13,6 @@
 // Add tooltips to icon buttons, emojis, and maybe some other things
 // Fix Desktop Mode
 // make @Tnix have tnix colour ect
-// Online indicators
 
 let end = false;
 let page = "load";
@@ -520,16 +519,11 @@ function loadpost(p) {
             user = parts[0];
             content = parts.slice(1).join(': ');
         } else {
-            if (p.u === eul[0]){
-                user = p.u + "👑"
-                content = p.p
-            } else {
-                content = p.p
-                user = p.p
-            }
+            content = p.p;
+            user = p.u;
         }
     }
-}
+    
     const postContainer = document.createElement("div");
     postContainer.classList.add("post");
     postContainer.setAttribute("tabindex", "0");
@@ -706,6 +700,7 @@ function loadpost(p) {
     } else {
         pageContainer.appendChild(postContainer);
     }
+}
 
 function loadPfp(username, button) {
     return new Promise((resolve, reject) => {
