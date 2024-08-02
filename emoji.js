@@ -38,6 +38,19 @@ function addemoji(emoji) {
     }
 }
 
+function addemojim(emoji) {
+    const ogmsg = document.getElementById('msg').value
+    document.getElementById('msg').value = `${ogmsg}${emoji} `;
+    autoresize();
+    event.preventDefault();
+    if (event) {
+        if (!event.shiftKey) {
+            closemodal();
+            document.getElementById('msg').focus();
+        }
+    }
+}
+
 function loadpicker() {
     pickerhtm();
     let picker = document.getElementById("emojipicker");
@@ -55,6 +68,84 @@ function loadpicker() {
     } else {
         document.querySelector(".emojipicker").classList.remove("reduced-ani");
     }
+
+    // Custom emojis from chats
+    for (const chat of Object.values(chatCache)) {
+        const customEmojis = chat.emojis;
+        if (!customEmojis.length) continue;
+
+        const sidebarButton = document.createElement("button");
+        sidebarButton.classList.add("emojibuttonside");
+        sidebarButton.onclick = () => emjpage(chat._id);
+
+        const chatIconElem = document.createElement("div");
+        chatIconElem.classList.add("avatar-small");
+        chatIconElem.classList.add("pfp-inner");
+        chatIconElem.setAttribute("alt", "Avatar");
+        if (chat.type === 0) {
+            if (chat.icon) {
+                chatIconElem.style.backgroundImage = `url(https://uploads.meower.org/icons/${chat.icon})`;
+            } else {
+                chatIconElem.style.backgroundImage = `url(images/GC.svg)`;
+            }
+            if (!chat.icon) {
+                chatIconElem.style.border = "1.5px solid #" + '1f5831';
+            } else if (chat.icon_color) {
+                chatIconElem.style.border = "1.5px solid #" + chat.icon_color;
+            } else {
+                chatIconElem.style.border = "1.5px solid #" + '000';
+            }
+        } else {
+            // this is so hacky :p
+            // - Tnix
+            loadPfp(chat.members.find(v => v !== localStorage.getItem("username")))
+            .then(pfpElem => {
+                if (pfpElem) {
+                    let bgImageUrl = pfpElem.style.backgroundImage;
+                    if (bgImageUrl) {
+                        bgImageUrl = bgImageUrl.slice(5, -2);
+                    }
+                    chatIconElem.style.border = pfpElem.style.border.replace("3px", "1.5px");
+                    chatIconElem.style.backgroundColor = pfpElem.style.border.replace("3px solid", "");
+                    chatIconElem.style.backgroundImage = `url("${bgImageUrl}")`;
+                    chatIconElem.classList.add("pfp-inner");
+                    if (pfpElem.classList.contains("svg-avatar")) {
+                        chatIconElem.classList.add("svg-avatar");
+                        chatIconElem.style.backgroundColor = '#fff';
+                    }
+                }
+            });
+        }
+        chatIconElem.style.width = "100%";
+        chatIconElem.style.height = "auto";
+        sidebarButton.appendChild(chatIconElem);
+
+        document.querySelector(".emojisidebar").appendChild(sidebarButton);
+
+        const section = document.createElement("div");
+        section.classList.add("emojisec");
+        section.id = chat._id;
+        const headerContainer = document.createElement("div");
+        headerContainer.classList.add("emojiheader");
+        const header = document.createElement("h3");
+        header.innerText = chat.nickname || `@${chat.members.find(v => v !== localStorage.getItem("username"))}`;
+        headerContainer.appendChild(header);
+        section.appendChild(headerContainer);
+        for (const emoji of customEmojis) {
+            const addButton = document.createElement("button");
+            addButton.classList.add("emojibutton");
+            addButton.title = emoji.name;
+            addButton.onclick = () => addemoji(`<:${emoji._id}>`);
+            const img = document.createElement("img");
+            img.src = `https://uploads.meower.org/emojis/${emoji._id}`;
+            img.alt = emoji.name;
+            img.height = 32;
+            addButton.appendChild(img);
+            section.appendChild(addButton);
+        }
+        document.querySelector(".emojicont").appendChild(section);
+    }
+
     document.getElementById("emojin").focus();
 }
 
@@ -108,6 +199,71 @@ function emjpage(page) {
 
 function fstemj() {
     addemoji(document.querySelector('.emojibutton:not([style*="display: none;"])').getAttribute('onclick').match(/'(.*?)'/)[1]);
+}
+
+function emojimodal() {
+    document.documentElement.style.overflow = "hidden";
+    
+    const mdlbck = document.querySelector('.modal-back');
+    if (mdlbck) {
+        mdlbck.style.display = 'flex';
+        
+        const mdl = mdlbck.querySelector('.modal');
+        mdl.id = '';
+        if (mdl) {
+            const mdlt = mdl.querySelector('.modal-top');
+            if (mdlt) {
+                mdlt.innerHTML = `
+                <div class="emojimodal">
+                    <button class="emojibuttonm" title="think" onclick="addemojim('<:think:1226311619064234086>')"><img src="https://cdn.discordapp.com/emojis/1226311619064234086.webp?size=96&amp;quality=lossless" alt="think" height="32px"></button>
+                    <button class="emojibuttonm" title="amog os" onclick="addemojim('<:amogos:1226314396377288726>')"><img src="https://cdn.discordapp.com/emojis/1226314396377288726.webp?size=96&amp;quality=lossless" alt="amogos" height="32px"></button>
+                    <button class="emojibuttonm" title="toasty" onclick="addemojim('<:toasty:1227089807897792605>')"><img src="https://cdn.discordapp.com/emojis/1227089807897792605.webp?size=96&quality=lossless" alt="toasty" height="32px"></button>
+                    <button class="emojibuttonm" title="luna" onclick="addemojim('<:luna:1221632755851591740>')"><img src="https://cdn.discordapp.com/emojis/1221632755851591740.webp?size=96&amp;quality=lossless" alt="luna" height="32px"></button>
+                    <button class="emojibuttonm" title="noodle" onclick="addemojim('<:noodle:1227131494183473233>')"><img src="https://cdn.discordapp.com/emojis/1227131494183473233.webp?size=96&quality=lossless" alt="noodle" height="32px"></button>
+                    <button class="emojibuttonm" title="me" onclick="addemojim('<:me:1221628997025267752>')"><img src="https://cdn.discordapp.com/emojis/1221628997025267752.webp?size=96&amp;quality=lossless" alt="me" height="32px"></button>
+                    <button class="emojibuttonm" title="oswal" onclick="addemojim('<:oswal:1226912603931148338>')"><img src="https://cdn.discordapp.com/emojis/1226912603931148338.webp?size=96&quality=lossless" alt="oswal" height="32px"></button>
+                    <button class="emojibuttonm" title="melm" onclick="addemojim('<:melm:1248842290806657035>')"><img src="https://cdn.discordapp.com/emojis/1248842290806657035.webp?size=96&quality=lossless" alt="melm" height="32px"></button>
+                    <button class="emojibuttonm" title="cta" onclick="addemojim('<:cta:1226913189590073494>')"><img src="https://cdn.discordapp.com/emojis/1226913189590073494.webp?size=96&quality=lossless" alt="cta" height="32px"></button>
+                    <button class="emojibuttonm" title="freya" onclick="addemojim('<:freya:1244778372953935922>')"><img src="https://cdn.discordapp.com/emojis/1244778372953935922.webp?size=96&quality=lossless" alt="freya" height="32px"></button>
+                    <button class="emojibuttonm" title="atticus" onclick="addemojim('<:atticu:1221630557369405440>')"><img src="https://cdn.discordapp.com/emojis/1221630557369405440.webp?size=96&amp;quality=lossless" alt="atticu" height="32px"></button>
+                    <button class="emojibuttonm" title="uggh" onclick="addemojim('<:uggh:1227845267496243242>')"><img src="https://cdn.discordapp.com/emojis/1227845267496243242.webp?size=96&quality=lossless" alt="uggh" height="32px"></button>
+                    <button class="emojibuttonm" title=":3" onclick="addemojim('<:33:1226320165302571087>')"><img src="https://cdn.discordapp.com/emojis/1226320165302571087.webp?size=44&quality=lossless" alt=":3" height="32px"></button>
+                    <button class="emojibuttonm" title="Cydia" onclick="addemojim('<:Cydia:1226320451278602290>')"><img src="https://cdn.discordapp.com/emojis/1226320451278602290.webp?size=44&quality=lossless" alt="Cydia" height="32px"></button>
+                    <button class="emojibuttonm" title="yuhhuh" onclick="addemojim('<:yuhhuh:1227268820213698611>')"><img src="https://cdn.discordapp.com/emojis/1227268820213698611.webp?size=96&quality=lossless" alt="yuhhuh" height="32px"></button>
+                    <button class="emojibuttonm" title="nuhhuh" onclick="addemojim('<:nuhhuh:1233290735999258664>')"><img src="https://cdn.discordapp.com/emojis/1233290735999258664.webp?size=96&quality=lossless" alt="nuhhuh" height="32px"></button>
+                    <button class="emojibuttonm" title="DebugMan" onclick="addemojim('<:DebugMan2:1226320526037880916>')"><img src="https://cdn.discordapp.com/emojis/1226320526037880916.webp?size=44&quality=lossless" alt="DebugMan" height="32px"></button>
+                    <button class="emojibuttonm" title="blobheart" onclick="addemojim('<:blobheart:1226319886867763240>')"><img src="https://cdn.discordapp.com/emojis/1226319886867763240.webp?size=44&quality=lossless" alt="blobheart" height="32px"></button>
+                    <button class="emojibuttonm" title="demonetized" onclick="addemojim('<:demonetized:1226320307673894953>')"><img src="https://cdn.discordapp.com/emojis/1226320307673894953.webp?size=44&quality=lossless" alt="demonetized" height="32px"></button>
+                    <button class="emojibuttonm" title="GarfTrue" onclick="addemojim('<:GarfTrue:1228207760047472670>')"><img src="https://cdn.discordapp.com/emojis/1228207760047472670.webp?size=44&quality=lossless" alt="GarfTrue" height="32px"></button>
+                    <button class="emojibuttonm" title="thubsup" onclick="addemojim('<:thubsup:1229994631840927774>')"><img src="https://cdn.discordapp.com/emojis/1229994631840927774.webp?size=96&quality=lossless" alt="thubsup" height="32px"></button>
+                    <button class="emojibuttonm" title="miau" onclick="addemojim('<:miau:1237207275870097519>')"><img src="https://cdn.discordapp.com/emojis/1237207275870097519.webp?size=96&quality=lossless" alt="miau" height="32px"></button>
+                    <button class="emojibuttonm" title="marker" onclick="addemojim('<:marker:1238203265229914132>')"><img src="https://cdn.discordapp.com/emojis/1238203265229914132.webp?size=128&quality=lossless" alt="marker" height="32px"></button>
+                    <button class="emojibuttonm" title="ow" onclick="addemojim('<:ow:1251723597630931065>')"><img src="https://cdn.discordapp.com/emojis/1251723597630931065.webp?size=128&quality=lossless" alt="ow" height="32px"></button>
+                    <button class="emojibuttonm" title="scary" onclick="addemojim('<:scary:1259355757602672651>')"><img src="https://cdn.discordapp.com/emojis/1259355757602672651.webp?size=96&quality=lossless" alt="scary" height="32px"></button>
+                    <button class="emojibuttonm" title="wink" onclick="addemojim('<:wink:1260356148968689704>')"><img src="https://cdn.discordapp.com/emojis/1260356148968689704.webp?size=96&quality=lossless" alt="wink" height="32px"></button>
+                    <button class="emojibuttonm" title="roxy" onclick="addemojim('<:roxy:1260366574989348955>')"><img src="https://cdn.discordapp.com/emojis/1260366574989348955.webp?size=96&quality=lossless" alt="roxy" height="32px"></button>
+                    <button class="emojibuttonm" title="doinkus" onclick="addemojim('<:doinkus:1267307216000782457>')"><img src="https://cdn.discordapp.com/emojis/1267307216000782457.webp?size=96&quality=lossless" alt="doinkus" height="32px"></button>
+                    
+                    <button class="emojibuttonm" title="yippe" onclick="addemojim('<a:yippe:1226318495147495505>')"><img src="https://cdn.discordapp.com/emojis/1226318495147495505.gif?size=48&quality=lossless&name=yippe" alt="yippe" height="32px"></button>
+                    <button class="emojibuttonm" title="hooray" onclick="addemojim('<a:hooray:1230023947777609808>')"><img src="https://cdn.discordapp.com/emojis/1230023947777609808.gif?size=48&quality=lossless&name=hooray" alt="hooray" height="32px"></button>
+                    <button class="emojibuttonm" title="boogie" onclick="addemojim('<a:boogie:1226311710818959401>')"><img src="https://cdn.discordapp.com/emojis/1226311710818959401.gif?size=96&amp;quality=lossless" alt="boogie" height="32px"></button>
+                    <button class="emojibuttonm" title="ameowdundundun" onclick="addemojim('<a:ameowdundundun:1226319768236331140>')"><img src="https://cdn.discordapp.com/emojis/1226319768236331140.gif?size=48&quality=lossless&name=ameowdundundun" alt="ameowdundundun" height="32px"></button>
+                    <button class="emojibuttonm" title="Misc_Hundred" onclick="addemojim('<a:Misc_Hundred:1226319950570983434>')"><img src="https://cdn.discordapp.com/emojis/1226319950570983434.gif?size=48&quality=lossless&name=Misc_Hundred" alt="Misc_Hundred" height="32px"></button>
+                    <button class="emojibuttonm" title="kick" onclick="addemojim('<a:kick:1231078387704139967>')"><img src="https://cdn.discordapp.com/emojis/1231078387704139967.gif?size=48&quality=lossless&name=kick" alt="kick" height="32px"></button>
+                    <button class="emojibuttonm" title="shake" onclick="addemojim('<a:shake:1227279789472354435>')"><img src="https://cdn.discordapp.com/emojis/1227279789472354435.gif?size=48&quality=lossless&name=shake" alt="shake" height="32px"></button>
+                    <button class="emojibuttonm" title="sphere" onclick="addemojim('<a:sphere:1227279796715917362>')"><img src="https://cdn.discordapp.com/emojis/1227279796715917362.gif?size=48&quality=lossless&name=sphere" alt="sphere" height="32px"></button>
+                    <button class="emojibuttonm" title="spin" onclick="addemojim('<a:spin:1227279798015889498>')"><img src="https://cdn.discordapp.com/emojis/1227279798015889498.gif?size=48&quality=lossless&name=spin" alt="spin" height="32px"></button>
+                    <button class="emojibuttonm" title="squish" onclick="addemojim('<a:squish:1227279787072946189>')"><img src="https://cdn.discordapp.com/emojis/1227279787072946189.gif?size=48&quality=lossless&name=squish" alt="squish" height="32px"></button>
+                </div>
+                `;
+            }
+            const mdbt = mdl.querySelector('.modal-bottom');
+            if (mdbt) {
+                mdbt.innerHTML = `
+                `;
+            }
+        }
+    }
 }
 
 
@@ -1692,7 +1848,8 @@ function pickerhtm() {
             <button class="emojibutton" title="scary" onclick="addemoji('<:scary:1259355757602672651>')"><img src="https://cdn.discordapp.com/emojis/1259355757602672651.webp?size=96&quality=lossless" alt="scary" height="32px"></button>
             <button class="emojibutton" title="wink" onclick="addemoji('<:wink:1260356148968689704>')"><img src="https://cdn.discordapp.com/emojis/1260356148968689704.webp?size=96&quality=lossless" alt="wink" height="32px"></button>
             <button class="emojibutton" title="roxy" onclick="addemoji('<:roxy:1260366574989348955>')"><img src="https://cdn.discordapp.com/emojis/1260366574989348955.webp?size=96&quality=lossless" alt="roxy" height="32px"></button>
-            
+            <button class="emojibutton" title="doinkus" onclick="addemoji('<:doinkus:1267307216000782457>')"><img src="https://cdn.discordapp.com/emojis/1267307216000782457.webp?size=96&quality=lossless" alt="doinkus" height="32px"></button>
+
             <button class="emojibutton" title="yippe" onclick="addemoji('<a:yippe:1226318495147495505>')"><img src="https://cdn.discordapp.com/emojis/1226318495147495505.gif?size=48&quality=lossless&name=yippe" alt="yippe" height="32px"></button>
             <button class="emojibutton" title="hooray" onclick="addemoji('<a:hooray:1230023947777609808>')"><img src="https://cdn.discordapp.com/emojis/1230023947777609808.gif?size=48&quality=lossless&name=hooray" alt="hooray" height="32px"></button>
             <button class="emojibutton" title="boogie" onclick="addemoji('<a:boogie:1226311710818959401>')"><img src="https://cdn.discordapp.com/emojis/1226311710818959401.gif?size=96&amp;quality=lossless" alt="boogie" height="32px"></button>

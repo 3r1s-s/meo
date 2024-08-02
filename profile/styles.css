@@ -33,6 +33,9 @@ hr {
 .dm-btn {
     flex: 0.1;
     background-color: transparent;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .mdl-sec {
@@ -75,6 +78,11 @@ hr {
     border: 2px dashed;
 }
 
+.updt-prfl {
+    margin-top: 10px;
+    margin-bottom: 0;
+}
+
 .profile-qt,
 p {
     margin: 0;
@@ -84,6 +92,10 @@ p {
 .custom-bg > .mdl-txt,
 .custom-bg > .sec {
     border: 1px solid #ffffff20;
+}
+
+.button:disabled {
+    opacity: 0.5;
 }
 
 .custom-bg .quote-edit {

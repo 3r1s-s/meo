@@ -166,7 +166,6 @@ bridge {
     background-color: var(--primary);
     border-radius: 25px;
     font-size: 12px;
-    margin-left: 5px;
     padding-left: 5px;
     padding-right: 5px;
     padding-bottom: 1px;
@@ -178,6 +177,24 @@ bridge {
 
 h6 {
     margin: 5px 0;
+}
+
+table {
+    border-spacing: 0px;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+td, th {
+    padding: 2px;
+}
+
+tr:nth-child(even) {
+    background-color: var(--accent-color);
+}
+
+tr:nth-child(odd) {
+  background-color: var(--accent-down);
 }
 
 .list {
@@ -292,8 +309,12 @@ h6 {
 .user-header {
     font-weight: 700;
     font-size: 19px;
-    display: block;
+    display: flex;
     margin: var(--text-margin) 0 10px 0;
+    text-wrap: nowrap;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 5px;
 }
 
 .ulmember {
@@ -337,6 +358,7 @@ h6 {
 }
 
 .reply {
+    font-size: 16px;
     background-color: var(--accent-down);
     border: 3px solid var(--accent-down);
     padding-left: 10px;
@@ -345,6 +367,12 @@ h6 {
     max-height: 100px;
     overflow: hidden;
     margin: var(--text-margin) 0;
+
+    display: flex;
+    text-wrap: nowrap;
+    gap: 10px;
+    align-items: center;
+    height: 42px;
 }
 
 .reply.custom {
@@ -495,6 +523,39 @@ h6 {
 #edit-indicator {
     margin: 0 calc(var(--margin)/2);
     display: flex;
+}
+
+#replies {
+    display: flex;
+    flex-direction: column;
+    font-size: 16px;
+}
+
+.replyinner > span {
+    padding-right: 15px;
+    padding-left: 10px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.replyinner {
+    display: flex;
+    gap: 10px;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.reply-pre {
+    flex: 1;
+    overflow: hidden;
+}
+
+.reply-pre .reply {
+    margin: 0;
 }
 
 #images-container {
@@ -824,7 +885,6 @@ h6 {
 }
 
 .date {
-    margin-left: 5px;
     -webkit-user-select: none;
     user-select: none;
 }
@@ -839,8 +899,8 @@ h6 {
 #main {
     flex: 1;
     max-width: 700px;
-    overflow: none;
-    height: auto;
+    overflow: auto;
+    height: 100vh;
     border-top: none;
 }
 
@@ -1063,6 +1123,7 @@ possible future styling
     border-radius: var(--border-radius);
     align-self: end;
     transition: var(--transition);
+    user-select: none;
 }
 
 .modal-close:hover {
@@ -1101,12 +1162,22 @@ possible future styling
     width: 100%;
     padding: var(--button-padding);
     border-radius: var(--border-radius);
-    margin-top: var(--margin);
     margin-bottom: var(--margin);
     text-align: left;
     display: flex;
     align-items: center;
     transition: var(--transition);
+    justify-content: space-between;
+}
+
+.modal-button:first-child {
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+}
+
+.modal-button:last-child {
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
 }
 
 .modal-button:hover {
@@ -1142,7 +1213,6 @@ possible future styling
 }
 
 .modal-icon {
-    width: 100%;
     height: 30px;
     display: flex;
     align-items: center;
@@ -1567,6 +1637,10 @@ possible future styling
     height: 16px;
 }
 
+.emoji:hover {
+    cursor: pointer;
+}
+
 .big > p > .emoji {
     height: 46px;
 }
@@ -1574,6 +1648,9 @@ possible future styling
 .emojisidebar {
     display: flex;
     flex-direction: column;
+    max-height: 500px;
+    overflow: scroll;
+    scrollbar-width: none;
 }
 
 #emojipicker {
@@ -1596,6 +1673,9 @@ possible future styling
     resize: horizontal;
     animation: slidedown cubic-bezier(.2,-.25,0,1) 0.2s forwards;
     z-index: 1;
+
+    display: flex;
+    gap: 10px;
 }
 
 .emojisec {
@@ -1604,11 +1684,10 @@ possible future styling
 }
 
 .emojicont {
-    padding-left: var(--padding);
     overflow-y: scroll;
-    max-height: 460px;
+    max-height: 500px;
     scrollbar-width: none;
-    width: 100%;
+    flex: 1;
 }
 
 .emojiheader {
@@ -1643,10 +1722,34 @@ possible future styling
     font-size: 16px;
     padding: var(--padding);
     margin: calc(var(--margin)/2);
+    width: 42px;
+    aspect-ratio: 1/1;
 }
 
 .emojibuttonside:hover {
     background-color: var(--hov-modal-button-color);
+}
+
+.emoji-button-mobile {
+    display: none;
+}
+
+.emojibuttonm {
+    background-color: var(--modal-button-color);
+    font-size: 32px;
+    padding: 0;
+    width: 100%; /* Make the button width responsive */
+    aspect-ratio: 1 / 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font);
+}
+
+.emojimodal {
+    display: grid;
+    gap: 10px;
+    grid-template-columns: repeat(auto-fit, minmax(56px, 1fr));
 }
 
 .emojisearch {
@@ -1954,9 +2057,10 @@ possible future styling
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: var(--border-radius);
+    border-radius: 6px;
     background: var(--background);
     transition: 100ms ease-in-out;
+    box-sizing: border-box;
 }
 
 .settingstoggle svg {
@@ -2022,7 +2126,11 @@ possible future styling
     gap: 12px;
 }
 
-.plugin label {
+.plugin:hover {
+    cursor: pointer;
+}
+
+.plugin-label {
     display: inline-block;
     width: 100%;
     height: 100%;
@@ -2039,6 +2147,7 @@ possible future styling
     border-radius: var(--border-radius);
     background: var(--background);
     transition: 100ms ease-in-out;
+    box-sizing: border-box;
 }
 
 .plugintoggle svg {
@@ -2047,11 +2156,7 @@ possible future styling
     color: var(--hov-color);
 }
 
-.plugintoggle:hover {
-    cursor: pointer;
-}
-
-.plugintoggle:hover svg {
+.plugin:hover .plugintoggle svg {
     opacity: 1;
     color: var(--hov-color);
 }
@@ -2192,6 +2297,19 @@ possible future styling
     border: none;
 }
 
+.radio {
+    width: 20px;
+    height: 20px;
+    box-sizing: border-box;
+    border: 2px solid var(--hov-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 100px;
+    background: var(--background);
+    transition: 100ms ease-in-out;
+}
+
 .languages {
     display: flex;
     flex-direction: column;
@@ -2207,6 +2325,11 @@ possible future styling
     font-size: 16px;
     display: flex;
     align-items: center;
+    gap: 10px;
+}
+
+.language:hover {
+    background-color: var(--accent-color);
 }
 
 .language-r {
@@ -2224,6 +2347,18 @@ possible future styling
 .language-selected {
     box-sizing: border-box;
     border: 3px solid var(--hov-accent-color);
+}
+
+.language:hover > .radio {
+    border: 4px solid var(--hov-color);
+}
+
+.language-selected > .radio {
+    border: 4px solid var(--primary);
+}
+
+.language-selected:hover > .radio {
+    border: 6px solid var(--primary);
 }
 
 .skeleton {
@@ -2604,7 +2739,6 @@ possible future styling
     }
     
     .modal-button {
-        border-radius: 100px;
         padding: 10px 15px 10px 15px;
     }
 
@@ -2850,6 +2984,10 @@ possible future styling
 
     .launch-logo {
         animation: none;
+    }
+
+    .emoji-button-mobile {
+        display: flex;
     }
 
     .emoji-button {

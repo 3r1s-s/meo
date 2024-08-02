@@ -3,17 +3,16 @@
 // - Eris
 
 // To-Do
-// make windows 7 theme
 // replace ulist with typing indicator
-// load more button at the end of post list
-// have it be automatic after the first load more
+// have it be automatic after the first load more, make sure reply jumping works
 // Modal close animation
-// Fix the sidebar and it's resizing
 // Add a sidebar to the right side for Member list and replace the current ulist with typing indicator
 // Discord mode where posts are on the bottom
 // Notification managment
 // Custom video and audio player, similar style as the file download preview
 // Add tooltips to icon buttons, emojis, and maybe some other things
+// Fix Desktop Mode
+// make @Tnix have tnix colour ect
 
 let end = false;
 let page = "load";
@@ -37,7 +36,6 @@ let ipBlocked = false;
 let openprofile = false;
 
 const communityDiscordLink = "https://discord.com/invite/THgK9CgyYJ";
-const forumLink = "https://forums.meower.org";
 const server = "wss://server.meower.org/";
 
 const pfpCache = {};
@@ -262,6 +260,27 @@ function main() {
                 );
                 renderChats();
             }
+        } else if (sentdata.val.mode == "create_emoji") {
+            const chatId = sentdata.val.payload.chat_id;
+            if (chatId in chatCache) {
+                chatCache[chatId].emojis.push(sentdata.val.payload);
+            }
+        } else if (sentdata.val.mode == "update_emoji") {
+            const chatId = sentdata.val.payload.chat_id;
+            if (chatId in chatCache) {
+                const emojiI = chatCache[chatId].emojis.findIndex(emoji => emoji._id === sentdata.val.payload._id);
+                if (emojiI && emojiI !== -1) {
+                    chatCache[chatId].emojis[emojiI] = Object.assign(
+                        chatCache[chatId].emojis[emojiI],
+                        sentdata.val.payload,
+                    );
+                }
+            }
+        } else if (sentdata.val.mode == "delete_emoji") {
+            const chatId = sentdata.val.payload.chat_id;
+            if (chatId in chatCache) {
+                chatCache[chatId].emojis = chatCache[chatId].emojis.filter(emoji => emoji._id !== sentdata.val.payload._id);
+            }
         } else if (sentdata.cmd == "ulist") {
             const iul = sentdata.val;
             sul = iul.trim().split(";");
@@ -292,6 +311,11 @@ function main() {
                     postCache[key].splice(index, 1);
                     break;
                 }
+            }
+
+            const replies = document.querySelectorAll(`#reply-${sentdata.val.id}`);
+            for (const reply of replies) {
+                reply.replaceWith(loadreplyv(null));
             }
 
             const divToDelete = document.getElementById(sentdata.val.id);
@@ -346,6 +370,10 @@ function main() {
                 const editIndicator = document.getElementById("edit-indicator");
                 if (editIndicator.hasAttribute("data-postid")) {
                     cancelEdit();
+                }
+                const replies = document.getElementById("replies");
+                if (replies) {
+                    replies.innerHTML = "";
                 }
                 textarea.blur();
             } else if (event.keyCode >= 48 && event.keyCode <= 90 && textarea === document.activeElement && !settingsstuff().invtyping && lastTyped + 3000 < Date.now()) {
@@ -431,6 +459,7 @@ function loadLogin() {
             <option value="enuk" ${language === "enuk" ? "selected" : ""}>${enuk.language}</option>
             <option value="es" ${language === "es" ? "selected" : ""}>${es.language}</option>
             <option value="de" ${language === "de" ? "selected" : ""}>${de.language}</option>
+            <option value="ua" ${language === "ua" ? "selected" : ""}>${ua.language}</option>
         </select>
         </div>
         <div class="login-back">
@@ -534,7 +563,7 @@ function loadpost(p) {
     mobileButtonContainer.classList.add("mobileContainer");
     mobileButtonContainer.innerHTML = `
     <div class='toolbarContainer'>
-        <div class='toolButton mobileButton' onclick='reply(event)' aria-label="reply" title="reply" tabindex="0">
+        <div class='toolButton mobileButton' onclick='reply("${p._id}")' aria-label="reply" title="reply" tabindex="0">
             <svg width='24' height='24' viewBox='0 0 24 24'><path d='M10 8.26667V4L3 11.4667L10 18.9333V14.56C15 14.56 18.5 16.2667 21 20C20 14.6667 17 9.33333 10 8.26667Z' fill='currentColor'></path></svg>
         </div>    
         <div class='toolButton mobileButton' onclick='openModal("${p._id}");'>
@@ -597,10 +626,9 @@ function loadpost(p) {
         });
     }
 
-    p.reply_to.forEach(function(item){
-        const replyContainer = loadreplyv(item);
-        pstinf.after(replyContainer);
-    });
+    const repliesContainer = document.createElement("div");
+    p.reply_to.forEach((item) => repliesContainer.appendChild(loadreplyv(item)));
+    pstinf.after(repliesContainer);
 
     let postContentText = document.createElement("p");
     postContentText.className = "post-content";
@@ -608,6 +636,7 @@ function loadpost(p) {
     if (typeof md !== 'undefined') {
         md.disable(['image']);
         postContentText.innerHTML = erimd(md.render(content.replace(/&/g, '&amp;')));
+        postContentText.innerHTML = meowerEmojis(postContentText.innerHTML, p.emojis || []);
         postContentText.innerHTML = buttonbadges(postContentText);
     } else {
         // fallback for when md doenst work
@@ -616,8 +645,9 @@ function loadpost(p) {
         console.error("Parsed with old markdown, fix later :)")
     }
     const emojiRgx = /^(?:(?!\d)(?:\p{Emoji}|[\u200d\ufe0f\u{E0061}-\u{E007A}\u{E007F}]))+$/u;
+    const meowerRgx = /^<:[a-zA-Z0-9]{24}>$/g;
     const discordRgx = /^<(a)?:\w+:\d+>$/gi;
-    if (emojiRgx.test(content) || discordRgx.test(content)) {
+    if (emojiRgx.test(content) || (meowerRgx.test(content) && p.emojis.length) || discordRgx.test(content)) {
         postContentText.classList.add('big');
     }
 
@@ -661,7 +691,7 @@ function loadpost(p) {
     postContainer.id = p._id;
     if (existingPost) {
         existingPost.replaceWith(postContainer);
-    } else if (pageContainer.firstChild) {
+    } else if (pageContainer.firstChild && !p._reverse) {
         pageContainer.insertBefore(postContainer, pageContainer.firstChild);
     } else {
         pageContainer.appendChild(postContainer);
@@ -770,7 +800,6 @@ async function loadreplies(postOrigin, replyIds) {
 
 async function loadreply(postOrigin, replyid) {
     const roarRegex = /^@[\w-]+ (.+?) \(([^)]+)\)/;
-    const betterMeowerRegex = /@([\w-]+)\[([a-zA-Z0-9]+)\]/g;
 
     try {
         let replydata = postCache[postOrigin].find(post => post._id === replyid);
@@ -799,7 +828,6 @@ async function loadreply(postOrigin, replyid) {
             content = replydata.p;
 
             let match = replydata.p.replace(roarRegex, "").trim();
-            match = match.replace(betterMeowerRegex, "").trim();
 
             if (match) {
                 content = match;
@@ -847,22 +875,14 @@ async function loadreply(postOrigin, replyid) {
 
             const desktopOffset = document.documentElement.classList.contains('desktop') ? 30 + navbarOffset : navbarOffset;
 
-            if (window.innerWidth < 720) {
-                const containerRect = outer.getBoundingClientRect();
-                const elementRect = targetElement.getBoundingClientRect();
-                const elementPosition = elementRect.top - containerRect.top + outer.scrollTop - desktopOffset;
+            const containerRect = outer.getBoundingClientRect();
+            const elementRect = targetElement.getBoundingClientRect();
+            const elementPosition = elementRect.top - containerRect.top + outer.scrollTop - desktopOffset;
 
-                outer.scrollTo({
-                    top: elementPosition,
-                    behavior: scroll
-                });
-            } else {
-                const elementPosition = targetElement.getBoundingClientRect().top + window.scrollY - desktopOffset;
-                window.scrollTo({
-                    top: elementPosition,
-                    behavior: scroll
-                });
-            }
+            outer.scrollTo({
+                top: elementPosition,
+                behavior: scroll
+            });
 
             setTimeout(() => {
                 targetElement.style.backgroundColor = '';
@@ -880,7 +900,8 @@ async function loadreply(postOrigin, replyid) {
 }
 
 function loadreplyv(item) {
-    console.log(item);
+    if (!item) item = { _id: "", author: {} };
+
     let bridged = (bridges.includes(item.u));
 
     const replycontainer = document.createElement("div");
@@ -903,7 +924,7 @@ function loadreplyv(item) {
     if (item.p) {
         content = item.p;
     } else if (item.attachments) {
-        content = "[Attachment]";
+        content = "Attachment";
     } else {
         content = '';
     }
@@ -923,7 +944,7 @@ function loadreplyv(item) {
         }
     }
 
-    replycontainer.innerHTML = `<p style='font-weight:bold;margin: 10px 0 10px 0;'>${escapeHTML(user)}</p><p style='margin: 10px 0 10px 0;'>${escapeHTML(content)}</p>`;
+    replycontainer.innerHTML = `<p style='font-weight:bold;margin: 10px 0 10px 0;'>${escapeHTML(user)}</p><p style='margin: 10px 0 10px 0;'>${content ? escapeHTML(content) : '<i>Deleted post</i>'}</p>`;
 
     const full = document.createElement("div");
     full.classList.add("reply-outer");
@@ -938,22 +959,14 @@ function loadreplyv(item) {
         let scroll = settingsstuff().reducemotion ? "auto" : "smooth";
         const desktopOffset = document.documentElement.classList.contains('desktop') ? 30 + navbarOffset : navbarOffset;
 
-        if (window.innerWidth < 720) {
-            const containerRect = outer.getBoundingClientRect();
-            const elementRect = targetElement.getBoundingClientRect();
-            const elementPosition = elementRect.top - containerRect.top + outer.scrollTop - desktopOffset;
+        const containerRect = outer.getBoundingClientRect();
+        const elementRect = targetElement.getBoundingClientRect();
+        const elementPosition = elementRect.top - containerRect.top + outer.scrollTop - desktopOffset;
 
-            outer.scrollTo({
-                top: elementPosition,
-                behavior: scroll
-            });
-        } else {
-            const elementPosition = targetElement.getBoundingClientRect().top + window.scrollY - desktopOffset;
-            window.scrollTo({
-                top: elementPosition,
-                behavior: scroll
-            });
-        }
+        outer.scrollTo({
+            top: elementPosition,
+            behavior: scroll
+        });
 
         setTimeout(() => {
             targetElement.style.backgroundColor = '';
@@ -964,27 +977,41 @@ function loadreplyv(item) {
     return full;
 }
 
-function reply(event) {
-    let postcont = "";
-    const postContainer = event.target.closest('.post');
-    if (postContainer) {
-        const username = postContainer.querySelector('#username').innerText;
-        if (postContainer.querySelector('p')) {
-            postcont = postContainer.querySelector('p').innerText
-                .replace(/\n/g, ' ')
-                .replace(/@\w+/g, '')
-                .split(' ')
-                .slice(0, 6)
-                .join(' ');
-        } else {
-            postcont = "";
-        }
-        const ogmsg = document.getElementById('msg').value
+function reply(postId) {
+    const replies = document.getElementById("replies");
+    if (replies.childNodes.length >= 10) {
+        openUpdate(lang().info.replieslimit);
+        return;
+    }
+    const post = postCache[page].find(post => post._id === postId);
+    if (post) {
+        const box = document.createElement("div");
+        box.classList.add('replyinner');
+        box.dataset.replyId = postId; // Add a data attribute to uniquely identify the reply
 
-        const postId = postContainer.id;
-        document.getElementById('msg').value = `@${username} "${postcont}..." (${postId})\n${ogmsg}`;
+        const replyContainer = document.createElement("div");
+        replyContainer.appendChild(loadreplyv(post));
+        replyContainer.classList.add("reply-pre");
+        
+        box.appendChild(replyContainer);
+    
+        const removeButton = document.createElement("span");
+        removeButton.onclick = () => removeReply(box); // Pass the box element to removeReply
+        removeButton.innerHTML = `
+            <svg width="16" height="16" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M2.05026 11.9497C4.78394 14.6834 9.21607 14.6834 11.9497 11.9497C14.6834 9.21607 14.6834 4.78394 11.9497 2.05026C9.21607 -0.683419 4.78394 -0.683419 2.05026 2.05026C-0.683419 4.78394 -0.683419 9.21607 2.05026 11.9497ZM9.3065 10.2946L7.00262 7.99112L4.69914 10.295C4.42624 10.5683 3.98395 10.5683 3.71065 10.295C3.43754 10.0219 3.43754 9.5788 3.71065 9.3065L6.01432 7.00282L3.7048 4.69371C3.4317 4.4206 3.4317 3.97791 3.7048 3.7048C3.97751 3.4317 4.4202 3.4317 4.6933 3.7048L7.00262 6.01412L9.3065 3.71065C9.4791 3.53764 9.71978 3.4742 9.94253 3.52012C10.0718 3.5467 10.1949 3.61014 10.2952 3.71044C10.5683 3.98315 10.5683 4.42624 10.2952 4.69894L7.99132 7.00242L10.295 9.30609C10.5683 9.579 10.5683 10.0213 10.295 10.2946C10.0221 10.5679 9.5794 10.5679 9.3065 10.2946Z" fill="currentColor"></path>
+            </svg>
+        `;
+        box.appendChild(removeButton);
+    
+        replies.appendChild(box);
         document.getElementById('msg').focus();
-        autoresize();
+    }
+}
+
+function removeReply(element) {
+    if (element && element.parentNode) {
+        element.parentNode.removeChild(element); // Remove the reply element from its parent
     }
 }
 
@@ -1102,6 +1129,7 @@ async function sendpost() {
     if (msgbox.value.trim() === "" && pendingAttachments.length === 0) return;
     const message = msgbox.value;
     msgbox.value = "";
+    autoresize();
 
     const editIndicator = document.getElementById("edit-indicator");
 
@@ -1110,19 +1138,18 @@ async function sendpost() {
         return;
     }
 
-    // Check for substitution pattern s/old/new
     const subregex = /^s\/(.+?)\/(.+)$/;
     const match = message.match(subregex);
-
+   
     if (match) {
         const old = match[1];
         const newtx = match[2];
-
+    
         const repst = [...postCache[page]].reverse().find(post => post.u === localStorage.getItem("username"));
-
+    
         if (repst) {
             const newCont = repst.p.replace(new RegExp(old, 'g'), newtx);
-            
+
             fetch(`https://api.meower.org/posts?id=${repst._id}`, {
                 method: "PATCH",
                 headers: {
@@ -1132,8 +1159,34 @@ async function sendpost() {
                 body: JSON.stringify({ content: newCont })
             });
         }
-
+    
         return;
+    }
+
+    // Create a placeholder post element
+    const placeholder = document.createElement("div");
+    placeholder.classList.add("post");
+    placeholder.style.opacity = "0.5";
+
+    placeholder.innerHTML = `
+    <div class="pfp">
+    </div>
+    <div class="wrapper">
+    <span class="user-header"><span id='username'>${localStorage.getItem("username")}</span><i class="date">sending...</i></span>
+    <p class="post-content">
+    <p>${message}</p>
+    </p>
+    </div>
+    `
+
+//    document.getElementById("msgs").prepend(placeholder);
+    if (placeholder) {
+        loadPfp(localStorage.getItem("username"), 0)
+        .then(pfpElement => {
+            if (pfpElement) {
+                placeholder.querySelector(".pfp").appendChild(pfpElement);
+            }
+        });
     }
 
     if (editIndicator.hasAttribute("data-postid")) {
@@ -1162,23 +1215,70 @@ async function sendpost() {
         document.getElementById('images-container').innerHTML = '';
         msgbox.placeholder = lang().meo_messagebox;
         msgbox.disabled = false;
-        fetch(`https://api.meower.org/${page === "home" ? "home" : `posts/${page}`}`, {
+
+        // Get post IDs from replies
+        const replies = document.getElementById("replies");
+        const replyToIds = Array.from(replies.childNodes).map(replyContainer => replyContainer.getAttribute("data-reply-id"));
+        replies.innerHTML = "";
+
+        const response = await fetch(`https://api.meower.org/${page === "home" ? "home" : `posts/${page}`}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
                 token: localStorage.getItem("token")
             },
             body: JSON.stringify({
+                reply_to: replyToIds,
                 content: message,
                 attachments: attachmentIds.reverse(),
             })
         });
+                
+        placeholder.remove();
     }
 
     autoresize();
     closepicker();
 }
 
+
+function createPlaceholderPost(id, message) {
+    const postContainer = document.createElement("div");
+    postContainer.classList.add("post");
+    postContainer.setAttribute("tabindex", "0");
+    postContainer.id = id;
+    postContainer.style.opacity = "0.5";
+
+    const wrapperDiv = document.createElement("div");
+    wrapperDiv.classList.add("wrapper");
+
+    const pfpDiv = document.createElement("div");
+    pfpDiv.classList.add("pfp");
+
+    const pstdte = document.createElement("i");
+    pstdte.classList.add("date");
+    pstdte.innerText = "sending...";
+
+    const pstinf = document.createElement("span");
+    pstinf.classList.add("user-header");
+    pstinf.innerHTML = `<span id='username'>${localStorage.getItem("username")}</span>`;
+    pstinf.appendChild(pstdte);
+    wrapperDiv.appendChild(pstinf);
+
+    const postContentText = document.createElement("p");
+    postContentText.className = "post-content";
+    postContentText.innerText = message;
+
+    wrapperDiv.appendChild(postContentText);
+    postContainer.appendChild(wrapperDiv);
+
+    const pageContainer = document.getElementById("msgs");
+    if (pageContainer.firstChild) {
+        pageContainer.insertBefore(postContainer, pageContainer.firstChild);
+    } else {
+        pageContainer.appendChild(postContainer);
+    }
+}
 
 function loadhome() {
     page = "home";
@@ -1405,22 +1505,22 @@ function renderChats() {
             // this is so hacky :p
             // - Tnix
             loadPfp(chat.members.find(v => v !== localStorage.getItem("username")))
-                .then(pfpElem => {
-                    if (pfpElem) {
-                        let bgImageUrl = pfpElem.style.backgroundImage;
-                        if (bgImageUrl) {
-                            bgImageUrl = bgImageUrl.slice(5, -2); // Assuming the URL is wrapped in "url('')"
-                        }
-                        chatIconElem.style.border = pfpElem.style.border.replace("3px", "3px"); // This line seems redundant as it replaces "3px" with "3px"
-                        chatIconElem.style.backgroundColor = pfpElem.style.border.replace("3px solid", "");
-                        chatIconElem.style.backgroundImage = `url("${bgImageUrl}")`;
-                        chatIconElem.classList.add("pfp-inner");
-                        if (pfpElem.classList.contains("svg-avatar")) {
-                            chatIconElem.classList.add("svg-avatar");
-                            chatIconElem.style.backgroundColor = '#fff';
-                        }
+            .then(pfpElem => {
+                if (pfpElem) {
+                    let bgImageUrl = pfpElem.style.backgroundImage;
+                    if (bgImageUrl) {
+                        bgImageUrl = bgImageUrl.slice(5, -2);
                     }
-                }); // Corrected the closing of the then block
+                    chatIconElem.style.border = pfpElem.style.border;
+                    chatIconElem.style.backgroundColor = pfpElem.style.border.replace("3px solid", "");
+                    chatIconElem.style.backgroundImage = `url("${bgImageUrl}")`;
+                    chatIconElem.classList.add("pfp-inner");
+                    if (pfpElem.classList.contains("svg-avatar")) {
+                        chatIconElem.classList.add("svg-avatar");
+                        chatIconElem.style.backgroundColor = '#fff';
+                    }
+                }
+            });
         }
         r.appendChild(chatIconElem);
 
@@ -1783,6 +1883,40 @@ function loadinbox() {
     xhttp.send();
 }
 
+function loadmore() { // finish
+    const chatId = page.valueOf();
+    if (!postCache[chatId]) return;
+
+    var path;
+    if (chatId === "home") path = "/home"
+    else if (chatId === "inbox") path = "/inbox"
+    else path = `/posts/${chatId}`;
+
+    const pageNo = Math.floor(postCache[chatId].length / 25) + 1;
+    if (pageNo < 2) return;
+
+    const xhttpPosts = new XMLHttpRequest();
+    xhttpPosts.open("GET", `https://api.meower.org${path}?page=${pageNo}`);
+    xhttpPosts.setRequestHeader("token", localStorage.getItem('token'));
+    xhttpPosts.onload = () => {
+        const postsData = JSON.parse(xhttpPosts.response);
+        const postsarray = postsData.autoget || [];
+        postsarray.forEach(post => {
+            if (page !== chatId) {
+                return;
+            }
+            if (postCache[chatId].findIndex(_post => _post._id === post._id) !== -1) {
+                return
+            }
+            postCache[chatId].unshift(post);
+            post._reverse = true;
+            loadpost(post);
+        });
+        document.getElementById("skeleton-msgs").style.display = "none";
+    };
+    xhttpPosts.send();
+}
+
 function logout(iskl) {
     if (!iskl) {
         localStorage.clear();
@@ -2075,11 +2209,11 @@ function addPlugin(plugin, isEnabled) {
                 <path d="m10 15.586-3.293-3.293-1.414 1.414L10 18.414l9.707-9.707-1.414-1.414z"></path>
             </svg>
         </div>
-        <label>
+        <div class="plugin-label">
             ${plugin.name}
             <p class='pluginsub'>${plugin.description}</p>
             <p class='subsubheader'>Created by <a href='https://github.com/${plugin.creator}' target='_blank'>${plugin.creator}</a></p>
-            </label>
+        </div>
             ${plugin.flags === '1' ? `
             <svg class="plugin-flag" width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path fill="currentColor" d="M20 6.00201H14V3.00201C14 2.45001 13.553 2.00201 13 2.00201H4C3.447 2.00201 3 2.45001 3 3.00201V22.002H5V14.002H10.586L8.293 16.295C8.007 16.581 7.922 17.011 8.076 17.385C8.23 17.759 8.596 18.002 9 18.002H20C20.553 18.002 21 17.554 21 17.002V7.00201C21 6.45001 20.553 6.00201 20 6.00201Z">
@@ -2090,21 +2224,23 @@ function addPlugin(plugin, isEnabled) {
     `);
 
     const pluginToggle = document.getElementById(plugin.name);
-    pluginToggle.addEventListener('click', function() {
+    const parentElement = pluginToggle.parentElement;
+    parentElement.addEventListener('click', function() {
         const isChecked = pluginToggle.classList.toggle('checked');
         const enabledPlugins = JSON.parse(localStorage.getItem('enabledPlugins')) || {};
         enabledPlugins[plugin.name] = isChecked;
         localStorage.setItem('enabledPlugins', JSON.stringify(enabledPlugins));
-
+    
         if (!isChecked) {
             const existingScript = document.querySelector(`script[src="${plugin.script}"]`);
             if (existingScript) {
                 existingScript.remove();
             }
         }
-
+    
         modalPluginup();
     });
+    
 
     // Set initial state
     if (isEnabled) {
@@ -2144,11 +2280,11 @@ function loadPluginScript(scriptUrl) {
             'Accept': 'application.javascript'
         }
     })
-        .then(response => response.text())
-        .then(data => {
-            eval(data);
-        })
-        .catch(error => console.error('Error:', error));
+    .then(response => response.text())
+    .then(data =>{
+        window.eval(data);
+    })
+    .catch(error => console.error('Error:', error));
 }
 
 function resetPlugins() {
@@ -2183,7 +2319,7 @@ function loadAppearance() {
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M4 14a2 2 0 1 0 0-4 2 2 0 0 0 0 4Zm10-2a2 2 0 1 1-4 0 2 2 0 0 1 4 0Zm8 0a2 2 0 1 1-4 0 2 2 0 0 1 4 0Z" clip-rule="evenodd" class=""></path></svg>
                         </div>
                     </div>
-                    </div><h3><span id="username">melt</span><bridge title="${lang().meo_bridged.title}">${lang().meo_bridged.start}</bridge><i class="date">04/06/24, 11:49 pm</i></h3><p>pal was so eepy she couldn't even finish speaking!! 😹</p></div></div><div id="example" class="post"><div class="pfp"><img src="https://uploads.meower.org/icons/Gi1WvwNobL0X6RpZB7pnAMNw" alt="Avatar" class="avatar" style="border: 3px solid #b190fe;"></div><div class="wrapper"><div class="buttonContainer">
+                    </div><span class="user-header"><span id="username">melt</span><bridge title="${lang().meo_bridged.title}">${lang().meo_bridged.start}</bridge><i class="date">04/06/24, 11:49 pm</i></span><p>pal was so eepy she couldn't even finish speaking!! 😹</p></div></div><div id="example" class="post"><div class="pfp"><img src="https://uploads.meower.org/icons/Gi1WvwNobL0X6RpZB7pnAMNw" alt="Avatar" class="avatar" style="border: 3px solid #b190fe;"></div><div class="wrapper"><div class="buttonContainer">
                     <div class="toolbarContainer">
                         <div class="toolButton">
                             <svg viewBox="0 0 20 20" fill="currentColor" width="18" height="18"><path d="M12.9297 3.25007C12.7343 3.05261 12.4154 3.05226 12.2196 3.24928L11.5746 3.89824C11.3811 4.09297 11.3808 4.40733 11.5739 4.60245L16.5685 9.64824C16.7614 9.84309 16.7614 10.1569 16.5685 10.3517L11.5739 15.3975C11.3808 15.5927 11.3811 15.907 11.5746 16.1017L12.2196 16.7507C12.4154 16.9477 12.7343 16.9474 12.9297 16.7499L19.2604 10.3517C19.4532 10.1568 19.4532 9.84314 19.2604 9.64832L12.9297 3.25007Z"></path><path d="M8.42616 4.60245C8.6193 4.40733 8.61898 4.09297 8.42545 3.89824L7.78047 3.24928C7.58466 3.05226 7.26578 3.05261 7.07041 3.25007L0.739669 9.64832C0.5469 9.84314 0.546901 10.1568 0.739669 10.3517L7.07041 16.7499C7.26578 16.9474 7.58465 16.9477 7.78047 16.7507L8.42545 16.1017C8.61898 15.907 8.6193 15.5927 8.42616 15.3975L3.43155 10.3517C3.23869 10.1569 3.23869 9.84309 3.43155 9.64824L8.42616 4.60245Z"></path></svg>
@@ -2204,7 +2340,7 @@ function loadAppearance() {
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M4 14a2 2 0 1 0 0-4 2 2 0 0 0 0 4Zm10-2a2 2 0 1 1-4 0 2 2 0 0 1 4 0Zm8 0a2 2 0 1 1-4 0 2 2 0 0 1 4 0Z" clip-rule="evenodd" class=""></path></svg>
                         </div>
                     </div>
-                    </div><h3><span id="username">Eris</span><i class="date">04/06/24, 11:12 pm</i></h3><p>get ready for this</p></div></div><div id="example" class="post"><div class="pfp"><img src="https://uploads.meower.org/icons/Gi1WvwNobL0X6RpZB7pnAMNw" alt="Avatar" class="avatar" style="border: 3px solid #b190fe;"></div><div class="wrapper"><div class="buttonContainer">
+                    </div><span class="user-header"><span id="username">Eris</span><i class="date">04/06/24, 11:12 pm</i></span><p>get ready for this</p></div></div><div id="example" class="post"><div class="pfp"><img src="https://uploads.meower.org/icons/Gi1WvwNobL0X6RpZB7pnAMNw" alt="Avatar" class="avatar" style="border: 3px solid #b190fe;"></div><div class="wrapper"><div class="buttonContainer">
                     <div class="toolbarContainer">
                         <div class="toolButton">
                             <svg viewBox="0 0 20 20" fill="currentColor" width="18" height="18"><path d="M12.9297 3.25007C12.7343 3.05261 12.4154 3.05226 12.2196 3.24928L11.5746 3.89824C11.3811 4.09297 11.3808 4.40733 11.5739 4.60245L16.5685 9.64824C16.7614 9.84309 16.7614 10.1569 16.5685 10.3517L11.5739 15.3975C11.3808 15.5927 11.3811 15.907 11.5746 16.1017L12.2196 16.7507C12.4154 16.9477 12.7343 16.9474 12.9297 16.7499L19.2604 10.3517C19.4532 10.1568 19.4532 9.84314 19.2604 9.64832L12.9297 3.25007Z"></path><path d="M8.42616 4.60245C8.6193 4.40733 8.61898 4.09297 8.42545 3.89824L7.78047 3.24928C7.58466 3.05226 7.26578 3.05261 7.07041 3.25007L0.739669 9.64832C0.5469 9.84314 0.546901 10.1568 0.739669 10.3517L7.07041 16.7499C7.26578 16.9474 7.58465 16.9477 7.78047 16.7507L8.42545 16.1017C8.61898 15.907 8.6193 15.5927 8.42616 15.3975L3.43155 10.3517C3.23869 10.1569 3.23869 9.84309 3.43155 9.64824L8.42616 4.60245Z"></path></svg>
@@ -2225,7 +2361,7 @@ function loadAppearance() {
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M4 14a2 2 0 1 0 0-4 2 2 0 0 0 0 4Zm10-2a2 2 0 1 1-4 0 2 2 0 0 1 4 0Zm8 0a2 2 0 1 1-4 0 2 2 0 0 1 4 0Z" clip-rule="evenodd" class=""></path></svg>
                         </div>
                     </div>
-                    </div><h3><span id="username">Eris</span><i class="date">04/06/24, 11:12 pm</i></h3><p>so ur scared of helpful advice</p></div></div><div id="example" class="post"><div class="pfp"><img src="https://uploads.meower.org/icons/Gi1WvwNobL0X6RpZB7pnAMNw" alt="Avatar" class="avatar" style="border: 3px solid #b190fe;"></div><div class="wrapper"><div class="buttonContainer">
+                    </div><span class="user-header"><span id="username">Eris</span><i class="date">04/06/24, 11:12 pm</i></span><p>so ur scared of helpful advice</p></div></div><div id="example" class="post"><div class="pfp"><img src="https://uploads.meower.org/icons/Gi1WvwNobL0X6RpZB7pnAMNw" alt="Avatar" class="avatar" style="border: 3px solid #b190fe;"></div><div class="wrapper"><div class="buttonContainer">
                     <div class="toolbarContainer">
                         <div class="toolButton">
                             <svg viewBox="0 0 20 20" fill="currentColor" width="18" height="18"><path d="M12.9297 3.25007C12.7343 3.05261 12.4154 3.05226 12.2196 3.24928L11.5746 3.89824C11.3811 4.09297 11.3808 4.40733 11.5739 4.60245L16.5685 9.64824C16.7614 9.84309 16.7614 10.1569 16.5685 10.3517L11.5739 15.3975C11.3808 15.5927 11.3811 15.907 11.5746 16.1017L12.2196 16.7507C12.4154 16.9477 12.7343 16.9474 12.9297 16.7499L19.2604 10.3517C19.4532 10.1568 19.4532 9.84314 19.2604 9.64832L12.9297 3.25007Z"></path><path d="M8.42616 4.60245C8.6193 4.40733 8.61898 4.09297 8.42545 3.89824L7.78047 3.24928C7.58466 3.05226 7.26578 3.05261 7.07041 3.25007L0.739669 9.64832C0.5469 9.84314 0.546901 10.1568 0.739669 10.3517L7.07041 16.7499C7.26578 16.9474 7.58465 16.9477 7.78047 16.7507L8.42545 16.1017C8.61898 15.907 8.6193 15.5927 8.42616 15.3975L3.43155 10.3517C3.23869 10.1569 3.23869 9.84309 3.43155 9.64824L8.42616 4.60245Z"></path></svg>
@@ -2246,7 +2382,7 @@ function loadAppearance() {
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M4 14a2 2 0 1 0 0-4 2 2 0 0 0 0 4Zm10-2a2 2 0 1 1-4 0 2 2 0 0 1 4 0Zm8 0a2 2 0 1 1-4 0 2 2 0 0 1 4 0Z" clip-rule="evenodd" class=""></path></svg>
                         </div>
                     </div>
-                    </div><h3><span id="username">Eris</span><i class="date">04/04/24, 10:49 pm</i></h3><p><a href="https://uploads.meower.org/attachments/oMZqXLbqOjb9fbkRN3VDYmI0/togif.gif" target="_blank" class="attachment"><svg class="icon_ecf39b icon__13ad2" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"><path fill="currentColor" d="M10.57 4.01a6.97 6.97 0 0 1 9.86 0l.54.55a6.99 6.99 0 0 1 0 9.88l-7.26 7.27a1 1 0 0 1-1.42-1.42l7.27-7.26a4.99 4.99 0 0 0 0-7.06L19 5.43a4.97 4.97 0 0 0-7.02 0l-8.02 8.02a3.24 3.24 0 1 0 4.58 4.58l6.24-6.24a1.12 1.12 0 0 0-1.58-1.58l-3.5 3.5a1 1 0 0 1-1.42-1.42l3.5-3.5a3.12 3.12 0 1 1 4.42 4.42l-6.24 6.24a5.24 5.24 0 0 1-7.42-7.42l8.02-8.02Z" class=""></path></svg><span> attachments</span></a></p><img src="https://uploads.meower.org/attachments/oMZqXLbqOjb9fbkRN3VDYmI0/togif.gif" onclick="openImage('https://uploads.meower.org/attachments/oMZqXLbqOjb9fbkRN3VDYmI0/togif.gif')" alt="togif.gif" class="embed"></div></div>
+                    </div><span class="user-header"><span id="username">Eris</span><i class="date">04/04/24, 10:49 pm</i></span><p><a href="https://uploads.meower.org/attachments/oMZqXLbqOjb9fbkRN3VDYmI0/togif.gif" target="_blank" class="attachment"><svg class="icon_ecf39b icon__13ad2" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"><path fill="currentColor" d="M10.57 4.01a6.97 6.97 0 0 1 9.86 0l.54.55a6.99 6.99 0 0 1 0 9.88l-7.26 7.27a1 1 0 0 1-1.42-1.42l7.27-7.26a4.99 4.99 0 0 0 0-7.06L19 5.43a4.97 4.97 0 0 0-7.02 0l-8.02 8.02a3.24 3.24 0 1 0 4.58 4.58l6.24-6.24a1.12 1.12 0 0 0-1.58-1.58l-3.5 3.5a1 1 0 0 1-1.42-1.42l3.5-3.5a3.12 3.12 0 1 1 4.42 4.42l-6.24 6.24a5.24 5.24 0 0 1-7.42-7.42l8.02-8.02Z" class=""></path></svg><span> attachments</span></a></p><img src="https://uploads.meower.org/attachments/oMZqXLbqOjb9fbkRN3VDYmI0/togif.gif" onclick="openImage('https://uploads.meower.org/attachments/oMZqXLbqOjb9fbkRN3VDYmI0/togif.gif')" alt="togif.gif" class="embed"></div></div>
             </div>
         <div class="theme-buttons">
             <h3>${lang().appearance_sub.theme}</h3>
@@ -2562,11 +2698,19 @@ function loadLanguages() {
         <h3>${lang().languages_sub.title}</h3>
         <div class="msgs"></div>
         <div class="languages">
-            <button class="language button" id="en" onclick="changeLanguage('en')"><span class="language-l">${en.language}</span><span class="language-r">English, US</span></button>
-            <button class="language button" id="enuk" onclick="changeLanguage('enuk')"><span class="language-l">${enuk.language}</span><span class="language-r">English, UK</span></button>
-            <button class="language button" id="es" onclick="changeLanguage('es')"><span class="language-l">${es.language}</span><span class="language-r">Spanish (Latin American)</span></button>
-            <button class="language button" id="es_es" onclick="changeLanguage('es_es')"><span class="language-l">${es_es.language}</span><span class="language-r">Spanish (Spain)</span></button>
-            <button class="language button" id="de" onclick="changeLanguage('de')"><span class="language-l">${de.language}</span><span class="language-r">German</span></button>
+            <button class="language button" id="en" onclick="changeLanguage('en')"><span class="language-l">${en.language}</span><span class="language-r">English, US</span><div class="radio"></div></button>
+            <button class="language button" id="enuk" onclick="changeLanguage('enuk')"><span class="language-l">${enuk.language}</span><span class="language-r">English, UK</span><div class="radio"></div></button>
+            <button class="language button" id="es" onclick="changeLanguage('es')"><span class="language-l">${es.language}</span><span class="language-r">Spanish (Latin American)</span><div class="radio"></div></button>
+            <button class="language button" id="es_es" onclick="changeLanguage('es_es')"><span class="language-l">${es_es.language}</span><span class="language-r">Spanish (Spain)</span><div class="radio"></div></button>
+            <button class="language button" id="de" onclick="changeLanguage('de')"><span class="language-l">${de.language}</span><span class="language-r">German</span><div class="radio"></div></button>
+            <button class="language button" id="ua" onclick="changeLanguage('ua')"><span class="language-l">${ua.language}</span><span class="language-r">Ukrainian</span><div class="radio"></div></button>
+            <h3>${lang().languages_sub.other}</h3>
+            <button class="language button" id="sj" onclick="changeLanguage('sj')"><span class="language-l">${sj.language}</span><span class="language-r">Sujaliro</span><div class="radio"></div></button>
+            <button class="language button" id="eh" onclick="changeLanguage('eh')"><span class="language-l">${eh.language}</span><span class="language-r">Enchantment Table</span><div class="radio"></div></button>
+            <button class="language button" id="b" onclick="changeLanguage('b')"><span class="language-l">${b.language}</span><span class="language-r">Bottom</span><div class="radio"></div></button>
+            <button class="language button" id="owo" onclick="changeLanguage('owo')"><span class="language-l">${owo.language}</span><span class="language-r">owo</span><div class="radio"></div></button>
+            <button class="language button" id="eris" onclick="changeLanguage('eris')"><span class="language-l">${eris.language}</span><span class="language-r">Eris</span><div class="radio"></div></button>
+            <button class="language button" id="goobert" onclick="changeLanguage('goobert')"><span class="language-l">${goobert.language}</span><span class="language-r">goobert</span><div class="radio"></div></button>
         </div>
         <hr>
         <span>${lang().languages_sub.desc} <a href='https://github.com/3r1s-s/meo' target="_blank" id='link'>${lang().languages_sub.link}</a></span>
@@ -3802,7 +3946,7 @@ function ipBlockedModal() {
                 modaltop.innerHTML = `
                 <h3>${lang().modals.blockedip}</h3>
                 <hr class="mdl-hr">
-                <span class="subheader">Your current IP address is blocked from accessing Meower.<br /><br />If you think this is a mistake, please contact the moderation team via <a href="${communityDiscordLink}" target="_blank">Discord</a> or email us <a href="${forumLink}" target="_blank">${forumLink}</a>, or try a different network.</span>
+                <span class="subheader">Your current IP address is blocked from accessing Meower.<br /><br />If you think this is a mistake, please contact the moderation team via <a href='mailto:support@meower.org' target='_blank'>support@meower.org</a>, or try a different network.</span>
                 `
             }
         }
@@ -4814,7 +4958,7 @@ function openGcModal(chatId) {
             if (mdbt) {
                 if (data.owner === localStorage.getItem("username")) {
                     mdbt.innerHTML = `
-                    <button class="modal-back-btn" onclick="updateGC('${chatId}')">Update Chat</button>
+                    <button id="updategc" class="modal-back-btn" onclick="updateGC('${chatId}')">Update Chat</button>
                     `;
                 } else {
                     mdbt.innerHTML = `
@@ -4831,6 +4975,10 @@ function updateGC(chatId) {
     const token = localStorage.getItem("token");
     const avtrclr = document.getElementById("gc-clr").value.substring(1);
     const nick = document.getElementById("chat-nick-input").value;
+
+    const update = document.getElementById("updategc");
+    update.disabled = true;
+    update.textContent = "Uploading...";
 
     const xhttp = new XMLHttpRequest();
 
@@ -4859,33 +5007,23 @@ function updateGC(chatId) {
         const formData = new FormData();
         formData.append("file", file);
 
-        fetch("https://api.meower.org/uploads/token/icon", {
-            method: "GET",
+        fetch("https://uploads.meower.org/icons", {
+            method: "POST",
             headers: {
-                "token": token
+                "Authorization": token
+            },
+            body: formData
+        })
+        .then(uploadResponse => uploadResponse.json())
+        .then(uploadData => {
+            if (nick) {
+                data.nickname = nick;
             }
+            const avatarId = uploadData.id;
+            data.icon = avatarId;
+            xhttp.send(JSON.stringify(data));
         })
-        .then(response => response.json())
-        .then(tokenData => {
-            fetch("https://uploads.meower.org/icons", {
-                method: "POST",
-                headers: {
-                    "Authorization": tokenData.token
-                },
-                body: formData
-            })
-            .then(uploadResponse => uploadResponse.json())
-            .then(uploadData => {
-                if (nick) {
-                    data.nickname = nick;
-                }
-                const avatarId = uploadData.id;
-                data.icon = avatarId;
-                xhttp.send(JSON.stringify(data));
-            })
-            .catch(error => console.error('Error uploading file:', error));
-        })
-        .catch(error => console.error('Error fetching uploads token:', error));
+        .catch(error => console.error('Error uploading file:', error));
     } else {
         if (nick) {
             data.nickname = nick;
