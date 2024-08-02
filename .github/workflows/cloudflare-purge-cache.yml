@@ -1,0 +1,22 @@
+name: Purge Cloudflare Pages Cache after Deployment
+
+on:
+  deployment:
+    types: [deployment_status]
+
+jobs:
+  purge_cache:
+    runs-on: ubuntu-latest
+    if: github.event.deployment_status.state == 'success'
+
+    steps:
+      - name: Purge Cloudflare Cache
+        env:
+          CLOUDFLARE_API_KEY: ${{ secrets.CLOUDFLARE_API_KEY }}
+          CLOUDFLARE_ZONE_ID: ${{ secrets.CLOUDFLARE_ZONE_ID }}
+        run: |
+          curl --request POST \
+            --url https://api.cloudflare.com/client/v4/zones/${CLOUDFLARE_ZONE_ID}/purge_cache \
+            --header 'Content-Type: application/json' \
+            --header "X-Auth-Key: ${CLOUDFLARE_API_KEY}" \
+            --data '{"purge_everything": true}'
