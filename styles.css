@@ -345,7 +345,7 @@ tr:nth-child(odd) {
 }
 
 .settings {
-    margin-bottom: 10px;
+    margin-bottom: 50px;
 }
 
 .settings > h1 {
@@ -394,12 +394,12 @@ tr:nth-child(odd) {
 .jump {
     position: fixed;
     bottom: 0;
-    width: 32px;
-    height: 32px;
+    width: 24px;
+    height: 24px;
     padding: var(--padding);
     margin: var(--margin);
-    background: var(--background);
-    border: 2px solid var(--accent-color);
+    background: var(--accent-tint);
+    border: 2px solid var(--hov-accent-color);
     display: none;
     justify-content: center;
     align-items: center;
@@ -2258,7 +2258,7 @@ possible future styling
     opacity: 0;
 }
 
-.posts .post:last-child {
+.posts .post:last-child, .posts .skeleton-post:last-child {
     border-bottom-right-radius: 15px;
     border-bottom-left-radius: 15px;
 }

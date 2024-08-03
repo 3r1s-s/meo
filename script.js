@@ -4,14 +4,12 @@
 
 // To-Do
 // replace ulist with typing indicator
-// have it be automatic after the first load more, make sure reply jumping works
 // Modal close animation
 // Add a sidebar to the right side for Member list and replace the current ulist with typing indicator
 // Discord mode where posts are on the bottom
 // Notification managment
 // Custom video and audio player, similar style as the file download preview
 // Add tooltips to icon buttons, emojis, and maybe some other things
-// Fix Desktop Mode
 // make @Tnix have tnix colour ect
 
 let end = false;
@@ -137,7 +135,6 @@ function main() {
             window.history.replaceState({}, document.title, newUrl);
         }
     }
-    
       
     meowerConnection.onmessage = (event) => {
         console.log("INC: " + event.data);
@@ -210,6 +207,21 @@ function main() {
             if (settingsstuff().notifications) {
                 if (page !== sentdata.val.post_origin || document.hidden) {
                     notify(sentdata.val.u, sentdata.val.p, sentdata.val.post_origin, sentdata.val);
+                }
+            }
+        } else if (sentdata.val.mode === "inbox_message") {
+            let post = sentdata.val.payload;
+            if (postCache["inbox"]) {
+                postCache["inbox"].push(post);
+                if (page === "inbox") {
+                    loadpost(post);
+                } else if (postCache["inbox"].length >= 24) {
+                    postCache["inbox"].shift();
+                }
+            }
+            if (settingsstuff().notifications) {
+                if (page !== "inbox" || document.hidden) {
+                    notify(post.u === "Server" ? "Announcement" : "Notification", post.p, "inbox", post);
                 }
             }
         } else if (end) {
@@ -392,6 +404,20 @@ function main() {
                 addAttachment(file);
             }
         };
+
+        const mainEl = document.getElementById("main");
+        mainEl.addEventListener("scroll", async (event) => {
+            const skeletonHeight = document.getElementById("skeleton-msgs").scrollHeight;
+            if (mainEl.scrollHeight - mainEl.scrollTop - skeletonHeight - mainEl.clientHeight < 1) {
+                const msgs = document.getElementById("msgs");
+                if (msgs.hasAttribute("data-loading-more")) return;
+                msgs.setAttribute("data-loading-more", "");
+                const scrollTop = mainEl.scrollTop;
+                await loadmore();
+                mainEl.scrollTop = scrollTop;
+                msgs.removeAttribute("data-loading-more");
+            }
+        });
     });
     addEventListener("keydown", (event) => {
         if (!event.ctrlKey && event.keyCode >= 48 && event.keyCode <= 90) {
@@ -1179,16 +1205,6 @@ async function sendpost() {
     </div>
     `
 
-//    document.getElementById("msgs").prepend(placeholder);
-    if (placeholder) {
-        loadPfp(localStorage.getItem("username"), 0)
-        .then(pfpElement => {
-            if (pfpElement) {
-                placeholder.querySelector(".pfp").appendChild(pfpElement);
-            }
-        });
-    }
-
     if (editIndicator.hasAttribute("data-postid")) {
         fetch(`https://api.meower.org/posts?id=${editIndicator.getAttribute("data-postid")}`, {
             method: "PATCH",
@@ -1233,51 +1249,10 @@ async function sendpost() {
                 attachments: attachmentIds.reverse(),
             })
         });
-                
-        placeholder.remove();
     }
 
     autoresize();
     closepicker();
-}
-
-
-function createPlaceholderPost(id, message) {
-    const postContainer = document.createElement("div");
-    postContainer.classList.add("post");
-    postContainer.setAttribute("tabindex", "0");
-    postContainer.id = id;
-    postContainer.style.opacity = "0.5";
-
-    const wrapperDiv = document.createElement("div");
-    wrapperDiv.classList.add("wrapper");
-
-    const pfpDiv = document.createElement("div");
-    pfpDiv.classList.add("pfp");
-
-    const pstdte = document.createElement("i");
-    pstdte.classList.add("date");
-    pstdte.innerText = "sending...";
-
-    const pstinf = document.createElement("span");
-    pstinf.classList.add("user-header");
-    pstinf.innerHTML = `<span id='username'>${localStorage.getItem("username")}</span>`;
-    pstinf.appendChild(pstdte);
-    wrapperDiv.appendChild(pstinf);
-
-    const postContentText = document.createElement("p");
-    postContentText.className = "post-content";
-    postContentText.innerText = message;
-
-    wrapperDiv.appendChild(postContentText);
-    postContainer.appendChild(wrapperDiv);
-
-    const pageContainer = document.getElementById("msgs");
-    if (pageContainer.firstChild) {
-        pageContainer.insertBefore(postContainer, pageContainer.firstChild);
-    } else {
-        pageContainer.appendChild(postContainer);
-    }
 }
 
 function loadhome() {
@@ -1300,7 +1275,7 @@ function loadhome() {
             }
             loadpost(post);
         });
-        document.getElementById("skeleton-msgs").style.display = "none";
+        //document.getElementById("skeleton-msgs").style.display = "none";
     } else {
         const xhttpPosts = new XMLHttpRequest();
         xhttpPosts.open("GET", "https://api.meower.org/home?autoget");
@@ -1316,7 +1291,7 @@ function loadhome() {
                 }
                 loadpost(post);
             });
-            document.getElementById("skeleton-msgs").style.display = "none";
+            //document.getElementById("skeleton-msgs").style.display = "none";
         };
         xhttpPosts.send();
     }
@@ -1345,9 +1320,10 @@ function loadhome() {
 
     const jumpButton = document.querySelector('.jump');
     const navbarOffset = document.querySelector('.message-container').offsetHeight;
-
-    window.addEventListener('scroll', function () {
-        if (window.scrollY > navbarOffset) {
+    const main = document.getElementById("main");
+    
+    main.addEventListener('scroll', function() {
+        if (main.scrollTop > navbarOffset) {
             jumpButton.classList.add('visible');
         } else {
             jumpButton.classList.remove('visible');
@@ -1714,7 +1690,7 @@ function loadchat(chatId) {
             }
             loadpost(post);
         });
-        document.getElementById("skeleton-msgs").style.display = "none";
+        //document.getElementById("skeleton-msgs").style.display = "none";
     } else {
         const xhttpPosts = new XMLHttpRequest();
         xhttpPosts.open("GET", `https://api.meower.org/posts/${chatId}?autoget`);
@@ -1731,7 +1707,7 @@ function loadchat(chatId) {
                 }
                 loadpost(post);
             });
-            document.getElementById("skeleton-msgs").style.display = "none";
+            //document.getElementById("skeleton-msgs").style.display = "none";
         };
         xhttpPosts.send();
     }
@@ -1863,27 +1839,35 @@ function loadinbox() {
     const sidedivs = document.querySelectorAll(".side");
     sidedivs.forEach(sidediv => sidediv.classList.remove("hidden"));
 
-    const inboxUrl = 'https://api.meower.org/inbox?autoget=1';
-
-    const xhttp = new XMLHttpRequest();
-    xhttp.open("GET", inboxUrl);
-    xhttp.setRequestHeader("token", localStorage.getItem('token'));
-    xhttp.onload = () => {
-        const postsData = JSON.parse(xhttp.response);
-        const postsarray = postsData.autoget || [];
-
-        postsarray.reverse();
-
-        postsarray.forEach(postId => {
-            loadpost(postId);
+    if (postCache["inbox"]) {
+        postCache["inbox"].forEach(post => {
+            if (page !== "inbox") {
+                return;
+            }
+            loadpost(post);
         });
-        document.getElementById("skeleton-msgs").style.display = "none";
-        document.getElementById("msg").style.display = "block";
-    };
-    xhttp.send();
+    } else {
+        const xhttpPosts = new XMLHttpRequest();
+        xhttpPosts.open("GET", "https://api.meower.org/inbox?autoget");
+        xhttpPosts.setRequestHeader("token", localStorage.getItem('token'));
+        xhttpPosts.onload = () => {
+            const postsData = JSON.parse(xhttpPosts.response);
+            const postsarray = postsData.autoget || [];
+
+            postsarray.reverse();
+            postCache["inbox"] = postsarray;
+            postsarray.forEach(post => {
+                if (page !== "inbox") {
+                    return;
+                }
+                loadpost(post);
+            });
+        };
+        xhttpPosts.send();
+    }
 }
 
-function loadmore() { // finish
+async function loadmore() {
     const chatId = page.valueOf();
     if (!postCache[chatId]) return;
 
@@ -1895,26 +1879,29 @@ function loadmore() { // finish
     const pageNo = Math.floor(postCache[chatId].length / 25) + 1;
     if (pageNo < 2) return;
 
-    const xhttpPosts = new XMLHttpRequest();
-    xhttpPosts.open("GET", `https://api.meower.org${path}?page=${pageNo}`);
-    xhttpPosts.setRequestHeader("token", localStorage.getItem('token'));
-    xhttpPosts.onload = () => {
-        const postsData = JSON.parse(xhttpPosts.response);
-        const postsarray = postsData.autoget || [];
-        postsarray.forEach(post => {
-            if (page !== chatId) {
-                return;
-            }
-            if (postCache[chatId].findIndex(_post => _post._id === post._id) !== -1) {
-                return
-            }
-            postCache[chatId].unshift(post);
-            post._reverse = true;
-            loadpost(post);
-        });
+    const response = await fetch(`https://api.meower.org${path}?page=${pageNo}`, {
+        headers: {
+            token: localStorage.getItem("token")
+        }
+    });
+    const postsData = await response.json();
+    if (postsData["page#"] === postsData.pages && postsData.autoget.length < 25) {
         document.getElementById("skeleton-msgs").style.display = "none";
-    };
-    xhttpPosts.send();
+        document.getElementById("msgs").setAttribute("data-loading-more", "");
+    }
+    const postsarray = postsData.autoget || [];
+    postsarray.forEach(post => {
+        if (page !== chatId) {
+            return;
+        }
+        if (postCache[chatId].findIndex(_post => _post._id === post._id) !== -1) {
+            return
+        }
+        postCache[chatId].unshift(post);
+        post._reverse = true;
+        loadpost(post);
+        post._reverse = false;
+    });
 }
 
 function logout(iskl) {
@@ -4793,31 +4780,18 @@ function jumpToTop() {
         scroll = "smooth";
     }
 
-    if (window.innerWidth < 720) {
-        const outer = document.getElementById("main");
-        outer.scrollTo({
-            top: 0,
-            behavior: scroll
-        });
-    } else {
-        window.scrollTo({
-            top: 0,
-            behavior: scroll
-        });
-    }
+    const outer = document.getElementById("main");
+    outer.scrollTo({
+        top: 0,
+        behavior: scroll
+    });
 }
 
 function setTop() {
-    if (window.innerWidth < 720) {
-        const outer = document.getElementById("main");
-        outer.scrollTo({
-            top: 0,
-        });
-    } else {
-        window.scrollTo({
-            top: 0,
-        });
-    }
+    const outer = document.getElementById("main");
+    outer.scrollTo({
+        top: 0,
+    });
 }
 
 function openGcModal(chatId) {
@@ -5156,7 +5130,7 @@ function removeMemberFromGC(chatId, user) {
 
 function notify(u, p, location, val) {
     let loc
-    if (location === "home" || location === "livechat") {
+    if (location === "home" || location === "livechat" || location == "inbox") {
         loc = location
     } else {
         if (!chatCache[location]) {
@@ -5183,7 +5157,7 @@ function notify(u, p, location, val) {
         if (chatCache[location].nickname) {
             loc = chatCache[location].nickname;
         } else {
-            loc = "you"
+            loc = "you";
         }
     }
     const roarRegex = /^@[\w-]+ (.+?) \(([^)]+)\)/;
@@ -5234,7 +5208,7 @@ function notify(u, p, location, val) {
             if (location !== "livechat") {
                 if (location !== "home" || content.includes(`@${localStorage.getItem("username")}`)) {
                     if (Notification.permission === "granted") {
-                        const notification = new Notification(`@${user} > ${loc}`, {
+                        const notification = new Notification(loc === "inbox" ? user : `@${user} > ${loc}`, {
                             body: content,
                             icon: pfp,
                         });
