@@ -1,12 +1,12 @@
 {
-  "name": "meo",
-  "short_name": "meo",
-  "start_url": "/meo",
+  "name": "Leo for Meower",
+  "short_name": "leo",
+  "start_url": "/",
   "display": "standalone",
   "background_color": "#1c1c26",
   "lang": "en",
-  "scope": "/meo",
-  "description": "Neo + Meower",
+  "scope": "/",
+  "description": "meo but better:tm:",
   "categories": [
     "communication",
     "chat",
@@ -46,8 +46,8 @@
     "preferred_width": 400
   },
   "display_override": [
-    "standalone",
     "window-controls-overlay",
+    "standalone",
     "borderless"
   ]
 }
