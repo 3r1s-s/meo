@@ -1983,7 +1983,6 @@ function loadGeneral() {
         <div class="settings-section-outer">
         ${createSettingSection("consolewarnings", lang().general_list.title.consolewarnings, lang().general_list.desc.consolewarnings)}
         ${createSettingSection("widemode", lang().general_list.title.widemode, lang().general_list.desc.widemode)}
-        ${createSettingSection("discord", lang().general_list.title.discord, lang().general_list.desc.discord)}
         </div>
         <h3>${lang().general_sub.privacy}</h3>
         <div class="fun-buttons">
@@ -2039,8 +2038,7 @@ function loadGeneral() {
         entersend: document.getElementById("entersend"),
         hideimages: document.getElementById("hideimages"),
         notifications: document.getElementById("notifications"),
-        widemode: document.getElementById("widemode"),
-        discord: document.getElementById("discord")
+        widemode: document.getElementById("widemode")
     };
 
     Object.values(settings).forEach((settingDiv) => {
@@ -2061,8 +2059,7 @@ function loadGeneral() {
                 entersend: settings.entersend.classList.contains("checked"),
                 hideimages: settings.hideimages.classList.contains("checked"),
                 notifications: settings.notifications.classList.contains("checked"),
-                widemode: settings.widemode.classList.contains("checked"),
-                discord: settings.discord.classList.contains("checked")
+                widemode: settings.widemode.classList.contains("checked")
             }));
             setAccessibilitySettings();
             if (settingsstuff().notifications) {
