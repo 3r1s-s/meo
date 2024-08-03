@@ -54,6 +54,7 @@ function meowerEmojis(content, emojis) {
 
 function loadinputs() {
 // this should be called preChatLoad or something
+    setTop()
     let textin
     
     textin = `
