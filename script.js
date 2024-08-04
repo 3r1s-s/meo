@@ -4857,7 +4857,7 @@ function openGcModal(chatId) {
                     mdlt.innerHTML = `
                     <div class="avatar-big pfp-inner" style="border: 6px solid #${color}; background-color: #${color}; background-image: ${url};"></div>
                     <div class="gctitle">
-                    <h2 class="gcn">${data.nickname}</h2> <i class="subtitle">${chatId}</i>
+                    <h2 id="nickname" class="gcn" onclick="copy('${meourl}?gc=${chatId}')">${data.nickname}</h2> <i class="subtitle">${chatId}</i>
                     </div>
                     <hr class="mdl-hr">
                     <span class="subheader">${lang().chats.owner}</span>
