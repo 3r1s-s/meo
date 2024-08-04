@@ -1083,7 +1083,7 @@ possible future styling
 }
 
 .big {
-    font-size: 48px;
+    font-size: 64px;
 }
 
 .nav-top {
@@ -1658,7 +1658,7 @@ possible future styling
 }
 
 .big > p > .emoji {
-    height: 46px;
+    height: 64px;
 }
 
 .emojisidebar {
