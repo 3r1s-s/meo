@@ -11,6 +11,7 @@
 // Custom video and audio player, similar style as the file download preview
 // Add tooltips to icon buttons, emojis, and maybe some other things
 // make @Tnix have tnix colour ect
+// Plugins options and API
 
 let end = false;
 let page = "load";
@@ -1727,9 +1728,10 @@ function loadchat(chatId) {
 
     const jumpButton = document.querySelector('.jump');
     const navbarOffset = document.querySelector('.message-container').offsetHeight;
-
-    window.addEventListener('scroll', function() {
-        if (window.scrollY > navbarOffset) {
+    const main = document.getElementById("main");
+    
+    main.addEventListener('scroll', function() {
+        if (main.scrollTop > navbarOffset) {
             jumpButton.classList.add('visible');
         } else {
             jumpButton.classList.remove('visible');
@@ -1785,9 +1787,10 @@ function loadlive() {
 
     const jumpButton = document.querySelector('.jump');
     const navbarOffset = document.querySelector('.message-container').offsetHeight;
-
-    window.addEventListener('scroll', function() {
-        if (window.scrollY > navbarOffset) {
+    const main = document.getElementById("main");
+    
+    main.addEventListener('scroll', function() {
+        if (main.scrollTop > navbarOffset) {
             jumpButton.classList.add('visible');
         } else {
             jumpButton.classList.remove('visible');
@@ -1856,6 +1859,18 @@ function loadinbox() {
         };
         xhttpPosts.send();
     }
+
+    const jumpButton = document.querySelector('.jump');
+    const navbarOffset = document.querySelector('.message-container').offsetHeight;
+    const main = document.getElementById("main");
+    
+    main.addEventListener('scroll', function() {
+        if (main.scrollTop > navbarOffset) {
+            jumpButton.classList.add('visible');
+        } else {
+            jumpButton.classList.remove('visible');
+        }
+    });
 }
 
 async function loadmore() {

@@ -1880,6 +1880,7 @@ possible future styling
     box-sizing: border-box;
     border-radius: var(--border-radius);
     text-align: left;
+    font-style: italic;
 }
 
 .srchtx {
@@ -3171,21 +3172,25 @@ input[type="button"]:focus-visible {
 ::-moz-placeholder {
     color: var(--color);
     opacity: 0.6;
+    font-style: italic;
 }
 
 :-ms-input-placeholder {
     color: var(--color);
     opacity: 0.6;
+    font-style: italic;
 }
 
 ::placeholder {
     color: var(--color);
     opacity: 0.6;
+    font-style: italic;
 }
 
 ::-webkit-input-placeholder  {
     color: var(--color);
     opacity: 0.6;
+    font-style: italic;
 }
 
 .red {
