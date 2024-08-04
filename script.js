@@ -29,6 +29,8 @@ if (settingsstuff().homepage) {
     pre = "start"
 }
 
+let meourl = 'https://eris.pages.dev/meo';
+
 let bridges = ['Discord', 'SplashBridge', 'gc'];
 
 let ipBlocked = false;
@@ -99,6 +101,45 @@ if (settingsstuff().discord) {
     document.querySelector('body').classList.add("discord");
 }
 
+checkver()
+
+async function checkver() {
+    try {
+        const response = await fetch('https://api.github.com/repos/3r1s-s/meo/commits/main');
+        const data = await response.json();
+        let version = data.sha;
+        console.log(version.substring(0, 7));
+    } catch (error) {
+        console.log('Error checking for updates:', error);
+    }
+}
+
+const urlParams = new URLSearchParams(window.location.search);
+if (urlParams.has('openprofile')) {
+    const username = urlParams.get('openprofile');
+    openUsrModal(username);
+
+    urlParams.delete('openprofile');
+    const newUrl = window.location.pathname + '?' + urlParams.toString();
+    if (urlParams.toString() === '') {
+        window.history.replaceState({}, document.title, window.location.pathname);
+    } else {
+        window.history.replaceState({}, document.title, newUrl);
+    }
+} else if (urlParams.has('gc')){
+    const id = urlParams.get('gc');
+    sidebars();
+    loadchat(id);
+
+    urlParams.delete('gc');
+    const newUrl = window.location.pathname + '?' + urlParams.toString();
+    if (urlParams.toString() === '') {
+        window.history.replaceState({}, document.title, window.location.pathname);
+    } else {
+        window.history.replaceState({}, document.title, newUrl);
+    }
+}
+
 // make it so when reconnect happens it goes back to the prev screen and not the start page
 function main() {
     meowerConnection = new WebSocket(server);
@@ -120,20 +161,6 @@ function main() {
     if (settingsstuff().notifications) {
         if (Notification.permission !== "granted") {
             Notification.requestPermission();
-        }
-    }
-
-    const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.has('openprofile')) {
-        const username = urlParams.get('openprofile');
-        openUsrModal(username);
-    
-        urlParams.delete('openprofile');
-        const newUrl = window.location.pathname + '?' + urlParams.toString();
-        if (urlParams.toString() === '') {
-            window.history.replaceState({}, document.title, window.location.pathname);
-        } else {
-            window.history.replaceState({}, document.title, newUrl);
         }
     }
       
@@ -1076,7 +1103,7 @@ function loadtheme() {
 
 function sharepost() {
     const postId = event.target.closest('.post').id;
-    window.open(`https://eris.pages.dev/meo/share?id=${postId}`, '_blank');
+    window.open(`${meourl}/share?id=${postId}`, '_blank');
 }
 
 function toggleLogin(yn) {
@@ -2145,6 +2172,9 @@ async function gitstuff() {
         document.querySelector('.yeah').innerHTML = `
         ${data.commit.message}
         `
+        if (data.sha !== version) {
+            
+        }
     } catch (error) {
         console.log('Error checking for updates:', error);
     }
@@ -3993,7 +4023,7 @@ function mdlpingusr(event) {
 
 function mdlshare(event) {
     const postId = event.target.closest('.modal').id;
-    window.open(`https://eris.pages.dev/meo/share?id=${postId}`, '_blank');
+    window.open(`${meourl}/share?id=${postId}`, '_blank');
     closemodal();
 }
 
@@ -4795,7 +4825,7 @@ function openGcModal(chatId) {
                     mdlt.innerHTML = `
                     <div class="avatar-big pfp-inner" style="border: 6px solid #${color}; background-color: #${color}; background-image: ${url};"></div>
                     <div class="gctitle">
-                    <h2 class="gcn">${data.nickname}</h2> <i class="subtitle">${chatId}</i>
+                    <h2 id="nickname" class="gcn" onclick="copy('${meourl}?gc=${chatId}')">${data.nickname}</h2> <i class="subtitle">${chatId}</i>
                     </div>
                     <hr class="mdl-hr">
                     <span class="subheader">${lang().profile.persona}</span>
@@ -5267,6 +5297,16 @@ function shortcutsModal() {
 
 function magnify() {
     document.body.classList.add("magnify");
+}
+
+function copy(text) {
+    const t = document.createElement('input');
+    t.value = text;
+    document.body.appendChild(t);
+    t.select();
+    document.execCommand('copy');
+    document.body.removeChild(t);
+    parent.closemodal(`${lang().modals.copygc}`);
 }
 
 // work on this
