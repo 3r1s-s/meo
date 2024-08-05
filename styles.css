@@ -1664,7 +1664,8 @@ possible future styling
 }
 
 .emoji {
-    height: 16px;
+    height: 1lh;
+    vertical-align: bottom;
 }
 
 .emoji:hover {
@@ -1673,6 +1674,7 @@ possible future styling
 
 .big > p > .emoji {
     height: 64px;
+    vertical-align: top;
 }
 
 .emojisidebar {

@@ -955,9 +955,9 @@ function loadreplyv(item) {
     const replycontainer = document.createElement("div");
     if (item.author.avatar_color && item.author.avatar_color !== "!color") {
         if (getComputedStyle(document.documentElement).getPropertyValue('--color-scheme').trim() === 'light') {
-            replycontainer.style.setProperty('--reply-accent', `${lightenColour(item.author.avatar_color, 3)}`);
-            replycontainer.style.setProperty('--reply-border', `${lightenColour(item.author.avatar_color, 5)}`);
-            replycontainer.style.setProperty('--reply-color', `${darkenColour(item.author.avatar_color, 1.5)}`);
+            replycontainer.style.setProperty('--reply-accent', `${lightenColour(item.author.avatar_color, 2)}`);
+            replycontainer.style.setProperty('--reply-border', `#${item.author.avatar_color}`);
+            replycontainer.style.setProperty('--reply-color', `${darkenColour(item.author.avatar_color, 2)}`);
         } else {
             replycontainer.style.setProperty('--reply-accent', `${darkenColour(item.author.avatar_color, 3)}`);
             replycontainer.style.setProperty('--reply-border', `${lightenColour(item.author.avatar_color, 3)}`);
