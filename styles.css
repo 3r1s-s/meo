@@ -1677,7 +1677,7 @@ possible future styling
 .emojisidebar {
     display: flex;
     flex-direction: column;
-    max-height: 500px;
+    max-height: 420px;
     overflow-y: scroll;
     scrollbar-width: none;
 }
@@ -1714,7 +1714,7 @@ possible future styling
 
 .emojicont {
     overflow-y: scroll;
-    max-height: 500px;
+    max-height: 420px;
     scrollbar-width: none;
     flex: 1;
 }
