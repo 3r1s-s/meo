@@ -66,7 +66,7 @@ function setlang(lang) {
 const en = {
     "reh": "English, US", // future reference for people adding languages disregard the reh
     "language": "English, US", // Replace this with that the language is called in that language (ie: "Español" instead of "Spanish")
-    "page_home": "Home",
+    "page_home": "Home", // To update a language easier I suggest looking at the diff between en and the language you're editing (sorry I don't have a better solution)
     "page_start": "Start",
     "page_explore": "Explore",
     "page_inbox": "Inbox",
@@ -217,11 +217,15 @@ const en = {
         "favorite": "Favorite",
         "download": "Download",
         "add": "Add",
-        "adduser": "Add Member", // update
-        "transfer": "Transfer Ownership", // update
-        "bug": "Report Bug", // update
-        "datarequest": "Request Data", // update
-        "discuss": "Discuss", // update
+        "adduser": "Add Member",
+        "transfer": "Transfer Ownership",
+        "bug": "Report Bug",
+        "datarequest": "Request Data",
+        "discuss": "Discuss",
+        "ping": "Ping",
+        "moddel": "Mod Delete",
+        "modpost": "Moderate Post",
+        "message": "Message",
     },
     "info": {
         "accexists": "Username Already Taken!",
@@ -1851,6 +1855,10 @@ const owo = {
         "bug": "Wepowt Bug~", // update
         "datarequest": "Wequest Data~", // update
         "discuss": "Discuss~", // update
+        "ping": "Pwing",
+        "moddel": "Mod Dewete",
+        "modpost": "Mod Powost",
+        "message": "Message~ >.<",
     },
     "info": {
         "accexists": "Usename Awweady Taken! >w<",
@@ -2072,11 +2080,15 @@ const eris = {
         "favorite": "favourite",
         "download": "download",
         "add": "add",
-        "adduser": "add someone (mistake)", // update
-        "transfer": "make someone else owner (mistake)", // update
-        "bug": "i found a problem", // update
-        "datarequest": "i love collecting infomation", // update
-        "discuss": "discuss", // update
+        "adduser": "add someone (mistake)",
+        "transfer": "make someone else owner (mistake)",
+        "bug": "i found a problem",
+        "datarequest": "i love collecting infomation",
+        "discuss": "discuss",
+        "ping": "@everyone",
+        "moddel": "banish post",
+        "modpost": "banish",
+        "message": "annoy",
     },
     "info": {
         "accexists": "someone already sniped that one",
@@ -2139,7 +2151,7 @@ const eris = {
         "profilecolor": "colour",
         "profilepic": "pfp",
     },
-    "chats": { // update
+    "chats": {
         "owner": "owner",
         "members": "members"
     }
@@ -2303,6 +2315,10 @@ const goobert = {
         "bug": "goobert",
         "datarequest": "goobert",
         "discuss": "goobert",
+        "ping": "goobert",
+        "moddel": "goobert",
+        "modpost": "goobert",
+        "message": "goobert",
     },
     "info": {
         "accexists": "goobert",

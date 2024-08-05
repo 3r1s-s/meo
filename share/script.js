@@ -11,7 +11,7 @@ async function loadsharedpost() {
     const api = `https://api.meower.org/posts?id=${id}`;
     console.debug(api);
     try {
-        const response = await fetch(api);
+        const response = await fetch(api, { headers: { token: localStorage.getItem("token") } });
         const data = await response.json();
         loadpost(data);
     } catch (error) {

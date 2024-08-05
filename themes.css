@@ -367,7 +367,7 @@
 
 /*Gradients*/
 
-.pride-theme, .trans-theme, .teb-theme, .fabloo-theme {
+.pride-theme, .trans-theme, .teb-theme, .fabloo-theme, .nonb-theme {
     --background: #000;
     --color: #fefefe;
     --accent-color: #4749502f;
@@ -381,16 +381,27 @@
     --modal-button-color: #0d0e0f;
     --hov-modal-button-color: #16191e;
 
+    --accent-tint: #000;
+    --accent-down: #000;
+
     --color-scheme: dark;
 }
 
 .trans-theme {
     --primary: #1aa6ca;
+    --color-on: #abeeff;
     --grad-height: 150px;
 }
 
 .pride-theme {
     --primary: #9443d1;
+    --color-on: #e3bdff;
+    --grad-height: 150px;
+}
+
+.nonb-theme {
+    --primary: rgb(252, 244, 52);
+    --color-on: #000000;
     --grad-height: 150px;
 }
 

@@ -39,6 +39,7 @@ button {
     font-family: var(--font);
     font-weight: 400;
     transition: var(--transition);
+    font-size: 0.813em;
 }
 
 .trans {
@@ -96,7 +97,7 @@ pre {
     padding: var(--padding);
     border-radius: var(--border-radius);
     overflow: auto;
-    font-size: 12px;
+    font-size: 0.75em;
     color: #fff;
     white-space: preserve;
     max-height: 300px;
@@ -112,7 +113,7 @@ pre > code {
 }
 
 i {
-    font-size: 13px;
+    font-size: 0.677em;
     font-weight: normal;
 }
 
@@ -165,7 +166,7 @@ li::marker, code, kbd, samp, pre {
 bridge {
     background-color: var(--primary);
     border-radius: 25px;
-    font-size: 12px;
+    font-size: 0.625em;
     padding-left: 5px;
     padding-right: 5px;
     padding-bottom: 1px;
@@ -195,6 +196,10 @@ tr:nth-child(even) {
 
 tr:nth-child(odd) {
   background-color: var(--accent-down);
+}
+
+video {
+    background-color: var(--background);
 }
 
 ::-webkit-scrollbar {
@@ -323,7 +328,7 @@ tr:nth-child(odd) {
 
 .user-header {
     font-weight: 700;
-    font-size: 19px;
+    font-size: 1.2em;
     display: flex;
     margin: var(--text-margin) 0 10px 0;
     text-wrap: nowrap;
@@ -373,14 +378,15 @@ tr:nth-child(odd) {
 }
 
 .reply {
-    font-size: 16px;
+    font-size: 1em;
     background-color: var(--accent-down);
     border: 3px solid var(--accent-down);
     padding-left: 10px;
     padding-right: 10px;
     border-radius: var(--border-radius);
     max-height: 100px;
-    overflow: hidden;
+    overflow-x: auto; /* Allows horizontal scrolling if content exceeds width */
+    overflow-y: visible; /* Ensures vertical overflow is visible */
     margin: var(--text-margin) 0;
 
     display: flex;
@@ -388,6 +394,7 @@ tr:nth-child(odd) {
     gap: 10px;
     align-items: center;
     height: 42px;
+    white-space: nowrap; /* Prevents text from wrapping */
 }
 
 .reply.custom {
@@ -543,7 +550,7 @@ tr:nth-child(odd) {
 #replies {
     display: flex;
     flex-direction: column;
-    font-size: 16px;
+    font-size: 1em;
 }
 
 .replyinner > span {
@@ -629,7 +636,7 @@ tr:nth-child(odd) {
 }
 
 .other-in {
-    font-size: 24px;
+    font-size: 1.5em;
     font-weight: bold;
 }
 
@@ -681,7 +688,6 @@ tr:nth-child(odd) {
 
 .attachment-name {
     padding: 4px;
-    font-size: 12px;
     margin-top: auto;
 }
 
@@ -691,6 +697,7 @@ tr:nth-child(odd) {
     text-overflow: ellipsis;
     width: 100%;
     display: inline-block;
+    font-size: 0.857em;
 }
 
 .edit-info {
@@ -720,7 +727,7 @@ tr:nth-child(odd) {
 
 .sub-msg-cnt {
     padding: 0 calc(var(--margin) / 2);
-    font-size: 14px;
+    font-size: 0.875em;
     height: auto;
     transition: all 0.1s ease-out;
     position: sticky;
@@ -740,6 +747,10 @@ tr:nth-child(odd) {
     flex: 1;
     margin: 0;
     overflow-y: hidden;
+}
+
+.message-input:first-child {
+    border-top-left-radius: var(--br);
 }
 
 .message-send {
@@ -782,6 +793,7 @@ tr:nth-child(odd) {
     border: var(--border);
     display: flex;
     animation: var(--animation);
+    position: relative;
 }
 
 .post:hover {
@@ -795,7 +807,9 @@ tr:nth-child(odd) {
 
 .buttonContainer {
     display: none;
-    float: right;
+    position: absolute;
+    right: 0;
+    margin: 8px;
 }
 
 .visibleButtonContainer {
@@ -1083,7 +1097,7 @@ possible future styling
 }
 
 .big {
-    font-size: 64px;
+    font-size: 4em;
 }
 
 .nav-top {
@@ -1303,7 +1317,7 @@ possible future styling
     align-items: center;
     box-sizing: border-box;
     transition: var(--transition);
-    font-size: 16px;
+    font-size: 1em;
 }
 
 .big-mdl-inp:focus {
@@ -1315,7 +1329,7 @@ possible future styling
 }
 
 .mdl-lb {
-    font-size: 12px;
+    font-size: 0.75em;
     opacity: 0.8;
 }
 
@@ -1555,7 +1569,7 @@ possible future styling
 }
 
 .desc {
-    font-size: 12px;
+    font-size: 0.75em;
 }
 
 .editor {
@@ -1644,13 +1658,19 @@ possible future styling
 }
 
 .edit-txt {
-    font-size: 16px;
+    font-size: 1em;
     display: flex;
     align-items: center;
 }
 
 .emoji {
-    height: 16px;
+    height: 1em;
+}
+
+.emoji-outer {
+    width: 1em;
+    height: 1em;
+    display: inline-block;
 }
 
 .emoji:hover {
@@ -1665,7 +1685,7 @@ possible future styling
     display: flex;
     flex-direction: column;
     max-height: 500px;
-    overflow: scroll;
+    overflow-y: scroll;
     scrollbar-width: none;
 }
 
@@ -1735,7 +1755,7 @@ possible future styling
 
 .emojibuttonside {
     background-color: var(--modal-button-color);
-    font-size: 16px;
+    font-size: 1em;
     padding: var(--padding);
     margin: calc(var(--margin)/2);
     width: 42px;
@@ -1900,7 +1920,7 @@ possible future styling
     background-color: var(--modal-button-color);
     border-radius: var(--border-radius);
     margin-bottom: 5px;
-    font-size: 12px;
+    font-size: 0.75em;
     text-align: left;
 }
 
@@ -1961,7 +1981,7 @@ possible future styling
     color: var(--color);
     border: none;
     font-family: var(--font);
-    font-size: 16px;
+    font-size: 1em;
     width: 100px;
 }
 
@@ -2102,7 +2122,7 @@ possible future styling
 }
 
 .subsubheader {
-    font-size: 12px;
+    font-size: 0.75em;
     -webkit-user-select: none;
     user-select: none;
     opacity: 0.8;
@@ -2180,7 +2200,7 @@ possible future styling
 
 .plugintoggle.checked svg {
     opacity: 1;
-    color: var(--color-on);
+    color: var(--color-on) !important;
 }
 
 .plugintoggle.checked {
@@ -2197,7 +2217,7 @@ possible future styling
 }
 
 .pluginsub {
-    font-size: 12px;
+    font-size: 0.75em;
     -webkit-user-select: none;
     user-select: none;
     opacity: 0.8;
@@ -2212,13 +2232,13 @@ possible future styling
     background: var(--accent-color);
     border-radius: var(--border-radius);
     margin-top: 5px;
-    font-size: 12px;
+    font-size: 0.75em;
     text-align: center;
     min-width: 80px;
 }
 
 .custom-label {
-    font-size: 14px;
+    font-size: 0.875;
     width: 100%;
     margin: 5px;
 }
@@ -2289,7 +2309,7 @@ possible future styling
     background: var(--accent-color);
     border-radius: var(--border-radius);
     margin-bottom: 5px;
-    font-size: 12px;
+    font-size: 0.75em;
     text-align: left;
     color: var(--color);
     text-decoration: none;
@@ -2339,7 +2359,7 @@ possible future styling
     border: 3px solid var(--accent-color);
     border-radius: var(--border-radius);
     margin-bottom: 5px;
-    font-size: 16px;
+    font-size: 1em;
     display: flex;
     align-items: center;
     gap: 10px;
@@ -2352,7 +2372,7 @@ possible future styling
 .language-r {
     flex: 1;
     text-align: right;
-    font-size: 12px;
+    font-size: 0.75em;
     opacity: 0.8;
 }
 
@@ -2384,7 +2404,7 @@ possible future styling
 
 .skeleton-header {
     font-weight: 700;
-    font-size: 19px;
+    font-size: 1.188em;
     display: flex;
     gap: var(--margin);
     margin: var(--text-margin) 0 10px 0;
@@ -2500,7 +2520,7 @@ possible future styling
 }
 
 .file-pre {
-    font-size: 12px;
+    font-size: 0.75em;
 }
 
 .fileicon {
@@ -2568,6 +2588,10 @@ possible future styling
     position: absolute;
     z-index: 1;
     text-shadow: 0 0 5px black;
+}
+
+.lightpre .attachment-progress span {
+    text-shadow: none;
 }
 
 .attachment-progress::before {
@@ -2650,7 +2674,7 @@ possible future styling
 
 .owner {
     margin: 5px 0;
-    font-size: 14px;
+    font-size: 0.875em;
 }
 
 .ow-btn {
@@ -2662,7 +2686,7 @@ possible future styling
     background: var(--modal-button-color);
     border-radius: var(--border-radius);
     margin-bottom: 5px;
-    font-size: 12px;
+    font-size: 0.75em;
     text-align: left;
 }
 
@@ -2709,7 +2733,7 @@ possible future styling
 
 .key {
     padding: 2px 5px;
-    font-size: 12px;
+    font-size: 0.75em;
     background: var(--hov-accent-color);
     border-radius: 3px;
     box-shadow: 0 0 1px var(--color-on);
@@ -2726,9 +2750,73 @@ possible future styling
     border-bottom: none;
 }
 
+.tooltip {
+    position: relative;
+}
+
+.tooltip::before, .tooltip::after {
+    position: absolute;
+    left: 50%;
+    opacity: 0;
+    transition: all 0.1s ease-in-out;
+    pointer-events: none;
+}
+
+.tooltip::before {
+    content: "";
+    border-width: 10px 8px 0 8px;
+    border-style: solid;
+    border-color: #111 transparent transparent transparent;
+    top: -20px;
+    margin-left: -8px;
+    z-index: 1;
+}
+
+.tooltip::after {
+    content: attr(data-tooltip);
+    background: #111;
+    top: -20px;
+    transform: translateY(-100%) translateX(-50%);
+    font-size: 12px;
+    width: 80px;
+    border-radius: 10px;
+    color: var(--color-on);
+    padding: 12px;
+    z-index: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.tooltip.left::after, .tooltip:last-child::after {
+    transform: translateY(-100%) translateX(-80%);
+}
+
+.tooltip.bottom::before {
+    border-width: 0 8px 10px 8px;
+    border-color: transparent transparent #111 transparent;
+    top: 40px;
+}
+
+.tooltip.bottom::after {
+    transform: translateY(185%) translateX(-55%);
+}
+
+.tooltip:hover::before, .tooltip:hover::after{
+    opacity: 1;
+}
+
 @media screen and (max-width: 720px) {
     html {
         scrollbar-gutter: none;
+    }
+
+    .wrapper {
+        overflow: hidden;
+    }
+
+    .tooltip::before, .tooltip::after {
+        display: none;
     }
 
     .modal {
@@ -2841,14 +2929,6 @@ possible future styling
     .settings {
         margin-bottom: 60px;
     }
-
-    #skeleton-msgs {
-        margin-top: -60px;
-    }
-
-    #msgs {
-        margin-bottom: 60px;
-    }
     
     .navigation {
         margin-left: 10px;
@@ -2883,7 +2963,9 @@ possible future styling
 
     .mobileContainer {
         display: flex;
-        float: right;
+        position: absolute;
+        right: 0;
+        margin: 8px;
     }
     
     .post:hover {
@@ -2891,7 +2973,7 @@ possible future styling
     }
 
     .date {
-        font-size: 12px;
+        font-size: 0.75em;
     }
 
     .image-outer, .embed {
@@ -3163,6 +3245,10 @@ a.underline, a:hover.underline {
 
 button:focus-visible {
     outline: auto;
+}
+
+input[type="button"] {
+    font-size: 0.813em;
 }
 
 input[type="button"]:focus-visible {

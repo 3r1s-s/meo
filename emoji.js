@@ -1874,7 +1874,7 @@ function groupcat() {
     pageContainer.innerHTML = 
     `
     <h1>GROUP CAT ATTICU EDITION</h1>
-    <button onclick="loadhome()" class="button blockeduser">AAAH THERE'S TOO MANY</button>
+    <button onclick="loadchat('home')" class="button blockeduser">AAAH THERE'S TOO MANY</button>
     <div class="groupcat">
         <img class="groupcat-cat" alt="MEOW" title="MEOW" src="images/atticu.png" height="100" style="left: 56.6652vw; top: 50.9331vh; animation-delay: -6.49979s; animation-duration: 14.2032s;">
         <img class="groupcat-cat" alt="MEOW" title="MEOW" src="images/atticu.png" height="100" style="left: 4.91153vw; top: 18.259vh; animation-delay: -1.32871s; animation-duration: 14.3195s;">

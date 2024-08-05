@@ -9,7 +9,6 @@
 // Discord mode where posts are on the bottom
 // Notification managment
 // Custom video and audio player, similar style as the file download preview
-// Add tooltips to icon buttons, emojis, and maybe some other things
 // make @Tnix have tnix colour ect
 // Plugins options and API
 
@@ -37,7 +36,7 @@ let ipBlocked = false;
 let openprofile = false;
 
 const communityDiscordLink = "https://discord.com/invite/THgK9CgyYJ";
-const server = "wss://server.meower.org/";
+const server = "wss://server.meower.org/?v=1";
 
 const pfpCache = {};
 const postCache = { livechat: [] };  // {chatId: [post, post, ...]} (up to 25 posts for inactive chats)
@@ -163,43 +162,50 @@ function main() {
             Notification.requestPermission();
         }
     }
-      
+
+    meowerConnection.onopen = () => {
+        if (localStorage.getItem("token") != undefined && localStorage.getItem("username") != undefined) {
+            meowerConnection.send(JSON.stringify({
+                cmd: "authpswd",
+                val: {
+                    username: localStorage.getItem("username"),
+                    pswd: localStorage.getItem("token"),
+                },
+                listener: "auth",
+            }));
+        } else {
+            loadLogin();
+        };
+    };
+
     meowerConnection.onmessage = (event) => {
         console.log("INC: " + event.data);
 
         const sentdata = JSON.parse(event.data);
         let data
-        if (sentdata.val == "I:112 | Trusted Access enabled") {
-            if (localStorage.getItem("token") != undefined && localStorage.getItem("username") != undefined) {
-                meowerConnection.send(JSON.stringify({
-                    cmd: "authpswd",
-                    val: {
-                        username: localStorage.getItem("username"),
-                        pswd: localStorage.getItem("token"),
-                    },
-                    listener: "auth",
-                }));
-            } else {
-                loadLogin();
-            };
-        } else if (sentdata.listener == "auth") {
-            if (sentdata.val.mode && sentdata.val.mode == "auth") {
-                sentdata.val.payload.relationships.forEach((relationship) => {
+        if (sentdata.listener === "auth") {
+            if (sentdata.cmd === "auth") {
+                sentdata.val.relationships.forEach((relationship) => {
                     if (relationship.state === 2) {
                         blockedUsers[relationship.username] = true;
                     }
                 });
-                localStorage.setItem("username", sentdata.val.payload.username);
-                localStorage.setItem("token", sentdata.val.payload.token);
-                localStorage.setItem("permissions", sentdata.val.payload.account.permissions);
-                favoritedChats = sentdata.val.payload.account.favorited_chats;
+                sentdata.val.chats.forEach((chat) => {
+                    chatCache[chat._id] = chat;
+                });
+                localStorage.setItem("username", sentdata.val.username);
+                localStorage.setItem("token", sentdata.val.token);
+                localStorage.setItem("permissions", sentdata.val.account.permissions);
+                favoritedChats = sentdata.val.account.favorited_chats;
                 loggedin = true;
+                loadPfp(sentdata.val.username, sentdata.val.account);
                 sidebars();
+                renderChats();
                 
                 // work on this
                 if (pre !== "") {
                     if (pre === "home") {
-                        loadhome();
+                        loadchat('home');
                     } else if (pre === "explore") {
                         loadexplore();
                     } else if (pre === "start") {
@@ -222,48 +228,33 @@ function main() {
                 console.error(`Failed logging in to Cloudlink: ${sentdata.val}`);
                 logout(false);
             }
-        } else if (loggedin && sentdata.val.post_origin) {
-            let postOrigin = sentdata.val.post_origin;
-            if (postCache[postOrigin]) {
-                postCache[postOrigin].push(sentdata.val);
-                if (page === postOrigin) {
-                    loadpost(sentdata.val);
-                } else if (postCache[postOrigin].length >= 24) {
-                    postCache[postOrigin].shift();
-                }
+        } else if (sentdata.cmd === "post" || sentdata.cmd === "inbox_message") {
+            let post = sentdata.val;
+            let postOrigin = post.post_origin;
+            if (!(postOrigin in postCache)) postCache[postOrigin] = [];
+            postCache[postOrigin].unshift(post);
+            if (page === postOrigin) {
+                loadpost(Object.assign(structuredClone(post), { _top: true }));
+            } else {
+                if (postCache[postOrigin].length > 25) postCache[postOrigin].length = 25;
             }
             if (settingsstuff().notifications) {
-                if (page !== sentdata.val.post_origin || document.hidden) {
-                    notify(sentdata.val.u, sentdata.val.p, sentdata.val.post_origin, sentdata.val);
-                }
-            }
-        } else if (sentdata.val.mode === "inbox_message") {
-            let post = sentdata.val.payload;
-            if (postCache["inbox"]) {
-                postCache["inbox"].push(post);
-                if (page === "inbox") {
-                    loadpost(post);
-                } else if (postCache["inbox"].length >= 24) {
-                    postCache["inbox"].shift();
-                }
-            }
-            if (settingsstuff().notifications) {
-                if (page !== "inbox" || document.hidden) {
-                    notify(post.u === "Server" ? "Announcement" : "Notification", post.p, "inbox", post);
+                if (page !== postOrigin || document.hidden) {
+                    notify(postOrigin === "inbox" ? "Inbox Message" : post.u, post.p, postOrigin, post);
                 }
             }
         } else if (end) {
             return 0;
-        } else if (sentdata.val.mode == "update_config") {
-            if (sentdata.val.payload.favorited_chats) {
-                favoritedChats = sentdata.val.payload.favorited_chats;
+        } else if (sentdata.cmd == "update_config") {
+            if (sentdata.val.favorited_chats) {
+                favoritedChats = sentdata.val.favorited_chats;
                 renderChats();
             }
-        } else if (sentdata.val.mode == "update_profile") {
-            let username = sentdata.val.payload._id;
+        } else if (sentdata.cmd == "update_profile") {
+            let username = sentdata.val._id;
             if (pfpCache[username]) {
                 delete pfpCache[username];
-                loadPfp(username, 0)
+                loadPfp(username, null, 0)
                     .then(pfpElement => {
                         if (pfpElement) {
                             pfpCache[username] = pfpElement.cloneNode(true);
@@ -274,52 +265,85 @@ function main() {
                         }
                     });
             }
-        } else if (sentdata.val.mode == "update_post") {
-            let postOrigin = sentdata.val.payload.post_origin;
+        } else if (sentdata.cmd == "update_post") {
+            let postOrigin = sentdata.val.post_origin;
             if (postCache[postOrigin]) {
-                index = postCache[postOrigin].findIndex(post => post._id === sentdata.val.payload._id);
+                index = postCache[postOrigin].findIndex(post => post._id === sentdata.val._id);
                 if (index !== -1) {
                     postCache[postOrigin][index] = Object.assign(
                         postCache[postOrigin][index],
-                        sentdata.val.payload
+                        sentdata.val
                     );
                 }
             }
-            if (document.getElementById(sentdata.val.payload.post_id)) {
-                loadpost(sentdata.val.payload);
+            if (document.getElementById(sentdata.val.post_id)) {
+                loadpost(sentdata.val);
             }
-        } else if (sentdata.val.mode == "create_chat") {
-            chatCache[sentdata.val.payload._id] = sentdata.val.payload;
+        } else if (sentdata.cmd === "delete_post") {
+            if (sentdata.val.chat_id in postCache) {
+                const index = postCache[sentdata.val.chat_id].findIndex(post => post._id === sentdata.val.post_id);
+                if (index !== -1) {
+                    postCache[sentdata.val.chat_id].splice(index, 1);
+                }
+            }
+
+            const divToDelete = document.getElementById(sentdata.val.post_id);
+            if (divToDelete) {
+                divToDelete.parentNode.removeChild(divToDelete);
+            }
+
+            const replies = document.querySelectorAll(`#reply-${sentdata.val.post_id}`);
+            for (const reply of replies) {
+                reply.replaceWith(loadreplyv(null));
+            }
+        } else if (sentdata.cmd == "create_chat") {
+            chatCache[sentdata.val._id] = sentdata.val;
             renderChats();
-        } else if (sentdata.val.mode == "update_chat") {
-            const chatId = sentdata.val.payload._id;
+        } else if (sentdata.cmd == "update_chat") {
+            const chatId = sentdata.val._id;
             if (chatId in chatCache) {
                 chatCache[chatId] = Object.assign(
                     chatCache[chatId],
-                    sentdata.val.payload
+                    sentdata.val
                 );
                 renderChats();
             }
-        } else if (sentdata.val.mode == "create_emoji") {
-            const chatId = sentdata.val.payload.chat_id;
-            if (chatId in chatCache) {
-                chatCache[chatId].emojis.push(sentdata.val.payload);
+        } else if (sentdata.cmd === "delete_chat") {
+            if (chatCache[sentdata.val.chat_id]) {
+                delete chatCache[sentdata.val.chat_id];
             }
-        } else if (sentdata.val.mode == "update_emoji") {
-            const chatId = sentdata.val.payload.chat_id;
+            if (postCache[sentdata.val.chat_id]) {
+                delete postCache[sentdata.val.chat_id];
+                renderChats();
+            }
+            if (page === sentdata.val.chat_id) {
+                openUpdate(lang().info.chatremoved);
+                if (!settingsstuff().homepage) {
+                    loadstart();
+                } else {
+                    loadchat('home');
+                }
+            }
+        } else if (sentdata.cmd == "create_emoji") {
+            const chatId = sentdata.val.chat_id;
             if (chatId in chatCache) {
-                const emojiI = chatCache[chatId].emojis.findIndex(emoji => emoji._id === sentdata.val.payload._id);
+                chatCache[chatId].emojis.push(sentdata.val);
+            }
+        } else if (sentdata.cmd == "update_emoji") {
+            const chatId = sentdata.val.chat_id;
+            if (chatId in chatCache) {
+                const emojiI = chatCache[chatId].emojis.findIndex(emoji => emoji._id === sentdata.val._id);
                 if (emojiI && emojiI !== -1) {
                     chatCache[chatId].emojis[emojiI] = Object.assign(
                         chatCache[chatId].emojis[emojiI],
-                        sentdata.val.payload,
+                        sentdata.val,
                     );
                 }
             }
-        } else if (sentdata.val.mode == "delete_emoji") {
-            const chatId = sentdata.val.payload.chat_id;
+        } else if (sentdata.cmd == "delete_emoji") {
+            const chatId = sentdata.val.chat_id;
             if (chatId in chatCache) {
-                chatCache[chatId].emojis = chatCache[chatId].emojis.filter(emoji => emoji._id !== sentdata.val.payload._id);
+                chatCache[chatId].emojis = chatCache[chatId].emojis.filter(emoji => emoji._id !== sentdata.val._id);
             }
         } else if (sentdata.cmd == "ulist") {
             const iul = sentdata.val;
@@ -335,43 +359,6 @@ function main() {
         
             if (page == "home") {
                 document.getElementById("info").innerText = lul + " users online (" + sul + ")";
-            }
-        } else if (sentdata.val.mode == "delete") {
-            console.log("Received delete command for ID:", sentdata.val.id);
-
-            if (chatCache[sentdata.val.id]) {
-                delete chatCache[sentdata.val.id];
-            }
-            if (postCache[sentdata.val.id]) {
-                delete postCache[sentdata.val.id];
-            }
-            for (const key in postCache) {
-                const index = postCache[key].findIndex(post => post._id === sentdata.val.id);
-                if (index !== -1) {
-                    postCache[key].splice(index, 1);
-                    break;
-                }
-            }
-
-            const replies = document.querySelectorAll(`#reply-${sentdata.val.id}`);
-            for (const reply of replies) {
-                reply.replaceWith(loadreplyv(null));
-            }
-
-            const divToDelete = document.getElementById(sentdata.val.id);
-            if (divToDelete) {
-                divToDelete.parentNode.removeChild(divToDelete);
-                if (page === sentdata.val.id) {
-                    openUpdate(lang().info.chatremoved);
-                    if (!settingsstuff().homepage) {
-                        loadstart();
-                    } else {
-                        loadhome();
-                    }
-                }
-                console.log(sentdata.val.id, "deleted successfully.");
-            } else {
-                console.warn(sentdata.val.id, "not found.");
             }
         }
     };
@@ -427,7 +414,7 @@ function main() {
     });
     addEventListener("DOMContentLoaded", () => {
         document.onpaste = (event) => {
-            if (!document.getElementById("msg")) return;
+            if (!document.getElementById("msg") || page === "livechat") return;
             for (const file of event.clipboardData.files) {
                 addAttachment(file);
             }
@@ -435,14 +422,13 @@ function main() {
 
         const mainEl = document.getElementById("main");
         mainEl.addEventListener("scroll", async (event) => {
+            if (!(page in postCache)) return;
             const skeletonHeight = document.getElementById("skeleton-msgs").scrollHeight;
             if (mainEl.scrollHeight - mainEl.scrollTop - skeletonHeight - mainEl.clientHeight < 1) {
                 const msgs = document.getElementById("msgs");
                 if (msgs.hasAttribute("data-loading-more")) return;
                 msgs.setAttribute("data-loading-more", "");
-                const scrollTop = mainEl.scrollTop;
-                await loadmore();
-                mainEl.scrollTop = scrollTop;
+                await loadposts(Math.floor(msgs.childElementCount / 25) + 1);
                 msgs.removeAttribute("data-loading-more");
             }
         });
@@ -463,7 +449,7 @@ function main() {
             if (postCache[page]) {
                 event.preventDefault();
 
-                const post = [...postCache[page]].reverse().find(post => post.u === localStorage.getItem("username"));
+                const post = [...postCache[page]].find(post => post.u === localStorage.getItem("username"));
                 if (post) {
                     editPost(page, post._id);
                 }
@@ -515,6 +501,7 @@ function loadLogin() {
             <option value="en" ${language === "en" ? "selected" : ""}>${en.language}</option>
             <option value="enuk" ${language === "enuk" ? "selected" : ""}>${enuk.language}</option>
             <option value="es" ${language === "es" ? "selected" : ""}>${es.language}</option>
+            <option value="es" ${language === "es_es" ? "selected" : ""}>${es_es.language}</option>
             <option value="de" ${language === "de" ? "selected" : ""}>${de.language}</option>
             <option value="ua" ${language === "ua" ? "selected" : ""}>${ua.language}</option>
         </select>
@@ -614,22 +601,23 @@ function loadpost(p) {
     const pfpDiv = document.createElement("div");
     pfpDiv.classList.add("pfp");
     
-    wrapperDiv.appendChild(createButtonContainer(p));
-    
-    const mobileButtonContainer = document.createElement("div");
-    mobileButtonContainer.classList.add("mobileContainer");
-    mobileButtonContainer.innerHTML = `
-    <div class='toolbarContainer'>
-        <div class='toolButton mobileButton' onclick='reply("${p._id}")' aria-label="reply" title="reply" tabindex="0">
-            <svg width='24' height='24' viewBox='0 0 24 24'><path d='M10 8.26667V4L3 11.4667L10 18.9333V14.56C15 14.56 18.5 16.2667 21 20C20 14.6667 17 9.33333 10 8.26667Z' fill='currentColor'></path></svg>
-        </div>    
-        <div class='toolButton mobileButton' onclick='openModal("${p._id}");'>
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M4 14a2 2 0 1 0 0-4 2 2 0 0 0 0 4Zm10-2a2 2 0 1 1-4 0 2 2 0 0 1 4 0Zm8 0a2 2 0 1 1-4 0 2 2 0 0 1 4 0Z" clip-rule="evenodd" class=""></path></svg>
+    if (p.post_origin !== "livechat") {
+        postContainer.appendChild(createButtonContainer(p));
+        
+        const mobileButtonContainer = document.createElement("div");
+        mobileButtonContainer.classList.add("mobileContainer");
+        mobileButtonContainer.innerHTML = `
+        <div class='toolbarContainer'>
+            ${p.post_origin !== 'inbox' ? `<div class='toolButton mobileButton' onclick='reply("${p._id}")' aria-label="reply" title="reply" tabindex="0">
+                <svg width='24' height='24' viewBox='0 0 24 24'><path d='M10 8.26667V4L3 11.4667L10 18.9333V14.56C15 14.56 18.5 16.2667 21 20C20 14.6667 17 9.33333 10 8.26667Z' fill='currentColor'></path></svg>
+            </div>` : ''}
+            <div class='toolButton mobileButton' onclick='openModal("${p._id}");'>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M4 14a2 2 0 1 0 0-4 2 2 0 0 0 0 4Zm10-2a2 2 0 1 1-4 0 2 2 0 0 1 4 0Zm8 0a2 2 0 1 1-4 0 2 2 0 0 1 4 0Z" clip-rule="evenodd" class=""></path></svg>
+            </div>
         </div>
-    </div>
-    `;
-    
-    wrapperDiv.appendChild(mobileButtonContainer);
+        `;
+        postContainer.appendChild(mobileButtonContainer);
+    }
 
     const pstdte = document.createElement("i");
     pstdte.classList.add("date");
@@ -735,7 +723,7 @@ function loadpost(p) {
 
     postContainer.appendChild(wrapperDiv);
 
-    loadPfp(user, 0)
+    loadPfp(user, p.author, 0)
         .then(pfpElement => {
             if (pfpElement) {
                 pfpDiv.appendChild(pfpElement);
@@ -744,109 +732,114 @@ function loadpost(p) {
             }
         });
 
+    const placeholder = document.getElementById(`placeholder-${p.nonce}`);
+    if (placeholder) placeholder.remove();
+
     const pageContainer = document.getElementById("msgs");
     const existingPost = document.getElementById(p._id);
     postContainer.id = p._id;
     if (existingPost) {
         existingPost.replaceWith(postContainer);
-    } else if (pageContainer.firstChild && !p._reverse) {
+    } else if (pageContainer.firstChild && p._top) {
         pageContainer.insertBefore(postContainer, pageContainer.firstChild);
     } else {
         pageContainer.appendChild(postContainer);
     }
 }
 
-function loadPfp(username, button) {
-    return new Promise((resolve, reject) => {
+function loadPfp(username, userData, button) {
+    return new Promise(async (resolve, reject) => {
         if (pfpCache[username]) {
             resolve(pfpCache[username].cloneNode(true));
         } else {
             let pfpElement;
 
-            fetch(`https://api.meower.org/users/${username}`)
-                .then(userResp => userResp.json())
-                .then(userData => {
-                    if (userData.avatar) {
-                        const pfpurl = `https://uploads.meower.org/icons/${userData.avatar}`;
+            if (!userData) {
+                try {
+                    const resp = await fetch(`https://api.meower.org/users/${username}`);
+                    userData = await resp.json();
+                } catch (e) {
+                    console.error("Failed to fetch:", error);
+                    resolve(null);
+                }
+            }
+            
+            if (userData.avatar) {
+                const pfpurl = `https://uploads.meower.org/icons/${userData.avatar}`;
 
-                        
-                        pfpElement = document.createElement("div");
-                        pfpElement.style.backgroundImage = `url(${pfpurl})`;
-                        pfpElement.classList.add("pfp-inner");
-                        pfpElement.setAttribute("alt", username);
-                        pfpElement.setAttribute("data-username", username);
-                        pfpElement.classList.add("avatar");
-                        if (!button) {
-                            pfpElement.setAttribute("onclick", `openUsrModal('${username}')`);
-                        }
-                        
-                        if (userData.avatar_color) {
+                
+                pfpElement = document.createElement("div");
+                pfpElement.style.backgroundImage = `url(${pfpurl})`;
+                pfpElement.classList.add("pfp-inner");
+                pfpElement.setAttribute("alt", username);
+                pfpElement.setAttribute("data-username", username);
+                pfpElement.classList.add("avatar");
+                if (!button) {
+                    pfpElement.setAttribute("onclick", `openUsrModal('${username}')`);
+                }
+                
+                if (userData.avatar_color) {
 //                            if (userData.avatar_color === "!color") {
 //                                pfpElement.style.border = `3px solid #f00`;
 //                                pfpElement.style.backgroundColor = `#f00`;
 //                            } else {
 //                            }
-                            pfpElement.style.border = `3px solid #${userData.avatar_color}`;
-                            pfpElement.style.backgroundColor = `#${userData.avatar_color}`;
-                        }
-                        
-                        pfpElement.addEventListener('error', function pngFallback() {
-                            pfpElement.removeEventListener('error', pngFallback);
-                            pfpElement.setAttribute("src", `${pfpurl}.png`);
-                            pfpCache[username].setAttribute("src", `${pfpurl}.png`);
-                        });
-
-                    } else if (userData.pfp_data) {
-                        let pfpurl;
-                        if (userData.pfp_data > 0 && userData.pfp_data <= 37) {
-                            pfpurl = `images/avatars/icon_${userData.pfp_data - 1}.svg`;
-                        } else {
-                            pfpurl = `images/avatars/icon_err.svg`;
-                        }
-                        
-                        pfpElement = document.createElement("div");
-                        pfpElement.style.backgroundImage = `url(${pfpurl})`;
-                        pfpElement.classList.add("pfp-inner");
-                        pfpElement.setAttribute("alt", username);
-                        pfpElement.setAttribute("data-username", username);
-                        pfpElement.classList.add("avatar");
-                        if (!button) {
-                            pfpElement.setAttribute("onclick", `openUsrModal('${username}')`);
-                        }
-                        pfpElement.classList.add("svg-avatar");
-
-                        if (userData.avatar_color) {
-                            pfpElement.style.border = `3px solid #${userData.avatar_color}`;
-                        }
-                        
-                    } else {
-                        const pfpurl = `images/avatars/icon_-4.svg`;
-                        
-                        pfpElement = document.createElement("div");
-                        pfpElement.style.backgroundImage = `url(${pfpurl})`;
-                        pfpElement.classList.add("pfp-inner");
-                        pfpElement.setAttribute("alt", username);
-                        pfpElement.setAttribute("data-username", username);
-                        if (!button) {
-                            pfpElement.setAttribute("onclick", `openUsrModal('${username}')`);
-                        }
-                        pfpElement.classList.add("avatar");
-                        pfpElement.classList.add("svg-avatar");
-                        
-                        pfpElement.style.border = `3px solid #fff`;
-                        pfpElement.style.backgroundColor = `#fff`;
-                    }
-
-                    if (pfpElement) {
-                        pfpCache[username] = pfpElement.cloneNode(true);
-                    }
-
-                    resolve(pfpElement);
-                })
-                .catch(error => {
-                    console.error("Failed to fetch:", error);
-                    resolve(null);
+                    pfpElement.style.border = `3px solid #${userData.avatar_color}`;
+                    pfpElement.style.backgroundColor = `#${userData.avatar_color}`;
+                }
+                
+                pfpElement.addEventListener('error', function pngFallback() {
+                    pfpElement.removeEventListener('error', pngFallback);
+                    pfpElement.setAttribute("src", `${pfpurl}.png`);
+                    pfpCache[username].setAttribute("src", `${pfpurl}.png`);
                 });
+
+            } else if (userData.pfp_data) {
+                let pfpurl;
+                if (userData.pfp_data > 0 && userData.pfp_data <= 37) {
+                    pfpurl = `images/avatars/icon_${userData.pfp_data - 1}.svg`;
+                } else {
+                    pfpurl = `images/avatars/icon_err.svg`;
+                }
+                
+                pfpElement = document.createElement("div");
+                pfpElement.style.backgroundImage = `url(${pfpurl})`;
+                pfpElement.classList.add("pfp-inner");
+                pfpElement.setAttribute("alt", username);
+                pfpElement.setAttribute("data-username", username);
+                pfpElement.classList.add("avatar");
+                if (!button) {
+                    pfpElement.setAttribute("onclick", `openUsrModal('${username}')`);
+                }
+                pfpElement.classList.add("svg-avatar");
+
+                if (userData.avatar_color) {
+                    pfpElement.style.border = `3px solid #${userData.avatar_color}`;
+                }
+                
+            } else {
+                const pfpurl = `images/avatars/icon_-4.svg`;
+                
+                pfpElement = document.createElement("div");
+                pfpElement.style.backgroundImage = `url(${pfpurl})`;
+                pfpElement.classList.add("pfp-inner");
+                pfpElement.setAttribute("alt", username);
+                pfpElement.setAttribute("data-username", username);
+                if (!button) {
+                    pfpElement.setAttribute("onclick", `openUsrModal('${username}')`);
+                }
+                pfpElement.classList.add("avatar");
+                pfpElement.classList.add("svg-avatar");
+                
+                pfpElement.style.border = `3px solid #fff`;
+                pfpElement.style.backgroundColor = `#fff`;
+            }
+
+            if (pfpElement) {
+                pfpCache[username] = pfpElement.cloneNode(true);
+            }
+
+            resolve(pfpElement);
         }
     });
 }
@@ -964,9 +957,15 @@ function loadreplyv(item) {
 
     const replycontainer = document.createElement("div");
     if (item.author.avatar_color && item.author.avatar_color !== "!color") {
-        replycontainer.style.setProperty('--reply-accent', `${darkenColour(item.author.avatar_color, 3)}`);
-        replycontainer.style.setProperty('--reply-border', `${lightenColour(item.author.avatar_color, 3)}`);
-        replycontainer.style.setProperty('--reply-color', `${lightenColour(item.author.avatar_color, 1.5)}`);
+        if (getComputedStyle(document.documentElement).getPropertyValue('--color-scheme').trim() === 'light') {
+            replycontainer.style.setProperty('--reply-accent', `${lightenColour(item.author.avatar_color, 3)}`);
+            replycontainer.style.setProperty('--reply-border', `${lightenColour(item.author.avatar_color, 5)}`);
+            replycontainer.style.setProperty('--reply-color', `${darkenColour(item.author.avatar_color, 1.5)}`);
+        } else {
+            replycontainer.style.setProperty('--reply-accent', `${darkenColour(item.author.avatar_color, 3)}`);
+            replycontainer.style.setProperty('--reply-border', `${lightenColour(item.author.avatar_color, 3)}`);
+            replycontainer.style.setProperty('--reply-color', `${lightenColour(item.author.avatar_color, 1.5)}`);
+        }
         replycontainer.classList.add("custom");
     } else {        
         replycontainer.style.setProperty('--reply-accent', `var(--accent-down)`);
@@ -1002,13 +1001,21 @@ function loadreplyv(item) {
         }
     }
 
-    replycontainer.innerHTML = `<p style='font-weight:bold;margin: 10px 0 10px 0;'>${escapeHTML(user)}</p><p style='margin: 10px 0 10px 0;'>${content ? escapeHTML(content) : '<i>Deleted post</i>'}</p>`;
+    replycontainer.innerHTML = `<p class="reply-u" style='font-weight:bold;margin: 10px 0 10px 0;'>${escapeHTML(user)}</p><p class="reply-p" style='margin: 10px 0 10px 0;'>${content ? escapeHTML(content) : '<i>Deleted post</i>'}</p>`;
 
     const full = document.createElement("div");
     full.classList.add("reply-outer");
 
-    full.addEventListener('click', (e) => {
+    full.addEventListener('click', async (e) => {
         e.preventDefault();
+
+        const index = postCache[page].findIndex(post => post._id === item._id);
+        if (index === -1) return;
+        const desiredPage = Math.floor(index / 25) + 1;
+        const currentPages = Math.floor(document.getElementById("msgs").childElementCount / 25) + 1;
+        for (var i = currentPages; i <= desiredPage; i++) {
+            await loadposts(i);
+        }
 
         const targetElement = document.getElementById(`${item._id}`);
         const outer = document.getElementById("main");
@@ -1188,6 +1195,7 @@ async function sendpost() {
     const message = msgbox.value;
     msgbox.value = "";
     autoresize();
+    localStorage.removeItem(`draft-${page}`);
 
     const editIndicator = document.getElementById("edit-indicator");
 
@@ -1203,7 +1211,7 @@ async function sendpost() {
         const old = match[1];
         const newtx = match[2];
     
-        const repst = [...postCache[page]].reverse().find(post => post.u === localStorage.getItem("username"));
+        const repst = [...postCache[page]].find(post => post.u === localStorage.getItem("username"));
     
         if (repst) {
             const newCont = repst.p.replace(new RegExp(old, 'g'), newtx);
@@ -1220,22 +1228,6 @@ async function sendpost() {
     
         return;
     }
-
-    // Create a placeholder post element
-    const placeholder = document.createElement("div");
-    placeholder.classList.add("post");
-    placeholder.style.opacity = "0.5";
-
-    placeholder.innerHTML = `
-    <div class="pfp">
-    </div>
-    <div class="wrapper">
-    <span class="user-header"><span id='username'>${localStorage.getItem("username")}</span><i class="date">sending...</i></span>
-    <p class="post-content">
-    <p>${message}</p>
-    </p>
-    </div>
-    `
 
     if (editIndicator.hasAttribute("data-postid")) {
         fetch(`https://api.meower.org/posts?id=${editIndicator.getAttribute("data-postid")}`, {
@@ -1269,6 +1261,32 @@ async function sendpost() {
         const replyToIds = Array.from(replies.childNodes).map(replyContainer => replyContainer.getAttribute("data-reply-id"));
         replies.innerHTML = "";
 
+        // Create post nonce
+        const nonce = Math.random().toString();
+
+        // Create a placeholder post element
+        const placeholder = document.createElement("div");
+        placeholder.id = `placeholder-${nonce}`;
+        placeholder.classList.add("post");
+        placeholder.style.opacity = "0.5";
+        placeholder.innerHTML = `
+        <div class="pfp">
+        </div>
+        <div class="wrapper">
+        <span class="user-header"><span id='username'>${localStorage.getItem("username")}</span><i class="date">sending...</i></span>
+        <p class="post-content">
+        <p>${message}</p>
+        </p>
+        </div>
+        `;
+        loadPfp(localStorage.getItem("username"), null, 0)
+            .then(pfpElement => {
+                if (pfpElement) {
+                    placeholder.querySelector(".pfp").appendChild(pfpElement);
+                }
+            });
+        document.getElementById("msgs").prepend(placeholder);
+
         const response = await fetch(`https://api.meower.org/${page === "home" ? "home" : `posts/${page}`}`, {
             method: "POST",
             headers: {
@@ -1279,88 +1297,13 @@ async function sendpost() {
                 reply_to: replyToIds,
                 content: message,
                 attachments: attachmentIds.reverse(),
+                nonce,
             })
         });
     }
 
     autoresize();
     closepicker();
-}
-
-function loadhome() {
-    page = "home";
-    pre = "home";
-    setTop();
-    let pageContainer
-    pageContainer = document.getElementById("main");
-    pageContainer.innerHTML = `
-        <div class='info'><h1 class='header-top'>${lang().page_home}</h1><p id='info'></p>
-        </div>` + loadinputs();
-        document.getElementById("info").innerText = lul + " users online (" + sul + ")";
-    
-    sidebars();
-
-    if (postCache["home"]) {
-        postCache["home"].forEach(post => {
-            if (page !== "home") {
-                return;
-            }
-            loadpost(post);
-        });
-        //document.getElementById("skeleton-msgs").style.display = "none";
-    } else {
-        const xhttpPosts = new XMLHttpRequest();
-        xhttpPosts.open("GET", "https://api.meower.org/home?autoget");
-        xhttpPosts.onload = () => {
-            const postsData = JSON.parse(xhttpPosts.response);
-            const postsarray = postsData.autoget || [];
-
-            postsarray.reverse();
-            postCache["home"] = postsarray;
-            postsarray.forEach(post => {
-                if (page !== "home") {
-                    return;
-                }
-                loadpost(post);
-            });
-            //document.getElementById("skeleton-msgs").style.display = "none";
-        };
-        xhttpPosts.send();
-    }
-    
-    const attachButton = document.getElementById('attach')
-    attachButton.addEventListener('dragover', function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        attachButton.classList.add('dragover');
-    });
-
-    attachButton.addEventListener('dragleave', function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        attachButton.classList.remove('dragover');
-    });
-
-    attachButton.addEventListener('drop', function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        attachButton.classList.remove('dragover');
-        for (const file of e.dataTransfer.files) {
-            addAttachment(file);
-        }
-    });
-
-    const jumpButton = document.querySelector('.jump');
-    const navbarOffset = document.querySelector('.message-container').offsetHeight;
-    const main = document.getElementById("main");
-    
-    main.addEventListener('scroll', function() {
-        if (main.scrollTop > navbarOffset) {
-            jumpButton.classList.add('visible');
-        } else {
-            jumpButton.classList.remove('visible');
-        }
-    });
 }
 
 function sidebars() {
@@ -1382,7 +1325,7 @@ function sidebars() {
     
     let navlist = `
     <input type="button" class="navigation-button button" id="explore" value="${lang().page_explore}" onclick="loadexplore();" aria-label="explore" tabindex="0">
-    <input type="button" class="navigation-button button" id="inbox" value="${lang().page_inbox}" onclick="loadinbox()" aria-label="inbox" tabindex="0">
+    <input type="button" class="navigation-button button" id="inbox" value="${lang().page_inbox}" onclick="loadchat('inbox')" aria-label="inbox" tabindex="0">
     <input type="button" class="navigation-button button" id="settings" value="${lang().page_settings}" onclick="loadstgs()" aria-label="settings" tabindex="0">
     <button type='button' class='user-area button' id='profile' onclick='openUsrModal("${localStorage.getItem("username")}")' aria-label="profile" tabindex="0">
         <div class="avatar-small" id="uav" alt="Avatar"></div>
@@ -1417,20 +1360,6 @@ function sidebars() {
 
     let mdmdl = document.getElementsByClassName('navigation')[0];
     mdmdl.innerHTML += navlist;
-//make it check if the list already exists, if so dont do this
-    if (Object.keys(chatCache).length === 0) {
-        const char = new XMLHttpRequest();
-        char.open("GET", "https://api.meower.org/chats?autoget");
-        char.setRequestHeader("token", localStorage.getItem('token'));
-        char.onload = async () => {
-            const response = JSON.parse(char.response);
-            response.autoget.forEach(chat => {
-                chatCache[chat._id] = chat;
-            });
-            renderChats();
-        };
-        char.send();
-    }
 
     const sidediv = document.querySelectorAll(".side");
     sidediv.forEach(function(sidediv) {
@@ -1453,7 +1382,7 @@ function renderChats() {
     groupsdiv.innerHTML = `
     <div class="groupheader">
         <h1>${lang().title_chats}</h1>
-        <button class="addgc button" onclick="createChatModal()">
+        <button class="addgc button tooltip bottom" onclick="createChatModal()" data-tooltip="${lang().action.creategc}">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g clip-path="url(#clip0_318_2)"><path d="M13.6653 13.6777L21.4322 13.6777C22.3528 13.6782 23.099 12.932 23.0986 12.0113C23.0986 11.0902 22.3528 10.3444 21.4322 10.3449H13.6653L13.6653 2.57804C13.6658 1.65739 12.9191 0.910682 11.9989 0.911622C11.0782 0.911155 10.332 1.65739 10.3325 2.57804L10.3325 10.3449L2.54674 10.3449C1.62563 10.3449 0.879848 11.0907 0.880371 12.0113C0.880322 12.4714 1.06705 12.8881 1.36874 13.1898C1.67044 13.4915 2.08712 13.6782 2.54726 13.6782L10.3335 13.6777V21.4446C10.3334 21.9047 10.5201 22.3214 10.8218 22.623C11.1235 22.9248 11.5397 23.111 12.0003 23.1114C12.9214 23.1114 13.6672 22.3657 13.6667 21.4451L13.6653 13.6777Z" fill="currentColor"/></g></svg>
         </button>
     </div>
@@ -1462,13 +1391,13 @@ function renderChats() {
     
     `;
     gcdiv.innerHTML += `
-    <button class="navigation-button button gcbtn" onclick="loadhome()">
+    <button class="navigation-button button gcbtn" onclick="loadchat('home')">
     <div class="chat-home-button">
         <svg width="36" height="26" viewBox="0 0 36 26" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M14.8336 21.6667C15.3859 21.6667 15.8336 21.219 15.8336 20.6667V16.1667C15.8336 15.6144 16.2814 15.1667 16.8336 15.1667H19.1669C19.7192 15.1667 20.1669 15.6144 20.1669 16.1667V20.6667C20.1669 21.219 20.6147 21.6667 21.1669 21.6667H24.5836C25.1359 21.6667 25.5836 21.219 25.5836 20.6667V13H28.8336L18.0003 3.25L7.16699 13H10.417V20.6667C10.417 21.219 10.8647 21.6667 11.417 21.6667H14.8336Z" fill="currentColor"/></svg>
     </div>
     <span class="gcname">${lang().page_home}</span>
     </button>
-    <button class="navigation-button button gcbtn" onclick="loadlive()">
+    <button class="navigation-button button gcbtn" onclick="loadchat('livechat')">
     <div class="chat-home-button">
         <svg width="36" height="26" viewBox="0 0 36 26" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M11.4 8C8.97012 8 7 9.94349 7 12.3405C7 14.7376 8.97012 16.6811 11.4 16.6811H24.6L27.7482 19.7867C28.2101 20.2424 29 19.9195 29 19.2752V12.7023C29 10.1053 26.8659 8 24.2333 8H11.4Z" fill="currentColor"/></svg>
     </div>    
@@ -1544,7 +1473,7 @@ function renderChats() {
         const chatOps = document.createElement("div");
         chatOps.classList.add("chat-ops");
         chatOps.innerHTML = `
-        <div class="chat-op" onclick="favChat(event, '${escapeHTML(chat._id)}')" title="${lang().action.favorite}">
+        <div class="chat-op tooltip" onclick="favChat(event, '${escapeHTML(chat._id)}')" title="${lang().action.favorite}" data-tooltip="${lang().action.favorite}">
             ${favoritedChats.includes(chat._id) ? `
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path fill="currentColor" d="M3.05649 9.24618L0.635792 6.89056C0.363174 6.62527 0.264902 6.22838 0.382279 5.8667C0.499657 5.50502 0.812337 5.24125 1.1889 5.18626L5.27593 4.58943L7.10348 0.890366C7.27196 0.549372 7.61957 0.333496 8.00019 0.333496C8.38081 0.333496 8.72843 0.549372 8.8969 0.890366L9.72865 2.57387L3.05649 9.24618Z"/>
@@ -1557,7 +1486,7 @@ function renderChats() {
             </svg>
             `}
         </div>
-        <div class="chat-op" onclick="closeChatModal(event, '${escapeHTML(chat._id)}', '${escnickname || chat.members.find(v => v !== localStorage.getItem("username"))}')" title="${lang().action.close}">
+        <div class="chat-op tooltip left" onclick="closeChatModal(event, '${escapeHTML(chat._id)}', '${escnickname || chat.members.find(v => v !== localStorage.getItem("username"))}')" title="${lang().action.close}" data-tooltip="${lang().action.close}">
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path fill="currentColor" d="M2.3352 13.6648C2.78215 14.1117 3.50678 14.1117 3.95372 13.6648L8 9.61851L12.0463 13.6648C12.4932 14.1117 13.2179 14.1117 13.6648 13.6648C14.1117 13.2179 14.1117 12.4932 13.6648 12.0463L9.61851 8L13.6648 3.95372C14.1117 3.50678 14.1117 2.78214 13.6648 2.3352C13.2179 1.88826 12.4932 1.88827 12.0463 2.33521L8 6.38149L3.95372 2.33521C3.50678 1.88827 2.78214 1.88827 2.3352 2.33521C1.88826 2.78215 1.88827 3.50678 2.33521 3.95372L6.38149 8L2.33521 12.0463C1.88827 12.4932 1.88827 13.2179 2.3352 13.6648Z"/>
             </svg>            
@@ -1596,7 +1525,7 @@ function loadstart() {
         </div>
         <div class="quick-btns">
         <button class="qbtn button" aria-label="create chat" onclick="createChatModal()">${lang().action.creategc}</button>
-        <button class="qbtn button" aria-label="home" onclick="loadhome();">${lang().action.gohome}</button>
+        <button class="qbtn button" aria-label="home" onclick="loadchat('home');">${lang().action.gohome}</button>
         <button class="qbtn button" aria-label="explore" onclick="loadexplore();">${lang().page_explore}</button>
         <button class="qbtn button" aria-label="dm me" onclick="opendm('Eris')">${lang().action.dmme}</button>
     </div>
@@ -1635,6 +1564,14 @@ function loadstart() {
 }
 
 function opendm(username) {
+    for (const chat of Object.values(chatCache)) {
+        if (chat.type === 1 && chat.members.includes(username)) {
+            parent.loadchat(chat._id);
+            parent.closemodal();
+            return;
+        }
+    }
+
     fetch(`https://api.meower.org/users/${username}/dm`, {
         method: 'GET',
         headers: {
@@ -1660,8 +1597,7 @@ function opendm(username) {
 function loadchat(chatId) {
     page = chatId;
     pre = chatId;
-    setTop();
-    if (!chatCache[chatId]) {
+    if (!["home", "inbox", "livechat"].includes(chatId) && !chatCache[chatId]) {
         fetch(`https://api.meower.org/chats/${chatId}`, {
             headers: {token: localStorage.getItem("token")}
         })
@@ -1684,7 +1620,7 @@ function loadchat(chatId) {
             if (!settingsstuff().homepage) {
                 loadstart();
             } else {
-                loadhome();
+                loadchat('home');
             }
         });
         return;
@@ -1695,202 +1631,65 @@ function loadchat(chatId) {
     const data = chatCache[chatId];
 
     const mainContainer = document.getElementById("main");
-    if (data.nickname) {
-        mainContainer.innerHTML = `<div class='info'><div class="gctitle"><h1 id='nickname' onclick="openGcModal('${chatId}')" class='header-top'>${escapeHTML(data.nickname)}</h1><i class="subtitle">${chatId}</i></div>
-        <p id='info'></p></div>` + loadinputs();
-    } else {
-        mainContainer.innerHTML = `<div class='info'><div class="gctitle"><h1 id='username' class='header-top' onclick="openUsrModal('${data.members.find(v => v !== localStorage.getItem("username"))}')">${data.members.find(v => v !== localStorage.getItem("username"))}</h1><i class="subtitle">${chatId}</i></div><p id='info'></p></div>` + loadinputs();
-    }
-
-    if (postCache[chatId]) {
-        postCache[chatId].forEach(post => {
-            if (page !== chatId) {
-                return;
-            }
-            loadpost(post);
-        });
-        //document.getElementById("skeleton-msgs").style.display = "none";
-    } else {
-        const xhttpPosts = new XMLHttpRequest();
-        xhttpPosts.open("GET", `https://api.meower.org/posts/${chatId}?autoget`);
-        xhttpPosts.setRequestHeader("token", localStorage.getItem('token'));
-        xhttpPosts.onload = () => {
-            const postsData = JSON.parse(xhttpPosts.response);
-            const postsarray = postsData.autoget || [];
-
-            postsarray.reverse();
-            postCache[chatId] = postsarray;
-            postsarray.forEach(post => {
-                if (page !== chatId) {
-                    return;
-                }
-                loadpost(post);
-            });
-            //document.getElementById("skeleton-msgs").style.display = "none";
-        };
-        xhttpPosts.send();
-    }
-
-    const attachButton = document.getElementById('attach')
-    attachButton.addEventListener('dragover', function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        attachButton.classList.add('dragover');
-    });
-
-    attachButton.addEventListener('dragleave', function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        attachButton.classList.remove('dragover');
-    });
-
-    attachButton.addEventListener('drop', function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        attachButton.classList.remove('dragover');
-        for (const file of e.dataTransfer.files) {
-            addAttachment(file);
-        }
-    });
-
-    const jumpButton = document.querySelector('.jump');
-    const navbarOffset = document.querySelector('.message-container').offsetHeight;
-    const main = document.getElementById("main");
-    
-    main.addEventListener('scroll', function() {
-        if (main.scrollTop > navbarOffset) {
-            jumpButton.classList.add('visible');
-        } else {
-            jumpButton.classList.remove('visible');
-        }
-    });
-}
-
-function loadlive() {
-    page = 'livechat';
-    pre = 'livechat';
-    setTop();
-    const mainContainer = document.getElementById("main");
-    mainContainer.innerHTML = `
-        <div class='info'>
-            <h1>${lang().title_live}</h1>
-            <p id='info'>${lang().live_sub.desc}</p>
-        </div>
-        ${loadinputs()}
-    `;
-    
-    document.getElementById("skeleton-msgs").style.display = "none";
-    sidebars();
-
-    if (!postCache["livechat"]) postCache["livechat"] = [];
-    postCache["livechat"].forEach(post => {
-        if (page !== "livechat") {
-            return;
-        }
-        loadpost(post);
-    });
-
-    const attachButton = document.getElementById('attach')
-    attachButton.addEventListener('dragover', function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        attachButton.classList.add('dragover');
-    });
-
-    attachButton.addEventListener('dragleave', function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        attachButton.classList.remove('dragover');
-    });
-
-    attachButton.addEventListener('drop', function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        attachButton.classList.remove('dragover');
-        for (const file of e.dataTransfer.files) {
-            addAttachment(file);
-        }
-    });
-
-    const jumpButton = document.querySelector('.jump');
-    const navbarOffset = document.querySelector('.message-container').offsetHeight;
-    const main = document.getElementById("main");
-    
-    main.addEventListener('scroll', function() {
-        if (main.scrollTop > navbarOffset) {
-            jumpButton.classList.add('visible');
-        } else {
-            jumpButton.classList.remove('visible');
-        }
-    });
-}
-
-function loadinbox() {
-    page = "inbox"
-    pre = "inbox"
-    setTop();
-
-    const mainContainer = document.getElementById("main");
-    mainContainer.innerHTML = `
-        <div class='info'>
+    if (chatId === "home") {
+        pageContainer.innerHTML = `
+        <div class='info'><h1 class='header-top'>${lang().page_home}</h1><p id='info'></p>
+        </div>` + loadinputs();
+        document.getElementById("info").innerText = lul + " users online (" + sul + ")";
+    } else if (chatId === "inbox") {
+        mainContainer.innerHTML = `<div class='info'>
             <h1>${lang().page_inbox}</h1>
             <p id='info'>${lang().inbox_sub.desc}</p>
-        </div>
-        <div class='message-container'>
-        </div>
-        <div id='msgs' class='posts'></div>
-            <div id="skeleton-msgs" class="posts" style="display:block;">
-            <div class="skeleton-post"><div class="pfp"><div class="skeleton-avatar"></div></div><div class="wrapper"><span class="skeleton-header"><div class="skeleton-username"></div><div class="skeleton-date"></div></span><div class="skeleton-content-1"></div><div class="skeleton-content-2"></div></div></div>
-            <div class="skeleton-post"><div class="pfp"><div class="skeleton-avatar"></div></div><div class="wrapper"><span class="skeleton-header"><div class="skeleton-username"></div><div class="skeleton-date"></div></span><div class="skeleton-content-1"></div><div class="skeleton-content-2"></div></div></div>
-            <div class="skeleton-post"><div class="pfp"><div class="skeleton-avatar"></div></div><div class="wrapper"><span class="skeleton-header"><div class="skeleton-username"></div><div class="skeleton-date"></div></span><div class="skeleton-content-1"></div><div class="skeleton-content-2"></div></div></div>
-            <div class="skeleton-post"><div class="pfp"><div class="skeleton-avatar"></div></div><div class="wrapper"><span class="skeleton-header"><div class="skeleton-username"></div><div class="skeleton-date"></div></span><div class="skeleton-content-1"></div><div class="skeleton-content-2"></div></div></div>
-            <div class="skeleton-post"><div class="pfp"><div class="skeleton-avatar"></div></div><div class="wrapper"><span class="skeleton-header"><div class="skeleton-username"></div><div class="skeleton-date"></div></span><div class="skeleton-content-1"></div><div class="skeleton-content-2"></div></div></div>
-            <div class="skeleton-post"><div class="pfp"><div class="skeleton-avatar"></div></div><div class="wrapper"><span class="skeleton-header"><div class="skeleton-username"></div><div class="skeleton-date"></div></span><div class="skeleton-content-1"></div><div class="skeleton-content-2"></div></div></div>
-            <div class="skeleton-post"><div class="pfp"><div class="skeleton-avatar"></div></div><div class="wrapper"><span class="skeleton-header"><div class="skeleton-username"></div><div class="skeleton-date"></div></span><div class="skeleton-content-1"></div><div class="skeleton-content-2"></div></div></div>
-            <div class="skeleton-post"><div class="pfp"><div class="skeleton-avatar"></div></div><div class="wrapper"><span class="skeleton-header"><div class="skeleton-username"></div><div class="skeleton-date"></div></span><div class="skeleton-content-1"></div><div class="skeleton-content-2"></div></div></div>
-            <div class="skeleton-post"><div class="pfp"><div class="skeleton-avatar"></div></div><div class="wrapper"><span class="skeleton-header"><div class="skeleton-username"></div><div class="skeleton-date"></div></span><div class="skeleton-content-1"></div><div class="skeleton-content-2"></div></div></div>
-            <div class="skeleton-post"><div class="pfp"><div class="skeleton-avatar"></div></div><div class="wrapper"><span class="skeleton-header"><div class="skeleton-username"></div><div class="skeleton-date"></div></span><div class="skeleton-content-1"></div><div class="skeleton-content-2"></div></div></div>
-            <div class="skeleton-post"><div class="pfp"><div class="skeleton-avatar"></div></div><div class="wrapper"><span class="skeleton-header"><div class="skeleton-username"></div><div class="skeleton-date"></div></span><div class="skeleton-content-1"></div><div class="skeleton-content-2"></div></div></div>
-            <div class="skeleton-post"><div class="pfp"><div class="skeleton-avatar"></div></div><div class="wrapper"><span class="skeleton-header"><div class="skeleton-username"></div><div class="skeleton-date"></div></span><div class="skeleton-content-1"></div><div class="skeleton-content-2"></div></div></div>
-        </div>
-    `;
-
-    sidebars();
-
-    const sidedivs = document.querySelectorAll(".side");
-    sidedivs.forEach(sidediv => sidediv.classList.remove("hidden"));
-
-    if (postCache["inbox"]) {
-        postCache["inbox"].forEach(post => {
-            if (page !== "inbox") {
-                return;
-            }
-            loadpost(post);
-        });
+        </div>` + loadinputs();
+    } else if (chatId === "livechat") {
+        mainContainer.innerHTML = `
+            <div class='info'>
+                <h1>${lang().title_live}</h1>
+                <p id='info'>${lang().live_sub.desc}</p>
+            </div>
+            ${loadinputs()}
+        `;
     } else {
-        const xhttpPosts = new XMLHttpRequest();
-        xhttpPosts.open("GET", "https://api.meower.org/inbox?autoget");
-        xhttpPosts.setRequestHeader("token", localStorage.getItem('token'));
-        xhttpPosts.onload = () => {
-            const postsData = JSON.parse(xhttpPosts.response);
-            const postsarray = postsData.autoget || [];
-
-            postsarray.reverse();
-            postCache["inbox"] = postsarray;
-            postsarray.forEach(post => {
-                if (page !== "inbox") {
-                    return;
-                }
-                loadpost(post);
-            });
-        };
-        xhttpPosts.send();
+        if (data.nickname) {
+            mainContainer.innerHTML = `<div class='info'><div class="gctitle"><h1 id='nickname' onclick="openGcModal('${chatId}')" class='header-top'>${escapeHTML(data.nickname)}</h1><i class="subtitle">${chatId}</i></div>
+            <p id='info'></p></div>` + loadinputs();
+        } else {
+            mainContainer.innerHTML = `<div class='info'><div class="gctitle"><h1 id='username' class='header-top' onclick="openUsrModal('${data.members.find(v => v !== localStorage.getItem("username"))}')">${data.members.find(v => v !== localStorage.getItem("username"))}</h1><i class="subtitle">${chatId}</i></div><p id='info'></p></div>` + loadinputs();
+        }
     }
 
+    loadposts(1);
+
+    const attachButton = document.getElementById('attach');
+    if (attachButton && chatId !== "livechat") {
+        attachButton.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            attachButton.classList.add('dragover');
+        });
+
+        attachButton.addEventListener('dragleave', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            attachButton.classList.remove('dragover');
+        });
+
+        attachButton.addEventListener('drop', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            attachButton.classList.remove('dragover');
+            for (const file of e.dataTransfer.files) {
+                addAttachment(file);
+            }
+        });
+    } else {
+        if (attachButton) attachButton.remove();
+    }
+
+    const messageContainer = document.querySelector('.message-container');
     const jumpButton = document.querySelector('.jump');
-    const navbarOffset = document.querySelector('.message-container').offsetHeight;
+    const navbarOffset = messageContainer.offsetHeight;
     const main = document.getElementById("main");
-    
     main.addEventListener('scroll', function() {
         if (main.scrollTop > navbarOffset) {
             jumpButton.classList.add('visible');
@@ -1898,30 +1697,58 @@ function loadinbox() {
             jumpButton.classList.remove('visible');
         }
     });
+
+    if (chatId === "inbox") {
+        messageContainer.innerHTML = "";
+    } else {
+        const msg = messageContainer.querySelector("#msg");
+        msg.value = localStorage.getItem(`draft-${chatId}`) || "";
+        autoresize();
+        msg.addEventListener("change", () => {
+            localStorage.setItem(`draft-${chatId}`, msg.value);
+        });
+    }
 }
 
-async function loadmore() {
+async function loadposts(pageNo) {
+    // Set up cache
     const chatId = page.valueOf();
-    if (!postCache[chatId]) return;
+    if (!(chatId in postCache)) postCache[chatId] = [];
 
+    // Fetch from cache
+    const cacheSkip = (pageNo-1) * 25;
+    const cachedPosts = postCache[chatId].slice(cacheSkip, (cacheSkip+25)+1);
+    for (const post of cachedPosts) {
+        loadpost(post);
+    }
+    if (cachedPosts.length >= 25 || chatId === "livechat") {
+        document.getElementById("skeleton-msgs").style.display = "none";
+        return;
+    }
+
+    // Get path
     var path;
     if (chatId === "home") path = "/home"
     else if (chatId === "inbox") path = "/inbox"
     else path = `/posts/${chatId}`;
 
-    const pageNo = Math.floor(postCache[chatId].length / 25) + 1;
-    if (pageNo < 2) return;
-
+    // Get posts from API
     const response = await fetch(`https://api.meower.org${path}?page=${pageNo}`, {
         headers: {
             token: localStorage.getItem("token")
         }
     });
     const postsData = await response.json();
+
+    // Block loading more if we've hit the end
     if (postsData["page#"] === postsData.pages && postsData.autoget.length < 25) {
         document.getElementById("skeleton-msgs").style.display = "none";
         document.getElementById("msgs").setAttribute("data-loading-more", "");
     }
+
+    // Cache and load posts
+    const mainEl = document.getElementById("main");
+    const scrollTop = mainEl.scrollTop;
     const postsarray = postsData.autoget || [];
     postsarray.forEach(post => {
         if (page !== chatId) {
@@ -1930,11 +1757,10 @@ async function loadmore() {
         if (postCache[chatId].findIndex(_post => _post._id === post._id) !== -1) {
             return
         }
-        postCache[chatId].unshift(post);
-        post._reverse = true;
+        postCache[chatId].push(post);
         loadpost(post);
-        post._reverse = false;
     });
+    mainEl.scrollTop = scrollTop;
 }
 
 function logout(iskl) {
@@ -2443,6 +2269,7 @@ function loadAppearance() {
                 <div class="theme-buttons-inner">
                     <button onclick='changeTheme(\"pride\", this)' class='theme-button pride-theme'>Pride</button>
                     <button onclick='changeTheme(\"trans\", this)' class='theme-button trans-theme'>Trans</button>
+                    <button onclick='changeTheme(\"nonb\", this)' class='theme-button nonb-theme'>Nonbinary</button>
                 </div>
             <h3>${lang().appearance_sub.cstheme}</h3>
                 <div class="theme-buttons-inner">
@@ -3031,6 +2858,8 @@ function openModal(postId) {
     document.documentElement.style.overflow = "hidden";
     const mdlbck = document.querySelector('.modal-back');
     
+    const post = postCache[page].find(_post => _post._id === postId);
+
     if (mdlbck) {
         mdlbck.style.display = 'flex';
         
@@ -3045,17 +2874,18 @@ function openModal(postId) {
             }
             const mdlt = mdl.querySelector('.modal-top');
             if (mdlt) {
-                mdlt.innerHTML = `
+                mdlt.innerHTML = `${post.post_origin !== 'inbox' ? `
                 <button class="modal-button" onclick="mdlreply(event)"><div>${lang().action.reply}</div><div class="modal-icon"><svg class="icon_d1ac81" width="24" height="24" viewBox="0 0 24 24"><path d="M10 8.26667V4L3 11.4667L10 18.9333V14.56C15 14.56 18.5 16.2667 21 20C20 14.6667 17 9.33333 10 8.26667Z" fill="currentColor"></path></svg></div></button>
                 <button class="modal-button" onclick="mdlpingusr(event)"><div>${lang().action.mention}</div><div class="modal-icon"><svg class="icon" height="24" width="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.486 2 2 6.486 2 12C2 17.515 6.486 22 12 22C14.039 22 15.993 21.398 17.652 20.259L16.521 18.611C15.195 19.519 13.633 20 12 20C7.589 20 4 16.411 4 12C4 7.589 7.589 4 12 4C16.411 4 20 7.589 20 12V12.782C20 14.17 19.402 15 18.4 15L18.398 15.018C18.338 15.005 18.273 15 18.209 15H18C17.437 15 16.6 14.182 16.6 13.631V12C16.6 9.464 14.537 7.4 12 7.4C9.463 7.4 7.4 9.463 7.4 12C7.4 14.537 9.463 16.6 12 16.6C13.234 16.6 14.35 16.106 15.177 15.313C15.826 16.269 16.93 17 18 17L18.002 16.981C18.064 16.994 18.129 17 18.195 17H18.4C20.552 17 22 15.306 22 12.782V12C22 6.486 17.514 2 12 2ZM12 14.599C10.566 14.599 9.4 13.433 9.4 11.999C9.4 10.565 10.566 9.399 12 9.399C13.434 9.399 14.6 10.565 14.6 11.999C14.6 13.433 13.434 14.599 12 14.599Z"></path></svg></div></button>
                 <button class="modal-button" onclick="reportModal(event)"><div>${lang().action.report}</div><div class="modal-icon"><svg height="20" width="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M20 6.00201H14V3.00201C14 2.45001 13.553 2.00201 13 2.00201H4C3.447 2.00201 3 2.45001 3 3.00201V22.002H5V14.002H10.586L8.293 16.295C8.007 16.581 7.922 17.011 8.076 17.385C8.23 17.759 8.596 18.002 9 18.002H20C20.553 18.002 21 17.554 21 17.002V7.00201C21 6.45001 20.553 6.00201 20 6.00201Z"></path></svg></div></button>      
+                ` : ''}
                 <button class="modal-button" onclick="mdlshare(event)"><div>${lang().action.share}</div><div class="modal-icon"><svg viewBox="0 0 20 20" fill="currentColor" width="18" height="18"><path d="M12.9297 3.25007C12.7343 3.05261 12.4154 3.05226 12.2196 3.24928L11.5746 3.89824C11.3811 4.09297 11.3808 4.40733 11.5739 4.60245L16.5685 9.64824C16.7614 9.84309 16.7614 10.1569 16.5685 10.3517L11.5739 15.3975C11.3808 15.5927 11.3811 15.907 11.5746 16.1017L12.2196 16.7507C12.4154 16.9477 12.7343 16.9474 12.9297 16.7499L19.2604 10.3517C19.4532 10.1568 19.4532 9.84314 19.2604 9.64832L12.9297 3.25007Z"></path><path d="M8.42616 4.60245C8.6193 4.40733 8.61898 4.09297 8.42545 3.89824L7.78047 3.24928C7.58466 3.05226 7.26578 3.05261 7.07041 3.25007L0.739669 9.64832C0.5469 9.84314 0.546901 10.1568 0.739669 10.3517L7.07041 16.7499C7.26578 16.9474 7.58465 16.9477 7.78047 16.7507L8.42545 16.1017C8.61898 15.907 8.6193 15.5927 8.42616 15.3975L3.43155 10.3517C3.23869 10.1569 3.23869 9.84309 3.43155 9.64824L8.42616 4.60245Z"></path></svg></div></button>      
                 `;
 
                 const postDiv = document.getElementById(postId);
                 const usernameElement = postDiv.querySelector('#username').innerText;
 
-                if (usernameElement === localStorage.getItem("username")) {
+                if (usernameElement === localStorage.getItem("username") && post.post_origin !== 'inbox') {
                     mdlt.innerHTML += `
                     <button class="modal-button" onclick="deletePost('${postId}')"><div>${lang().action.delete}</div><div class="modal-icon"><svg width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M15 3.999V2H9V3.999H3V5.999H21V3.999H15Z"></path><path fill="currentColor" d="M5 6.99902V18.999C5 20.101 5.897 20.999 7 20.999H17C18.103 20.999 19 20.101 19 18.999V6.99902H5ZM11 17H9V11H11V17ZM15 17H13V11H15V17Z"></path></svg></div></button>      
                     <button class="modal-button" onclick="editPost('${page}', '${postId}')"><div>${lang().action.edit}</div><div class="modal-icon"><svg width="20" height="20" viewBox="0 0 24 24"><path fill-rule="evenodd" clip-rule="evenodd" d="M19.2929 9.8299L19.9409 9.18278C21.353 7.77064 21.353 5.47197 19.9409 4.05892C18.5287 2.64678 16.2292 2.64678 14.817 4.05892L14.1699 4.70694L19.2929 9.8299ZM12.8962 5.97688L5.18469 13.6906L10.3085 18.813L18.0201 11.0992L12.8962 5.97688ZM4.11851 20.9704L8.75906 19.8112L4.18692 15.239L3.02678 19.8796C2.95028 20.1856 3.04028 20.5105 3.26349 20.7337C3.48669 20.9569 3.8116 21.046 4.11851 20.9704Z" fill="currentColor"></path></svg></div></button>      
@@ -3299,7 +3129,7 @@ async function loadreports() {
                     </li>
                     `;
                     
-                    loadPfp(report.content.u, 1)
+                    loadPfp(report.content.u, report.content.author, 1)
                     .then(pfpElement => {
                         if (pfpElement) {
                             const rpfp = rprtbx.querySelector('.avatar');
@@ -4157,6 +3987,9 @@ function addAttachment(file) {
 
         element.classList.add("attach-pre-outer");
         element.title = file.name;
+        if (getComputedStyle(document.documentElement).getPropertyValue('--color-scheme').trim() === 'light') {
+            element.classList.add(`lightpre`);
+        }
         element.innerHTML = `
         <div class="attachment-wrapper">
         <div class="attachment-progress" style="--pre: 0%;">
@@ -4171,7 +4004,7 @@ function addAttachment(file) {
         </div>
         `;
         element.querySelector(".attachment-wrapper").querySelector(".delete-attach").onclick = () => { attachment.cancel(""); };
-        if (['image/png', 'image/jpeg', 'image/webp', 'image/gif'].includes(file.type)) {
+        if (file.type.includes("image/") && file.size < (10 << 20)) {
             const reader = new FileReader();
             reader.onloadend = () => {
                 const img = document.createElement("img");
@@ -4294,7 +4127,7 @@ function goTo() {
     } else if (place.charAt(0) === "!") {
         openUsrModal(place.substring(1));
     } else if (place === "home") {
-        loadhome();
+        loadchat('home');
     } else if (place === "start") {
         loadstart();
     } else if (place === "settings") {
@@ -4315,9 +4148,9 @@ function goTo() {
     } else if (place === "explore") {
         loadexplore();
     } else if (place === "inbox") {
-        loadinbox();
+        loadchat('inbox');
     } else if (place === "livechat") {
-        loadlive();
+        loadchat('livechat');
     } else if (place === "groupcat" || place === "atticus") {
         groupcat();
     }
@@ -5193,13 +5026,13 @@ function notify(u, p, location, val) {
                         notification.addEventListener('click', () => {
                             switch (location) {
                                 case "home":
-                                    loadhome();
+                                    loadchat('home');
                                     break;
                                 case "livechat":
-                                    loadlive();
+                                    loadchat('livechat');
                                     break;
                                 case "inbox":
-                                    loadinbox();
+                                    loadchat('inbox');
                                     break;
                                 default:
                                     loadchat(location);
