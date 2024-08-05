@@ -49,7 +49,7 @@ function erimd(content) {
 
 function meowerEmojis(content, emojis) {
     for (const emoji of emojis) {
-        content = content.replaceAll(`&lt;:${emoji._id}&gt;`, `<div class="emoji-outer"><img src="https://uploads.meower.org/emojis/${emoji._id}" alt="${emoji.name}" title="${emoji.name}" class="emoji"></div>`);
+        content = content.replaceAll(`&lt;:${emoji._id}&gt;`, `<img src="https://uploads.meower.org/emojis/${emoji._id}" alt="${emoji.name}" title="${emoji.name}" class="emoji">`);
     }
     return content;
 }

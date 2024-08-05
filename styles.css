@@ -39,7 +39,6 @@ button {
     font-family: var(--font);
     font-weight: 400;
     transition: var(--transition);
-    font-size: 0.813em;
 }
 
 .trans {
@@ -97,7 +96,7 @@ pre {
     padding: var(--padding);
     border-radius: var(--border-radius);
     overflow: auto;
-    font-size: 0.75em;
+    font-size: 12px;
     color: #fff;
     white-space: preserve;
     max-height: 300px;
@@ -113,7 +112,7 @@ pre > code {
 }
 
 i {
-    font-size: 0.677em;
+    font-size: 13px;
     font-weight: normal;
 }
 
@@ -131,7 +130,7 @@ textarea {
     outline: none;
     font-family: var(--font);
     font-weight: 400;
-    font-size: 0.813em;
+    font-size: 13px;
     resize: none;
     transition: var(--transition);
 }
@@ -166,7 +165,7 @@ li::marker, code, kbd, samp, pre {
 bridge {
     background-color: var(--primary);
     border-radius: 25px;
-    font-size: 0.625em;
+    font-size: 12px;
     padding-left: 5px;
     padding-right: 5px;
     padding-bottom: 1px;
@@ -328,7 +327,7 @@ video {
 
 .user-header {
     font-weight: 700;
-    font-size: 1.2em;
+    font-size: 19px;
     display: flex;
     margin: var(--text-margin) 0 10px 0;
     text-wrap: nowrap;
@@ -378,7 +377,7 @@ video {
 }
 
 .reply {
-    font-size: 1em;
+    font-size: 16px;
     background-color: var(--accent-down);
     border: 3px solid var(--accent-down);
     padding-left: 10px;
@@ -550,7 +549,7 @@ video {
 #replies {
     display: flex;
     flex-direction: column;
-    font-size: 1em;
+    font-size: 16px;
 }
 
 .replyinner > span {
@@ -636,7 +635,7 @@ video {
 }
 
 .other-in {
-    font-size: 1.5em;
+    font-size: 24px;
     font-weight: bold;
 }
 
@@ -697,7 +696,7 @@ video {
     text-overflow: ellipsis;
     width: 100%;
     display: inline-block;
-    font-size: 0.857em;
+    font-size: 12px;
 }
 
 .edit-info {
@@ -727,7 +726,7 @@ video {
 
 .sub-msg-cnt {
     padding: 0 calc(var(--margin) / 2);
-    font-size: 0.875em;
+    font-size: 14px;
     height: auto;
     transition: all 0.1s ease-out;
     position: sticky;
@@ -1097,7 +1096,7 @@ possible future styling
 }
 
 .big {
-    font-size: 4em;
+    font-size: 64px;
 }
 
 .nav-top {
@@ -1317,7 +1316,7 @@ possible future styling
     align-items: center;
     box-sizing: border-box;
     transition: var(--transition);
-    font-size: 1em;
+    font-size: 16px;
 }
 
 .big-mdl-inp:focus {
@@ -1329,7 +1328,7 @@ possible future styling
 }
 
 .mdl-lb {
-    font-size: 0.75em;
+    font-size: 12px;
     opacity: 0.8;
 }
 
@@ -1569,7 +1568,7 @@ possible future styling
 }
 
 .desc {
-    font-size: 0.75em;
+    font-size: 12px;
 }
 
 .editor {
@@ -1658,19 +1657,13 @@ possible future styling
 }
 
 .edit-txt {
-    font-size: 1em;
+    font-size: 16px;
     display: flex;
     align-items: center;
 }
 
 .emoji {
-    height: 1em;
-}
-
-.emoji-outer {
-    width: 1em;
-    height: 1em;
-    display: inline-block;
+    height: 16px;
 }
 
 .emoji:hover {
@@ -1755,7 +1748,7 @@ possible future styling
 
 .emojibuttonside {
     background-color: var(--modal-button-color);
-    font-size: 1em;
+    font-size: 16px;
     padding: var(--padding);
     margin: calc(var(--margin)/2);
     width: 42px;
@@ -1920,7 +1913,7 @@ possible future styling
     background-color: var(--modal-button-color);
     border-radius: var(--border-radius);
     margin-bottom: 5px;
-    font-size: 0.75em;
+    font-size: 12px;
     text-align: left;
 }
 
@@ -1981,7 +1974,7 @@ possible future styling
     color: var(--color);
     border: none;
     font-family: var(--font);
-    font-size: 1em;
+    font-size: 16px;
     width: 100px;
 }
 
@@ -2122,7 +2115,7 @@ possible future styling
 }
 
 .subsubheader {
-    font-size: 0.75em;
+    font-size: 12px;
     -webkit-user-select: none;
     user-select: none;
     opacity: 0.8;
@@ -2217,7 +2210,7 @@ possible future styling
 }
 
 .pluginsub {
-    font-size: 0.75em;
+    font-size: 12px;
     -webkit-user-select: none;
     user-select: none;
     opacity: 0.8;
@@ -2232,7 +2225,7 @@ possible future styling
     background: var(--accent-color);
     border-radius: var(--border-radius);
     margin-top: 5px;
-    font-size: 0.75em;
+    font-size: 12px;
     text-align: center;
     min-width: 80px;
 }
@@ -2309,7 +2302,7 @@ possible future styling
     background: var(--accent-color);
     border-radius: var(--border-radius);
     margin-bottom: 5px;
-    font-size: 0.75em;
+    font-size: 12px;
     text-align: left;
     color: var(--color);
     text-decoration: none;
@@ -2359,7 +2352,7 @@ possible future styling
     border: 3px solid var(--accent-color);
     border-radius: var(--border-radius);
     margin-bottom: 5px;
-    font-size: 1em;
+    font-size: 16px;
     display: flex;
     align-items: center;
     gap: 10px;
@@ -2372,7 +2365,7 @@ possible future styling
 .language-r {
     flex: 1;
     text-align: right;
-    font-size: 0.75em;
+    font-size: 12px;
     opacity: 0.8;
 }
 
@@ -2404,7 +2397,7 @@ possible future styling
 
 .skeleton-header {
     font-weight: 700;
-    font-size: 1.188em;
+    font-size: 19px;
     display: flex;
     gap: var(--margin);
     margin: var(--text-margin) 0 10px 0;
@@ -2495,7 +2488,7 @@ possible future styling
     flex: 0.9;
     margin: 0;
     overflow-y: hidden;
-    font-size: 0.813em;
+    font-size: 13px;
     opacity: 0.8;
     background: var(--accent-color);
     border-radius: var(--border-radius);
@@ -2520,7 +2513,7 @@ possible future styling
 }
 
 .file-pre {
-    font-size: 0.75em;
+    font-size: 12px;
 }
 
 .fileicon {
@@ -2608,7 +2601,7 @@ possible future styling
     width: 100%;
     padding: var(--button-padding);
     box-sizing: border-box;
-    font-size: 0.813em;
+    font-size: 13px;
     background: var(--modal-button-color);
     border-radius: var(--border-radius);
 }
@@ -2625,7 +2618,7 @@ possible future styling
     width: 100%;
     padding: var(--button-padding);
     box-sizing: border-box;
-    font-size: 0.813em;
+    font-size: 13px;
     background: var(--modal-button-color);
     border-radius: var(--border-radius);
     display: flex;
@@ -2674,7 +2667,7 @@ possible future styling
 
 .owner {
     margin: 5px 0;
-    font-size: 0.875em;
+    font-size: 14px;
 }
 
 .ow-btn {
@@ -2686,7 +2679,7 @@ possible future styling
     background: var(--modal-button-color);
     border-radius: var(--border-radius);
     margin-bottom: 5px;
-    font-size: 0.75em;
+    font-size: 12px;
     text-align: left;
 }
 
@@ -2733,7 +2726,7 @@ possible future styling
 
 .key {
     padding: 2px 5px;
-    font-size: 0.75em;
+    font-size: 12px;
     background: var(--hov-accent-color);
     border-radius: 3px;
     box-shadow: 0 0 1px var(--color-on);
@@ -2966,14 +2959,11 @@ possible future styling
         position: absolute;
         right: 0;
         margin: 8px;
+        background-color: var(--accent-color);
     }
     
     .post:hover {
         background-color: var(--accent-color);
-    }
-
-    .date {
-        font-size: 0.75em;
     }
 
     .image-outer, .embed {
@@ -3245,10 +3235,6 @@ a.underline, a:hover.underline {
 
 button:focus-visible {
     outline: auto;
-}
-
-input[type="button"] {
-    font-size: 0.813em;
 }
 
 input[type="button"]:focus-visible {
