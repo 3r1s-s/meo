@@ -1629,7 +1629,7 @@ function loadchat(chatId) {
 
     const mainContainer = document.getElementById("main");
     if (chatId === "home") {
-        pageContainer.innerHTML = `
+        mainContainer.innerHTML = `
         <div class='info'><h1 class='header-top'>${lang().page_home}</h1><p id='info'></p>
         </div>` + loadinputs();
         document.getElementById("info").innerText = lul + " users online (" + sul + ")";
