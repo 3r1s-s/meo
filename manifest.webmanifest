@@ -12,7 +12,7 @@
     "chat",
     "messaging"
   ],
-  "orientation": "any",
+  "orientation": "portrait",
   "theme_color": "#1c1c26",
   "icons": [
     {

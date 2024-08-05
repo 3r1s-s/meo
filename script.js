@@ -11,6 +11,7 @@
 // Custom video and audio player, similar style as the file download preview
 // Add tooltips to icon buttons, emojis, and maybe some other things
 // make @Tnix have tnix colour ect
+// Plugins options and API
 
 let end = false;
 let page = "load";
@@ -28,6 +29,7 @@ if (settingsstuff().homepage) {
     pre = "start"
 }
 
+let meourl = 'https://leo.atticat.tech';
 let bridges = ['Discord', 'SplashBridge', 'gc', 'Revower'];
 
 let ipBlocked = false;
@@ -98,6 +100,45 @@ if (settingsstuff().discord) {
     document.querySelector('body').classList.add("discord");
 }
 
+checkver()
+
+async function checkver() {
+    try {
+        const response = await fetch('https://api.github.com/repos/3r1s-s/meo/commits/main');
+        const data = await response.json();
+        let version = data.sha;
+        console.log(version.substring(0, 7));
+    } catch (error) {
+        console.log('Error checking for updates:', error);
+    }
+}
+
+const urlParams = new URLSearchParams(window.location.search);
+if (urlParams.has('openprofile')) {
+    const username = urlParams.get('openprofile');
+    openUsrModal(username);
+
+    urlParams.delete('openprofile');
+    const newUrl = window.location.pathname + '?' + urlParams.toString();
+    if (urlParams.toString() === '') {
+        window.history.replaceState({}, document.title, window.location.pathname);
+    } else {
+        window.history.replaceState({}, document.title, newUrl);
+    }
+} else if (urlParams.has('gc')){
+    const id = urlParams.get('gc');
+    sidebars();
+    loadchat(id);
+
+    urlParams.delete('gc');
+    const newUrl = window.location.pathname + '?' + urlParams.toString();
+    if (urlParams.toString() === '') {
+        window.history.replaceState({}, document.title, window.location.pathname);
+    } else {
+        window.history.replaceState({}, document.title, newUrl);
+    }
+}
+
 // make it so when reconnect happens it goes back to the prev screen and not the start page
 function main() {
     meowerConnection = new WebSocket(server);
@@ -119,20 +160,6 @@ function main() {
     if (settingsstuff().notifications) {
         if (Notification.permission !== "granted") {
             Notification.requestPermission();
-        }
-    }
-
-    const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.has('openprofile')) {
-        const username = urlParams.get('openprofile');
-        openUsrModal(username);
-    
-        urlParams.delete('openprofile');
-        const newUrl = window.location.pathname + '?' + urlParams.toString();
-        if (urlParams.toString() === '') {
-            window.history.replaceState({}, document.title, window.location.pathname);
-        } else {
-            window.history.replaceState({}, document.title, newUrl);
         }
     }
       
@@ -1071,7 +1098,7 @@ function loadtheme() {
 
 function sharepost() {
     const postId = event.target.closest('.post').id;
-    window.open(`https://leo.atticat.tech/share?id=${postId}`, '_blank');
+    window.open(`${meourl}/share?id=${postId}`, '_blank');
 }
 
 function toggleLogin(yn) {
@@ -1736,9 +1763,10 @@ function loadchat(chatId) {
 
     const jumpButton = document.querySelector('.jump');
     const navbarOffset = document.querySelector('.message-container').offsetHeight;
-
-    window.addEventListener('scroll', function () {
-        if (window.scrollY > navbarOffset) {
+    const main = document.getElementById("main");
+    
+    main.addEventListener('scroll', function() {
+        if (main.scrollTop > navbarOffset) {
             jumpButton.classList.add('visible');
         } else {
             jumpButton.classList.remove('visible');
@@ -1794,9 +1822,10 @@ function loadlive() {
 
     const jumpButton = document.querySelector('.jump');
     const navbarOffset = document.querySelector('.message-container').offsetHeight;
-
-    window.addEventListener('scroll', function () {
-        if (window.scrollY > navbarOffset) {
+    const main = document.getElementById("main");
+    
+    main.addEventListener('scroll', function() {
+        if (main.scrollTop > navbarOffset) {
             jumpButton.classList.add('visible');
         } else {
             jumpButton.classList.remove('visible');
@@ -1865,6 +1894,18 @@ function loadinbox() {
         };
         xhttpPosts.send();
     }
+
+    const jumpButton = document.querySelector('.jump');
+    const navbarOffset = document.querySelector('.message-container').offsetHeight;
+    const main = document.getElementById("main");
+    
+    main.addEventListener('scroll', function() {
+        if (main.scrollTop > navbarOffset) {
+            jumpButton.classList.add('visible');
+        } else {
+            jumpButton.classList.remove('visible');
+        }
+    });
 }
 
 async function loadmore() {
@@ -1992,7 +2033,6 @@ function loadGeneral() {
         <div class="settings-section-outer">
         ${createSettingSection("consolewarnings", lang().general_list.title.consolewarnings, lang().general_list.desc.consolewarnings)}
         ${createSettingSection("widemode", lang().general_list.title.widemode, lang().general_list.desc.widemode)}
-        ${createSettingSection("discord", lang().general_list.title.discord, lang().general_list.desc.discord)}
         </div>
         <h3>${lang().general_sub.privacy}</h3>
         <div class="fun-buttons">
@@ -2048,8 +2088,7 @@ function loadGeneral() {
         entersend: document.getElementById("entersend"),
         hideimages: document.getElementById("hideimages"),
         notifications: document.getElementById("notifications"),
-        widemode: document.getElementById("widemode"),
-        discord: document.getElementById("discord")
+        widemode: document.getElementById("widemode")
     };
 
     Object.values(settings).forEach((settingDiv) => {
@@ -2070,8 +2109,7 @@ function loadGeneral() {
                 entersend: settings.entersend.classList.contains("checked"),
                 hideimages: settings.hideimages.classList.contains("checked"),
                 notifications: settings.notifications.classList.contains("checked"),
-                widemode: settings.widemode.classList.contains("checked"),
-                discord: settings.discord.classList.contains("checked")
+                widemode: settings.widemode.classList.contains("checked")
             }));
             setAccessibilitySettings();
             if (settingsstuff().notifications) {
@@ -2148,6 +2186,9 @@ async function gitstuff() {
         document.querySelector('.yeah').innerHTML = `
         ${data.commit.message}
         `
+        if (data.sha !== version) {
+            
+        }
     } catch (error) {
         console.log('Error checking for updates:', error);
     }
@@ -3998,7 +4039,7 @@ function mdlpingusr(event) {
 
 function mdlshare(event) {
     const postId = event.target.closest('.modal').id;
-    window.open(`https://leo.atticat.tech/share?id=${postId}`, '_blank');
+    window.open(`${meourl}/share?id=${postId}`, '_blank');
     closemodal();
 }
 
@@ -4850,7 +4891,7 @@ function openGcModal(chatId) {
                     mdlt.innerHTML = `
                     <div class="avatar-big pfp-inner" style="border: 6px solid #${color}; background-color: #${color}; background-image: ${url};"></div>
                     <div class="gctitle">
-                    <h2 class="gcn">${data.nickname}</h2> <i class="subtitle">${chatId}</i>
+                    <h2 id="nickname" class="gcn" onclick="copy('${meourl}?gc=${chatId}')">${data.nickname}</h2> <i class="subtitle">${chatId}</i>
                     </div>
                     <hr class="mdl-hr">
                     <span class="subheader">${lang().profile.persona}</span>
@@ -4882,7 +4923,7 @@ function openGcModal(chatId) {
                     mdlt.innerHTML = `
                     <div class="avatar-big pfp-inner" style="border: 6px solid #${color}; background-color: #${color}; background-image: ${url};"></div>
                     <div class="gctitle">
-                    <h2 class="gcn">${data.nickname}</h2> <i class="subtitle">${chatId}</i>
+                    <h2 id="nickname" class="gcn" onclick="copy('${meourl}?gc=${chatId}')">${data.nickname}</h2> <i class="subtitle">${chatId}</i>
                     </div>
                     <hr class="mdl-hr">
                     <span class="subheader">${lang().chats.owner}</span>
@@ -5322,6 +5363,16 @@ function shortcutsModal() {
 
 function magnify() {
     document.body.classList.add("magnify");
+}
+
+function copy(text) {
+    const t = document.createElement('input');
+    t.value = text;
+    document.body.appendChild(t);
+    t.select();
+    document.execCommand('copy');
+    document.body.removeChild(t);
+    parent.closemodal(`${lang().modals.copygc}`);
 }
 
 // work on this

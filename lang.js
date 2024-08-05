@@ -287,6 +287,7 @@ const en = {
         "plugin": "Refresh Required!",
         "shortcuts": "Shortcuts",
         "copyuser": "Copied username to clipboard!",
+        "copygc": "Copied link to chat!",
         "uploadimage": "Upload an image",
     },
     "profile": {
