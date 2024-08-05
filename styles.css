@@ -334,6 +334,7 @@ video {
     flex-wrap: wrap;
     align-items: baseline;
     gap: 5px;
+    max-width: 75%;
 }
 
 .ulmember {
@@ -1677,7 +1678,7 @@ possible future styling
 .emojisidebar {
     display: flex;
     flex-direction: column;
-    max-height: 420px;
+    max-height: 460px;
     overflow-y: scroll;
     scrollbar-width: none;
 }
@@ -1714,7 +1715,7 @@ possible future styling
 
 .emojicont {
     overflow-y: scroll;
-    max-height: 420px;
+    max-height: 460px;
     scrollbar-width: none;
     flex: 1;
 }

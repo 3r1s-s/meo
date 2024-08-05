@@ -37,10 +37,7 @@ function fetchprofile() {
             let quote;
             if (typeof md !== 'undefined') {
                 md.disable(['image']);
-                quote = md.render(data.quote)
-                .replace(/<a(.*?)>/g, '<a$1 target="_blank">')
-                .replace(/&lt;:(\w+):(\d+)&gt;/g, '<img src="https://cdn.discordapp.com/emojis/$2.webp?size=96&quality=lossless" alt="$1" title="$1" class="emoji">')
-                .replace(/&lt;a:(\w+):(\d+)&gt;/g, '<img src="https://cdn.discordapp.com/emojis/$2.gif?size=96&quality=lossless" alt="$1" title="$1" class="emoji">'); // might remove this later, will all discord emojis in general        
+                quote = erimd(md.render(data.quote).replace(/<a(.*?)>/g, '<a$1 target="_blank">'));
             } else {
                 // fallback for when md doenst work
                 // figure this issue OUT
