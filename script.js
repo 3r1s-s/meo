@@ -142,7 +142,6 @@ if (urlParams.has('openprofile')) {
 // make it so when reconnect happens it goes back to the prev screen and not the start page
 function main() {
     meowerConnection = new WebSocket(server);
-    let loggedin = false;
 
     meowerConnection.addEventListener('error', function(event) {
         //launch screen
@@ -182,7 +181,6 @@ function main() {
         console.log("INC: " + event.data);
 
         const sentdata = JSON.parse(event.data);
-        let data
         if (sentdata.listener === "auth") {
             if (sentdata.cmd === "auth") {
                 sentdata.val.relationships.forEach((relationship) => {
@@ -197,7 +195,6 @@ function main() {
                 localStorage.setItem("token", sentdata.val.token);
                 localStorage.setItem("permissions", sentdata.val.account.permissions);
                 favoritedChats = sentdata.val.account.favorited_chats;
-                loggedin = true;
                 loadPfp(sentdata.val.username, sentdata.val.account);
                 sidebars();
                 renderChats();
@@ -1632,7 +1629,7 @@ function loadchat(chatId) {
 
     const mainContainer = document.getElementById("main");
     if (chatId === "home") {
-        pageContainer.innerHTML = `
+        mainContainer.innerHTML = `
         <div class='info'><h1 class='header-top'>${lang().page_home}</h1><p id='info'></p>
         </div>` + loadinputs();
         document.getElementById("info").innerText = lul + " users online (" + sul + ")";
@@ -1722,7 +1719,7 @@ async function loadposts(pageNo) {
         loadpost(post);
     }
     if (cachedPosts.length >= 25 || chatId === "livechat") {
-        document.getElementById("skeleton-msgs").style.display = "none";
+        if (chatId === "livechat") document.getElementById("skeleton-msgs").style.display = "none";
         return;
     }
 
