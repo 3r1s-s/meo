@@ -1298,6 +1298,35 @@ possible future styling
     background-color: var(--hov-modal-button-color);
 }
 
+.mdl-file {
+    background-color: var(--modal-button-color);
+    flex: 1;
+    width: 100%;
+    margin: var(--margin) 0;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+    transition: var(--transition);
+}
+
+.mdl-file.mdl-file::file-selector-button {
+    background-color: var(--modal-button-color);
+    padding: var(--button-padding);
+    border-radius: var(--border-radius);
+    transition: var(--transition);
+    color: var(--color);
+    border: none;
+    font-family: var(--font);
+    font-size: 14px;
+    width: 100%;
+}
+
+.mdl-file::file-selector-button:hover {
+    cursor: pointer;
+    background-color: var(--hov-modal-button-color);
+}
+
 .mdl-lg {
     margin: 5px 0;
 }
@@ -1345,7 +1374,7 @@ possible future styling
 
 #mdl-big {
     width: 80%;
-    max-width: 600px;
+    max-width: 800px;
 }
 
 .mdl-ovr {
@@ -2617,6 +2646,17 @@ possible future styling
     background: var(--hov-accent-color);
 }
 
+.emoji-option-in {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.emoji-option-im {
+    height: 2lh;
+    border-radius: 2px;
+}
+
 .member-in {
     width: 100%;
     padding: var(--button-padding);
@@ -2632,6 +2672,8 @@ possible future styling
 
 .mem-ops {
     display: none;
+    margin-right: 2px;
+    gap: 5px;
 }
 
 .mem-op {
@@ -2666,6 +2708,21 @@ possible future styling
     margin: var(--button-margin) 0;
     display: flex;
     flex-direction: column;
+    max-height: 300px;
+    overflow-y: scroll;
+    overflow-x: visible;
+    width: 80%;
+}
+
+.emoji-list {
+    gap: var(--button-margin);
+    margin: var(--button-margin) 0;
+    display: flex;
+    flex-direction: column;
+    max-height: 300px;
+    overflow-y: scroll;
+    overflow-x: visible;
+    width: 80%;
 }
 
 .owner {
@@ -2791,11 +2848,15 @@ possible future styling
 .tooltip.bottom::before {
     border-width: 0 8px 10px 8px;
     border-color: transparent transparent #111 transparent;
-    top: 40px;
+    top: 100%;
+    margin-top: 5px;
+    margin-left: -8px;
 }
 
 .tooltip.bottom::after {
-    transform: translateY(185%) translateX(-55%);
+    top: 100%;
+    transform: translateY(0) translateX(-50%);
+    margin-top: 15px;
 }
 
 .tooltip:hover::before, .tooltip:hover::after{

@@ -226,6 +226,10 @@ const en = {
         "moddel": "Mod Delete",
         "modpost": "Moderate Post",
         "message": "Message",
+        "uploademoji": "Upload Emoji",
+        "editemoji": "Edit Emoji",
+        "name": "Name",
+        "remove": "Remove",
     },
     "info": {
         "accexists": "Username Already Taken!",
@@ -292,7 +296,10 @@ const en = {
     },
     "chats": { // update
         "owner": "Ownership",
-        "members": "Members"
+        "members": "Members",
+        "addmember": "Add Member",
+        "emojis": "Emojis",
+        "uploademoji": "Upload Emoji"
     }
 }
 

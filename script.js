@@ -1309,7 +1309,7 @@ function sidebars() {
     pageContainer.innerHTML = `
     <div class='navigation'>
     <div class='nav-top'>
-    <button class='trans' id='submit' value='Home' onclick='loadstart()' aria-label="Home">
+    <button class='trans tooltip bottom' id='submit' value='Home' onclick='loadstart()' aria-label="Home" data-tooltip="${lang().page_start}">
         <svg width="32" height="32" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
             <g>
                 <path fill="currentColor" d="M468.42 20.5746L332.997 65.8367C310.218 58.8105 284.517 55.049 255.499 55.6094C226.484 55.049 200.78 58.8105 178.004 65.8367L42.5803 20.5746C18.9102 16.3251 -1.81518 36.2937 2.5967 59.1025L38.7636 200.894C18.861 248.282 12.1849 296.099 12.1849 325.027C12.1849 399.343 44.6613 492 255.499 492C466.339 492 498.815 399.343 498.815 325.027C498.815 296.099 492.139 248.282 472.237 200.894L508.404 59.1025C512.814 36.2937 492.09 16.3251 468.42 20.5746Z"/>
@@ -4680,7 +4680,11 @@ function openGcModal(chatId) {
                     <span class="subheader">${lang().chats.members}</span>
                     <span id="member-count"></span>
                     <div class="member-list">
-                    <button class="member button" onclick="addMembertoGCModal('${chatId}')">Add Member</button>
+                    <button class="member button" onclick="addMembertoGCModal('${chatId}')">${lang().chats.addmember}</button>
+                    </div>
+                    <span class="subheader">${lang().chats.emojis}</span>
+                    <div class="emoji-list">
+                    <button class="member button" onclick="uploadEmojiModal('${chatId}')">${lang().chats.uploademoji}</button>
                     </div>
                     `;
                 } else {
@@ -4703,35 +4707,50 @@ function openGcModal(chatId) {
                 }
                 const memberList = mdl.querySelector('.member-list');
                 if (memberList) {
-                    if (data.owner === localStorage.getItem("username")) {
-                        data.members.forEach(member => {
-                            const memberItem = document.createElement('div');
-                            memberItem.className = 'member-in';
-                            memberItem.innerHTML = `
-                            <span>@${member}</span>
-                            <div class="mem-ops">
-                                <div class="mem-op" onclick="removeMemberFromGC('${chatId}', '${member}')" title="Remove">
-                                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path fill="currentColor" d="M2.3352 13.6648C2.78215 14.1117 3.50678 14.1117 3.95372 13.6648L8 9.61851L12.0463 13.6648C12.4932 14.1117 13.2179 14.1117 13.6648 13.6648C14.1117 13.2179 14.1117 12.4932 13.6648 12.0463L9.61851 8L13.6648 3.95372C14.1117 3.50678 14.1117 2.78214 13.6648 2.3352C13.2179 1.88826 12.4932 1.88827 12.0463 2.33521L8 6.38149L3.95372 2.33521C3.50678 1.88827 2.78214 1.88827 2.3352 2.33521C1.88826 2.78215 1.88827 3.50678 2.33521 3.95372L6.38149 8L2.33521 12.0463C1.88827 12.4932 1.88827 13.2179 2.3352 13.6648Z"></path>
-                                    </svg>
-                                </div>
+                    data.members.forEach(member => {
+                        const memberItem = document.createElement('div');
+                        memberItem.className = 'member-in';
+                        memberItem.innerHTML = `
+                        <span>@${member}</span>
+                        ${data.owner === localStorage.getItem("username") || member === localStorage.getItem("username") ? `<div class="mem-ops">
+                            <div class="mem-op tooltip left" onclick="removeMemberFromGC('${chatId}', '${member}')" title="${lang().action.remove}" data-tooltip="${lang().action.remove}">
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path fill="currentColor" d="M2.3352 13.6648C2.78215 14.1117 3.50678 14.1117 3.95372 13.6648L8 9.61851L12.0463 13.6648C12.4932 14.1117 13.2179 14.1117 13.6648 13.6648C14.1117 13.2179 14.1117 12.4932 13.6648 12.0463L9.61851 8L13.6648 3.95372C14.1117 3.50678 14.1117 2.78214 13.6648 2.3352C13.2179 1.88826 12.4932 1.88827 12.0463 2.33521L8 6.38149L3.95372 2.33521C3.50678 1.88827 2.78214 1.88827 2.3352 2.33521C1.88826 2.78215 1.88827 3.50678 2.33521 3.95372L6.38149 8L2.33521 12.0463C1.88827 12.4932 1.88827 13.2179 2.3352 13.6648Z"></path>
+                                </svg>
                             </div>
-                            `;
-                            memberList.appendChild(memberItem);
-                        });
-                        document.getElementById("member-count").innerText = `(${data.members.length})`
-                    } else {
-                        data.members.forEach(member => {
-                            const memberItem = document.createElement('div');
-                            memberItem.className = 'member-in';
-                            memberItem.innerHTML = `
-                            <span>@${member}</span>
-                            `;
-                            memberList.appendChild(memberItem);
-                        });
-                        document.getElementById("member-count").innerText = `(${data.members.length})`
-                    }
+                        </div>` : ''}
+                        `;
+                        memberList.appendChild(memberItem);
+                    });
+                    document.getElementById("member-count").innerText = `(${data.members.length})`;
                 }
+                const emojiList = mdl.querySelector('.emoji-list');
+                if (emojiList) {
+                    data.emojis.forEach(emoji => {
+                        const emojiItem = document.createElement('div');
+                        emojiItem.className = 'member-in';
+                        emojiItem.innerHTML = `
+                        <div class="emoji-option-in">
+                        <img class="emoji-option-im" src="https://uploads.meower.org/emojis/${emoji._id}" alt="${emoji.name}" />
+                        <span>${emoji.name}</span>
+                        </div>
+                        ${data.owner === localStorage.getItem("username") ? `
+                        <div class="mem-ops">
+                            <div class="mem-op tooltip left" onclick="editEmojiName('${chatId}', '${emoji._id}', '${emoji.name}')" title="${lang().action.edit}" data-tooltip="${lang().action.edit}">
+                                <svg width="18" height="18" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" clip-rule="evenodd" d="M12.8619 6.55339L13.2939 6.12198C14.2353 5.18055 14.2353 3.6481 13.2939 2.70607C12.3525 1.76464 10.8195 1.76464 9.878 2.70607L9.4466 3.13808L12.8619 6.55339ZM8.59747 3.98471L3.45646 9.12719L6.87233 12.5421L12.0134 7.39959L8.59747 3.98471ZM2.74567 13.9804L5.83937 13.2076L2.79128 10.1595L2.01785 13.2532C1.96685 13.4572 2.02685 13.6738 2.17566 13.8226C2.32446 13.9714 2.54107 14.0308 2.74567 13.9804Z" fill="currentColor"/>
+                                </svg>
+                            </div>    
+                            <div class="mem-op tooltip left" onclick="removeEmoji('${chatId}', '${emoji._id}', '${emoji.name}')" title="${lang().action.remove}" data-tooltip="${lang().action.remove}">
+                                <svg width="18" height="18" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path fill="currentColor" d="M2.3352 13.6648C2.78215 14.1117 3.50678 14.1117 3.95372 13.6648L8 9.61851L12.0463 13.6648C12.4932 14.1117 13.2179 14.1117 13.6648 13.6648C14.1117 13.2179 14.1117 12.4932 13.6648 12.0463L9.61851 8L13.6648 3.95372C14.1117 3.50678 14.1117 2.78214 13.6648 2.3352C13.2179 1.88826 12.4932 1.88827 12.0463 2.33521L8 6.38149L3.95372 2.33521C3.50678 1.88827 2.78214 1.88827 2.3352 2.33521C1.88826 2.78215 1.88827 3.50678 2.33521 3.95372L6.38149 8L2.33521 12.0463C1.88827 12.4932 1.88827 13.2179 2.3352 13.6648Z"></path>
+                                </svg>
+                            </div>
+                        </div>` : ''}
+                        `;
+                        emojiList.appendChild(emojiItem);
+                    });
+                } // reminder to make the emoji icons 20px and not 18
             }
             const mdbt = mdl.querySelector('.modal-bottom');
             if (mdbt) {

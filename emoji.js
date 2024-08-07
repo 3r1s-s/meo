@@ -149,6 +149,136 @@ function loadpicker() {
     document.getElementById("emojin").focus();
 }
 
+function uploadEmojiModal(chatid) {
+    document.documentElement.style.overflow = "hidden";
+    
+    const mdlbck = document.querySelector('.modal-back');
+    if (mdlbck) {
+        mdlbck.style.display = 'flex';
+        
+        const mdl = mdlbck.querySelector('.modal');
+        mdl.id = 'mdl-uptd';
+        if (mdl) {
+            const mdlt = mdl.querySelector('.modal-top');
+            if (mdlt) {
+                mdlt.innerHTML = `
+                <h3>${lang().action.uploademoji}</h3>
+                <div>
+                <input id="chat-nick-input" class="mdl-inp" placeholder="${lang().action.name}" minlength="1" maxlength="32">
+                <input type="file" id="emoji-file" class="mdl-file" accept="image/png,image/jpeg,image/webp,image/gif" onchange="preUploadEmoji()">
+                </div>
+                `;
+            }
+            const mdbt = mdl.querySelector('.modal-bottom');
+            if (mdbt) {
+                mdbt.innerHTML = `
+                <button id="create-emoji" class="modal-back-btn" onclick="uploadEmoji('${chatid}')">${lang().action.create}</button>
+                `;
+            }
+        }
+    }
+}
+
+function editEmojiName(chatid, emojiid, name) {
+    document.documentElement.style.overflow = "hidden";
+    
+    const mdlbck = document.querySelector('.modal-back');
+    if (mdlbck) {
+        mdlbck.style.display = 'flex';
+        
+        const mdl = mdlbck.querySelector('.modal');
+        mdl.id = 'mdl-uptd';
+        if (mdl) {
+            const mdlt = mdl.querySelector('.modal-top');
+            if (mdlt) {
+                mdlt.innerHTML = `
+                <h3>${lang().action.editemoji}</h3>
+                <div>
+                <input id="chat-nick-input" class="mdl-inp" placeholder="${name}" minlength="1" maxlength="32">
+                </div>
+                `;
+            }
+            const mdbt = mdl.querySelector('.modal-bottom');
+            if (mdbt) {
+                mdbt.innerHTML = `
+                <button id="create-emoji" class="modal-back-btn" onclick="pushEmojiName('${chatid}', '${emojiid}')">${lang().action.confirm}</button>
+                `;
+            }
+        }
+    }
+}
+
+async function pushEmojiName(chatid, emojiId) {
+    const name = document.getElementById('chat-nick-input').value; // emoji name probably
+    const createBtn = document.getElementById("create-emoji");
+    createBtn.innerText = "Updating...";
+    const apiResp = await fetch(`https://api.meower.org/chats/${chatid}/emojis/${emojiId}`, {
+        method: "PATCH",
+        headers: {
+            'Content-Type': 'application/json',
+            token: localStorage.getItem("token"),
+        },
+        body: JSON.stringify({ name }),
+    });
+
+    closemodal("Emoji updated!");
+}
+
+async function removeEmoji(chatid, emojiId) {
+    const apiResp = await fetch(`https://api.meower.org/chats/${chatid}/emojis/${emojiId}`, {
+        method: "Delete",
+        headers: {
+            'Content-Type': 'application/json',
+            token: localStorage.getItem("token"),
+        },
+        body: JSON.stringify({ name }),
+    });
+
+    closemodal("Emoji deleted!");
+}
+
+function preUploadEmoji() {
+    const file = document.getElementById('emoji-file').files[0];
+    if (file.size > 1 << 20) {
+        closemodal("File too large! Emojis can be a maximum of 1 MiB.");
+    } else if (!["image/png", "image/jpeg", "image/webp", "image/gif"].includes(file.type)) {
+        closemodal("Unsupported file type! An emoji must be a PNG, JPEG, WebP, or GIF.");
+    }
+
+    const nick = document.getElementById('chat-nick-input');
+    nick.value = file.name.split('.').slice(0, -1).join('.');
+}
+
+async function uploadEmoji(chatid) {
+    const name = document.getElementById('chat-nick-input').value; // emoji name probably
+    const file = document.getElementById('emoji-file').files[0]; // emoji file probably need to redo these
+    const createBtn = document.getElementById("create-emoji");
+
+    createBtn.disabled = true;
+
+    createBtn.innerText = "Uploading...";
+    const formData = new FormData();
+    formData.append("file", file);
+    const uploadsResp = await fetch("https://uploads.meower.org/emojis", {
+        method: "POST",
+        headers: { Authorization: localStorage.getItem("token") },
+        body: formData,
+    });
+    const emojiId = (await uploadsResp.json()).id;
+
+    createBtn.innerText = "Creating...";
+    const apiResp = await fetch(`https://api.meower.org/chats/${chatid}/emojis/${emojiId}`, {
+        method: "PUT",
+        headers: {
+            'Content-Type': 'application/json',
+            token: localStorage.getItem("token"),
+        },
+        body: JSON.stringify({ name }),
+    });
+
+    closemodal("Emoji created!");
+}
+
 document.addEventListener('input', function(event) {
     if (opened === 1) {
         const searchQuery = document.getElementById('emojin').value.toLowerCase();
@@ -265,7 +395,6 @@ function emojimodal() {
         }
     }
 }
-
 
 function pickerhtm() {
     return `
