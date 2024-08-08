@@ -136,6 +136,11 @@ function buttonbadges(content) {
         
         if ((['png', 'jpg', 'jpeg', 'webp', 'gif', 'mp4', 'webm', 'mov', 'm4v', 'svg'].includes(fileExtension)) || fileDomain) {
             link.classList.add('attachment');
+            link.classList.add('tooltip');
+            link.classList.add('bottom');
+            link.classList.add('right');
+            link.classList.add('long');
+            link.setAttribute('data-tooltip', url);
             link.innerHTML = '<svg class="icon_ecf39b icon__13ad2" xmlns="http://www.w3.org/2000/svg" width="0.8em" height="0.8em" viewBox="0 0 24 24"><path fill="currentColor" d="M10.57 4.01a6.97 6.97 0 0 1 9.86 0l.54.55a6.99 6.99 0 0 1 0 9.88l-7.26 7.27a1 1 0 0 1-1.42-1.42l7.27-7.26a4.99 4.99 0 0 0 0-7.06L19 5.43a4.97 4.97 0 0 0-7.02 0l-8.02 8.02a3.24 3.24 0 1 0 4.58 4.58l6.24-6.24a1.12 1.12 0 0 0-1.58-1.58l-3.5 3.5a1 1 0 0 1-1.42-1.42l3.5-3.5a3.12 3.12 0 1 1 4.42 4.42l-6.24 6.24a5.24 5.24 0 0 1-7.42-7.42l8.02-8.02Z" class=""></path></svg><span> attachments</span>';
         } else if (url === "https://eris.pages.dev/meo/" || url === "https://eris.pages.dev/meo/") {
             link.classList.add('attachment');
@@ -337,7 +342,7 @@ function embed(links) {
                     embeddedElement.setAttribute("allow", "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share");
                     embeddedElement.setAttribute("allowfullscreen", "");
                 }
-            } else if (link.includes('open.spotify.com')) {
+            } else if (link.includes('open.spotify.com/track')) {
                 const spotifyRegex = /track\/([a-zA-Z0-9]+)/;
                 const match = link.match(spotifyRegex);
                 if (match) {
@@ -354,6 +359,22 @@ function embed(links) {
                     embeddedElement.setAttribute("loading", "lazy");
                     
                     embeddedElement.classList.add("media");
+                }
+            } else if (link.includes('open.spotify.com/album')) {
+                const spotifyRegex = /album\/([a-zA-Z0-9]+)/;
+                const match = link.match(spotifyRegex);
+                if (match) {
+                    const trackId = match[1];
+
+                    embeddedElement = document.createElement("iframe");
+                    embeddedElement.setAttribute("style", "border-radius: 12px;max-width:500px;");
+                    embeddedElement.setAttribute("src", `https://open.spotify.com/embed/album/${trackId}?utm_source=generator`);
+                    embeddedElement.setAttribute("width", "100%");
+                    embeddedElement.setAttribute("height", "352");
+                    embeddedElement.setAttribute("frameBorder", "0");
+                    embeddedElement.setAttribute("allowfullscreen", "");
+                    embeddedElement.setAttribute("allow", "autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture");
+                    embeddedElement.setAttribute("loading", "lazy");
                 }
             } else if (link.includes('tenor.com')) {
                 const tenorRegex = /\d+$/;

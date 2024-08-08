@@ -11,6 +11,8 @@
 // Custom video and audio player, similar style as the file download preview
 // make @Tnix have tnix colour ect
 // Plugins options and API
+// Online indicators
+// Convert Gc Modal into separate page
 
 let end = false;
 let page = "load";
@@ -483,11 +485,13 @@ function loadLogin() {
     pageContainer.innerHTML = 
     `<div class='login'>
         <div class='login-inner'>
-            <h2 class="login-header">${lang().meo_welcome}</h2>
+            <h2 id="login-header" class="login-header">${lang().meo_welcome}</h2>
             <input type='text' id='userinput' placeholder='${lang().meo_username}' class='login-text text' aria-label="username input" autocomplete="username">
             <input type='password' id='passinput' placeholder='${lang().meo_password}' class='login-text text' aria-label="password input" autocomplete="current-password">
-            <input type='button' id='login' value='${lang().action.login}' class='login-button button' onclick='toggleLogin(true);login(document.getElementById("userinput").value, document.getElementById("passinput").value)' aria-label="Register">
+            <input type='text' id='otpinput' placeholder='${lang().meo_totp}' class='login-text text' aria-label="one-time-code input" autocomplete="one-time-code" style="display:none;">
+            <input type='button' id='login' value='${lang().action.login}' class='login-button button' onclick='toggleLogin(true);login()' aria-label="Register">
             <input type='button' id='signup' value='${lang().action.signup}' class='login-button button' onclick='agreementModal()' aria-label="log in">
+            <input type='button' id='back' value='${lang().action.back}' class='login-button button' onclick='loadLogin()' aria-label="back" style="display:none;">
             <small>${lang().login_sub.desc}</small>
         </div>
         <div class="login-top">
@@ -1119,19 +1123,59 @@ function toggleLogin(yn) {
     }
 }
 
-function login(username, password) {
+function login() {
+    const loginHeader = document.getElementById("login-header");
+    const userInput = document.getElementById("userinput");
+    const passInput = document.getElementById("passinput");
+    const otpInput = document.getElementById("otpinput");
+    const loginBtn = document.getElementById("login");
+    const signupBtn = document.getElementById("signup");
+    const backBtn = document.getElementById("back");
+
+    let totpCode, recoveryCode;
+    if (otpInput && otpInput.style.display !== "none") {
+        if (otpInput.value.length === 6) {
+            totpCode = otpInput.value;
+        } else if (otpInput.value.length === 10) {
+            recoveryCode = otpInput.value;
+        } else {
+            toggleLogin(false);
+            openUpdate(lang().info.invalidotp);
+            return;
+        }
+    }
+
     fetch("https://api.meower.org/auth/login", {
         method: "POST",
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
-            username,
-            password,
+            username: userInput.value,
+            password: passInput.value,
+            totp_code: totpCode,
+            mfa_recovery_code: recoveryCode,
         }),
     }).then(resp => resp.json().then(resp => {
         if (resp.error) {
             toggleLogin(false);
-            if (resp.type === "Unauthorized") {
-                openUpdate(lang().info.invalidcreds);
+            if (resp.type === "mfaRequired") {
+                if (resp.mfa_methods.includes("totp")) {
+                    loginHeader.innerText = lang().meo_welcomeback;
+
+                    userInput.style.display = "none";
+                    passInput.style.display = "none";
+                    signupBtn.style.display = "none";
+
+                    otpInput.style.display = "block";
+                    backBtn.style.display = "block";
+                } else {
+                    openUpdate(lang().info.unknownmfa);
+                }
+            } else if (resp.type === "Unauthorized") {
+                if (totpCode || recoveryCode) {
+                    openUpdate(lang().info.invalidotp);
+                } else {
+                    openUpdate(lang().info.invalidcreds);
+                }
             } else if (resp.type === "accountDeleted") {
                 openUpdate(lang().info.accdeleted);
             } else {
@@ -1141,7 +1185,7 @@ function login(username, password) {
             meowerConnection.send(JSON.stringify({
                 cmd: "authpswd",
                 val: {
-                    username,
+                    username: resp.account._id,
                     pswd: resp.token,
                 },
                 listener: "auth",
@@ -1811,6 +1855,7 @@ function loadstgs() {
             </svg>
         </button>
         <input type='button' class='settings-button button' id='submit' value='${lang().settings_general}' onclick='loadGeneral()' aria-label="general">
+        <input type='button' class='settings-button button' id='submit' value='${lang().settings_account}' onclick='loadAccount()' aria-label="account">
         <input type='button' class='settings-button button' id='submit' value='${lang().settings_appearance}' onclick='loadAppearance()' aria-label="appearance">
         <input type="button" class="settings-button button" id="submit" value='${lang().settings_languages}' onclick="loadLanguages()" aria-label="languages">
         <input type="button" class="settings-button button" id="submit" value='${lang().settings_plugins}' onclick="loadPlugins()" aria-label="plugins">
@@ -1852,14 +1897,7 @@ function loadGeneral() {
         <h3>${lang().general_sub.privacy}</h3>
         <div class="fun-buttons">
             <a href="https://github.com/3r1s-s/meo/issues" target="_blank" class="button blockeduser">${lang().action.bug}</a>
-            <a href="https://meower.org/export/" target="_blank" class="button blockeduser">${lang().action.datarequest}</a>
         </div>
-        <a style="font-size: 12px" href="https://meower.org/legal" target="_blank">${lang().login_sub.agreement}</a>
-        <h3>${lang().general_sub.acc}</h3>
-        <button onclick="deleteTokensModal()" class="button blockeduser">${lang().action.cleartokens}</button>
-        <button onclick="changePasswordModal()" class="button blockeduser">${lang().action.changepw}</button>
-        <button onclick="clearLocalstorageModal()" class="button blockeduser">${lang().action.clearls}</button>
-        <button onclick="DeleteAccountModal()" class="button blockeduser red">${lang().action.deleteacc}</button>
         <h3>${lang().general_sub.blockedusers}</h3>
         <div class="blockedusers list">
             <button class="blockeduser button" onclick="blockUserSel()">${lang().action.blockuser}</button>
@@ -1964,6 +2002,405 @@ function loadGeneral() {
         }
     }
     gitstuff();
+}
+
+function loadAccount() {
+    setTop();
+    let pageContainer = document.querySelector(".settings");
+    pageContainer.innerHTML = `
+        <h1>${lang().settings_account}</h1>
+
+        <h3>${lang().account_sub.password}</h3>
+        <div class="settings-buttons-row">
+            <button onclick="changePasswordModal()" class="button blockeduser">${lang().action.changepw}</button>
+            <button onclick="deleteTokensModal()" class="button blockeduser">${lang().action.cleartokens}</button>
+        </div>
+
+        <h3>${lang().account_sub.privacy}</h3>
+        <div class="settings-buttons-row">
+            <a href="https://meower.org/export/" target="_blank" class="button blockeduser">${lang().action.datarequest}</a>
+            <button onclick="DeleteAccountModal()" class="button blockeduser red">${lang().action.deleteacc}</button>
+        </div>
+        <a style="font-size: 12px" href="https://meower.org/legal" target="_blank">${lang().login_sub.agreement}</a>
+
+        <h3>${lang().account_sub.mfa}</h3>
+        <div class='authenticators'>-----------</div>
+    `;
+
+    loadAuthenticators();
+}
+
+async function loadAuthenticators() {
+    const mfaAuthenticators = (await(await fetch("https://api.meower.org/me/authenticators", {
+        headers: { token: localStorage.getItem("token") },
+    })).json()).autoget;
+
+    const authenticatorsList = document.createElement("div");
+    authenticatorsList.classList.add("authenticator-list")
+    document.querySelector(".authenticators").innerHTML = `
+        <p class="mfa-info">${mfaAuthenticators.length ? `${lang().account_sub.mfainfoenabled}<br /><br />${lang().account_sub.mfainfoincompatible}` : lang().account_sub.mfainfodisabled}</p>
+        <button id="add-totp-btn" onclick="addTotpModal(null)" class="button blockeduser">${lang().action.addtotp}</button>
+        ${mfaAuthenticators.length ? `
+            <button onclick="resetRecoveryCodeModal()" class="button blockeduser">${lang().action.resetrecovery}</button>
+        ` : ''}
+    `;
+    if (mfaAuthenticators.length) {
+        const header = document.createElement("h3");
+        //header.innerText = `${lang().account_sub.devices}`;
+        document.querySelector(".authenticators").appendChild(header);
+    }
+    mfaAuthenticators.forEach(authenticator => {
+        authenticatorsList.insertAdjacentHTML('beforeend', `
+            <div class="member-in">
+                <div class="emoji-option-in">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M8 0.625C6.68832 0.625 5.625 1.68832 5.625 3V21C5.625 22.3117 6.68832 23.375 8 23.375H16C17.3117 23.375 18.375 22.3117 18.375 21V3C18.375 1.68832 17.3117 0.625 16 0.625H8ZM7.375 3C7.375 2.65482 7.65482 2.375 8 2.375H16C16.3452 2.375 16.625 2.65482 16.625 3V21C16.625 21.3452 16.3452 21.625 16 21.625H8C7.65482 21.625 7.375 21.3452 7.375 21V3Z" fill="currentColor" stroke="currentColor" stroke-width="0.25"/>
+                <rect x="10.5" y="17.5" width="3" height="3" rx="1.5" fill="currentColor"/>
+                </svg>
+                ${escapeHTML(authenticator.nickname || 'Authenticator App')}
+                </div>
+                <div class="mem-ops">
+                    <div class="mem-op tooltip left" onclick="editAuthenticatorModal('${authenticator._id}', '${escapeHTML(authenticator.nickname || 'Authenticator App')}')" title="${lang().action.edit}" data-tooltip="${lang().action.edit}">
+                        <svg width="18" height="18" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M12.8619 6.55339L13.2939 6.12198C14.2353 5.18055 14.2353 3.6481 13.2939 2.70607C12.3525 1.76464 10.8195 1.76464 9.878 2.70607L9.4466 3.13808L12.8619 6.55339ZM8.59747 3.98471L3.45646 9.12719L6.87233 12.5421L12.0134 7.39959L8.59747 3.98471ZM2.74567 13.9804L5.83937 13.2076L2.79128 10.1595L2.01785 13.2532C1.96685 13.4572 2.02685 13.6738 2.17566 13.8226C2.32446 13.9714 2.54107 14.0308 2.74567 13.9804Z" fill="currentColor"/>
+                        </svg>
+                    </div>
+                    <div class="mem-op tooltip left" onclick="removeAuthenticatorModal('${authenticator._id}', '${escapeHTML(authenticator.nickname || 'Authenticator App')}')" title="${lang().action.remove}" data-tooltip="${lang().action.remove}">
+                        <svg width="18" height="18" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path fill="currentColor" d="M2.3352 13.6648C2.78215 14.1117 3.50678 14.1117 3.95372 13.6648L8 9.61851L12.0463 13.6648C12.4932 14.1117 13.2179 14.1117 13.6648 13.6648C14.1117 13.2179 14.1117 12.4932 13.6648 12.0463L9.61851 8L13.6648 3.95372C14.1117 3.50678 14.1117 2.78214 13.6648 2.3352C13.2179 1.88826 12.4932 1.88827 12.0463 2.33521L8 6.38149L3.95372 2.33521C3.50678 1.88827 2.78214 1.88827 2.3352 2.33521C1.88826 2.78215 1.88827 3.50678 2.33521 3.95372L6.38149 8L2.33521 12.0463C1.88827 12.4932 1.88827 13.2179 2.3352 13.6648Z"></path>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        `);
+    });
+    document.querySelector(".authenticators").appendChild(authenticatorsList)
+}
+
+async function addTotpModal(totpSecret) {
+    const addTotpBtn = document.getElementById("add-totp-btn");
+    addTotpBtn.disabled = true;
+
+    if (!totpSecret) {
+        totpSecret = await(await fetch("https://api.meower.org/me/authenticators/totp-secret", {
+            headers: { token: localStorage.getItem("token") },
+        })).json();
+    }
+    addTotpBtn.disabled = false;
+
+    document.documentElement.style.overflow = "hidden";
+    
+    const mdlbck = document.querySelector('.modal-back');
+    if (mdlbck) {
+        mdlbck.style.display = 'flex';
+        
+        const mdl = mdlbck.querySelector('.modal');
+        mdl.id = 'mdl-uptd';
+        if (mdl) {
+            const mdlt = mdl.querySelector('.modal-top');
+            if (mdlt) {
+                mdlt.innerHTML = `
+                <h3>${lang().action.addtotp}</h3>
+                <div class="totp-secret">
+                    <span>Download <a href="https://support.google.com/accounts/answer/1066447" target="_blank">Google Authenticator</a>, <a href="https://www.microsoft.com/security/mobile-authenticator-app" target="_blank">Microsoft Authenticator</a>, or <a href="https://authy.com/" target="_blank">Authy</a> and the scan the QR code below to generate one-time codes.</span>
+                    <div class="totp-secret-qr">
+                        ${totpSecret.qr_code_svg.replaceAll("svg:rect", "rect")}
+                    </div>
+                    <pre class="totp-secret-text">${totpSecret.secret}</pre>
+                </div>
+                <input id="totp-code-input" class="mdl-inp" type="text" placeholder="${lang().inputs.onetimecode}" minlength="6" maxlength="6" autocomplete="one-time-code">
+                <input id="password-input" class="mdl-inp" type="password" placeholder="${lang().inputs.password}" minlength="1" maxlength="255" autocomplete="password">
+                <span id="totp-error" class="error"></span>
+                `;
+
+                mdlt.querySelector('svg').childNodes.forEach(rect => {
+                    rect.setAttribute("fill", "currentColor");
+                })
+            }
+            const mdbt = mdl.querySelector('.modal-bottom');
+            if (mdbt) {
+                mdbt.innerHTML = `
+                <button class="modal-back-btn" onclick="addTotp('${totpSecret.secret}')">${lang().action.confirm}</button>
+                `;
+            }
+        }
+    }
+}
+
+async function addTotp(secret) {
+    const password = document.getElementById("password-input").value;
+    const code = document.getElementById("totp-code-input").value;
+
+    try {
+        if (password.length < 1) {
+            throw new Error(lang().info.nopass);
+        } else if (code.length < 6) {
+            throw new Error(lang().info.nocode);
+        }
+
+        const resp = await fetch("https://api.meower.org/me/authenticators", {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+                token: localStorage.getItem("token")
+            },
+            body: JSON.stringify({
+                password,
+                type: 'totp',
+                totp_secret: secret,
+                totp_code: code,
+            }),
+        });
+        const respJson = await resp.json();
+        if (!resp.ok) {
+            if (respJson.type === "invalidTOTPCode") {
+                throw new Error("Invalid one-time code!");
+            } else if (respJson.type === "invalidCredentials") {
+                throw new Error("Invalid password!");
+            } else {
+                throw new Error(`Unexpected: ${respJson.type}`);
+            }
+        }
+
+        const mdlbck = document.querySelector('.modal-back');
+        if (mdlbck) {
+            mdlbck.style.display = 'flex';
+
+            const mdl = mdlbck.querySelector('.modal');
+            mdl.id = 'mdl-uptd';
+            if (mdl) {
+                const mdlt = mdl.querySelector('.modal-top');
+                if (mdlt) {
+                    mdlt.innerHTML = `
+                    <h3>${lang().action.addtotp}</h3>
+                    <div class="totp-secret">
+                        <span>${lang().account_sub.added} ${lang().account_sub.recoverycode}</span>
+                        <pre class="totp-secret-text">${respJson.mfa_recovery_code}</pre>
+                    </div>
+                    `;
+                }
+                const mdbt = mdl.querySelector('.modal-bottom');
+                if (mdbt) {
+                    mdbt.innerHTML = "";
+                }
+            }
+        }
+    } catch (e) {
+        document.getElementById("totp-error").innerText = e;
+        document.getElementById("totp-error").style.display = "inline-flex";
+        return;
+    }
+
+    loadAuthenticators();
+}
+
+
+
+async function editAuthenticatorModal(authenticatorId, authenticatorName) {
+    document.documentElement.style.overflow = "hidden";
+    
+    const mdlbck = document.querySelector('.modal-back');
+    if (mdlbck) {
+        mdlbck.style.display = 'flex';
+        
+        const mdl = mdlbck.querySelector('.modal');
+        mdl.id = 'mdl-uptd';
+        if (mdl) {
+            const mdlt = mdl.querySelector('.modal-top');
+            if (mdlt) {
+                mdlt.innerHTML = `
+                <h3>${lang().action.edit} ${authenticatorName}</h3>
+                <input id="nickname-input" class="mdl-inp" type="text" placeholder="Authenticator App" value="${authenticatorName}" maxlength="32">
+                <span id="authenticator-error" class="error"></span>
+                `;
+            }
+            const mdbt = mdl.querySelector('.modal-bottom');
+            if (mdbt) {
+                mdbt.innerHTML = `
+                <button class="modal-back-btn" onclick="editAuthenticator('${authenticatorId}')">${lang().action.confirm}</button>
+                `;
+            }
+        }
+    }
+}
+
+async function editAuthenticator(authenticatorId) {
+    const nickname = document.getElementById("nickname-input").value;
+
+    try {
+        const resp = await fetch(`https://api.meower.org/me/authenticators/${authenticatorId}`, {
+            method: "PATCH",
+            headers: {
+                'Content-Type': 'application/json',
+                token: localStorage.getItem("token")
+            },
+            body: JSON.stringify({
+                nickname,
+            }),
+        });
+        if (!resp.ok) {
+            const respJson = await resp.json();
+            throw new Error(`Unexpected: ${respJson.type}`);
+        }
+    } catch (e) {
+        document.getElementById("authenticator-error").innerText = e;
+        document.getElementById("authenticator-error").style.display = "inline-flex";
+        return;
+    }
+
+    loadAuthenticators();
+
+    closemodal(lang().info.authrename);
+}
+
+async function removeAuthenticatorModal(authenticatorId, authenticatorName) {
+    document.documentElement.style.overflow = "hidden";
+    
+    const mdlbck = document.querySelector('.modal-back');
+    if (mdlbck) {
+        mdlbck.style.display = 'flex';
+        
+        const mdl = mdlbck.querySelector('.modal');
+        mdl.id = 'mdl-uptd';
+        if (mdl) {
+            const mdlt = mdl.querySelector('.modal-top');
+            if (mdlt) {
+                mdlt.innerHTML = `
+                <h3>${lang().action.remove} ${authenticatorName}</h3>
+                <input id="password-input" class="mdl-inp" type="password" placeholder="${lang().inputs.password}" minlength="1" maxlength="255">
+                <span id="authenticator-error" class="error"></span>
+                `;
+            }
+            const mdbt = mdl.querySelector('.modal-bottom');
+            if (mdbt) {
+                mdbt.innerHTML = `
+                <button class="modal-back-btn" onclick="removeAuthenticator('${authenticatorId}')">${lang().action.confirm}</button>
+                `;
+            }
+        }
+    }
+}
+
+async function removeAuthenticator(authenticatorId) {
+    const password = document.getElementById("password-input").value;
+
+    try {
+        if (password.length < 1) {
+            throw new Error(lang().info.nopass);
+        }
+
+        const resp = await fetch(`https://api.meower.org/me/authenticators/${authenticatorId}`, {
+            method: "DELETE",
+            headers: {
+                'Content-Type': 'application/json',
+                token: localStorage.getItem("token")
+            },
+            body: JSON.stringify({
+                password,
+            }),
+        });
+        if (!resp.ok) {
+            const respJson = await resp.json();
+            if (respJson.type === "invalidCredentials") {
+                throw new Error("Invalid password!");
+            } else {
+                throw new Error(`Unexpected: ${respJson.type}`);
+            }
+        }
+    } catch (e) {
+        document.getElementById("authenticator-error").innerText = e;
+        document.getElementById("authenticator-error").style.display = "inline-flex";
+        return;
+    }
+
+    loadAuthenticators();
+
+    closemodal(lang().info.authremove);
+}
+
+async function resetRecoveryCodeModal() {
+    document.documentElement.style.overflow = "hidden";
+    
+    const mdlbck = document.querySelector('.modal-back');
+    if (mdlbck) {
+        mdlbck.style.display = 'flex';
+        
+        const mdl = mdlbck.querySelector('.modal');
+        mdl.id = 'mdl-uptd';
+        if (mdl) {
+            const mdlt = mdl.querySelector('.modal-top');
+            if (mdlt) {
+                mdlt.innerHTML = `
+                <h3>${lang().action.resetrecovery}</h3>
+                <input id="password-input" class="mdl-inp" type="password" placeholder="${lang().inputs.password}" minlength="1" maxlength="255">
+                <span id="authenticator-error" class="error"></span>
+                `;
+            }
+            const mdbt = mdl.querySelector('.modal-bottom');
+            if (mdbt) {
+                mdbt.innerHTML = `
+                <button class="modal-back-btn" onclick="resetRecoveryCode()">${lang().action.confirm}</button>
+                `;
+            }
+        }
+    }
+}
+
+async function resetRecoveryCode() {
+    const password = document.getElementById("password-input").value;
+
+    try {
+        if (password.length < 1) {
+            throw new Error(lang().info.nopass);
+        }
+
+        const resp = await fetch(`https://api.meower.org/me/reset-mfa-recovery-code`, {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+                token: localStorage.getItem("token")
+            },
+            body: JSON.stringify({
+                password,
+            }),
+        });
+        const respJson = await resp.json();
+        if (!resp.ok) {
+            if (respJson.type === "invalidCredentials") {
+                throw new Error("Invalid password!");
+            } else {
+                throw new Error(`Unexpected: ${respJson.type}`);
+            }
+        }
+
+        const mdlbck = document.querySelector('.modal-back');
+        if (mdlbck) {
+            mdlbck.style.display = 'flex';
+    
+            const mdl = mdlbck.querySelector('.modal');
+            mdl.id = 'mdl-uptd';
+            if (mdl) {
+                const mdlt = mdl.querySelector('.modal-top');
+                if (mdlt) {
+                    mdlt.innerHTML = `
+                    <h3>${lang().action.resetrecovery}</h3>
+                    <div class="totp-secret">
+                        <span>${lang().account_sub.recoverycode}</span>
+                        <pre class="totp-secret-text">${respJson.mfa_recovery_code}</pre>
+                    </div>
+                    `;
+                }
+                const mdbt = mdl.querySelector('.modal-bottom');
+                if (mdbt) {
+                    mdbt.innerHTML = "";
+                }
+            }
+        }
+    } catch (e) {
+        document.getElementById("authenticator-error").innerText = e;
+        document.getElementById("authenticator-error").style.display = "inline-flex";
+        return;
+    }
 }
 
 function createSettingSection(id, title, desc) {

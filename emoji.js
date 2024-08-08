@@ -440,8 +440,8 @@ function emojimodal() {
                     section.appendChild(addButton);
                 }
                 mdlt.querySelector(".emojicont-mobile").appendChild(section);
+                ag = 0;
             }
-            ag = 0;
         }
     }
 }

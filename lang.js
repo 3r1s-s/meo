@@ -73,9 +73,11 @@ const en = {
     "page_settings": "Settings",
     "meo_username": "Username",
     "meo_password": "Password",
+    "meo_totp": "Authenticator app or recovery code", // update
     "meo_messagebox": Math.random() < 1/25 ? "Whar's on your mind?" : "What's on your mind?",
     "meo_goanywhere": "Where would you like to go?",
     "meo_welcome": "Welcome!",
+    "meo_welcomeback": "Welcome back!", // update
     "meo_bridged": {
         "start": "Bridged",
         "title": "This post has been bridged from another platform."
@@ -83,6 +85,7 @@ const en = {
     "title_chats": "Chats",
     "title_live": "Livechat",
     "settings_general": "General",
+    "settings_account": "Account", // update
     "settings_appearance": "Appearance",
     "settings_plugins": "Plugins",
     "settings_languages": "Languages",
@@ -136,6 +139,17 @@ const en = {
             "discord": "Reverses the post order to be more like Discord (Experiemental, Requires refresh)",
         }
     },
+    "account_sub": {
+        "password": "Password",
+        "privacy": "Privacy & Safety",
+        "mfa": "Multi-factor Authentication",
+        "mfainfoenabled": "Multi-factor authentication is enabled. You'll be prompted to prove your identity using one of the devices below when logging into your account.",
+        "mfainfodisabled": "Multi-factor authentication is currently disabled. Add a device using one of the buttons below to add extra security to your account.",
+        "mfainfoincompatible": "Put your authenticator app or recovery code right after your password when logging into clients that don't support multi-factor authentication.",
+        "devices": "Devices",
+        "added": "Successfully added authenticator app!",
+        "recoverycode": "Here is your recovery code, please save it somewhere safe:",
+    },
     "appearance_sub": {
         "theme": "Theme",
         "spthemes": "Special Themes",
@@ -186,6 +200,8 @@ const en = {
         "gohome": "Go Home",
         "cleartokens": "Clear Tokens",
         "changepw": "Change Password",
+        "addtotp": "Add Authenticator App",
+        "resetrecovery": "Reset Recovery Code",
         "clearls": "Clear Localstorage",
         "deleteacc": "Delete Account",
         "block": "Block",
@@ -236,6 +252,13 @@ const en = {
         "invaliduser": "Invalid Username!",
         "invalidpass": "Invalid Password!",
         "invalidcreds": "Invalid username or password!",
+        "invalidotp": "Invalid code!", // update
+        "unknownmfa": "Unknown multi-factor method! Please make sure you are on the latest meo version.", // update
+        "nopass": "You must enter your password!", // update
+        "nocode": "You must enter the generated one-time code!", // update
+        "authadd": "Authenticator app added! Here is your recovery code that you can use to get back in if you ever get locked out, please keep it safe: ", // update
+        "authrename": "Authenticator renamed!",
+        "authremove": "Authenticator removed!",
         "accbanned": "Account Banned!",
         "accdeleted": "Account Deleted!",
         "conflict": "You probably logged in on another client. Refresh the page and log back in to continue.",
@@ -300,6 +323,10 @@ const en = {
         "addmember": "Add Member",
         "emojis": "Emojis",
         "uploademoji": "Upload Emoji"
+    },
+    "inputs": { // update
+        "onetimecode": "One-time code",
+        "password": "Password",
     }
 }
 
