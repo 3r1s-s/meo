@@ -190,6 +190,18 @@
     mask-image: linear-gradient(to bottom, rgba(0, 0, 0, .25) 0%, rgba(0, 0, 0, 0) 100%);
 }
 
+.nonb-theme #page::after {
+    content: '';
+    position: fixed;
+    top: 0;
+    z-index: -1;
+    width: 100%;
+    height: var(--grad-height);
+    background: linear-gradient(90deg, rgb(252, 244, 52) 0%, rgb(255, 255, 255) 50%, rgb(156, 89, 209) 100%); 
+    -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, .25) 0%, rgba(0, 0, 0, 0) 100%);
+    mask-image: linear-gradient(to bottom, rgba(0, 0, 0, .25) 0%, rgba(0, 0, 0, 0) 100%);
+}
+
 .theme-button.trans-theme {
     background: linear-gradient(90deg, rgb(27, 111, 133) 0%, rgb(138, 82, 93) 25%, rgb(113, 113, 113) 50%, rgb(138, 82, 93) 75%, rgb(27, 111, 133) 100%); 
     background-size: cover;
@@ -200,8 +212,14 @@
     background-size: cover;
 }
 
+.theme-button.nonb-theme {
+    background: linear-gradient(90deg, rgb(198, 192, 40) 0%, rgb(166, 166, 166) 50%, rgb(121, 68, 162) 100%);
+    background-size: cover;
+}
+
 .pride-theme .settings > h1,
-.trans-theme .settings > h1
+.trans-theme .settings > h1,
+.nonb-theme .settings > h1
  {
     background: transparent;
     position: static;

@@ -70,16 +70,18 @@ function currentlang() {
 const en = {
     "reh": "English, US", // future reference for people adding languages disregard the reh
     "language": "English, US", // Replace this with that the language is called in that language (ie: "Español" instead of "Spanish")
-    "page_home": "Home",
+    "page_home": "Home", // To update a language easier I suggest looking at the diff between en and the language you're editing (sorry I don't have a better solution)
     "page_start": "Start",
     "page_explore": "Explore",
     "page_inbox": "Inbox",
     "page_settings": "Settings",
     "meo_username": "Username",
     "meo_password": "Password",
+    "meo_totp": "Authenticator app or recovery code", // update
     "meo_messagebox": Math.random() < 1/25 ? "Whar's on your mind?" : "What's on your mind?",
     "meo_goanywhere": "Where would you like to go?",
     "meo_welcome": "Welcome!",
+    "meo_welcomeback": "Welcome back!", // update
     "meo_bridged": {
         "start": "Bridged",
         "title": "This post has been bridged from another platform."
@@ -87,6 +89,7 @@ const en = {
     "title_chats": "Chats",
     "title_live": "Livechat",
     "settings_general": "General",
+    "settings_account": "Account", // update
     "settings_appearance": "Appearance",
     "settings_plugins": "Plugins",
     "settings_languages": "Languages",
@@ -142,6 +145,17 @@ const en = {
             "discord": "Reverses the post order to be more like Discord (Experiemental, Requires refresh)",
         }
     },
+    "account_sub": {
+        "password": "Password",
+        "privacy": "Privacy & Safety",
+        "mfa": "Multi-factor Authentication",
+        "mfainfoenabled": "Multi-factor authentication is enabled. You'll be prompted to prove your identity using one of the devices below when logging into your account.",
+        "mfainfodisabled": "Multi-factor authentication is currently disabled. Add a device using one of the buttons below to add extra security to your account.",
+        "mfainfoincompatible": "Put your authenticator app or recovery code right after your password when logging into clients that don't support multi-factor authentication.",
+        "devices": "Devices",
+        "added": "Successfully added authenticator app!",
+        "recoverycode": "Here is your recovery code, please save it somewhere safe:",
+    },
     "appearance_sub": {
         "theme": "Theme",
         "spthemes": "Special Themes",
@@ -195,6 +209,8 @@ const en = {
         "gohome": "Go Home",
         "cleartokens": "Clear Tokens",
         "changepw": "Change Password",
+        "addtotp": "Add Authenticator App",
+        "resetrecovery": "Reset Recovery Code",
         "clearls": "Clear Localstorage",
         "deleteacc": "Delete Account",
         "block": "Block",
@@ -226,17 +242,32 @@ const en = {
         "favorite": "Favorite",
         "download": "Download",
         "add": "Add",
-        "adduser": "Add Member", // update
-        "transfer": "Transfer Ownership", // update
-        "bug": "Report Bug", // update
-        "datarequest": "Request Data", // update
-        "discuss": "Discuss", // update
+        "adduser": "Add Member",
+        "transfer": "Transfer Ownership",
+        "bug": "Report Bug",
+        "datarequest": "Request Data",
+        "discuss": "Discuss",
+        "ping": "Ping",
+        "moddel": "Mod Delete",
+        "modpost": "Moderate Post",
+        "message": "Message",
+        "uploademoji": "Upload Emoji",
+        "editemoji": "Edit Emoji",
+        "name": "Name",
+        "remove": "Remove",
     },
     "info": {
         "accexists": "Username Already Taken!",
         "invaliduser": "Invalid Username!",
         "invalidpass": "Invalid Password!",
         "invalidcreds": "Invalid username or password!",
+        "invalidotp": "Invalid code!", // update
+        "unknownmfa": "Unknown multi-factor method! Please make sure you are on the latest meo version.", // update
+        "nopass": "You must enter your password!", // update
+        "nocode": "You must enter the generated one-time code!", // update
+        "authadd": "Authenticator app added! Here is your recovery code that you can use to get back in if you ever get locked out, please keep it safe: ", // update
+        "authrename": "Authenticator renamed!",
+        "authremove": "Authenticator removed!",
         "accbanned": "Account Banned!",
         "accdeleted": "Account Deleted!",
         "conflict": "You probably logged in on another client. Refresh the page and log back in to continue.",
@@ -298,7 +329,14 @@ const en = {
     },
     "chats": { // update
         "owner": "Ownership",
-        "members": "Members"
+        "members": "Members",
+        "addmember": "Add Member",
+        "emojis": "Emojis",
+        "uploademoji": "Upload Emoji"
+    },
+    "inputs": { // update
+        "onetimecode": "One-time code",
+        "password": "Password",
     }
 }
 
@@ -1875,6 +1913,10 @@ const owo = {
         "bug": "Wepowt Bug~", // update
         "datarequest": "Wequest Data~", // update
         "discuss": "Discuss~", // update
+        "ping": "Pwing",
+        "moddel": "Mod Dewete",
+        "modpost": "Mod Powost",
+        "message": "Message~ >.<",
     },
     "info": {
         "accexists": "Usename Awweady Taken! >w<",
@@ -2096,11 +2138,15 @@ const eris = {
         "favorite": "favourite",
         "download": "download",
         "add": "add",
-        "adduser": "add someone (mistake)", // update
-        "transfer": "make someone else owner (mistake)", // update
-        "bug": "i found a problem", // update
-        "datarequest": "i love collecting infomation", // update
-        "discuss": "discuss", // update
+        "adduser": "add someone (mistake)",
+        "transfer": "make someone else owner (mistake)",
+        "bug": "i found a problem",
+        "datarequest": "i love collecting infomation",
+        "discuss": "discuss",
+        "ping": "@everyone",
+        "moddel": "banish post",
+        "modpost": "banish",
+        "message": "annoy",
     },
     "info": {
         "accexists": "someone already sniped that one",
@@ -2163,7 +2209,7 @@ const eris = {
         "profilecolor": "colour",
         "profilepic": "pfp",
     },
-    "chats": { // update
+    "chats": {
         "owner": "owner",
         "members": "members"
     }
@@ -2327,6 +2373,10 @@ const goobert = {
         "bug": "goobert",
         "datarequest": "goobert",
         "discuss": "goobert",
+        "ping": "goobert",
+        "moddel": "goobert",
+        "modpost": "goobert",
+        "message": "goobert",
     },
     "info": {
         "accexists": "goobert",

@@ -130,7 +130,7 @@ textarea {
     outline: none;
     font-family: var(--font);
     font-weight: 400;
-    font-size: 0.813em;
+    font-size: 13px;
     resize: none;
     transition: var(--transition);
 }
@@ -195,6 +195,10 @@ tr:nth-child(even) {
 
 tr:nth-child(odd) {
   background-color: var(--accent-down);
+}
+
+video {
+    background-color: var(--background);
 }
 
 ::-webkit-scrollbar {
@@ -330,6 +334,7 @@ tr:nth-child(odd) {
     flex-wrap: wrap;
     align-items: baseline;
     gap: 5px;
+    max-width: 75%;
 }
 
 .ulmember {
@@ -380,7 +385,8 @@ tr:nth-child(odd) {
     padding-right: 10px;
     border-radius: var(--border-radius);
     max-height: 100px;
-    overflow: hidden;
+    overflow-x: auto; /* Allows horizontal scrolling if content exceeds width */
+    overflow-y: visible; /* Ensures vertical overflow is visible */
     margin: var(--text-margin) 0;
 
     display: flex;
@@ -388,6 +394,7 @@ tr:nth-child(odd) {
     gap: 10px;
     align-items: center;
     height: 42px;
+    white-space: nowrap; /* Prevents text from wrapping */
 }
 
 .reply.custom {
@@ -681,7 +688,6 @@ tr:nth-child(odd) {
 
 .attachment-name {
     padding: 4px;
-    font-size: 12px;
     margin-top: auto;
 }
 
@@ -691,6 +697,7 @@ tr:nth-child(odd) {
     text-overflow: ellipsis;
     width: 100%;
     display: inline-block;
+    font-size: 12px;
 }
 
 .edit-info {
@@ -742,6 +749,10 @@ tr:nth-child(odd) {
     overflow-y: hidden;
 }
 
+.message-input:first-child {
+    border-top-left-radius: var(--br);
+}
+
 .message-send {
     flex: 0.2;
     min-width: 60px;
@@ -782,6 +793,7 @@ tr:nth-child(odd) {
     border: var(--border);
     display: flex;
     animation: var(--animation);
+    position: relative;
 }
 
 .post:hover {
@@ -795,7 +807,9 @@ tr:nth-child(odd) {
 
 .buttonContainer {
     display: none;
-    float: right;
+    position: absolute;
+    right: 0;
+    margin: 8px;
 }
 
 .visibleButtonContainer {
@@ -1284,6 +1298,35 @@ possible future styling
     background-color: var(--hov-modal-button-color);
 }
 
+.mdl-file {
+    background-color: var(--modal-button-color);
+    flex: 1;
+    width: 100%;
+    margin: var(--margin) 0;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+    transition: var(--transition);
+}
+
+.mdl-file.mdl-file::file-selector-button {
+    background-color: var(--modal-button-color);
+    padding: var(--button-padding);
+    border-radius: var(--border-radius);
+    transition: var(--transition);
+    color: var(--color);
+    border: none;
+    font-family: var(--font);
+    font-size: 14px;
+    width: 100%;
+}
+
+.mdl-file::file-selector-button:hover {
+    cursor: pointer;
+    background-color: var(--hov-modal-button-color);
+}
+
 .mdl-lg {
     margin: 5px 0;
 }
@@ -1331,7 +1374,7 @@ possible future styling
 
 #mdl-big {
     width: 80%;
-    max-width: 600px;
+    max-width: 800px;
 }
 
 .mdl-ovr {
@@ -1650,7 +1693,8 @@ possible future styling
 }
 
 .emoji {
-    height: 16px;
+    height: 1lh;
+    vertical-align: bottom;
 }
 
 .emoji:hover {
@@ -1659,14 +1703,53 @@ possible future styling
 
 .big > p > .emoji {
     height: 64px;
+    vertical-align: top;
 }
 
 .emojisidebar {
     display: flex;
     flex-direction: column;
-    max-height: 500px;
-    overflow: scroll;
+    max-height: 460px;
+    overflow-y: scroll;
     scrollbar-width: none;
+}
+
+.emojisidebar-mobile {
+    display: flex;
+    overflow-x: auto;
+    white-space: nowrap;
+    gap: 10px;
+    padding: 15px 0;
+    scrollbar-width: thin;
+}
+
+.emojisidebar-mobile ::-webkit-scrollbar {
+    width: 6px;
+}
+
+.emojibuttonside-mobile {
+    background-color: var(--modal-button-color);
+    font-size: 16px;
+    padding: var(--padding);
+    width: 42px;
+    aspect-ratio: 1/1;
+    flex: 0 0 auto;
+}
+
+.emojisec-mobile {
+    display: none;
+    grid-template-columns: repeat(auto-fit, minmax(60px, max-content));
+    position: relative;
+    padding-top: 40px;
+}
+
+.emojisec-mobile .emojiheader {
+    position: absolute;
+    margin: 0;
+    top: 0;
+    background-color: var(--modal-color);
+    width: 100%;
+    box-sizing: border-box;
 }
 
 #emojipicker {
@@ -1701,7 +1784,7 @@ possible future styling
 
 .emojicont {
     overflow-y: scroll;
-    max-height: 500px;
+    max-height: 460px;
     scrollbar-width: none;
     flex: 1;
 }
@@ -2050,6 +2133,12 @@ possible future styling
     border-bottom-right-radius: 15px;
 }
 
+.settings-buttons-row {
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+}
+
 .stg-section:hover, .general-label:hover {
     cursor: pointer;
 }
@@ -2180,7 +2269,7 @@ possible future styling
 
 .plugintoggle.checked svg {
     opacity: 1;
-    color: var(--color-on);
+    color: var(--color-on) !important;
 }
 
 .plugintoggle.checked {
@@ -2218,7 +2307,7 @@ possible future styling
 }
 
 .custom-label {
-    font-size: 14px;
+    font-size: 0.875;
     width: 100%;
     margin: 5px;
 }
@@ -2475,7 +2564,7 @@ possible future styling
     flex: 0.9;
     margin: 0;
     overflow-y: hidden;
-    font-size: 0.813em;
+    font-size: 13px;
     opacity: 0.8;
     background: var(--accent-color);
     border-radius: var(--border-radius);
@@ -2570,6 +2659,10 @@ possible future styling
     text-shadow: 0 0 5px black;
 }
 
+.lightpre .attachment-progress span {
+    text-shadow: none;
+}
+
 .attachment-progress::before {
     content: '';
     position: absolute;
@@ -2584,7 +2677,7 @@ possible future styling
     width: 100%;
     padding: var(--button-padding);
     box-sizing: border-box;
-    font-size: 0.813em;
+    font-size: 13px;
     background: var(--modal-button-color);
     border-radius: var(--border-radius);
 }
@@ -2597,11 +2690,24 @@ possible future styling
     background: var(--hov-accent-color);
 }
 
+.emoji-option-in {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+.emoji-option-im {
+    height: 2lh;
+    border-radius: 2px;
+}
+
 .member-in {
     width: 100%;
     padding: var(--button-padding);
     box-sizing: border-box;
-    font-size: 0.813em;
+    font-size: 13px;
     background: var(--modal-button-color);
     border-radius: var(--border-radius);
     display: flex;
@@ -2610,8 +2716,14 @@ possible future styling
     transition: var(--transition);
 }
 
+.authenticators .member-in {
+    line-height: 1.5;
+}
+
 .mem-ops {
     display: none;
+    margin-right: 2px;
+    gap: 5px;
 }
 
 .mem-op {
@@ -2646,6 +2758,21 @@ possible future styling
     margin: var(--button-margin) 0;
     display: flex;
     flex-direction: column;
+    max-height: 300px;
+    overflow-y: scroll;
+    overflow-x: visible;
+    width: 80%;
+}
+
+.emoji-list {
+    gap: var(--button-margin);
+    margin: var(--button-margin) 0;
+    display: flex;
+    flex-direction: column;
+    max-height: 300px;
+    overflow-y: scroll;
+    overflow-x: visible;
+    width: 80%;
 }
 
 .owner {
@@ -2679,6 +2806,53 @@ possible future styling
     background: var(--modal-color);
     z-index: 1;
     border-bottom: 1px solid var(--modal-button-color);
+}
+
+.authenticator-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.authenticator-list .member-in:first-child {
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+}
+
+.authenticator-list .member-in:last-child {
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+}
+
+.totp-secret {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.totp-secret-qr svg {
+    background-color: var(--dark-accent);
+    border-radius: var(--border-radius);
+}
+
+.totp-secret-text {
+    color: var(--color);
+    background-color: var(--dark-accent);
+    font-size: 14px;
+    font-weight: bold;
+    margin: 0;
+}
+
+.error {
+    color: var(--color-on);
+    background: var(--red);
+    padding: 2px 5px;
+    border-radius: 5px;
+    display: none;
+    justify-content: center;
+    align-items: center;
 }
 
 .shr-div {
@@ -2726,9 +2900,86 @@ possible future styling
     border-bottom: none;
 }
 
+.tooltip {
+    position: relative;
+}
+
+.tooltip::before, .tooltip::after {
+    position: absolute;
+    left: 50%;
+    opacity: 0;
+    transition: all 0.1s ease-in-out;
+    pointer-events: none;
+}
+
+.tooltip::before {
+    content: "";
+    border-width: 10px 8px 0 8px;
+    border-style: solid;
+    border-color: #111 transparent transparent transparent;
+    top: -20px;
+    margin-left: -8px;
+    z-index: 1;
+}
+
+.tooltip::after {
+    content: attr(data-tooltip);
+    background: #111;
+    top: -20px;
+    transform: translateY(-100%) translateX(-50%);
+    font-size: 12px;
+    width: 80px;
+    border-radius: 10px;
+    color: var(--color-on);
+    padding: 12px;
+    z-index: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.tooltip.left::after, .tooltip:last-child::after {
+    transform: translateY(-100%) translateX(-80%);
+}
+
+.tooltip.bottom::before {
+    border-width: 0 8px 10px 8px;
+    border-color: transparent transparent #111 transparent;
+    top: 100%;
+    margin-top: 5px;
+    margin-left: -8px;
+}
+
+.tooltip.bottom::after {
+    top: 100%;
+    transform: translateY(0) translateX(-50%);
+    margin-top: 15px;
+}
+
+
+.tooltip.right::after {
+    transform: translateY(-1px) translateX(-25%);
+}
+
+.tooltip.long::after {
+    width: 150px;
+} 
+
+.tooltip:hover::before, .tooltip:hover::after{
+    opacity: 1;
+}
+
 @media screen and (max-width: 720px) {
     html {
         scrollbar-gutter: none;
+    }
+
+    .wrapper {
+        overflow: hidden;
+    }
+
+    .tooltip::before, .tooltip::after {
+        display: none;
     }
 
     .modal {
@@ -2841,14 +3092,6 @@ possible future styling
     .settings {
         margin-bottom: 60px;
     }
-
-    #skeleton-msgs {
-        margin-top: -60px;
-    }
-
-    #msgs {
-        margin-bottom: 60px;
-    }
     
     .navigation {
         margin-left: 10px;
@@ -2883,15 +3126,13 @@ possible future styling
 
     .mobileContainer {
         display: flex;
-        float: right;
+        position: absolute;
+        right: 0;
+        margin: 8px;
     }
     
     .post:hover {
         background-color: var(--accent-color);
-    }
-
-    .date {
-        font-size: 12px;
     }
 
     .image-outer, .embed {
