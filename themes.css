@@ -389,19 +389,19 @@
 
 .trans-theme {
     --primary: #1aa6ca;
-    --color-on: #abeeff;
+    --color-on: #fff;
     --grad-height: 150px;
 }
 
 .pride-theme {
     --primary: #9443d1;
-    --color-on: #e3bdff;
+    --color-on: #fff;
     --grad-height: 150px;
 }
 
 .nonb-theme {
     --primary: rgb(252, 244, 52);
-    --color-on: #000000;
+    --color-on: #fff;
     --grad-height: 150px;
 }
 

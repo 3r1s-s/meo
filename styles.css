@@ -747,6 +747,7 @@ video {
     flex: 1;
     margin: 0;
     overflow-y: hidden;
+
 }
 
 .message-input:first-child {
@@ -1738,7 +1739,7 @@ possible future styling
 
 .emojisec-mobile {
     display: none;
-    grid-template-columns: repeat(auto-fit, minmax(60px, max-content));
+    grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
     position: relative;
     padding-top: 40px;
 }
@@ -1750,6 +1751,10 @@ possible future styling
     background-color: var(--modal-color);
     width: 100%;
     box-sizing: border-box;
+}
+
+.emojisec-mobile .emojibutton {
+    width: auto;
 }
 
 #emojipicker {
