@@ -133,7 +133,7 @@ const en = {
             "invtyping": "Other users won't see you typing",
             "imagewhitelist": "This allows any site to see your IP, use responsibly",
             "censorwords": "Censors words instead of treating them like a blocked message",
-            "embeds": "Embeds Tenor GIFS, Youtube Videos, ect. (Uses 3rd party cookies)",
+            "embeds": "Embeds Tenor GIFS, Youtube Videos, etc. (Uses 3rd party cookies)",
             "reducemotion": "Reduce the intensity of animations and other moving effects",
             "showpostbuttons": "Post buttons always remain visible",
             "underlinelinks": "Make links to websites and other pages stand out more by underlining them",
