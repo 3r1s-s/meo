@@ -35,78 +35,50 @@ function fetchprofile() {
             }
 
             let quote;
+            let pronouns;
+            
             if (typeof md !== 'undefined') {
                 md.disable(['image']);
                 quote = erimd(md.render(data.quote).replace(/<a(.*?)>/g, '<a$1 target="_blank">'));
+                
+                const regex = /\[(.*?)\]/;
+                const match = quote.match(regex);
+                pronouns = match ? match[1] : "";
+                quote = quote.replace(regex, '');                                                      
             } else {
-                // fallback for when md doenst work
-                // figure this issue OUT
                 quote = oldMarkdown(data.quote);
                 console.error("Parsed with old markdown, fix later :)");
             }
-            if (data._id === "Discord") {
-                quote = md.render(`
-### Please, do not use the bridge.
-This is used to bridge posts from the Meower Discord server.
-This is harmful to Meower, Features that Meower lacks are compensated for using this feature.
-Because of this, Meower never gets a chance to improve.
-***
-This message was created by meo.
-                `).replace(/<a(.*?)>/g, '<a$1 target="_blank">');
-            }
-
-            if (data._id === localStorage.getItem('username')) {
-                profilecont.innerHTML += `
-                <div class="usr-header">
+            
+            let profileContent = `
+            <div class="usr-header">
                 <h2 class="username" onclick="copy('${meourl}/profile?u=${data._id}')">${data._id}</h2>
-                </div>
-                <hr>
-                `
-                profilecont.innerHTML += `
-                <span class="subheader">${lang().profile.quote}</span>
-                <br>
-                <textarea class="quote-edit mdl-txt" id="quote">${data.quote}</textarea>
-                <span class="subheader">${lang().profile.persona}</span>
-                <div class="sec edit"><span>${lang().profile.profilecolor}:</span><input id="avtr-clr" type="color" value="#${data.avatar_color}"></input>
-                </div>
-                <div class="sec edit">
+                ${data._id !== localStorage.getItem('username') && localStorage.getItem('permissions') === "1" ? `
+                <button class="button dm-btn" onclick="openmdusr('${data._id}');" aria-label="moderate user" title="Moderate">
+                    <svg width="20" height="20" viewBox="0 0 24 24"><path fill="currentColor" d="M19 6.00001C15.56 6.00001 12.826 2.43501 12.799 2.39801C12.421 1.89801 11.579 1.89801 11.201 2.39801C11.174 2.43501 8.44 6.00001 5 6.00001C4.447 6.00001 4 6.44801 4 7.00001V14C4 17.807 10.764 21.478 11.534 21.884C11.68 21.961 11.84 21.998 12 21.998C12.16 21.998 12.32 21.96 12.466 21.884C13.236 21.478 20 17.807 20 14V7.00001C20 6.44801 19.553 6.00001 19 6.00001ZM15 16L12 14L9 16L10 13L8 11H11L12 8.00001L13 11H16L14 13L15 16Z"></path></svg>
+                </button>` : ''}
+                ${data._id !== localStorage.getItem('username') ? `
+                <button class="button dm-btn" onclick="parent.opendm('${data._id}');" aria-label="dm user" title="DM">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24"><path fill="currentColor" d="M12 22a10 10 0 1 0-8.45-4.64c.13.19.11.44-.04.61l-2.06 2.37A1 1 0 0 0 2.2 22H12Z" class=""></path></svg>
+                </button>` : ''}
+            </div>
+            ${pronouns !== '' ? `<span class="subsubheader">${pronouns}</span>` : `<span>${pronouns}</span>`}
+            <hr>
+            <span class="subheader">${lang().profile.quote}</span>
+            ${data._id === localStorage.getItem('username') ? `
+            <textarea class="quote-edit mdl-txt" id="quote">${data.quote}</textarea>
+            <span class="subheader">${lang().profile.persona}</span>
+            <div class="sec edit"><span>${lang().profile.profilecolor}:</span><input id="avtr-clr" type="color" value="#${data.avatar_color}"></input></div>
+            <div class="sec edit">
                 <label for="gc-photo" class="filesel">${lang().profile.profilepic}</label>
                 <input type="file" id="profile-photo" accept="image/png,image/jpeg,image/webp,image/gif">
-                </div>
-                `;
-            } else {
-                if (localStorage.getItem('permissions') === "1") {
-                    profilecont.innerHTML += `
-                    <div class="usr-header">
-                    <h2 class="username" onclick="copy('${meourl}/profile?u=${data._id}')">${data._id}</h2>
-                    <button class="button dm-btn" onclick="openmdusr('${data._id}');" aria-label="moderate user" title="Moderate">
-                    <svg width="20" height="20" viewBox="0 0 24 24"><path fill="currentColor" d="M19 6.00001C15.56 6.00001 12.826 2.43501 12.799 2.39801C12.421 1.89801 11.579 1.89801 11.201 2.39801C11.174 2.43501 8.44 6.00001 5 6.00001C4.447 6.00001 4 6.44801 4 7.00001V14C4 17.807 10.764 21.478 11.534 21.884C11.68 21.961 11.84 21.998 12 21.998C12.16 21.998 12.32 21.96 12.466 21.884C13.236 21.478 20 17.807 20 14V7.00001C20 6.44801 19.553 6.00001 19 6.00001ZM15 16L12 14L9 16L10 13L8 11H11L12 8.00001L13 11H16L14 13L15 16Z"></path></svg>
-                    </button>
-                    <button class="button dm-btn" onclick="parent.opendm('${data._id}');" aria-label="dm user" title="DM">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24"><path fill="currentColor" d="M12 22a10 10 0 1 0-8.45-4.64c.13.19.11.44-.04.61l-2.06 2.37A1 1 0 0 0 2.2 22H12Z" class=""></path></svg>
-                    </button>
-                    </div>
-                    <hr>
-                    `;
-                } else {
-                    profilecont.innerHTML += `
-                    <div class="usr-header">
-                    <h2 class="username" onclick="copy('${meourl}/profile?u=${data._id}')">${data._id}</h2>
-                    <button class="button dm-btn" onclick="parent.opendm('${data._id}');" aria-label="dm user" title="DM">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24"><path fill="currentColor" d="M12 22a10 10 0 1 0-8.45-4.64c.13.19.11.44-.04.61l-2.06 2.37A1 1 0 0 0 2.2 22H12Z" class=""></path></svg>
-                    </button>
-                    </div>
-                    <hr>
-                    `;
-                }
-
-                profilecont.innerHTML += `
-                <span class="subheader">${lang().profile.quote}</span>
-                <div class="sec">
+            </div>` : `
+            <div class="sec">
                 <span class="profile-qt">${quote}</span>
-                </div>
-                `;
-            }              
+            </div>`}
+            `;
+            
+            profilecont.innerHTML += profileContent;                                   
 
             profilecont.innerHTML += `
             <i>Created: ${new Date(data.created * 1000).toLocaleDateString()} | Last Seen: ${timeago(data.last_seen)}</i>
