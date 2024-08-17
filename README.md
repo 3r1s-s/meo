@@ -1,5 +1,5 @@
 # leo
-meo but better:tm:
+An awesome fork of meo with more features
 
 ## changes
 leo has the following additions to meo so far
