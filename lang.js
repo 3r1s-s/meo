@@ -82,6 +82,12 @@ const en = {
         "start": "Bridged",
         "title": "This post has been bridged from another platform."
     },
+    "meo_typing": {
+        "one": "{user} is typing...",
+        "two": "{user1} and {user2} are typing...",
+        "multiple": "{user1}, {user2}, and {user3} are typing...",
+        "many": "{count} people are typing..."
+    },
     "title_chats": "Chats",
     "title_live": "Livechat",
     "settings_general": "General",
@@ -89,6 +95,7 @@ const en = {
     "settings_appearance": "Appearance",
     "settings_plugins": "Plugins",
     "settings_languages": "Languages",
+    "settings_profile": "Profile",
     "general_sub": {
         "chat": "Chat",
         "accessibility": "Accessibility",
@@ -119,6 +126,7 @@ const en = {
             "notifications": "Allow Notifications",
             "widemode": "New Desktop Experience",
             "discord": "Discord Post Layout",
+            "compactmode": "Compact Mode",
         },
         "desc": {
             "homepage": "Instead of showing you the Start Page you get directly taken to home",
@@ -137,6 +145,7 @@ const en = {
             "notifications": "This will ask for notification permissions (Experimental)",
             "widemode": "Enables new desktop experience (Experiemental, Requires refresh)",
             "discord": "Reverses the post order to be more like Discord (Experiemental, Requires refresh)",
+            "compactmode": "Makes posts take up less space, for viewing more posts at a time (Experiemental, Requires refresh)",
         }
     },
     "account_sub": {

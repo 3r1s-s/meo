@@ -44,6 +44,7 @@ const pfpCache = {};
 const postCache = { livechat: [] };  // {chatId: [post, post, ...]} (up to 25 posts for inactive chats)
 const chatCache = {}; // {chatId: chat}
 const blockedUsers = {}; // {user, user}
+const usersTyping = {}; // {chatId: {username1: timeoutId, username2: timeoutId}}
 
 let favoritedChats = [];  // [chatId, ...]
 
@@ -92,6 +93,11 @@ if (settingsstuff().widemode) {
         `;
         page.insertBefore(ex, page.firstChild);
     }
+} else if (settingsstuff().compactmode) {
+    const stylesheet = document.createElement('link');
+    stylesheet.rel = 'stylesheet';
+    stylesheet.href = 'compact.css';
+    document.head.appendChild(stylesheet);
 }
 
 if (settingsstuff().magnify) {
@@ -102,13 +108,14 @@ if (settingsstuff().discord) {
     document.querySelector('body').classList.add("discord");
 }
 
+let version;
 checkver()
 
 async function checkver() {
     try {
         const response = await fetch('https://api.github.com/repos/3r1s-s/meo/commits/main');
         const data = await response.json();
-        let version = data.sha;
+        version = data.sha;
         console.log(version.substring(0, 7));
     } catch (error) {
         console.log('Error checking for updates:', error);
@@ -230,6 +237,14 @@ function main() {
         } else if (sentdata.cmd === "post" || sentdata.cmd === "inbox_message") {
             let post = sentdata.val;
             let postOrigin = post.post_origin;
+
+            if (usersTyping[postOrigin] && post.author._id in usersTyping[postOrigin]) {
+                clearTimeout(usersTyping[postOrigin][post.author._id]);
+                delete usersTyping[postOrigin][post.author._id];
+                
+                renderTyping();
+            }
+
             if (!(postOrigin in postCache)) postCache[postOrigin] = [];
             postCache[postOrigin].unshift(post);
             if (page === postOrigin) {
@@ -242,6 +257,26 @@ function main() {
                     notify(postOrigin === "inbox" ? "Inbox Message" : post.u, post.p, postOrigin, post);
                 }
             }
+        } else if (sentdata.cmd === "typing") {
+            const chatId = sentdata.val.chat_id;
+            const username = sentdata.val.username;
+            if (username === localStorage.getItem("username")) return;
+
+            if (!(chatId in usersTyping)) usersTyping[chatId] = {};
+            if (username in usersTyping[chatId]) {
+                clearTimeout(usersTyping[chatId][username]);
+            }
+
+            usersTyping[chatId][username] = setTimeout(() => {
+                if (username in usersTyping[chatId]) {
+                    clearTimeout(usersTyping[chatId][username]);
+                    delete usersTyping[chatId][username];
+                    
+                    renderTyping();
+                }
+            }, 4000);
+
+            renderTyping();
         } else if (end) {
             return 0;
         } else if (sentdata.cmd == "update_config") {
@@ -355,9 +390,9 @@ function main() {
             } else {
                 sul = sul[0];
             }
-        
+
             if (page == "home") {
-                document.getElementById("info").innerText = lul + " users online (" + sul + ")";
+                document.getElementById("info").innerText = lul + " users online";
             }
         }
     };
@@ -759,7 +794,7 @@ function loadPfp(username, userData, button) {
                 try {
                     const resp = await fetch(`https://api.meower.org/users/${username}`);
                     userData = await resp.json();
-                } catch (e) {
+                } catch (error) {
                     console.error("Failed to fetch:", error);
                     resolve(null);
                 }
@@ -1542,13 +1577,43 @@ function renderChats() {
     groupsdiv.appendChild(gcdiv);
 }
 
+function renderTyping() {
+    if (!(page in usersTyping)) return;
+    const typing = Object.keys(usersTyping[page]);
+    const typingElem = document.getElementById("info-typing");
+    const translations = lang().meo_typing;
+
+    switch (typing.length) {
+        case 0:
+            typingElem.innerText = "";
+            break;
+        case 1:
+            typingElem.innerText = translations.one.replace("{user}", typing[0]);
+            break;
+        case 2:
+            typingElem.innerText = translations.two
+                .replace("{user1}", typing[0])
+                .replace("{user2}", typing[1]);
+            break;
+        case 3:
+            typingElem.innerText = translations.multiple
+                .replace("{user1}", typing[0])
+                .replace("{user2}", typing[1])
+                .replace("{user3}", typing[2]);
+            break;
+        default:
+            typingElem.innerText = translations.many.replace("{count}", typing.length);
+            break;
+    }
+}
+
 function loadstart() {
     page = "start";
     pre = "start";
     sidebars();
     pageContainer = document.getElementById("main");
     pageContainer.innerHTML = `
-    <div class="info"><h1>${lang().page_start}</h1></div>
+    <div class="start-info"><h1>${lang().page_start}</h1></div>
     <div class="explore">
         <span class="span-h3">Online - ${lul}</span>
         <div class="start-users-online">
@@ -1635,7 +1700,7 @@ function opendm(username) {
     });
 }
 
-function loadchat(chatId) {
+function loadchat(chatId) { // typing indicator goes in #info-typing
     page = chatId;
     pre = chatId;
     if (!["home", "inbox", "livechat"].includes(chatId) && !chatCache[chatId]) {
@@ -1674,18 +1739,18 @@ function loadchat(chatId) {
     const mainContainer = document.getElementById("main");
     if (chatId === "home") {
         mainContainer.innerHTML = `
-        <div class='info'><h1 class='header-top'>${lang().page_home}</h1><p id='info'></p>
+        <div class='info'><h1 class='header-top'>${lang().page_home}</h1><p id='info'><span id="info-ulist"></span><span id="info-typing"></span></p>
         </div>` + loadinputs();
-        document.getElementById("info").innerText = lul + " users online (" + sul + ")";
+        document.getElementById("info-ulist").innerText = lul + " users online";
     } else if (chatId === "inbox") {
         mainContainer.innerHTML = `<div class='info'>
-            <h1>${lang().page_inbox}</h1>
+            <h1 class='header-top'>${lang().page_inbox}</h1>
             <p id='info'>${lang().inbox_sub.desc}</p>
         </div>` + loadinputs();
     } else if (chatId === "livechat") {
         mainContainer.innerHTML = `
             <div class='info'>
-                <h1>${lang().title_live}</h1>
+                <h1 class='header-top'>${lang().title_live}</h1>
                 <p id='info'>${lang().live_sub.desc}</p>
             </div>
             ${loadinputs()}
@@ -1693,9 +1758,9 @@ function loadchat(chatId) {
     } else {
         if (data.nickname) {
             mainContainer.innerHTML = `<div class='info'><div class="gctitle"><h1 id='nickname' onclick="openGcModal('${chatId}')" class='header-top'>${escapeHTML(data.nickname)}</h1><i class="subtitle">${chatId}</i></div>
-            <p id='info'></p></div>` + loadinputs();
+            <p id='info'><span id="info-typing"></span></p></div>` + loadinputs();
         } else {
-            mainContainer.innerHTML = `<div class='info'><div class="gctitle"><h1 id='username' class='header-top' onclick="openUsrModal('${data.members.find(v => v !== localStorage.getItem("username"))}')">${data.members.find(v => v !== localStorage.getItem("username"))}</h1><i class="subtitle">${chatId}</i></div><p id='info'></p></div>` + loadinputs();
+            mainContainer.innerHTML = `<div class='info'><div class="gctitle"><h1 id='username' class='header-top' onclick="openUsrModal('${data.members.find(v => v !== localStorage.getItem("username"))}')">${data.members.find(v => v !== localStorage.getItem("username"))}</h1><i class="subtitle">${chatId}</i></div><p id='info'><span id="info-typing"></span></p></div>` + loadinputs();
         }
     }
 
@@ -1749,6 +1814,8 @@ function loadchat(chatId) {
             localStorage.setItem(`draft-${chatId}`, msg.value);
         });
     }
+
+    renderTyping();
 }
 
 async function loadposts(pageNo) {
@@ -1855,6 +1922,7 @@ function loadstgs() {
             </svg>
         </button>
         <input type='button' class='settings-button button' id='submit' value='${lang().settings_general}' onclick='loadGeneral()' aria-label="general">
+        <input type='button' class='settings-button button' id='submit' value='${lang().settings_profile}' onclick='loadProfile()' aria-label="profile">
         <input type='button' class='settings-button button' id='submit' value='${lang().settings_account}' onclick='loadAccount()' aria-label="account">
         <input type='button' class='settings-button button' id='submit' value='${lang().settings_appearance}' onclick='loadAppearance()' aria-label="appearance">
         <input type="button" class="settings-button button" id="submit" value='${lang().settings_languages}' onclick="loadLanguages()" aria-label="languages">
@@ -1893,6 +1961,7 @@ function loadGeneral() {
         <div class="settings-section-outer">
         ${createSettingSection("consolewarnings", lang().general_list.title.consolewarnings, lang().general_list.desc.consolewarnings)}
         ${createSettingSection("widemode", lang().general_list.title.widemode, lang().general_list.desc.widemode)}
+        ${createSettingSection("compactmode", lang().general_list.title.compactmode, lang().general_list.desc.compactmode)}
         </div>
         <h3>${lang().general_sub.privacy}</h3>
         <div class="fun-buttons">
@@ -1941,7 +2010,8 @@ function loadGeneral() {
         entersend: document.getElementById("entersend"),
         hideimages: document.getElementById("hideimages"),
         notifications: document.getElementById("notifications"),
-        widemode: document.getElementById("widemode")
+        widemode: document.getElementById("widemode"),
+        compactmode: document.getElementById("compactmode")
     };
 
     Object.values(settings).forEach((settingDiv) => {
@@ -1962,7 +2032,8 @@ function loadGeneral() {
                 entersend: settings.entersend.classList.contains("checked"),
                 hideimages: settings.hideimages.classList.contains("checked"),
                 notifications: settings.notifications.classList.contains("checked"),
-                widemode: settings.widemode.classList.contains("checked")
+                widemode: settings.widemode.classList.contains("checked"),
+                compactmode: settings.compactmode.classList.contains("checked")
             }));
             setAccessibilitySettings();
             if (settingsstuff().notifications) {
@@ -2185,7 +2256,7 @@ async function addTotp(secret) {
                 }
             }
         }
-    } catch (e) {
+    } catch (error) {
         document.getElementById("totp-error").innerText = e;
         document.getElementById("totp-error").style.display = "inline-flex";
         return;
@@ -2193,8 +2264,6 @@ async function addTotp(secret) {
 
     loadAuthenticators();
 }
-
-
 
 async function editAuthenticatorModal(authenticatorId, authenticatorName) {
     document.documentElement.style.overflow = "hidden";
@@ -2242,7 +2311,7 @@ async function editAuthenticator(authenticatorId) {
             const respJson = await resp.json();
             throw new Error(`Unexpected: ${respJson.type}`);
         }
-    } catch (e) {
+    } catch (error) {
         document.getElementById("authenticator-error").innerText = e;
         document.getElementById("authenticator-error").style.display = "inline-flex";
         return;
@@ -2307,7 +2376,7 @@ async function removeAuthenticator(authenticatorId) {
                 throw new Error(`Unexpected: ${respJson.type}`);
             }
         }
-    } catch (e) {
+    } catch (error) {
         document.getElementById("authenticator-error").innerText = e;
         document.getElementById("authenticator-error").style.display = "inline-flex";
         return;
@@ -2396,7 +2465,7 @@ async function resetRecoveryCode() {
                 }
             }
         }
-    } catch (e) {
+    } catch (error) {
         document.getElementById("authenticator-error").innerText = e;
         document.getElementById("authenticator-error").style.display = "inline-flex";
         return;
@@ -2521,7 +2590,6 @@ function addPlugin(plugin, isEnabled) {
         pluginToggle.classList.add('checked');
     }
 }
-
 
 async function fetchPlugins() {
     try {
