@@ -392,7 +392,7 @@ function main() {
             }
 
             if (page == "home") {
-                document.getElementById("info").innerText = lul + " users online";
+                document.getElementById("info-ulist").innerText = lul + " users online";
             }
         }
     };
@@ -1700,7 +1700,7 @@ function opendm(username) {
     });
 }
 
-function loadchat(chatId) { // typing indicator goes in #info-typing
+function loadchat(chatId) {
     page = chatId;
     pre = chatId;
     if (!["home", "inbox", "livechat"].includes(chatId) && !chatCache[chatId]) {
@@ -1757,7 +1757,7 @@ function loadchat(chatId) { // typing indicator goes in #info-typing
         `;
     } else {
         if (data.nickname) {
-            mainContainer.innerHTML = `<div class='info'><div class="gctitle"><h1 id='nickname' onclick="openGcModal('${chatId}')" class='header-top'>${escapeHTML(data.nickname)}</h1><i class="subtitle">${chatId}</i></div>
+            mainContainer.innerHTML = `<div class='info'><div class="gctitle"><h1 id='nickname' onclick="openGcModal('${chatId}')" class='header-top'>${escapeHTML(data.nickname)}</h1></div>
             <p id='info'><span id="info-typing"></span></p></div>` + loadinputs();
         } else {
             mainContainer.innerHTML = `<div class='info'><div class="gctitle"><h1 id='username' class='header-top' onclick="openUsrModal('${data.members.find(v => v !== localStorage.getItem("username"))}')">${data.members.find(v => v !== localStorage.getItem("username"))}</h1><i class="subtitle">${chatId}</i></div><p id='info'><span id="info-typing"></span></p></div>` + loadinputs();
@@ -4355,8 +4355,7 @@ function mdlpingusr(event) {
 
 function mdlshare(event) {
     const postId = event.target.closest('.modal').id;
-    window.open(`${meourl}/share?id=${postId}`, '_blank');
-    closemodal();
+    copy(`${meourl}/share?id=${postId}`, "Copied link to message!")
 }
 
 function loadexplore() {
@@ -5160,7 +5159,7 @@ function openGcModal(chatId) {
                     mdlt.innerHTML = `
                     <div class="avatar-big pfp-inner" style="border: 6px solid #${color}; background-color: #${color}; background-image: ${url};"></div>
                     <div class="gctitle">
-                    <h2 id="nickname" class="gcn" onclick="copy('${meourl}?gc=${chatId}')">${data.nickname}</h2> <i class="subtitle">${chatId}</i>
+                    <h2 id="nickname" class="gcn" onclick="copy('${meourl}?gc=${chatId}')">${escapeHTML(data.nickname)}</h2> <i class="subtitle">${chatId}</i>
                     </div>
                     <hr class="mdl-hr">
                     <span class="subheader">${lang().profile.persona}</span>
@@ -5196,7 +5195,7 @@ function openGcModal(chatId) {
                     mdlt.innerHTML = `
                     <div class="avatar-big pfp-inner" style="border: 6px solid #${color}; background-color: #${color}; background-image: ${url};"></div>
                     <div class="gctitle">
-                    <h2 id="nickname" class="gcn" onclick="copy('${meourl}?gc=${chatId}')">${data.nickname}</h2> <i class="subtitle">${chatId}</i>
+                    <h2 id="nickname" class="gcn" onclick="copy('${meourl}?gc=${chatId}')">${escapeHTML(data.nickname)}</h2> <i class="subtitle">${chatId}</i>
                     </div>
                     <hr class="mdl-hr">
                     <span class="subheader">${lang().chats.owner}</span>
@@ -5653,14 +5652,18 @@ function magnify() {
     document.body.classList.add("magnify");
 }
 
-function copy(text) {
+function copy(text, message) {
     const t = document.createElement('input');
     t.value = text;
     document.body.appendChild(t);
     t.select();
     document.execCommand('copy');
     document.body.removeChild(t);
-    parent.closemodal(`${lang().modals.copygc}`);
+    if (message) {
+        parent.closemodal(`${message}`);
+    } else {
+        parent.closemodal(`${lang().modals.copygc}`);
+    }
 }
 
 // work on this

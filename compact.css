@@ -11,6 +11,12 @@
     background-color: var(--accent-color);
 }
 
+@media screen and (max-width: 720px) {
+    .post:hover .buttonContainer, .post:hover {
+        background-color: transparent;
+    }
+}
+
 .pfp {
     max-height: 80px;
 }

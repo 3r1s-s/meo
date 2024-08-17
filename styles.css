@@ -325,6 +325,12 @@ img.embed {
     margin: 0;
 }
 
+.gctitle > .header-top {
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 #info {
     margin: 0;
     display: flex;
@@ -2086,6 +2092,7 @@ possible future styling
     display: flex;
     align-items: baseline;
     flex-wrap: wrap;
+    text-wrap: nowrap;
     gap: 10px;
 }
 
