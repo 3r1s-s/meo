@@ -1355,7 +1355,7 @@ async function sendpost() {
         <div class="wrapper">
         <span class="user-header"><span id='username'>${localStorage.getItem("username")}</span><i class="date">sending...</i></span>
         <p class="post-content">
-        <p>${message}</p>
+        <p>${escapeHTML(message)}</p>
         </p>
         </div>
         `;
