@@ -2059,23 +2059,44 @@ possible future styling
 }
 
 #gc-photo::file-selector-button, #profile-photo::file-selector-button {
-    background-color: var(--hov-modal-button-color);
+    background-color: var(--accent-color);
     padding: var(--padding);
     border-radius: var(--border-radius);
     transition: var(--transition);
     color: var(--color);
     border: none;
     font-family: var(--font);
-    font-size: 16px;
+    font-size: 12px;
     width: 100px;
 }
 
 #gc-photo::file-selector-button:hover, #profile-photo::file-selector-button:hover {
     cursor: pointer;
+    background-color: var(--hov-accent-color);
 }
 
 #gc-photo, #profile-photo {
     width: 100px;
+}
+
+#profile-color {
+    padding: 0;
+    width: 64px;
+    height: 42px;
+}
+
+.color-outer {
+    position: relative;
+    width: 64px;
+    height: 42px;
+}
+
+.color-icon {
+    position: absolute;
+    right: 0;
+    top: 0;
+    color: var(--color-on);
+    padding: 4px;
 }
 
 .duo-cl {
@@ -2159,7 +2180,26 @@ possible future styling
 .settings-buttons-row {
     display: flex;
     flex-direction: row;
-    gap: 12px;
+    gap: 8px;
+}
+
+.settings-button-in {
+    padding: 10px var(--button-padding);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    box-sizing: border-box;
+    text-wrap: nowrap;
+    background: var(--accent-color);
+    border-radius: var(--border-radius);
+    margin-bottom: 5px;
+    font-size: 12px;
+    text-align: center;
+    color: var(--color);
+    text-decoration: none;
+    -webkit-user-select: none;
+    user-select: none;
+    display: inline-block;
+    min-width: 100px;
 }
 
 .stg-section:hover, .general-label:hover {
@@ -2921,6 +2961,77 @@ possible future styling
 .key:active {
     margin-top: 2px;
     border-bottom: none;
+}
+
+.setting-input {
+    background-color: var(--accent-color);
+    color: var(--color);
+    border: none;
+    border-radius: var(--button-radius);
+    padding: var(--padding);
+    box-sizing: border-box;
+}
+
+.setting-input:focus {
+    background-color: var(--hov-accent-color);
+}
+
+.profile-settings {
+    background: var(--accent-color);
+    padding: var(--padding);
+    border-radius: var(--border-radius);
+    min-height: 200px;
+}
+
+.profile-settings-page {
+    display: flex;
+    flex-direction: row-reverse;
+    gap: 10px;
+}
+
+.profile-settings-page > div {
+    flex: 1;
+}
+
+.usr-header-inner {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    overflow: hidden;
+}
+
+.pronouns {
+    text-wrap: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.usr-header-inner > h2 {
+    margin: 0;
+}
+
+.quote-edit {
+    padding: var(--padding);
+    min-width: 250px;
+    min-height: 80px;
+}
+
+.custom-bg a {
+    color: var(--accent);
+}
+
+.sec {
+    background-color: var(--modal-button-color);
+    display: flex;
+    align-items: center;
+    margin: var(--text-margin) 0 0 0;
+    padding: var(--padding);
+    border-radius: var(--border-radius);
+    word-wrap: anywhere;
+}
+
+.profile-qt > p {
+    margin: 0;
 }
 
 @media screen and (max-width: 720px) {

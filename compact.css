@@ -8,7 +8,7 @@
 }
 
 .post:hover .buttonContainer {
-    background-color: var(--accent-color);
+    background-color: transparent;
 }
 
 @media screen and (max-width: 720px) {

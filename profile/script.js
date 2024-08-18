@@ -69,17 +69,9 @@ function fetchprofile() {
             </div>
             <hr>
             <span class="subheader">${lang().profile.quote}</span>
-            ${data._id === localStorage.getItem('username') ? `
-            <textarea class="quote-edit mdl-txt" id="quote">${data.quote}</textarea>
-            <span class="subheader">${lang().profile.persona}</span>
-            <div class="sec edit"><span>${lang().profile.profilecolor}:</span><input id="avtr-clr" type="color" value="#${data.avatar_color}"></input></div>
-            <div class="sec edit">
-                <label for="gc-photo" class="filesel">${lang().profile.profilepic}</label>
-                <input type="file" id="profile-photo" accept="image/png,image/jpeg,image/webp,image/gif">
-            </div>` : `
             <div class="sec">
                 <span class="profile-qt">${quote}</span>
-            </div>`}
+            </div>
             `;
             
             profilecont.innerHTML += profileContent;                                   
@@ -90,7 +82,7 @@ function fetchprofile() {
             
             if (data._id === localStorage.getItem('username')) {
                 profilecont.innerHTML += `
-                <button id="updt-prfl" class="modal-button updt-prfl" onclick="updateprofile()" aria-label="update profile"><div>${lang().action.update}</div></button>      
+                <span class="subsubheader warn">Profile customization moved to the settings!</span>
                 `;
             }                    
             
@@ -215,7 +207,6 @@ function updateprofile() {
         xhttp.send(JSON.stringify(data));
     }
 }
-
 
 function opendm(user) {
     const token = localStorage.getItem("token");
