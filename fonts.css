@@ -1,74 +1,118 @@
 @font-face {
-    font-family: Simvoni;
-    src: url(fonts/simvoni/Simvoni.ttf);
-    font-weight: normal;
+	font-family: Whitney;
+	font-weight: normal;
+	src: url(fonts/whitney/whitney-medium.otf) format("opentype");
 }
 
 @font-face {
-    font-family: Simvoni;
-    src: url(fonts/simvoni/Simvoni-Bold.ttf);
-    font-weight: bold;
+	font-family: Whitney;
+	font-weight: bold;
+	src: url(fonts/whitney/whitney-bold.otf) format("opentype");
 }
 
 @font-face {
-    font-family: Whitney;
-    font-weight: normal;
-    src: url(fonts/whitney/whitney-medium.otf) format("opentype");
-    }
-    
-  @font-face {
-    font-family: Whitney;
-    font-weight: bold;
-    src: url(fonts/whitney/whitney-bold.otf) format("opentype");
-  }
-      
-  @font-face {
-    font-family: Whitney;
-    font-weight: 200;
-    src: url(fonts/whitney/whitney-light.otf) format("opentype");
-  }
-    
-  @font-face {
-    font-family: Whitney Italic;
-    font-weight: normal;
-    src: url(fonts/whitney/whitney-mediumitalic.otf) format("opentype");
-  }
-  
-  @font-face {
-    font-family: Whitney Italic;
-    font-weight: bold;
-    src: url(fonts/whitney/whitney-semibolditalic.otf) format("opentype");
-  }
-  
-  @font-face {
-    font-family: Whitney Italic;
-    font-weight: 200;
-    src: url(fonts/whitney/whitney-lightitalic.otf) format("opentype");
-  }
-  
-  @font-face {
-    font-family: Whitney Book;
-    font-weight: normal;
-    src: url(fonts/whitney/whitneybook.otf) format("opentype");
-  }
-  
-  @font-face {
-    font-family: Whitney Book;
-    font-weight: 200;
-    src: url(fonts/whitney/whitneybook-italic.otf) format("opentype");
-  }
+	font-family: Whitney;
+	font-weight: 200;
+	src: url(fonts/whitney/whitney-light.otf) format("opentype");
+}
 
-  @font-face {
-    font-family: seguiemj;
-    src: url(fonts/fluentemoji/seguiemj.ttf) format('truetype');
-  }
+@font-face {
+	font-family: Whitney Italic;
+	font-weight: normal;
+	src: url(fonts/whitney/whitney-mediumitalic.otf) format("opentype");
+}
 
-  @font-face {
-    font-family: notoc;
-    src: url(fonts/noto/notoc.ttf) format('truetype');
-  }
+@font-face {
+	font-family: Whitney Italic;
+	font-weight: bold;
+	src: url(fonts/whitney/whitney-semibolditalic.otf) format("opentype");
+}
 
-  @font-face {
-    font-family: Reddit Mono;
-    src: url(fonts/Reddit_Mono/RedditMono-VariableFont_wght.ttf) format('truetype');
-  }
+@font-face {
+	font-family: Whitney Italic;
+	font-weight: 200;
+	src: url(fonts/whitney/whitney-lightitalic.otf) format("opentype");
+}
+
+@font-face {
+	font-family: Whitney Book;
+	font-weight: normal;
+	src: url(fonts/whitney/whitneybook.otf) format("opentype");
+}
+
+@font-face {
+	font-family: Whitney Book;
+	font-weight: 200;
+	src: url(fonts/whitney/whitneybook-italic.otf) format("opentype");
+}
+
+@font-face {
+	font-family: seguiemj;
+	src: url(fonts/fluentemoji/seguiemj.ttf) format('truetype');
+}
+
+@font-face {
+	font-family: notoc;
+	src: url(fonts/noto/notoc.ttf) format('truetype');
+}
+
+@font-face {
+	font-family: Reddit Mono;
+	src: url(fonts/Reddit_Mono/RedditMono-VariableFont_wght.ttf) format('truetype');
+}
+
+@font-face {
+	font-family: 'GG Sans';
+	font-style: normal;
+	font-weight: 300;
+	src: url(fonts/ggsans/ggsans-Normal.woff2);
+}
+
+@font-face {
+	font-family: 'GG Sans';
+	font-style: normal;
+	font-weight: 400;
+	src: url(fonts/ggsans/ggsans-Medium.woff2);
+}
+
+@font-face {
+	font-family: 'GG Sans';
+	font-style: normal;
+	font-weight: 500;
+	src: url(fonts/ggsans/ggsans-Semibold.woff2);
+}
+
+@font-face {
+	font-family: 'GG Sans';
+	font-style: normal;
+	font-weight: 600;
+	src: url(fonts/ggsans/ggsans-Bold.woff2);
+}
+
+@font-face {
+	font-family: 'GG Sans';
+	font-style: italic;
+	font-weight: 300;
+	src: url(fonts/ggsans/ggsans-NormalItalic.woff2);
+}
+
+@font-face {
+	font-family: 'GG Sans';
+	font-style: italic;
+	font-weight: 400;
+	src: url(fonts/ggsans/ggsans-MediumItalic.woff2);
+}
+
+@font-face {
+	font-family: 'GG Sans';
+	font-style: italic;
+	font-weight: 500;
+	src: url(fonts/ggsans/ggsans-SemiboldItalic.woff2);
+}
+
+@font-face {
+	font-family: 'GG Sans';
+	font-style: italic;
+	font-weight: 600;
+	src: url(fonts/ggsans/ggsans-BoldItalic.woff2);
+}
