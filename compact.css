@@ -1,4 +1,4 @@
-.post {
+.post, .skeleton-post {
     background-color: transparent;
     margin-bottom: 0;
 }
@@ -9,6 +9,12 @@
 
 .post:hover .buttonContainer {
     background-color: var(--accent-color);
+}
+
+@media screen and (max-width: 720px) {
+    .post:hover .buttonContainer, .post:hover {
+        background-color: transparent;
+    }
 }
 
 .pfp {

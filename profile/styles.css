@@ -23,7 +23,6 @@ hr {
 
 .username {
     margin: 0;
-    flex: 1;
 }
 
 .username:hover {
@@ -31,11 +30,12 @@ hr {
 }
 
 .dm-btn {
-    flex: 0.1;
+    width: 40px;
     background-color: transparent;
     display: flex;
     justify-content: center;
     align-items: center;
+    padding: 5px 10px;
 }
 
 .mdl-sec {
@@ -117,4 +117,23 @@ p {
 .edit {
     display: flex;
     justify-content: space-between;
+}
+
+.usr-header-inner {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    overflow: hidden;
+}
+
+.pronouns {
+    text-wrap: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.usr-buttons-inner {
+    flex: 1;
+    display: flex;
+    justify-content: right;
 }
