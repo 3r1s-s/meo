@@ -2981,6 +2981,7 @@ possible future styling
     padding: var(--padding);
     border-radius: var(--border-radius);
     min-height: 200px;
+    box-shadow: 0 5px 10px #00000050;
 }
 
 .profile-settings-page {
