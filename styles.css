@@ -3449,6 +3449,12 @@ possible future styling
         opacity: 1;
         color: var(--color-on);
     }
+        
+    .profile-settings-page {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
 }
 
 .reduced-ani.modal, .reduced-ani.image-mdl > .embed-large {

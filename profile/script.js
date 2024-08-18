@@ -82,7 +82,6 @@ function fetchprofile() {
             
             if (data._id === localStorage.getItem('username')) {
                 profilecont.innerHTML += `
-                <span class="subsubheader warn">Profile customization moved to the settings!</span>
                 `;
             }                    
             
