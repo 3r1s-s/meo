@@ -392,7 +392,11 @@ function main() {
             }
 
             if (page == "home") {
-                document.getElementById("info-ulist").innerText = lul + " users online";
+                if (settingsstuff().ulist) {
+                    document.getElementById("info-ulist").innerText = lul + " users online (" + sul + ")";   
+                } else {
+                    document.getElementById("info-ulist").innerText = lul + " users online";   
+                }
             }
         }
     };
@@ -1741,7 +1745,11 @@ function loadchat(chatId) {
         mainContainer.innerHTML = `
         <div class='info'><h1 class='header-top'>${lang().page_home}</h1><p id='info'><span id="info-ulist"></span><span id="info-typing"></span></p>
         </div>` + loadinputs();
-        document.getElementById("info-ulist").innerText = lul + " users online";
+        if (settingsstuff().ulist) {
+            document.getElementById("info-ulist").innerText = lul + " users online (" + sul + ")";   
+        } else {
+            document.getElementById("info-ulist").innerText = lul + " users online";   
+        }
     } else if (chatId === "inbox") {
         mainContainer.innerHTML = `<div class='info'>
             <h1 class='header-top'>${lang().page_inbox}</h1>
@@ -1758,9 +1766,9 @@ function loadchat(chatId) {
     } else {
         if (data.nickname) {
             mainContainer.innerHTML = `<div class='info'><div class="gctitle"><h1 id='nickname' onclick="openGcModal('${chatId}')" class='header-top'>${escapeHTML(data.nickname)}</h1></div>
-            <p id='info'><span id="info-typing"></span></p></div>` + loadinputs();
+            <p id='info'><span id="info-members">${data.members.length} members<span id="info-typing"></span></p></div>` + loadinputs();
         } else {
-            mainContainer.innerHTML = `<div class='info'><div class="gctitle"><h1 id='username' class='header-top' onclick="openUsrModal('${data.members.find(v => v !== localStorage.getItem("username"))}')">${data.members.find(v => v !== localStorage.getItem("username"))}</h1><i class="subtitle">${chatId}</i></div><p id='info'><span id="info-typing"></span></p></div>` + loadinputs();
+            mainContainer.innerHTML = `<div class='info'><div class="gctitle"><h1 id='username' class='header-top' onclick="openUsrModal('${data.members.find(v => v !== localStorage.getItem("username"))}')">${data.members.find(v => v !== localStorage.getItem("username"))}</h1></div><p id='info'><span id="info-typing"></span></p></div>` + loadinputs();
         }
     }
 
@@ -1946,6 +1954,7 @@ function loadGeneral() {
         ${createSettingSection("hideimages", lang().general_list.title.hideimages, lang().general_list.desc.hideimages)}
         ${createSettingSection("embeds", lang().general_list.title.embeds, lang().general_list.desc.embeds)}
         ${createSettingSection("entersend", lang().general_list.title.entersend, lang().general_list.desc.entersend)}
+        ${createSettingSection("ulist", lang().general_list.title.ulist, lang().general_list.desc.ulist)}
         ${createSettingSection("blockedmessages", lang().general_list.title.blockedmessages, lang().general_list.desc.blockedmessages)}
         ${createSettingSection("censorwords", lang().general_list.title.censorwords, lang().general_list.desc.censorwords)}
         ${createSettingSection("notifications", lang().general_list.title.notifications, lang().general_list.desc.notifications)}
@@ -2011,7 +2020,8 @@ function loadGeneral() {
         hideimages: document.getElementById("hideimages"),
         notifications: document.getElementById("notifications"),
         widemode: document.getElementById("widemode"),
-        compactmode: document.getElementById("compactmode")
+        compactmode: document.getElementById("compactmode"),
+        ulist: document.getElementById("ulist")
     };
 
     Object.values(settings).forEach((settingDiv) => {
@@ -2033,7 +2043,8 @@ function loadGeneral() {
                 hideimages: settings.hideimages.classList.contains("checked"),
                 notifications: settings.notifications.classList.contains("checked"),
                 widemode: settings.widemode.classList.contains("checked"),
-                compactmode: settings.compactmode.classList.contains("checked")
+                compactmode: settings.compactmode.classList.contains("checked"),
+                ulist: settings.ulist.classList.contains("checked")
             }));
             setAccessibilitySettings();
             if (settingsstuff().notifications) {

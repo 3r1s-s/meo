@@ -127,6 +127,7 @@ const en = {
             "widemode": "New Desktop Experience",
             "discord": "Discord Post Layout",
             "compactmode": "Compact Mode",
+            "ulist": "Online Userlist",
         },
         "desc": {
             "homepage": "Instead of showing you the Start Page you get directly taken to home",
@@ -146,6 +147,7 @@ const en = {
             "widemode": "Enables new desktop experience (Experiemental, Requires refresh)",
             "discord": "Reverses the post order to be more like Discord (Experiemental, Requires refresh)",
             "compactmode": "Makes posts take up less space, for viewing more posts at a time (Experiemental, Requires refresh)",
+            "ulist": "Shows the list of users online on the home page",
         }
     },
     "account_sub": {
