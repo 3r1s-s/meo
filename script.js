@@ -2781,7 +2781,7 @@ function chatSettings(chatId) {
     }
 
 	const emojiList = mainContainer.querySelector('.emoji-list');
-	if (emojiList) {
+	if (emojiList || data.emojis) {
 		data.emojis.forEach(emoji => {
 			const emojiItem = document.createElement('div');
 			emojiItem.className = 'member-in';
