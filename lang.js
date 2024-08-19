@@ -82,6 +82,8 @@ const en = {
     "meo_goanywhere": "Where would you like to go?",
     "meo_welcome": "Welcome!",
     "meo_welcomeback": "Welcome back!", // update
+    "meo_userson": "users online",
+    "meo_members": "members",
     "meo_bridged": {
         "start": "Bridged",
         "title": "This post has been bridged from another platform."
@@ -335,8 +337,10 @@ const en = {
     "profile": {
         "quote": "Quote",
         "persona": "Personalization",
-        "profilecolor": "Profile Color",
-        "profilepic": "Profile Picture",
+        "color": "Profile Color",
+        "avatar": "Profile Picture",
+        "pronouns": "Pronouns",
+        "update": "Save Profile",
     },
     "chats": { // update
         "owner": "Ownership",
@@ -404,7 +408,7 @@ const enuk = {
     },
     "profile": {
         "persona": "Personalisation",
-        "profilecolor": "Profile Colour",
+        "color": "Profile Colour",
     },
     "chats": {
     }
@@ -606,8 +610,8 @@ const es = {
     "profile": {
         "quote": "Cita de perfil",
         "persona": "Personalización",
-        "profilecolor": "Color del perfil",
-        "profilepic": "Foto de perfil",
+        "color": "Color del perfil",
+        "avatar": "Foto de perfil",
     },
     "chats": {
         "members": "Miembros"
@@ -819,11 +823,291 @@ const es_es = {
     "profile": {
         "quote": "Cita",
         "persona": "Personalización",
-        "profilecolor": "Color del perfil",
-        "profilepic": "Foto de perfil"
+        "color": "Color del perfil",
+        "avatar": "Foto de perfil"
     },
     "chats": {
         "members": "Miembros"
+    }
+}
+
+const fr = {
+    "language": "Français", // Replace this with that the language is called in that language (ie: "Español" instead of "Spanish")
+    "page_home": "Accueil", // To update a language easier I suggest looking at the diff between en and the language you're editing (sorry I don't have a better solution)
+    "page_start": "Démarrer",
+    "page_explore": "Explores",
+    "page_inbox": "Voîte de réception",
+    "page_settings": "Paramètres",
+    "meo_username": "Nom d’utilisateur",
+    "meo_password": "Mot de passe",
+    "meo_totp": "Application d'authentification ou code de récupération",
+    "meo_messagebox": "What's on your mind?",
+    "meo_goanywhere": "Où dèsires-tu aller ?",
+    "meo_welcome": "Bienvenue !",
+    "meo_welcomeback": "Bienvenue !",
+    "meo_userson": "utilisateurs en ligne",
+    "meo_members": "membres",
+    "meo_bridged": {
+        "start": "Pont",
+        "title": "This post has been bridged from another platform."
+    },
+    "meo_typing": {
+        "one": "{user} est en train d'écrire...",
+        "two": "{user1} et {user2} est en train d'écrire...",
+        "multiple": "{user1}, {user2}, et {user3} est en train d'écrire...",
+        "many": "{count} personnes en train d'écrireg..."
+    },
+    "title_chats": "Èchanges",
+    "title_live": "Livechat",
+    "settings_general": "Général",
+    "settings_account": "Compte",
+    "settings_appearance": "Apparence",
+    "settings_plugins": "Plugins",
+    "settings_languages": "Langue",
+    "settings_profile": "Profil",
+    "general_sub": {
+        "chat": "Chat",
+        "accessibility": "Accessibilité",
+        "misc": "Autre",
+        "acc": "Compte",
+        "blockedusers": "Blocks",
+        "blockedwords": "Blacklisted Words",
+        "about": "Informations",
+        "credits": "Crédits",
+        "contrib": "Contribuer",
+        "privacy": "Confidentialité et sécurité",
+    },
+    "general_list": {
+        "title": {
+            "homepage": "Auto-navigate to Home",
+            "consolewarnings": "Disable console warning",
+            "blockedmessages": "Hide blocked user messages",
+            "invtyping": "Invisible typing",
+            "imagewhitelist": "Allow images from any source",
+            "censorwords": "Censor blacklisted words",
+            "embeds": "Special embeds",
+            "reducemotion": "Reduce motion",
+            "showpostbuttons": "Always show post buttons",
+            "underlinelinks": "Always underline links",
+            "magnify": "Magnify text",
+            "entersend": "Don't send on Enter",
+            "hideimages": "Hide images",
+            "notifications": "Allow Notifications",
+            "widemode": "New Desktop Experience",
+            "discord": "Discord Post Layout",
+            "compactmode": "Compact Mode",
+            "ulist": "Online Userlist",
+        },
+        "desc": {
+            "homepage": "Instead of showing you the Start Page you get directly taken to home",
+            "consolewarnings": "Hides warning message from console",
+            "blockedmessages": "Show a warning or hide messages completely",
+            "invtyping": "Other users won't see you typing",
+            "imagewhitelist": "This allows any site to see your IP, use responsibly",
+            "censorwords": "Censors words instead of treating them like a blocked message",
+            "embeds": "Embeds Tenor GIFS, Youtube Videos, etc. (Uses 3rd party cookies)",
+            "reducemotion": "Reduce the intensity of animations and other moving effects",
+            "showpostbuttons": "Post buttons always remain visible",
+            "underlinelinks": "Make links to websites and other pages stand out more by underlining them",
+            "magnify": "Enlargens and bolds text to be easier to read with poor eyesight (Requires refresh)",
+            "entersend": "Enter key creates newlines instead of sending the post",
+            "hideimages": "Blurs images before opening them",
+            "notifications": "This will ask for notification permissions (Experimental)",
+            "widemode": "Enables new desktop experience (Experiemental, Requires refresh)",
+            "discord": "Reverses the post order to be more like Discord (Experiemental, Requires refresh)",
+            "compactmode": "Makes posts take up less space, for viewing more posts at a time (Experiemental, Requires refresh)",
+            "ulist": "Shows the list of users online on the home page",
+        }
+    },
+    "account_sub": {
+        "password": "Mot de passe",
+        "privacy": "Confidentialité et sécurité",
+        "mfa": "Authentification multifactorielle",
+        "mfainfoenabled": "Multi-factor authentication is enabled. You'll be prompted to prove your identity using one of the devices below when logging into your account.",
+        "mfainfodisabled": "Multi-factor authentication is currently disabled. Add a device using one of the buttons below to add extra security to your account.",
+        "mfainfoincompatible": "Put your authenticator app or recovery code right after your password when logging into clients that don't support multi-factor authentication.",
+        "devices": "Devices",
+        "added": "Successfully added authenticator app!",
+        "recoverycode": "Here is your recovery code, please save it somewhere safe:",
+    },
+    "appearance_sub": {
+        "theme": "Théme",
+        "spthemes": "Special Themes",
+        "acthemes": "Accessible Themes",
+        "ogthemes": "Original Themes",
+        "glthemes": "Glass Themes",
+        "cstheme": "Custom Theme",
+        "cscss": "Custom CSS",
+    },
+    "plugins_sub": {
+        "manage": "Manage",
+        "desc": "The plugins repo can be found ",
+        "link": "here!"
+    },
+    "languages_sub": {
+        "title": "Sèlectionne une Langue",
+        "desc": "La langue que vous souhaitez n'est pas disponible ?",
+        "link": "Aidez-nous en contribuant vos traductions !",
+        "other": "Autres options de langue"
+    },
+    "inbox_sub": {
+        "desc": "Notifications are displayed here.",
+    },
+    "live_sub": {
+        "desc": "Messages won't be saved here."
+    },
+    "login_sub": {
+        "title": "Login",
+        "desc": "This client was made by eri :>",
+        "oldpass": "Old Password",
+        "newpass": "New Password",
+        "agreement": "Terms of Use & Privacy Policy",
+    },
+    "leave_sub": {
+        "desc": "Are you sure you want to leave",
+        "end": "?",
+    },
+    "action": {
+        "logout": "Déconnexion",
+        "login": "Connexion",
+        "signup": "S'inscrire",
+        "search": "Rechercher",
+        "mod": "Modéré",
+        "creategc": "Create Chat",
+        "leavegc": "Leave Chat?",
+        "dmme": "DM Me :)",
+        "invite": "Invite People",
+        "gohome": "Go Home",
+        "cleartokens": "Clear Tokens",
+        "changepw": "Change Password",
+        "addtotp": "Add Authenticator App",
+        "resetrecovery": "Reset Recovery Code",
+        "clearls": "Clear Localstorage",
+        "deleteacc": "Delete Account",
+        "block": "Block",
+        "blockuser": "Block User",
+        "blockword": "Blacklist Word",
+        "run": "Run",
+        "close": "Close",
+        "back": "Back",
+        "opennewtab": "Open in Browser",
+        "reply": "Rèpondre",
+        "mention": "Mention",
+        "report": "Signaler",
+        "delete": "Supprimer",
+        "edit": "Modifier",
+        "share": "Partager",
+        "comment": "Comment",
+        "nick": "Nickname",
+        "create": "Create",
+        "reason": "Reason",
+        "sendreport": "Send Report",
+        "yes": "Yes",
+        "confirm": "Confirm",
+        "update": "Update",
+        "go": "Go",
+        "apply": "Apply",
+        "savetheme": "Save Theme",
+        "loadtheme": "Load Theme",
+        "resetplugins": "Disable All",
+        "favorite": "Favorite",
+        "download": "Download",
+        "add": "Add",
+        "adduser": "Add Member",
+        "transfer": "Transfer Ownership",
+        "bug": "Report Bug",
+        "datarequest": "Request Data",
+        "discuss": "Discuss",
+        "ping": "Ping",
+        "moddel": "Mod Delete",
+        "modpost": "Moderate Post",
+        "message": "Message",
+        "uploademoji": "Upload Emoji",
+        "editemoji": "Edit Emoji",
+        "name": "Name",
+        "remove": "Remove",
+    },
+    "info": {
+        "accexists": "Username Already Taken!",
+        "invaliduser": "Invalid Username!",
+        "invalidpass": "Invalid Password!",
+        "invalidcreds": "Invalid username or password!",
+        "invalidotp": "Invalid code!", // update
+        "unknownmfa": "Unknown multi-factor method! Please make sure you are on the latest meo version.", // update
+        "nopass": "You must enter your password!", // update
+        "nocode": "You must enter the generated one-time code!", // update
+        "authadd": "Authenticator app added! Here is your recovery code that you can use to get back in if you ever get locked out, please keep it safe: ", // update
+        "authrename": "Authenticator renamed!",
+        "authremove": "Authenticator removed!",
+        "accbanned": "Account Banned!",
+        "accdeleted": "Account Deleted!",
+        "conflict": "You probably logged in on another client. Refresh the page and log back in to continue.",
+        "unknown": "Unknown Login Status:",
+        "chatremoved": "You have been removed from the chat you were in.",
+        "passupdate": "Your password has been updated!",
+        "editingpost": "Editing Post:",
+        "reportsent": "Report Sent!",
+        "blockedip": "Blocked IP",
+        "searchany": "Search for anything!",
+        "cleartokens": "This will log you out everywhere.",
+        "clearls": "This will log you out.",
+        "signup": "By signing up you agree to the Meower TOS",
+        "tokenscleared": "Tokens deleted, you will need to log back in",
+        "accscheduled": "Account scheduled for deletion",
+        "deletewarn": "It will be deleted FOREVER (a very long time!)",
+        "changepwwarn": "It will be updated immediately.",
+        "tryagain": "Try again",
+        "cleared": "Cleared!",
+        "plugin": "Restart now to apply new plugins and their settings",
+        "replieslimit": "You can only reply up to 10 posts at a time!", // update
+    },
+    "reports": {
+        "spam": "Spam",
+        "harassment": "Harassment or abuse towards others",
+        "language": "Rude, vulgar or offensive language",
+        "nsfw": "NSFW (sexual, alcohol, violence, gore, etc.)",
+        "scam": "Scams, hacks, phishing or other malicious content",
+        "harm": "Threatening violence or real world harm",
+        "illegal": "Illegal activity",
+        "suicide": "Self-harm/suicide",
+        "age": "This person is too young to use Meower",
+        "other": "Other",
+    },
+    "modals": {
+        "report": "Report Post",
+        "blockword": "Blacklist a Word",
+        "blockauser": "Block a User (case sensitive)",
+        "blockuser": "Block",
+        "unblockuser": "Unblock",
+        "bgimage": "Background Image Link",
+        "blockedip": "IP Blocked",
+        "cleartokens": "Clear Tokens?",
+        "changepass": "Change Password",
+        "clearls": "Clear Localstorage?",
+        "deleteacc": "Delete Account?",
+        "share": "Share",
+        "plugin": "Refresh Required!",
+        "shortcuts": "Shortcuts",
+        "copyuser": "Copied username to clipboard!",
+        "copygc": "Copied link to chat!",
+    },
+    "profile": {
+        "quote": "Citer",
+        "persona": "Personnalisation",
+        "color": "Couleur du profil",
+        "avatar": "Photo de profil",
+        "pronouns": "Pronoms",
+    },
+    "chats": { // update
+        "owner": "Ownership",
+        "members": "Members",
+        "addmember": "Add Member",
+        "emojis": "Emojis",
+        "uploademoji": "Upload Emoji"
+    },
+    "inputs": { // update
+        "onetimecode": "One-time code",
+        "password": "Password",
     }
 }
 
@@ -1018,8 +1302,8 @@ const de = {
     "profile": {
         "quote": "Zitat",
         "persona": "Personalisierung",
-        "profilecolor": "Profilfarbe",
-        "profilepic": "Profilbild",
+        "color": "Profilfarbe",
+        "avatar": "Profilbild",
     }
 }
 
@@ -1244,8 +1528,8 @@ const ua = {
     "profile": {
         "quote": "Цитата",
         "persona": "Персоналізація",
-        "profilecolor": "Колір профілю",
-        "profilepic": "Картинка профілю",
+        "color": "Колір профілю",
+        "avatar": "Картинка профілю",
     },
     "chats": { // what updates? some more spyware so the nsa can keep spying on me? obama...
         "owner": "Власність",
@@ -1472,8 +1756,8 @@ const sj = {
     "profile": {
         "quote": "Libo",
         "persona": "Personanisus",
-        "profilecolor": "Coloro d'Personopado",
-        "profilepic": "Bildo d'Personopado",
+        "color": "Coloro d'Personopado",
+        "avatar": "Bildo d'Personopado",
     },
     "chats": { // update
         "owner": "Ownership",
@@ -1757,8 +2041,8 @@ const b = {
     "profile": {
         "quote": "💖✨💖",
         "persona": "💖✨",
-        "profilecolor": "💖💖",
-        "profilepic": "💖✨💖",
+        "color": "💖💖",
+        "avatar": "💖✨💖",
     },
     "chats": {
         "owner": "💖💖💖💖",
@@ -1987,8 +2271,8 @@ const owo = {
     "profile": {
         "quote": "Quote~",
         "persona": "Peasonawization~",
-        "profilecolor": "Pwofile Cowow~",
-        "profilepic": "Pwofile Pictuwe~",
+        "color": "Pwofile Cowow~",
+        "avatar": "Pwofile Pictuwe~",
     },
     "chats": { // update
         "owner": "Ownership~",
@@ -2217,8 +2501,8 @@ const eris = {
     "profile": {
         "quote": "quote",
         "persona": "persona",
-        "profilecolor": "colour",
-        "profilepic": "pfp",
+        "color": "colour",
+        "avatar": "pfp",
     },
     "chats": {
         "owner": "owner",
@@ -2448,8 +2732,8 @@ const goobert = {
     "profile": {
         "quote": "goobert",
         "persona": "goobert",
-        "profilecolor": "goobert",
-        "profilepic": "goobert",
+        "color": "goobert",
+        "avatar": "goobert",
     },
     "chats": {
         "owner": "goobert",

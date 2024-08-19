@@ -392,9 +392,9 @@ function main() {
 
             if (page == "home") {
                 if (settingsstuff().ulist) {
-                    document.getElementById("info-ulist").innerText = lul + " users online (" + sul + ")";   
+                    document.getElementById("info-ulist").innerText = `${lul} ${lang().meo_userson} (${sul})`;   
                 } else {
-                    document.getElementById("info-ulist").innerText = lul + " users online";   
+                    document.getElementById("info-ulist").innerText = `${lul} ${lang().meo_userson}`;
                 }
             }
         } else if (sentdata.val.mode == "delete") {
@@ -574,7 +574,8 @@ function loadLogin() {
             <option value="en" ${language === "en" ? "selected" : ""}>${en.language}</option>
             <option value="enuk" ${language === "enuk" ? "selected" : ""}>${enuk.language}</option>
             <option value="es" ${language === "es" ? "selected" : ""}>${es.language}</option>
-            <option value="es" ${language === "es_es" ? "selected" : ""}>${es_es.language}</option>
+            <option value="es_es" ${language === "es_es" ? "selected" : ""}>${es_es.language}</option>
+            <option value="fr" ${language === "fr" ? "selected" : ""}>${fr.language}</option>
             <option value="de" ${language === "de" ? "selected" : ""}>${de.language}</option>
             <option value="ua" ${language === "ua" ? "selected" : ""}>${ua.language}</option>
         </select>
@@ -1791,9 +1792,9 @@ function loadchat(chatId) {
         <div class='info'><h1 class='header-top'>${lang().page_home}</h1><p id='info'><span id="info-ulist"></span><span id="info-typing"></span></p>
         </div>` + loadinputs();
         if (settingsstuff().ulist) {
-            document.getElementById("info-ulist").innerText = lul + " users online (" + sul + ")";   
+            document.getElementById("info-ulist").innerText = `${lul} ${lang().meo_userson} (${sul})`;   
         } else {
-            document.getElementById("info-ulist").innerText = lul + " users online";   
+            document.getElementById("info-ulist").innerText = `${lul} ${lang().meo_userson}`;
         }
     } else if (chatId === "inbox") {
         mainContainer.innerHTML = `<div class='info'>
@@ -1811,7 +1812,7 @@ function loadchat(chatId) {
     } else {
         if (data.nickname) {
             mainContainer.innerHTML = `<div class='info'><div class="gctitle"><h1 id='nickname' onclick="openGcModal('${chatId}')" class='header-top'>${escapeHTML(data.nickname)}</h1></div>
-            <p id='info'><span id="info-members">${data.members.length} members<span id="info-typing"></span></p></div>` + loadinputs();
+            <p id='info'><span id="info-members">${data.members.length} ${lang().meo_members}<span id="info-typing"></span></p></div>` + loadinputs();
         } else {
             mainContainer.innerHTML = `<div class='info'><div class="gctitle"><h1 id='username' class='header-top' onclick="openUsrModal('${data.members.find(v => v !== localStorage.getItem("username"))}')">${data.members.find(v => v !== localStorage.getItem("username"))}</h1></div><p id='info'><span id="info-typing"></span></p></div>` + loadinputs();
         }
@@ -2571,6 +2572,202 @@ async function gitstuff() {
     }
 }
 
+function loadProfile() {
+    const username = localStorage.getItem("username"); 
+
+    setTop();
+    let pageContainer = document.querySelector(".settings");
+    pageContainer.innerHTML = `
+        <h1>${lang().settings_profile}</h1>
+        <div class="profile-settings-page">
+            <div>
+                <div class="profile-settings" id="profile-settings" style="">
+                
+                </div>
+            </div>
+            <div>
+                <h3>${lang().profile.pronouns}</h3>
+                    <input type="text" class="setting-input" id="pronouns-edit" placeholder="they/them">
+                <h3>${lang().profile.quote}</h3>
+                    <textarea class="quote-edit" id="quote-edit"></textarea>
+                <h3>${lang().profile.avatar}</h3>
+                    <input type="file" id="profile-photo" accept="image/png,image/jpeg,image/webp,image/gif">
+                <h3>${lang().profile.color}</h3>
+                <div class="color-outer">
+                <div class="color-icon">
+                    <svg class="swatch" aria-hidden="true" role="img" xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24"><path fill="currentColor" d="m13.96 5.46 4.58 4.58a1 1 0 0 0 1.42 0l1.38-1.38a2 2 0 0 0 0-2.82l-3.18-3.18a2 2 0 0 0-2.82 0l-1.38 1.38a1 1 0 0 0 0 1.42ZM2.11 20.16l.73-4.22a3 3 0 0 1 .83-1.61l7.87-7.87a1 1 0 0 1 1.42 0l4.58 4.58a1 1 0 0 1 0 1.42l-7.87 7.87a3 3 0 0 1-1.6.83l-4.23.73a1.5 1.5 0 0 1-1.73-1.73Z"></path></svg>
+                </div>
+                <input id="profile-color" type="color" value="#000">
+                </div>
+                <h3>${lang().profile.update}</h3>
+                <div class="settings-buttons-row">
+                    <button onclick="saveProfile()" id="profile-update" class="settings-button-in green">${lang().profile.update}</button>
+                </div>
+            </div>
+        </div>
+    `;
+
+    fetch(`https://api.meower.org/users/${username}`)
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('User not found');
+        }
+        return response.json();
+    })
+    .then(data => {
+        const profilecont = document.getElementById("profile-settings");
+
+        if (data.avatar_color !== "!color" && data.avatar_color) {
+            profilecont.classList.add('custom-bg');
+            const clr1 = darkenColour(data.avatar_color, 3);
+            const clr2 = darkenColour(data.avatar_color, 5);
+
+            profilecont.style.background = `linear-gradient(180deg, ${clr1} 0%, ${clr2} 100%`;
+            profilecont.style.setProperty('--accent', lightenColour(data.avatar_color, 2));
+            profilecont.style.setProperty('color', lightenColour(data.avatar_color, 1.25));
+        }
+
+        if (data.avatar) {
+            profilecont.innerHTML = `
+            <div class="avatar-big pfp-inner" style="border: 6px solid #${data.avatar_color}; background-color:#${data.avatar_color}; background-image: url(https://uploads.meower.org/icons/${data.avatar});"></div>
+            `
+        } else if (data.pfp_data) {                    
+            profilecont.innerHTML = `
+            <div class="avatar-big pfp-inner svg-avatar" style="border: 6px solid #${data.avatar_color}; background-image: url(../images/avatars/icon_${data.pfp_data - 1}.svg);"></div>
+            `
+        } else {                        
+            profilecont.innerHTML = `
+            <div class="avatar-big pfp-inner svg-avatar" style="border: 6px solid #000; background-image: url(../images/avatars/icon_-4.svg);"></div>
+            `
+        }
+
+        let quote;
+        let editquote;
+        let pronouns;
+        
+        if (typeof md !== 'undefined') {
+            md.disable(['image']);
+            quote = erimd(md.render(data.quote).replace(/<a(.*?)>/g, '<a$1 target="_blank">'));
+            
+            const regex = /\[(.*?)\]/;
+            const newlineregex = /\n\n\[(.*?)\]/;
+            const match = quote.match(regex);
+            pronouns = match ? match[1] : "";
+            quote = quote.replace(regex, '');
+            editquote = data.quote.replace(newlineregex, '');                                                   
+        } else {
+            quote = oldMarkdown(data.quote);
+            console.error("Parsed with old markdown, fix later :)");
+        }
+
+        document.getElementById("pronouns-edit").value = pronouns;
+        document.getElementById("quote-edit").value = editquote;
+        document.getElementById("profile-color").value = `#${data.avatar_color}`;
+        
+        let profileContent = `
+        <div class="usr-header">
+        <div class="usr-header-inner">
+            <h2 class="username" onclick="copy('${meourl}/profile?u=${data._id}', '${lang().modals.copyuser}')">${data._id}</h2>
+            ${pronouns !== '' ? `<span title="Pronouns" class="subsubheader pronouns">${escapeHTML(pronouns)}</span>` : ``}
+        </div> 
+        </div>
+        <hr>
+        <span class="subheader">${lang().profile.quote}</span>
+        <div class="sec">
+            <span class="profile-qt">${quote}</span>
+        </div>
+        `;
+        
+        profilecont.innerHTML += profileContent;
+
+        const check = document.querySelector(".avatar-big");
+        const pfpUrl = `../images/avatars/icon_${data.pfp_data - 1}.svg`;
+        fetch(pfpUrl)
+            .then(response => {
+                if (!response.ok) {
+                    check.src = `../images/avatars/icon_err.svg`;
+                }
+            })
+            .catch(error => {
+                check.src = `../images/avatars/icon_err.svg`;
+                console.warn('Error fetching profile picture:', error);
+            });
+        })
+        .catch(error => {
+            const profilecont = document.createElement('div');
+            profilecont.classList.add('mdl-sec');
+            profilecont.innerHTML = '<h2>404: User not found</h2>';
+            document.getElementById('page').appendChild(profilecont);
+            console.error('Error fetching user profile:', error);
+        });
+}
+
+function saveProfile() {
+    let quote = document.getElementById("quote-edit").value;
+    const pronouns = document.getElementById("pronouns-edit").value;
+
+    if (pronouns.trim() !== "") {
+        quote = `${quote}\n\n[${pronouns}]`;
+    }
+
+    const profilecolor = document.getElementById("profile-color").value.substring(1);
+    const fileInput = document.getElementById("profile-photo");
+    const file = fileInput.files[0];
+    const token = localStorage.getItem("token");
+
+    const update = document.getElementById("profile-update");
+    update.disabled = true;
+    update.textContent = "Uploading...";
+
+    const xhttp = new XMLHttpRequest();
+
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4) {
+            if (this.status == 200) {
+                console.log('Profile updated successfully.');
+                const update = document.getElementById("profile-update");
+                update.disabled = false;
+                update.textContent = `${lang().profile.update}`;
+                loadProfile();
+                parent.closemodal("Profile Updated!");
+            } else {
+                console.error('Failed to update profile. HTTP ' + this.status.toString());
+            }
+        }
+    };
+
+    xhttp.open("PATCH", "https://api.meower.org/me/config");
+
+    xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    xhttp.setRequestHeader("token", token);
+
+    const data = {
+        quote: quote,
+        avatar_color: profilecolor
+    };
+
+    if (file) {
+        const formData = new FormData();
+        formData.append("file", file);
+            fetch("https://uploads.meower.org/icons", {
+                method: "POST",
+                headers: {
+                    "Authorization": token
+                },
+                body: formData
+            })
+            .then(uploadResponse => uploadResponse.json())
+            .then(uploadData => {
+                const avatarId = uploadData.id;
+                data.avatar = avatarId;
+                xhttp.send(JSON.stringify(data));
+            })
+            .catch(error => console.error('Error uploading file:', error));
+    } else {
+        xhttp.send(JSON.stringify(data));
+    }
+}
+
 async function loadPlugins() {
     setTop();
     let pageContainer = document.querySelector(".settings");
@@ -3107,6 +3304,7 @@ function loadLanguages() {
             <button class="language button" id="enuk" onclick="changeLanguage('enuk')"><span class="language-l">${enuk.language}</span><span class="language-r">English, UK</span><div class="radio"></div></button>
             <button class="language button" id="es" onclick="changeLanguage('es')"><span class="language-l">${es.language}</span><span class="language-r">Spanish (Latin American)</span><div class="radio"></div></button>
             <button class="language button" id="es_es" onclick="changeLanguage('es_es')"><span class="language-l">${es_es.language}</span><span class="language-r">Spanish (Spain)</span><div class="radio"></div></button>
+            <button class="language button" id="fr" onclick="changeLanguage('fr')"><span class="language-l">${fr.language}</span><span class="language-r">French</span><div class="radio"></div></button>
             <button class="language button" id="de" onclick="changeLanguage('de')"><span class="language-l">${de.language}</span><span class="language-r">German</span><div class="radio"></div></button>
             <button class="language button" id="ua" onclick="changeLanguage('ua')"><span class="language-l">${ua.language}</span><span class="language-r">Ukrainian</span><div class="radio"></div></button>
             <h3>${lang().languages_sub.other}</h3>
