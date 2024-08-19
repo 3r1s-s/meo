@@ -340,6 +340,7 @@ const en = {
         "emojis": "Emojis",
         "uploademoji": "Upload Emoji",
         "chatsettings": "Chat Settings",
+        "leave": "Leave",
         "update": "Save Chat",
     },
     "inputs": { // update

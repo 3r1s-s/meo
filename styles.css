@@ -2814,6 +2814,9 @@ possible future styling
     margin: var(--button-margin) 0;
     display: flex;
     flex-direction: column;
+    max-height: 450px;
+    overflow-y: scroll;
+    overflow-x: visible;
 }
 
 .emoji-list {
@@ -2821,7 +2824,7 @@ possible future styling
     margin: var(--button-margin) 0;
     display: flex;
     flex-direction: column;
-    max-height: 300px;
+    max-height: 450px;
     overflow-y: scroll;
     overflow-x: visible;
 }
