@@ -344,10 +344,13 @@ const en = {
     },
     "chats": { // update
         "owner": "Ownership",
+        "settings": "Settings",
         "members": "Members",
         "addmember": "Add Member",
         "emojis": "Emojis",
-        "uploademoji": "Upload Emoji"
+        "uploademoji": "Upload Emoji",
+        "chatsettings": "Chat Settings",
+        "update": "Save Chat",
     },
     "inputs": { // update
         "onetimecode": "One-time code",

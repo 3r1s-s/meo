@@ -1810,9 +1810,41 @@ function loadchat(chatId) {
             ${loadinputs()}
         `;
     } else {
-        if (data.nickname) {
-            mainContainer.innerHTML = `<div class='info'><div class="gctitle"><h1 id='nickname' onclick="openGcModal('${chatId}')" class='header-top'>${escapeHTML(data.nickname)}</h1></div>
-            <p id='info'><span id="info-members">${data.members.length} ${lang().meo_members}<span id="info-typing"></span></p></div>` + loadinputs();
+        if (data.nickname) { // update this one too
+            mainContainer.innerHTML = `<div class='info'><div class="gctitle"><h1 id='nickname' onclick="chatSettings('${chatId}')" class='header-top'>${escapeHTML(data.nickname)}</h1></div>
+            <p id='info'><span id="info-members">${data.members.length} ${lang().meo_members}</span><span id="info-typing"></span></p></div>` + loadinputs();
+            
+            let url
+            if (data.icon) {
+                url = `url(https://uploads.meower.org/icons/${data.icon})`;
+            } else {
+                url = `url(images/GC.svg)`;
+            }
+            let color
+            if (!data.icon) {
+                color = '1f5831';
+            } else if (data.icon_color) {
+                color = data.icon_color;
+            } else {
+                color = '000';
+            }
+            navc = document.querySelector(".nav-top");
+            navc.innerHTML = `
+            <button class="trans" id="submit" value="Home" onclick="loadstart()" aria-label="Home">
+                <svg width="32" height="32" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+                    <g>
+                        <path fill="currentColor" d="M468.42 20.5746L332.997 65.8367C310.218 58.8105 284.517 55.049 255.499 55.6094C226.484 55.049 200.78 58.8105 178.004 65.8367L42.5803 20.5746C18.9102 16.3251 -1.81518 36.2937 2.5967 59.1025L38.7636 200.894C18.861 248.282 12.1849 296.099 12.1849 325.027C12.1849 399.343 44.6613 492 255.499 492C466.339 492 498.815 399.343 498.815 325.027C498.815 296.099 492.139 248.282 472.237 200.894L508.404 59.1025C512.814 36.2937 492.09 16.3251 468.42 20.5746Z"></path>
+                    </g>
+                </svg>
+            </button>
+
+            <button id="42d60d56-3fd6-4657-bf0b-bc1f9c8a3c67" class="navigation-button button gcbtn" onclick="loadchat('${chatId}')">
+            <div class="avatar-small pfp-inner" alt="Avatar" style="background-image: ${url}; border: 3px solid #${color};"></div><span class="gcname">${escapeHTML(data.nickname)}</span>
+            </button>
+
+            <input type='button' class='settings-button button' id='submit' value='${lang().chats.settings}' onclick='chatSettings("${chatId}")'>
+            <input type='button' class='settings-button button' id='submit' value='${lang().chats.members}' onclick='chatMembers("${chatId}")'>
+            `;
         } else {
             mainContainer.innerHTML = `<div class='info'><div class="gctitle"><h1 id='username' class='header-top' onclick="openUsrModal('${data.members.find(v => v !== localStorage.getItem("username"))}')">${data.members.find(v => v !== localStorage.getItem("username"))}</h1></div><p id='info'><span id="info-typing"></span></p></div>` + loadinputs();
         }
@@ -2694,6 +2726,586 @@ function loadProfile() {
             document.getElementById('page').appendChild(profilecont);
             console.error('Error fetching user profile:', error);
         });
+}
+
+function chatSettings(chatId) {
+	setTop();
+
+	if (!chatCache[chatId]) {
+		fetch(`https://api.meower.org/chats/${chatId}`, {
+				headers: {
+					token: localStorage.getItem("token")
+				}
+			})
+			.then(response => {
+				if (!response.ok) {
+					if (response.status === 404) {
+						throw new Error("Chat not found");
+					} else {
+						throw new Error('Network response was not ok');
+					}
+				}
+				return response.json();
+			})
+			.then(data => {
+				chatCache[chatId] = data;
+				loadchat(chatId);
+			})
+			.catch(e => {
+				openUpdate(`Unable to open chat: ${e}`);
+			});
+		return;
+	}
+
+	const data = chatCache[chatId];
+	document.documentElement.style.overflow = "hidden";
+
+	const mainContainer = document.getElementById("main");
+
+	let url
+	if (data.icon) {
+		url = `url(https://uploads.meower.org/icons/${data.icon})`;
+	} else {
+		url = `url(images/GC.svg)`;
+	}
+	let color
+	if (!data.icon) {
+		color = '1f5831';
+	} else if (data.icon_color) {
+		color = data.icon_color;
+	} else {
+		color = '000';
+	}
+    if (data.owner === localStorage.getItem("username")) {
+        mainContainer.innerHTML = `
+        <div class="settings">
+            <h1>${lang().chats.settings}</h1>
+            <div class="avatar-big pfp-inner" style="border: 6px solid #${color}; background-color: #${color}; background-image: ${url};"></div>
+            <div class="gctitle">
+                <h2 id="nickname" class="gcn" onclick="copy('${meourl}?gc=${chatId}')">${escapeHTML(data.nickname)}</h2><i class="subtitle">${chatId}</i>
+            </div>
+            <hr class="mdl-hr">
+            <h3>Chat Photo</h3>
+                <input type="file" id="chat-photo" accept="image/png,image/jpeg,image/webp,image/gif">
+            <h3>Chat Color</h3>
+            <div class="color-outer">
+            <div class="color-icon">
+                <svg class="swatch" aria-hidden="true" role="img" xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24"><path fill="currentColor" d="m13.96 5.46 4.58 4.58a1 1 0 0 0 1.42 0l1.38-1.38a2 2 0 0 0 0-2.82l-3.18-3.18a2 2 0 0 0-2.82 0l-1.38 1.38a1 1 0 0 0 0 1.42ZM2.11 20.16l.73-4.22a3 3 0 0 1 .83-1.61l7.87-7.87a1 1 0 0 1 1.42 0l4.58 4.58a1 1 0 0 1 0 1.42l-7.87 7.87a3 3 0 0 1-1.6.83l-4.23.73a1.5 1.5 0 0 1-1.73-1.73Z"></path></svg>
+            </div>
+                <input id="chat-color" type="color" value="#${data.icon_color}">
+            </div>
+                <h3>${lang().action.nick}</h3>
+                <div class="nick">
+                    <input id="chat-nick-input" class="setting-input" placeholder="${data.nickname}" minlength="1" maxlength="20">
+                </div>
+                <h3>${lang().chats.emojis}</h3>
+                <div class="emoji-list">
+                <button class="member button" onclick="uploadEmojiModal('${chatId}')">${lang().chats.uploademoji}</button>
+                </div>
+                <hr>
+            <div class="settings-buttons-row">
+                <button onclick="saveChat('${chatId}')" id="chat-update" class="settings-button-in green">${lang().chats.update}</button>
+            </div>
+        </div>
+    `;
+    } else {
+        mainContainer.innerHTML = `
+        <div class="settings">
+            <h1>${lang().chats.settings}</h1>
+            <div class="avatar-big pfp-inner" style="border: 6px solid #${color}; background-color: #${color}; background-image: ${url};"></div>
+            <div class="gctitle">
+                <h2 id="nickname" class="gcn" onclick="copy('${meourl}?gc=${chatId}')">${escapeHTML(data.nickname)}</h2><i class="subtitle">${chatId}</i>
+            </div>
+            <hr class="mdl-hr">
+                <h3>${lang().chats.emojis}</h3>
+                <div class="emoji-list">
+                </div>
+                <hr>
+        </div>
+    `;
+    }
+
+	const emojiList = mainContainer.querySelector('.emoji-list');
+	if (emojiList) {
+		data.emojis.forEach(emoji => {
+			const emojiItem = document.createElement('div');
+			emojiItem.className = 'member-in';
+			emojiItem.innerHTML = `
+                        <div class="emoji-option-in">
+                        <img class="emoji-option-im" src="https://uploads.meower.org/emojis/${emoji._id}" alt="${emoji.name}" />
+                        <span>${emoji.name}</span>
+                        </div>
+                        ${data.owner === localStorage.getItem("username") ? `
+                        <div class="mem-ops">
+                            <div class="mem-op tooltip left" onclick="editEmojiName('${chatId}', '${emoji._id}', '${emoji.name}')" title="${lang().action.edit}" data-tooltip="${lang().action.edit}">
+                                <svg width="18" height="18" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" clip-rule="evenodd" d="M12.8619 6.55339L13.2939 6.12198C14.2353 5.18055 14.2353 3.6481 13.2939 2.70607C12.3525 1.76464 10.8195 1.76464 9.878 2.70607L9.4466 3.13808L12.8619 6.55339ZM8.59747 3.98471L3.45646 9.12719L6.87233 12.5421L12.0134 7.39959L8.59747 3.98471ZM2.74567 13.9804L5.83937 13.2076L2.79128 10.1595L2.01785 13.2532C1.96685 13.4572 2.02685 13.6738 2.17566 13.8226C2.32446 13.9714 2.54107 14.0308 2.74567 13.9804Z" fill="currentColor"/>
+                                </svg>
+                            </div>    
+                            <div class="mem-op tooltip left" onclick="removeEmoji('${chatId}', '${emoji._id}', '${emoji.name}')" title="${lang().action.remove}" data-tooltip="${lang().action.remove}">
+                                <svg width="18" height="18" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path fill="currentColor" d="M2.3352 13.6648C2.78215 14.1117 3.50678 14.1117 3.95372 13.6648L8 9.61851L12.0463 13.6648C12.4932 14.1117 13.2179 14.1117 13.6648 13.6648C14.1117 13.2179 14.1117 12.4932 13.6648 12.0463L9.61851 8L13.6648 3.95372C14.1117 3.50678 14.1117 2.78214 13.6648 2.3352C13.2179 1.88826 12.4932 1.88827 12.0463 2.33521L8 6.38149L3.95372 2.33521C3.50678 1.88827 2.78214 1.88827 2.3352 2.33521C1.88826 2.78215 1.88827 3.50678 2.33521 3.95372L6.38149 8L2.33521 12.0463C1.88827 12.4932 1.88827 13.2179 2.3352 13.6648Z"></path>
+                                </svg>
+                            </div>
+                        </div>` : ''}
+                        `;
+			emojiList.appendChild(emojiItem);
+		});
+	}
+}
+
+function chatMembers(chatId) {
+	setTop();
+
+	if (!chatCache[chatId]) {
+		fetch(`https://api.meower.org/chats/${chatId}`, {
+				headers: {
+					token: localStorage.getItem("token")
+				}
+			})
+			.then(response => {
+				if (!response.ok) {
+					if (response.status === 404) {
+						throw new Error("Chat not found");
+					} else {
+						throw new Error('Network response was not ok');
+					}
+				}
+				return response.json();
+			})
+			.then(data => {
+				chatCache[chatId] = data;
+				loadchat(chatId);
+			})
+			.catch(e => {
+				openUpdate(`Unable to open chat: ${e}`);
+			});
+		return;
+	}
+
+	const data = chatCache[chatId];
+	document.documentElement.style.overflow = "hidden";
+
+	const mainContainer = document.getElementById("main");
+
+	let url
+	if (data.icon) {
+		url = `url(https://uploads.meower.org/icons/${data.icon})`;
+	} else {
+		url = `url(images/GC.svg)`;
+	}
+	let color
+	if (!data.icon) {
+		color = '1f5831';
+	} else if (data.icon_color) {
+		color = data.icon_color;
+	} else {
+		color = '000';
+	}
+	mainContainer.innerHTML = `
+    <div class="settings">
+        <h1>${lang().chats.members}</h1>
+        <h3>${lang().chats.owner}</h3>
+        <div class="owner">
+        </div>
+        <h3>${lang().chats.members} <span id="member-count"></span></h3>
+        <button class="member button" onclick="addMembertoGCModal('${chatId}')">Add Member</button>
+        <div class="member-list">
+        </div>
+    </div>
+`;
+    const memberList = mainContainer.querySelector('.member-list');
+    if (data.owner === localStorage.getItem("username")) {
+        const ownercont = mainContainer.querySelector('.owner');
+        ownercont.innerHTML = `
+        <button onclick="transferOwnershipModal('${chatId}')" class="button ow-btn">Transfer Ownership</button>
+        `
+    } else {
+        const ownercont = mainContainer.querySelector('.owner');
+        ownercont.innerHTML = `
+        <p class="subsubheader">${data.owner} is the owner</p>
+        `
+    }
+    if (memberList) {
+        data.members.forEach(member => {
+            const memberItem = document.createElement('div');
+            memberItem.className = 'member-in';
+            memberItem.innerHTML = `
+            <span>@${member}</span>
+            ${data.owner === localStorage.getItem("username") || member === localStorage.getItem("username") ? `<div class="mem-ops">
+                <div class="mem-op tooltip left" onclick="removeMemberFromGC('${chatId}', '${member}')" title="${lang().action.remove}" data-tooltip="${lang().action.remove}">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path fill="currentColor" d="M2.3352 13.6648C2.78215 14.1117 3.50678 14.1117 3.95372 13.6648L8 9.61851L12.0463 13.6648C12.4932 14.1117 13.2179 14.1117 13.6648 13.6648C14.1117 13.2179 14.1117 12.4932 13.6648 12.0463L9.61851 8L13.6648 3.95372C14.1117 3.50678 14.1117 2.78214 13.6648 2.3352C13.2179 1.88826 12.4932 1.88827 12.0463 2.33521L8 6.38149L3.95372 2.33521C3.50678 1.88827 2.78214 1.88827 2.3352 2.33521C1.88826 2.78215 1.88827 3.50678 2.33521 3.95372L6.38149 8L2.33521 12.0463C1.88827 12.4932 1.88827 13.2179 2.3352 13.6648Z"></path>
+                    </svg>
+                </div>
+            </div>` : ''}
+            `;
+            memberList.appendChild(memberItem);
+        });
+        document.getElementById("member-count").innerText = ` (${data.members.length})`;
+
+    }
+}
+
+function saveChat(chatId) {
+    const fileInput = document.getElementById("chat-photo");
+    const file = fileInput.files[0];
+    const token = localStorage.getItem("token");
+    const avtrclr = document.getElementById("chat-color").value.substring(1);
+    const nick = document.getElementById("chat-nick-input").value;
+
+    const update = document.getElementById("chat-update");
+    update.disabled = true;
+    update.textContent = "Uploading...";
+
+    const xhttp = new XMLHttpRequest();
+
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4) {
+            if (this.status == 200) {
+                console.log('GC updated successfully.');
+                closemodal("Chat Updated!");
+                const update = document.getElementById("chat-update");
+                update.disabled = false;
+                update.textContent = lang().chats.update;
+
+                loadchat(chatId);
+            } else {
+                closemodal(this.status.toString());
+                const update = document.getElementById("chat-update");
+                update.disabled = false;
+                update.textContent = lang().chats.update;
+                console.error('Failed to update chat. HTTP ' + this.status.toString());
+            }
+        }
+    };
+
+    xhttp.open("PATCH", `https://api.meower.org/chats/${chatId}`);
+
+    xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    xhttp.setRequestHeader("token", token);
+
+    const data = {
+        icon_color: avtrclr
+    };
+
+    if (file) {
+        const formData = new FormData();
+        formData.append("file", file);
+
+        fetch("https://uploads.meower.org/icons", {
+            method: "POST",
+            headers: {
+                "Authorization": token
+            },
+            body: formData
+        })
+        .then(uploadResponse => uploadResponse.json())
+        .then(uploadData => {
+            if (nick) {
+                data.nickname = nick;
+            }
+            const avatarId = uploadData.id;
+            data.icon = avatarId;
+            xhttp.send(JSON.stringify(data));
+        })
+        .catch(error => console.error('Error uploading file:', error));
+    } else {
+        if (nick) {
+            data.nickname = nick;
+        }
+        xhttp.send(JSON.stringify(data));
+    }
+}
+
+function chatSettings(chatId) {
+	setTop();
+
+	if (!chatCache[chatId]) {
+		fetch(`https://api.meower.org/chats/${chatId}`, {
+				headers: {
+					token: localStorage.getItem("token")
+				}
+			})
+			.then(response => {
+				if (!response.ok) {
+					if (response.status === 404) {
+						throw new Error("Chat not found");
+					} else {
+						throw new Error('Network response was not ok');
+					}
+				}
+				return response.json();
+			})
+			.then(data => {
+				chatCache[chatId] = data;
+				loadchat(chatId);
+			})
+			.catch(e => {
+				openUpdate(`Unable to open chat: ${e}`);
+			});
+		return;
+	}
+
+	const data = chatCache[chatId];
+	document.documentElement.style.overflow = "hidden";
+
+	const mainContainer = document.getElementById("main");
+
+	let url
+	if (data.icon) {
+		url = `url(https://uploads.meower.org/icons/${data.icon})`;
+	} else {
+		url = `url(images/GC.svg)`;
+	}
+	let color
+	if (!data.icon) {
+		color = '1f5831';
+	} else if (data.icon_color) {
+		color = data.icon_color;
+	} else {
+		color = '000';
+	}
+    if (data.owner === localStorage.getItem("username")) {
+        mainContainer.innerHTML = `
+        <div class="settings">
+            <h1>${lang().chats.settings}</h1>
+            <div class="avatar-big pfp-inner" style="border: 6px solid #${color}; background-color: #${color}; background-image: ${url};"></div>
+            <div class="gctitle">
+                <h2 id="nickname" class="gcn" onclick="copy('${meourl}?gc=${chatId}')">${escapeHTML(data.nickname)}</h2><i class="subtitle">${chatId}</i>
+            </div>
+            <hr class="mdl-hr">
+            <h3>Chat Photo</h3>
+                <input type="file" id="chat-photo" accept="image/png,image/jpeg,image/webp,image/gif">
+            <h3>Chat Color</h3>
+            <div class="color-outer">
+            <div class="color-icon">
+                <svg class="swatch" aria-hidden="true" role="img" xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24"><path fill="currentColor" d="m13.96 5.46 4.58 4.58a1 1 0 0 0 1.42 0l1.38-1.38a2 2 0 0 0 0-2.82l-3.18-3.18a2 2 0 0 0-2.82 0l-1.38 1.38a1 1 0 0 0 0 1.42ZM2.11 20.16l.73-4.22a3 3 0 0 1 .83-1.61l7.87-7.87a1 1 0 0 1 1.42 0l4.58 4.58a1 1 0 0 1 0 1.42l-7.87 7.87a3 3 0 0 1-1.6.83l-4.23.73a1.5 1.5 0 0 1-1.73-1.73Z"></path></svg>
+            </div>
+                <input id="chat-color" type="color" value="#${data.icon_color}">
+            </div>
+                <h3>${lang().action.nick}</h3>
+                <div class="nick">
+                    <input id="chat-nick-input" class="setting-input" placeholder="${data.nickname}" minlength="1" maxlength="20">
+                </div>
+                <h3>${lang().chats.emojis}</h3>
+                <div class="emoji-list">
+                <button class="member button" onclick="uploadEmojiModal('${chatId}')">${lang().chats.uploademoji}</button>
+                </div>
+                <hr>
+            <div class="settings-buttons-row">
+                <button onclick="saveChat('${chatId}')" id="chat-update" class="settings-button-in green">${lang().chats.update}</button>
+            </div>
+        </div>
+    `;
+    } else {
+        mainContainer.innerHTML = `
+        <div class="settings">
+            <h1>${lang().chats.settings}</h1>
+            <div class="avatar-big pfp-inner" style="border: 6px solid #${color}; background-color: #${color}; background-image: ${url};"></div>
+            <div class="gctitle">
+                <h2 id="nickname" class="gcn" onclick="copy('${meourl}?gc=${chatId}')">${escapeHTML(data.nickname)}</h2><i class="subtitle">${chatId}</i>
+            </div>
+            <hr class="mdl-hr">
+                <h3>${lang().chats.emojis}</h3>
+                <div class="emoji-list">
+                </div>
+                <hr>
+        </div>
+    `;
+    }
+
+	const emojiList = mainContainer.querySelector('.emoji-list');
+	if (emojiList) {
+		data.emojis.forEach(emoji => {
+			const emojiItem = document.createElement('div');
+			emojiItem.className = 'member-in';
+			emojiItem.innerHTML = `
+                        <div class="emoji-option-in">
+                        <img class="emoji-option-im" src="https://uploads.meower.org/emojis/${emoji._id}" alt="${emoji.name}" />
+                        <span>${emoji.name}</span>
+                        </div>
+                        ${data.owner === localStorage.getItem("username") ? `
+                        <div class="mem-ops">
+                            <div class="mem-op tooltip left" onclick="editEmojiName('${chatId}', '${emoji._id}', '${emoji.name}')" title="${lang().action.edit}" data-tooltip="${lang().action.edit}">
+                                <svg width="18" height="18" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" clip-rule="evenodd" d="M12.8619 6.55339L13.2939 6.12198C14.2353 5.18055 14.2353 3.6481 13.2939 2.70607C12.3525 1.76464 10.8195 1.76464 9.878 2.70607L9.4466 3.13808L12.8619 6.55339ZM8.59747 3.98471L3.45646 9.12719L6.87233 12.5421L12.0134 7.39959L8.59747 3.98471ZM2.74567 13.9804L5.83937 13.2076L2.79128 10.1595L2.01785 13.2532C1.96685 13.4572 2.02685 13.6738 2.17566 13.8226C2.32446 13.9714 2.54107 14.0308 2.74567 13.9804Z" fill="currentColor"/>
+                                </svg>
+                            </div>    
+                            <div class="mem-op tooltip left" onclick="removeEmoji('${chatId}', '${emoji._id}', '${emoji.name}')" title="${lang().action.remove}" data-tooltip="${lang().action.remove}">
+                                <svg width="18" height="18" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path fill="currentColor" d="M2.3352 13.6648C2.78215 14.1117 3.50678 14.1117 3.95372 13.6648L8 9.61851L12.0463 13.6648C12.4932 14.1117 13.2179 14.1117 13.6648 13.6648C14.1117 13.2179 14.1117 12.4932 13.6648 12.0463L9.61851 8L13.6648 3.95372C14.1117 3.50678 14.1117 2.78214 13.6648 2.3352C13.2179 1.88826 12.4932 1.88827 12.0463 2.33521L8 6.38149L3.95372 2.33521C3.50678 1.88827 2.78214 1.88827 2.3352 2.33521C1.88826 2.78215 1.88827 3.50678 2.33521 3.95372L6.38149 8L2.33521 12.0463C1.88827 12.4932 1.88827 13.2179 2.3352 13.6648Z"></path>
+                                </svg>
+                            </div>
+                        </div>` : ''}
+                        `;
+			emojiList.appendChild(emojiItem);
+		});
+	}
+}
+
+function chatMembers(chatId) {
+	setTop();
+
+	if (!chatCache[chatId]) {
+		fetch(`https://api.meower.org/chats/${chatId}`, {
+				headers: {
+					token: localStorage.getItem("token")
+				}
+			})
+			.then(response => {
+				if (!response.ok) {
+					if (response.status === 404) {
+						throw new Error("Chat not found");
+					} else {
+						throw new Error('Network response was not ok');
+					}
+				}
+				return response.json();
+			})
+			.then(data => {
+				chatCache[chatId] = data;
+				loadchat(chatId);
+			})
+			.catch(e => {
+				openUpdate(`Unable to open chat: ${e}`);
+			});
+		return;
+	}
+
+	const data = chatCache[chatId];
+	document.documentElement.style.overflow = "hidden";
+
+	const mainContainer = document.getElementById("main");
+
+	let url
+	if (data.icon) {
+		url = `url(https://uploads.meower.org/icons/${data.icon})`;
+	} else {
+		url = `url(images/GC.svg)`;
+	}
+	let color
+	if (!data.icon) {
+		color = '1f5831';
+	} else if (data.icon_color) {
+		color = data.icon_color;
+	} else {
+		color = '000';
+	}
+	mainContainer.innerHTML = `
+    <div class="settings">
+        <h1>${lang().chats.members}</h1>
+        <h3>${lang().chats.owner}</h3>
+        <div class="owner">
+        </div>
+        <h3>${lang().chats.members} <span id="member-count"></span></h3>
+        <button class="member button" onclick="addMembertoGCModal('${chatId}')">Add Member</button>
+        <div class="member-list">
+        </div>
+    </div>
+`;
+    const memberList = mainContainer.querySelector('.member-list');
+    if (data.owner === localStorage.getItem("username")) {
+        const ownercont = mainContainer.querySelector('.owner');
+        ownercont.innerHTML = `
+        <button onclick="transferOwnershipModal('${chatId}')" class="button ow-btn">Transfer Ownership</button>
+        `
+    } else {
+        const ownercont = mainContainer.querySelector('.owner');
+        ownercont.innerHTML = `
+        <p class="subsubheader">${data.owner} is the owner</p>
+        `
+    }
+    if (memberList) {
+        data.members.forEach(member => {
+            const memberItem = document.createElement('div');
+            memberItem.className = 'member-in';
+            memberItem.innerHTML = `
+            <span>@${member}</span>
+            ${data.owner === localStorage.getItem("username") || member === localStorage.getItem("username") ? `<div class="mem-ops">
+                <div class="mem-op tooltip left" onclick="removeMemberFromGC('${chatId}', '${member}')" title="${lang().action.remove}" data-tooltip="${lang().action.remove}">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path fill="currentColor" d="M2.3352 13.6648C2.78215 14.1117 3.50678 14.1117 3.95372 13.6648L8 9.61851L12.0463 13.6648C12.4932 14.1117 13.2179 14.1117 13.6648 13.6648C14.1117 13.2179 14.1117 12.4932 13.6648 12.0463L9.61851 8L13.6648 3.95372C14.1117 3.50678 14.1117 2.78214 13.6648 2.3352C13.2179 1.88826 12.4932 1.88827 12.0463 2.33521L8 6.38149L3.95372 2.33521C3.50678 1.88827 2.78214 1.88827 2.3352 2.33521C1.88826 2.78215 1.88827 3.50678 2.33521 3.95372L6.38149 8L2.33521 12.0463C1.88827 12.4932 1.88827 13.2179 2.3352 13.6648Z"></path>
+                    </svg>
+                </div>
+            </div>` : ''}
+            `;
+            memberList.appendChild(memberItem);
+        });
+        document.getElementById("member-count").innerText = ` (${data.members.length})`;
+
+    }
+}
+
+function saveChat(chatId) {
+    const fileInput = document.getElementById("chat-photo");
+    const file = fileInput.files[0];
+    const token = localStorage.getItem("token");
+    const avtrclr = document.getElementById("chat-color").value.substring(1);
+    const nick = document.getElementById("chat-nick-input").value;
+
+    const update = document.getElementById("chat-update");
+    update.disabled = true;
+    update.textContent = "Uploading...";
+
+    const xhttp = new XMLHttpRequest();
+
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4) {
+            if (this.status == 200) {
+                console.log('GC updated successfully.');
+                closemodal("Chat Updated!");
+                const update = document.getElementById("chat-update");
+                update.disabled = false;
+                update.textContent = lang().chats.update;
+
+                loadchat(chatId);
+            } else {
+                closemodal(this.status.toString());
+                const update = document.getElementById("chat-update");
+                update.disabled = false;
+                update.textContent = lang().chats.update;
+                console.error('Failed to update chat. HTTP ' + this.status.toString());
+            }
+        }
+    };
+
+    xhttp.open("PATCH", `https://api.meower.org/chats/${chatId}`);
+
+    xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    xhttp.setRequestHeader("token", token);
+
+    const data = {
+        icon_color: avtrclr
+    };
+
+    if (file) {
+        const formData = new FormData();
+        formData.append("file", file);
+
+        fetch("https://uploads.meower.org/icons", {
+            method: "POST",
+            headers: {
+                "Authorization": token
+            },
+            body: formData
+        })
+        .then(uploadResponse => uploadResponse.json())
+        .then(uploadData => {
+            if (nick) {
+                data.nickname = nick;
+            }
+            const avatarId = uploadData.id;
+            data.icon = avatarId;
+            xhttp.send(JSON.stringify(data));
+        })
+        .catch(error => console.error('Error uploading file:', error));
+    } else {
+        if (nick) {
+            data.nickname = nick;
+        }
+        xhttp.send(JSON.stringify(data));
+    }
 }
 
 function saveProfile() {
@@ -5404,237 +6016,6 @@ function setTop() {
     });
 }
 
-function openGcModal(chatId) {
-    if (!chatCache[chatId]) {
-        fetch(`https://api.meower.org/chats/${chatId}`, {
-            headers: {token: localStorage.getItem("token")}
-        })
-        .then(response => {
-            if (!response.ok) {
-                if (response.status === 404) {
-                    throw new Error("Chat not found");
-                } else {
-                    throw new Error('Network response was not ok');
-                }
-            }
-            return response.json();
-        })
-        .then(data => {
-            chatCache[chatId] = data;
-            loadchat(chatId);
-        })
-        .catch(e => {
-            openUpdate(`Unable to open chat: ${e}`);
-        });
-        return;
-    }
-
-    const data = chatCache[chatId];
-    document.documentElement.style.overflow = "hidden";
-
-    const mdlbck = document.querySelector('.modal-back');
-    if (mdlbck) {
-        mdlbck.style.display = 'flex';
-
-        const mdl = mdlbck.querySelector('.modal');
-        mdl.id = 'mdl-big';
-        if (mdl) {
-            const mdlt = mdl.querySelector('.modal-top');
-            if (mdlt) {
-                let url
-                if (data.icon) {
-                    url = `url(https://uploads.meower.org/icons/${data.icon})`;
-                } else {
-                    url = `url(images/GC.svg)`;
-                }
-                let color
-                if (!data.icon) {
-                    color = '1f5831';
-                } else if (data.icon_color) {
-                    color = data.icon_color;
-                } else {
-                    color = '000';
-                }
-                console.log(data.owner)
-                if (data.owner === localStorage.getItem("username")) {
-                    mdlt.innerHTML = `
-                    <div class="avatar-big pfp-inner" style="border: 6px solid #${color}; background-color: #${color}; background-image: ${url};"></div>
-                    <div class="gctitle">
-                    <h2 id="nickname" class="gcn" onclick="copy('${meourl}?gc=${chatId}')">${escapeHTML(data.nickname)}</h2> <i class="subtitle">${chatId}</i>
-                    </div>
-                    <hr class="mdl-hr">
-                    <span class="subheader">${lang().profile.persona}</span>
-                    <div class="duo-cl">
-                    <div class="gcsec">
-                    <span>Chat Color:</span>
-                            <input id="gc-clr" type="color" value="#${data.icon_color}">
-                        </div>
-                        <div class="gcsec">
-                            <label for="gc-photo" class="filesel">Chat Icon</label>
-                            <input type="file" id="gc-photo" accept="image/png,image/jpeg,image/webp,image/gif">
-                        </div>        
-                    </div>
-                    <span class="subheader">${lang().action.nick}</span>
-                    <div class="nick">
-                        <input id="chat-nick-input" class="mdl-inp" placeholder="${data.nickname}" minlength="1" maxlength="20">
-                    </div>
-                    <span class="subheader">${lang().chats.owner}</span>
-                    <div class="owner">
-                        <button onclick="transferOwnershipModal('${chatId}')" class="button ow-btn">Transfer Ownership</button>
-                    </div>
-                    <span class="subheader">${lang().chats.members}</span>
-                    <span id="member-count"></span>
-                    <div class="member-list">
-                    <button class="member button" onclick="addMembertoGCModal('${chatId}')">${lang().chats.addmember}</button>
-                    </div>
-                    <span class="subheader">${lang().chats.emojis}</span>
-                    <div class="emoji-list">
-                    <button class="member button" onclick="uploadEmojiModal('${chatId}')">${lang().chats.uploademoji}</button>
-                    </div>
-                    `;
-                } else {
-                    mdlt.innerHTML = `
-                    <div class="avatar-big pfp-inner" style="border: 6px solid #${color}; background-color: #${color}; background-image: ${url};"></div>
-                    <div class="gctitle">
-                    <h2 id="nickname" class="gcn" onclick="copy('${meourl}?gc=${chatId}')">${escapeHTML(data.nickname)}</h2> <i class="subtitle">${chatId}</i>
-                    </div>
-                    <hr class="mdl-hr">
-                    <span class="subheader">${lang().chats.owner}</span>
-                    <div class="owner">
-                    <span>${data.owner} is the owner</span>
-                    </div>
-                    <span class="subheader">${lang().chats.members}</span>
-                    <span id="member-count"></span>
-                    <div class="member-list">
-                    <button class="member button" onclick="addMembertoGCModal('${chatId}')">Add Member</button>
-                    </div>
-                    `;
-                }
-                const memberList = mdl.querySelector('.member-list');
-                if (memberList) {
-                    data.members.forEach(member => {
-                        const memberItem = document.createElement('div');
-                        memberItem.className = 'member-in';
-                        memberItem.innerHTML = `
-                        <span>@${member}</span>
-                        ${data.owner === localStorage.getItem("username") || member === localStorage.getItem("username") ? `<div class="mem-ops">
-                            <div class="mem-op tooltip left" onclick="removeMemberFromGC('${chatId}', '${member}')" title="${lang().action.remove}" data-tooltip="${lang().action.remove}">
-                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path fill="currentColor" d="M2.3352 13.6648C2.78215 14.1117 3.50678 14.1117 3.95372 13.6648L8 9.61851L12.0463 13.6648C12.4932 14.1117 13.2179 14.1117 13.6648 13.6648C14.1117 13.2179 14.1117 12.4932 13.6648 12.0463L9.61851 8L13.6648 3.95372C14.1117 3.50678 14.1117 2.78214 13.6648 2.3352C13.2179 1.88826 12.4932 1.88827 12.0463 2.33521L8 6.38149L3.95372 2.33521C3.50678 1.88827 2.78214 1.88827 2.3352 2.33521C1.88826 2.78215 1.88827 3.50678 2.33521 3.95372L6.38149 8L2.33521 12.0463C1.88827 12.4932 1.88827 13.2179 2.3352 13.6648Z"></path>
-                                </svg>
-                            </div>
-                        </div>` : ''}
-                        `;
-                        memberList.appendChild(memberItem);
-                    });
-                    document.getElementById("member-count").innerText = `(${data.members.length})`;
-                }
-                const emojiList = mdl.querySelector('.emoji-list');
-                if (emojiList) {
-                    data.emojis.forEach(emoji => {
-                        const emojiItem = document.createElement('div');
-                        emojiItem.className = 'member-in';
-                        emojiItem.innerHTML = `
-                        <div class="emoji-option-in">
-                        <img class="emoji-option-im" src="https://uploads.meower.org/emojis/${emoji._id}" alt="${emoji.name}" />
-                        <span>${emoji.name}</span>
-                        </div>
-                        ${data.owner === localStorage.getItem("username") ? `
-                        <div class="mem-ops">
-                            <div class="mem-op tooltip left" onclick="editEmojiName('${chatId}', '${emoji._id}', '${emoji.name}')" title="${lang().action.edit}" data-tooltip="${lang().action.edit}">
-                                <svg width="18" height="18" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path fill-rule="evenodd" clip-rule="evenodd" d="M12.8619 6.55339L13.2939 6.12198C14.2353 5.18055 14.2353 3.6481 13.2939 2.70607C12.3525 1.76464 10.8195 1.76464 9.878 2.70607L9.4466 3.13808L12.8619 6.55339ZM8.59747 3.98471L3.45646 9.12719L6.87233 12.5421L12.0134 7.39959L8.59747 3.98471ZM2.74567 13.9804L5.83937 13.2076L2.79128 10.1595L2.01785 13.2532C1.96685 13.4572 2.02685 13.6738 2.17566 13.8226C2.32446 13.9714 2.54107 14.0308 2.74567 13.9804Z" fill="currentColor"/>
-                                </svg>
-                            </div>    
-                            <div class="mem-op tooltip left" onclick="removeEmoji('${chatId}', '${emoji._id}', '${emoji.name}')" title="${lang().action.remove}" data-tooltip="${lang().action.remove}">
-                                <svg width="18" height="18" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path fill="currentColor" d="M2.3352 13.6648C2.78215 14.1117 3.50678 14.1117 3.95372 13.6648L8 9.61851L12.0463 13.6648C12.4932 14.1117 13.2179 14.1117 13.6648 13.6648C14.1117 13.2179 14.1117 12.4932 13.6648 12.0463L9.61851 8L13.6648 3.95372C14.1117 3.50678 14.1117 2.78214 13.6648 2.3352C13.2179 1.88826 12.4932 1.88827 12.0463 2.33521L8 6.38149L3.95372 2.33521C3.50678 1.88827 2.78214 1.88827 2.3352 2.33521C1.88826 2.78215 1.88827 3.50678 2.33521 3.95372L6.38149 8L2.33521 12.0463C1.88827 12.4932 1.88827 13.2179 2.3352 13.6648Z"></path>
-                                </svg>
-                            </div>
-                        </div>` : ''}
-                        `;
-                        emojiList.appendChild(emojiItem);
-                    });
-                } // reminder to make the emoji icons 20px and not 18
-            }
-            const mdbt = mdl.querySelector('.modal-bottom');
-            if (mdbt) {
-                if (data.owner === localStorage.getItem("username")) {
-                    mdbt.innerHTML = `
-                    <button id="updategc" class="modal-back-btn" onclick="updateGC('${chatId}')">Update Chat</button>
-                    `;
-                } else {
-                    mdbt.innerHTML = `
-                    `;
-                }
-            }
-        }
-    }
-}
-
-function updateGC(chatId) {
-    const fileInput = document.getElementById("gc-photo");
-    const file = fileInput.files[0];
-    const token = localStorage.getItem("token");
-    const avtrclr = document.getElementById("gc-clr").value.substring(1);
-    const nick = document.getElementById("chat-nick-input").value;
-
-    const update = document.getElementById("updategc");
-    update.disabled = true;
-    update.textContent = "Uploading...";
-
-    const xhttp = new XMLHttpRequest();
-
-    xhttp.onreadystatechange = function() {
-        if (this.readyState == 4) {
-            if (this.status == 200) {
-                console.log('GC updated successfully.');
-                closemodal("Chat Updated!");
-                loadchat(chatId);
-            } else {
-                console.error('Failed to update chat. HTTP ' + this.status.toString());
-            }
-        }
-    };
-
-    xhttp.open("PATCH", `https://api.meower.org/chats/${chatId}`);
-
-    xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-    xhttp.setRequestHeader("token", token);
-
-    const data = {
-        icon_color: avtrclr
-    };
-
-    if (file) {
-        const formData = new FormData();
-        formData.append("file", file);
-
-        fetch("https://uploads.meower.org/icons", {
-            method: "POST",
-            headers: {
-                "Authorization": token
-            },
-            body: formData
-        })
-        .then(uploadResponse => uploadResponse.json())
-        .then(uploadData => {
-            if (nick) {
-                data.nickname = nick;
-            }
-            const avatarId = uploadData.id;
-            data.icon = avatarId;
-            xhttp.send(JSON.stringify(data));
-        })
-        .catch(error => console.error('Error uploading file:', error));
-    } else {
-        if (nick) {
-            data.nickname = nick;
-        }
-        xhttp.send(JSON.stringify(data));
-    }
-}
-
 function addMembertoGCModal(chatId) {
     document.documentElement.style.overflow = "hidden";
     
@@ -5705,7 +6086,6 @@ function transferOwnership(chatId) {
     .then(data => {
         chatCache[data._id] = data;
         closemodal();
-        openGcModal(chatId);
     })
     .catch(e => {
         openUpdate(`Failed to add member: ${e}`);
@@ -5727,8 +6107,8 @@ function addMembertoGC(chatId) {
     })
     .then(data => {
         chatCache[data._id] = data;
+        chatMembers(chatId);
         closemodal();
-        openGcModal(chatId);
     })
     .catch(e => {
         openUpdate(`Failed to add member: ${e}`);
@@ -5749,7 +6129,7 @@ function removeMemberFromGC(chatId, user) {
     })
     .then(data => {
         chatCache[data._id] = data;
-        closemodal();
+        chatMembers(chatId);
         openUpdate(`Removed ${user}`);
     })
     .catch(e => {

@@ -165,7 +165,7 @@ function uploadEmojiModal(chatid) {
                 mdlt.innerHTML = `
                 <h3>${lang().action.uploademoji}</h3>
                 <div>
-                <input id="chat-nick-input" class="mdl-inp" placeholder="${lang().action.name}" minlength="1" maxlength="32">
+                <input id="emoji-nick-input" class="mdl-inp" placeholder="${lang().action.name}" minlength="1" maxlength="32">
                 <input type="file" id="emoji-file" class="mdl-file" accept="image/png,image/jpeg,image/webp,image/gif" onchange="preUploadEmoji()">
                 </div>
                 `;
@@ -195,7 +195,7 @@ function editEmojiName(chatid, emojiid, name) {
                 mdlt.innerHTML = `
                 <h3>${lang().action.editemoji}</h3>
                 <div>
-                <input id="chat-nick-input" class="mdl-inp" placeholder="${name}" minlength="1" maxlength="32">
+                <input id="emoji-nick-input" class="mdl-inp" placeholder="${name}" minlength="1" maxlength="32">
                 </div>
                 `;
             }
@@ -210,7 +210,7 @@ function editEmojiName(chatid, emojiid, name) {
 }
 
 async function pushEmojiName(chatid, emojiId) {
-    const name = document.getElementById('chat-nick-input').value; // emoji name probably
+    const name = document.getElementById('emoji-nick-input').value; // emoji name probably
     const createBtn = document.getElementById("create-emoji");
     createBtn.innerText = "Updating...";
     const apiResp = await fetch(`https://api.meower.org/chats/${chatid}/emojis/${emojiId}`, {
@@ -246,12 +246,12 @@ function preUploadEmoji() {
         closemodal("Unsupported file type! An emoji must be a PNG, JPEG, WebP, or GIF.");
     }
 
-    const nick = document.getElementById('chat-nick-input');
+    const nick = document.getElementById('emoji-nick-input');
     nick.value = file.name.split('.').slice(0, -1).join('.');
 }
 
 async function uploadEmoji(chatid) {
-    const name = document.getElementById('chat-nick-input').value; // emoji name probably
+    const name = document.getElementById('emoji-nick-input').value; // emoji name probably
     const file = document.getElementById('emoji-file').files[0]; // emoji file probably need to redo these
     const createBtn = document.getElementById("create-emoji");
 
