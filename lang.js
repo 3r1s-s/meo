@@ -337,7 +337,8 @@ const en = {
         "members": "Members",
         "addmember": "Add Member",
         "emojis": "Emojis",
-        "uploademoji": "Upload Emoji"
+        "uploademoji": "Upload Emoji",
+        "chatsettings": "Chat Settings",
     },
     "inputs": { // update
         "onetimecode": "One-time code",
