@@ -1708,6 +1708,8 @@ possible future styling
 
 .emoji {
     height: 1lh;
+    width: 1lh;
+    aspect-ratio: 1 / 1;
     vertical-align: bottom;
 }
 
