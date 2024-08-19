@@ -3011,6 +3011,10 @@ possible future styling
     margin: 0;
 }
 
+.usr-header-inner > h2:hover {
+    cursor: pointer;
+}
+
 .quote-edit {
     padding: var(--padding);
     min-width: 250px;

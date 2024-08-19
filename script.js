@@ -2546,7 +2546,7 @@ function loadProfile() {
                 <div class="color-icon">
                     <svg class="swatch" aria-hidden="true" role="img" xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24"><path fill="currentColor" d="m13.96 5.46 4.58 4.58a1 1 0 0 0 1.42 0l1.38-1.38a2 2 0 0 0 0-2.82l-3.18-3.18a2 2 0 0 0-2.82 0l-1.38 1.38a1 1 0 0 0 0 1.42ZM2.11 20.16l.73-4.22a3 3 0 0 1 .83-1.61l7.87-7.87a1 1 0 0 1 1.42 0l4.58 4.58a1 1 0 0 1 0 1.42l-7.87 7.87a3 3 0 0 1-1.6.83l-4.23.73a1.5 1.5 0 0 1-1.73-1.73Z"></path></svg>
                 </div>
-                <input id="profile-color" type="color" value="#ff94e2">
+                <input id="profile-color" type="color" value="#000">
                 </div>
                 <h3>${lang().profile.update}</h3>
                 <div class="settings-buttons-row">
@@ -2611,11 +2611,12 @@ function loadProfile() {
 
         document.getElementById("pronouns-edit").value = pronouns;
         document.getElementById("quote-edit").value = editquote;
+        document.getElementById("profile-color").value = `#${data.avatar_color}`;
         
         let profileContent = `
         <div class="usr-header">
         <div class="usr-header-inner">
-            <h2 class="username" onclick="copy('${meourl}/profile?u=${data._id}')">${data._id}</h2>
+            <h2 class="username" onclick="copy('${meourl}/profile?u=${data._id}', '${lang().modals.copyuser}')">${data._id}</h2>
             ${pronouns !== '' ? `<span title="Pronouns" class="subsubheader pronouns">${escapeHTML(pronouns)}</span>` : ``}
         </div> 
         </div>
