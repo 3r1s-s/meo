@@ -393,9 +393,9 @@ function main() {
 
             if (page == "home") {
                 if (settingsstuff().ulist) {
-                    document.getElementById("info-ulist").innerText = lul + " users online (" + sul + ")";   
+                    document.getElementById("info-ulist").innerText = `${lul} ${lang().meo_userson} (${sul})`;   
                 } else {
-                    document.getElementById("info-ulist").innerText = lul + " users online";   
+                    document.getElementById("info-ulist").innerText = `${lul} ${lang().meo_userson}`;
                 }
             }
         }
@@ -1747,9 +1747,9 @@ function loadchat(chatId) {
         <div class='info'><h1 class='header-top'>${lang().page_home}</h1><p id='info'><span id="info-ulist"></span><span id="info-typing"></span></p>
         </div>` + loadinputs();
         if (settingsstuff().ulist) {
-            document.getElementById("info-ulist").innerText = lul + " users online (" + sul + ")";   
+            document.getElementById("info-ulist").innerText = `${lul} ${lang().meo_userson} (${sul})`;   
         } else {
-            document.getElementById("info-ulist").innerText = lul + " users online";   
+            document.getElementById("info-ulist").innerText = `${lul} ${lang().meo_userson}`;
         }
     } else if (chatId === "inbox") {
         mainContainer.innerHTML = `<div class='info'>

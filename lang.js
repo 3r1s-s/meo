@@ -78,6 +78,7 @@ const en = {
     "meo_goanywhere": "Where would you like to go?",
     "meo_welcome": "Welcome!",
     "meo_welcomeback": "Welcome back!", // update
+    "meo_userson": "users online.",
     "meo_bridged": {
         "start": "Bridged",
         "title": "This post has been bridged from another platform."
@@ -825,6 +826,7 @@ const fr = {
     "meo_goanywhere": "Où dèsires-tu aller ?",
     "meo_welcome": "Bienvenue !",
     "meo_welcomeback": "Bienvenue !",
+    "meo_userson": "utilisateurs en ligne",
     "meo_bridged": {
         "start": "Pont",
         "title": "This post has been bridged from another platform."
@@ -835,7 +837,7 @@ const fr = {
         "multiple": "{user1}, {user2}, et {user3} est en train d'écrire...",
         "many": "{count} personnes en train d'écrireg..."
     },
-    "title_chats": "Chats",
+    "title_chats": "Èchanges",
     "title_live": "Livechat",
     "settings_general": "Général",
     "settings_account": "Compte",
@@ -1071,9 +1073,9 @@ const fr = {
     },
     "profile": {
         "quote": "Citer",
-        "persona": "Personalization",
-        "color": "Profile Color",
-        "avatar": "Profile Picture",
+        "persona": "Personnalisation",
+        "color": "Couleur du profil",
+        "avatar": "Photo de profil",
         "pronouns": "Pronoms",
     },
     "chats": { // update
