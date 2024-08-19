@@ -2586,8 +2586,6 @@ function loadProfile() {
                 </div>
             </div>
             <div>
-                <h3>${lang().profile.pronouns}</h3>
-                    <input type="text" class="setting-input" id="pronouns-edit" placeholder="they/them">
                 <h3>${lang().profile.quote}</h3>
                     <textarea class="quote-edit" id="quote-edit"></textarea>
                 <h3>${lang().profile.avatar}</h3>
@@ -2643,7 +2641,6 @@ function loadProfile() {
 
         let quote;
         let editquote;
-        let pronouns;
         
         if (typeof md !== 'undefined') {
             md.disable(['image']);
@@ -2652,7 +2649,6 @@ function loadProfile() {
             const regex = /\[(.*?)\]/;
             const newlineregex = /\n\n\[(.*?)\]/;
             const match = quote.match(regex);
-            pronouns = match ? match[1] : "";
             quote = quote.replace(regex, '');
             editquote = data.quote.replace(newlineregex, '');                                                   
         } else {
@@ -2660,7 +2656,6 @@ function loadProfile() {
             console.error("Parsed with old markdown, fix later :)");
         }
 
-        document.getElementById("pronouns-edit").value = pronouns;
         document.getElementById("quote-edit").value = editquote;
         document.getElementById("profile-color").value = `#${data.avatar_color}`;
         
@@ -2668,7 +2663,6 @@ function loadProfile() {
         <div class="usr-header">
         <div class="usr-header-inner">
             <h2 class="username" onclick="copy('${meourl}/profile?u=${data._id}', '${lang().modals.copyuser}')">${data._id}</h2>
-            ${pronouns !== '' ? `<span title="Pronouns" class="subsubheader pronouns">${escapeHTML(pronouns)}</span>` : ``}
         </div> 
         </div>
         <hr>
@@ -2704,11 +2698,6 @@ function loadProfile() {
 
 function saveProfile() {
     let quote = document.getElementById("quote-edit").value;
-    const pronouns = document.getElementById("pronouns-edit").value;
-
-    if (pronouns.trim() !== "") {
-        quote = `${quote}\n\n[${pronouns}]`;
-    }
 
     const profilecolor = document.getElementById("profile-color").value.substring(1);
     const fileInput = document.getElementById("profile-photo");
