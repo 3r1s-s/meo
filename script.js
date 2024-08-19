@@ -5725,6 +5725,7 @@ function addMembertoGC(chatId) {
     })
     .then(data => {
         chatCache[data._id] = data;
+        chatMembers(chatId);
         closemodal();
     })
     .catch(e => {
@@ -5746,7 +5747,7 @@ function removeMemberFromGC(chatId, user) {
     })
     .then(data => {
         chatCache[data._id] = data;
-        closemodal();
+        chatMembers(chatId);
         openUpdate(`Removed ${user}`);
     })
     .catch(e => {
