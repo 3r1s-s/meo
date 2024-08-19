@@ -1975,6 +1975,15 @@ possible future styling
 .start-info {
     margin: 0 5px
 }
+
+.start-info > h1 {
+    position: sticky;
+    top: 0;
+    margin: 0;
+    padding: 25px 0;
+    background: var(--background);
+    z-index: 1;
+}
   
 .search-input {
     margin: var(--margin);

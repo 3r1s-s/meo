@@ -3,16 +3,13 @@
 // - Eris
 
 // To-Do
-// replace ulist with typing indicator
 // Modal close animation
-// Add a sidebar to the right side for Member list and replace the current ulist with typing indicator
 // Discord mode where posts are on the bottom
 // Notification managment
 // Custom video and audio player, similar style as the file download preview
 // make @Tnix have tnix colour ect
 // Plugins options and API
 // Online indicators
-// Convert Gc Modal into separate page
 
 let end = false;
 let page = "load";
