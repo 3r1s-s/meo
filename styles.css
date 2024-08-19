@@ -1110,10 +1110,6 @@ possible future styling
     background: transparent;
 }
 
-.big {
-    font-size: 64px;
-}
-
 .nav-top {
     position: absolute;
     top: 0;
@@ -1709,7 +1705,6 @@ possible future styling
 .emoji {
     height: 1lh;
     width: 1lh;
-    aspect-ratio: 1 / 1;
     vertical-align: bottom;
 }
 
