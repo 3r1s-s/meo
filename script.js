@@ -1767,7 +1767,7 @@ function loadchat(chatId) {
     } else {
         if (data.nickname) {
             mainContainer.innerHTML = `<div class='info'><div class="gctitle"><h1 id='nickname' onclick="openGcModal('${chatId}')" class='header-top'>${escapeHTML(data.nickname)}</h1></div>
-            <p id='info'><span id="info-members">${data.members.length} members<span id="info-typing"></span></p></div>` + loadinputs();
+            <p id='info'><span id="info-members">${data.members.length} ${lang().meo_members}<span id="info-typing"></span></p></div>` + loadinputs();
         } else {
             mainContainer.innerHTML = `<div class='info'><div class="gctitle"><h1 id='username' class='header-top' onclick="openUsrModal('${data.members.find(v => v !== localStorage.getItem("username"))}')">${data.members.find(v => v !== localStorage.getItem("username"))}</h1></div><p id='info'><span id="info-typing"></span></p></div>` + loadinputs();
         }

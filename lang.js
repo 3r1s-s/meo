@@ -78,7 +78,8 @@ const en = {
     "meo_goanywhere": "Where would you like to go?",
     "meo_welcome": "Welcome!",
     "meo_welcomeback": "Welcome back!", // update
-    "meo_userson": "users online.",
+    "meo_userson": "users online",
+    "meo_members": "members",
     "meo_bridged": {
         "start": "Bridged",
         "title": "This post has been bridged from another platform."
@@ -827,6 +828,7 @@ const fr = {
     "meo_welcome": "Bienvenue !",
     "meo_welcomeback": "Bienvenue !",
     "meo_userson": "utilisateurs en ligne",
+    "meo_members": "membres",
     "meo_bridged": {
         "start": "Pont",
         "title": "This post has been bridged from another platform."
@@ -971,12 +973,12 @@ const fr = {
         "close": "Close",
         "back": "Back",
         "opennewtab": "Open in Browser",
-        "reply": "Reply",
+        "reply": "Rèpondre",
         "mention": "Mention",
-        "report": "Report",
-        "delete": "Delete",
-        "edit": "Edit",
-        "share": "Share",
+        "report": "Signaler",
+        "delete": "Supprimer",
+        "edit": "Modifier",
+        "share": "Partager",
         "comment": "Comment",
         "nick": "Nickname",
         "create": "Create",
