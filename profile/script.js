@@ -53,7 +53,7 @@ function fetchprofile() {
             let profileContent = `
             <div class="usr-header">
             <div class="usr-header-inner">
-                <h2 class="username" onclick="copy('${meourl}/profile?u=${data._id}')">${data._id}</h2>
+                <h2 class="username" onclick="copy('${data._id}')">${data._id}</h2>
                 ${pronouns !== '' ? `<span title="Pronouns" class="subsubheader pronouns">${escapeHTML(pronouns)}</span>` : ``}
             </div> 
             <div class="usr-buttons-inner">

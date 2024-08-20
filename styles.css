@@ -323,6 +323,8 @@ img.embed {
 
 .header-top {
     margin: 0;
+    -webkit-user-select: none;
+    user-select: none;
 }
 
 .gctitle > .header-top {
@@ -353,6 +355,8 @@ img.embed {
     align-items: baseline;
     gap: 5px;
     max-width: 75%;
+    -webkit-user-select: none;
+    user-select: none;
 }
 
 .ulmember {
@@ -393,6 +397,8 @@ img.embed {
     padding: 25px 0;
     background: var(--background);
     z-index: 1;
+    -webkit-user-select: none;
+    user-select: none;
 }
 
 .reply {
@@ -1127,6 +1133,8 @@ possible future styling
     align-items: center;
     justify-content: space-between;
     width: 70%;
+    -webkit-user-select: none;
+    user-select: none;
 }
 
 .addgc {
@@ -3459,6 +3467,23 @@ possible future styling
         display: flex;
         flex-direction: column;
         gap: 10px;
+    }
+
+    .member-in:hover {
+        background: var(--modal-button-color);
+    }
+
+    .plugin:hover .plugintoggle svg {
+        opacity: 0;
+    }
+
+    .plugintoggle.checked svg {
+        opacity: 1 !important;
+        color: var(--color-on) !important;
+    }
+
+    #chat-photo::file-selector-button:hover, #profile-photo::file-selector-button:hover {
+        background-color: var(--accent-color);
     }
 }
 
