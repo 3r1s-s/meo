@@ -3,16 +3,13 @@
 // - Eris
 
 // To-Do
-// replace ulist with typing indicator
 // Modal close animation
-// Add a sidebar to the right side for Member list and replace the current ulist with typing indicator
 // Discord mode where posts are on the bottom
 // Notification managment
 // Custom video and audio player, similar style as the file download preview
 // make @Tnix have tnix colour ect
 // Plugins options and API
 // Online indicators
-// Convert Gc Modal into separate page
 
 let end = false;
 let page = "load";
@@ -2826,7 +2823,7 @@ function chatSettings(chatId) {
     }
 
 	const emojiList = mainContainer.querySelector('.emoji-list');
-	if (emojiList) {
+	if (emojiList || data.emojis) {
 		data.emojis.forEach(emoji => {
 			const emojiItem = document.createElement('div');
 			emojiItem.className = 'member-in';
@@ -2912,6 +2909,9 @@ function chatMembers(chatId) {
         <button class="member button" onclick="addMembertoGCModal('${chatId}')">Add Member</button>
         <div class="member-list">
         </div>
+        <hr>
+        <div class="settings-buttons-row" id="chat-members-manage">
+        </div>
     </div>
 `;
     const memberList = mainContainer.querySelector('.member-list');
@@ -2925,6 +2925,10 @@ function chatMembers(chatId) {
         ownercont.innerHTML = `
         <p class="subsubheader">${data.owner} is the owner</p>
         `
+        const leavecont = mainContainer.querySelector('#chat-members-manage');
+        leavecont.innerHTML = `
+        <button onclick="closeChatModal(event, '${chatId}', '${escapeHTML(data.nickname)}')" id="chat-update" class="settings-button-in red">${lang().chats.leave}</button>
+        `
     }
     if (memberList) {
         data.members.forEach(member => {
@@ -2932,7 +2936,7 @@ function chatMembers(chatId) {
             memberItem.className = 'member-in';
             memberItem.innerHTML = `
             <span>@${member}</span>
-            ${data.owner === localStorage.getItem("username") || member === localStorage.getItem("username") ? `<div class="mem-ops">
+            ${data.owner === localStorage.getItem("username") ? `<div class="mem-ops">
                 <div class="mem-op tooltip left" onclick="removeMemberFromGC('${chatId}', '${member}')" title="${lang().action.remove}" data-tooltip="${lang().action.remove}">
                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path fill="currentColor" d="M2.3352 13.6648C2.78215 14.1117 3.50678 14.1117 3.95372 13.6648L8 9.61851L12.0463 13.6648C12.4932 14.1117 13.2179 14.1117 13.6648 13.6648C14.1117 13.2179 14.1117 12.4932 13.6648 12.0463L9.61851 8L13.6648 3.95372C14.1117 3.50678 14.1117 2.78214 13.6648 2.3352C13.2179 1.88826 12.4932 1.88827 12.0463 2.33521L8 6.38149L3.95372 2.33521C3.50678 1.88827 2.78214 1.88827 2.3352 2.33521C1.88826 2.78215 1.88827 3.50678 2.33521 3.95372L6.38149 8L2.33521 12.0463C1.88827 12.4932 1.88827 13.2179 2.3352 13.6648Z"></path>
@@ -4198,7 +4202,7 @@ function closeChatModal(e, chatId, chatName) {
                 mdlt.innerHTML = `
                 <h3>${lang().action.leavegc}</h3>
                 <hr class="mdl-hr">
-                <span class="subheader">${lang().leave_sub.desc} ${chatName}${lang().leave_sub.end}</span>
+                <span class="subheader">${lang().leave_sub.desc} ${escapeHTML(chatName)}${lang().leave_sub.end}</span>
                 `;
             }
             const mdbt = mdl.querySelector('.modal-bottom');
