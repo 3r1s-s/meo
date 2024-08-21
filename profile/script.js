@@ -54,7 +54,6 @@ function fetchprofile() {
             <div class="usr-header">
             <div class="usr-header-inner">
                 <h2 class="username" onclick="copy('${data._id}')">${data._id}</h2>
-                ${pronouns !== '' ? `<span title="Pronouns" class="subsubheader pronouns">${escapeHTML(pronouns)}</span>` : ``}
             </div> 
             <div class="usr-buttons-inner">
                 ${data._id !== localStorage.getItem('username') && localStorage.getItem('permissions') === "1" ? `

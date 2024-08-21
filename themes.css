@@ -39,8 +39,8 @@
 
     --transition: all 0.05s ease;
     --border: none;
-    --border-radius: 6px;
-    --button-radius: 6px;
+    --border-radius: 10px;
+    --button-radius: 10px;
     --margin: 10px;
     --text-margin: 10px;
     --padding: 10px;
@@ -489,8 +489,8 @@
     --modal-color: #efefef47;
     --modal-button-color: #dddddd80;
     --hov-modal-button-color: #dddddd80;
-    --border-radius: 5px;
-    --button-radius: 5px;
+    --border-radius: 10px;
+    --button-radius: 10px;
 }
 
 .gdark-theme {
@@ -502,8 +502,8 @@
     --modal-color: #4f4f4f50;
     --modal-button-color: #4f4f4f50;
     --hov-modal-button-color: #4f4f4f50;
-    --border-radius: 5px;
-    --button-radius: 5px;
+    --border-radius: 10px;
+    --button-radius: 10px;
 }
 
 .oldlight-theme {
@@ -611,8 +611,8 @@
 
 .quake-pro-theme {
     --border: none;
-    --border-radius: 5px;
-    --button-radius: 5px;
+    --border-radius: 10px;
+    --button-radius: 10px;
     --margin: 8px;
     --text-margin: 4px;
     --padding: 4px;
