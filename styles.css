@@ -1709,7 +1709,7 @@ possible future styling
     display: flex;
     align-items: center;
 }
-/*comment for force update*/
+
 .emoji {
     height: 1lh;
     aspect-ratio: 1 / 1;
@@ -3676,4 +3676,15 @@ input[type="button"]:focus-visible {
 
 .hidden {
     display: none !important;
+}
+
+.undertale {
+    border-radius: 0px;
+    border: 4px solid #fff;
+    background-color: #000;
+}
+
+.undertale > code {
+    font-size: 16px;
+    font-family: 'Determination Mono';
 }

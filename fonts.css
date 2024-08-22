@@ -116,3 +116,10 @@
 	font-weight: 600;
 	src: url(fonts/ggsans/ggsans-BoldItalic.woff2);
 }
+
+@font-face {
+	font-family: 'Determination Mono';
+	font-style: normal;
+	font-weight: 600;
+	src: url(fonts/determination-mono/determination-mono.ttf);
+}
