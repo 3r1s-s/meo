@@ -1833,7 +1833,8 @@ possible future styling
 }
 
 .emojibutton img {
-    object-fit: cover;
+    width: 32px;
+    object-fit: contain;
 }
 
 .emojibutton:hover {
@@ -2777,8 +2778,9 @@ possible future styling
 
 .emoji-option-im {
     height: 2lh;
+    aspect-ratio: 1 / 1;
     border-radius: 2px;
-    object-fit: cover;
+    object-fit: contain;
 }
 
 .member-in {
