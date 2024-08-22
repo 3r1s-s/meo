@@ -1832,6 +1832,10 @@ possible future styling
     font-family: var(--font);
 }
 
+.emojibutton img {
+    object-fit: cover;
+}
+
 .emojibutton:hover {
     background-color: var(--hov-modal-button-color);
 }
@@ -2774,6 +2778,7 @@ possible future styling
 .emoji-option-im {
     height: 2lh;
     border-radius: 2px;
+    object-fit: cover;
 }
 
 .member-in {
