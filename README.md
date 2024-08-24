@@ -23,6 +23,7 @@ An awesome fork of meo with more features & patches to work on legacy firefox. A
 
 ### Not Working
 - Static (webp) Emojis, PFPs and Chat icons (should work if your browser supports webp!)
+- Unicode Emojis (should work if your browser & OS supports unicode emojis!)
 - Viewing uploaded files
 
 Anything not listed here is untested, feel free to test yourself and make a GitHub issue about it.
