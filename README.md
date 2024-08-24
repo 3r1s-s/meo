@@ -1,5 +1,5 @@
 # leo with legacy firefox patches
-An awesome fork of meo with more features & patches to work on legacy firefox
+An awesome fork of meo with more features & patches to work on legacy firefox. Accessible at [https://old-firefox-fix.leo-b79.pages.dev](https://old-firefox-fix.leo-b79.pages.dev)
 
 ## what works (& doesn't)
 *Tested using jamesh's Fennec 55.0.3 on Asus Transformer TF101 running Android 4.0.3*
