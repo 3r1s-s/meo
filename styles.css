@@ -766,7 +766,7 @@ img.embed {
     flex: 1;
     margin: 0;
     overflow-y: hidden;
-
+    margin-right: 10px;
 }
 
 .message-input:first-child {
@@ -796,6 +796,7 @@ img.embed {
     display: flex;
     align-items: center;
     justify-content: center;
+    margin-right: 10px;
 }
 
 .wrapper {
@@ -1011,6 +1012,7 @@ img.embed {
     display: flex;
     align-items: center;
     justify-content: left;
+    margin-bottom: 10px;
 }
 
 .navigation-button {
@@ -1020,6 +1022,7 @@ img.embed {
     display: flex;
     align-items: center;
     justify-content: left;
+    margin-bottom: 10px;
 }
 
 .nav-button-label {
@@ -1917,6 +1920,7 @@ possible future styling
     text-align: left;
     display: flex;
     align-items: center;
+    margin-bottom: 10px;
 }
 
 .qc-bts-sc {
@@ -1951,6 +1955,8 @@ possible future styling
     display: flex;
     align-items: center;
     flex: 1;
+    margin-bottom: 10px;
+    margin-right: 10px;
 }
 
 .ubtnsa {
@@ -2122,6 +2128,7 @@ possible future styling
 
 .gcbtn {
     padding: calc(var(--button-padding)/2) var(--button-padding);
+    margin-bottom: 10px;
 }
 
 .gctitle {
@@ -2180,6 +2187,7 @@ possible future styling
     border: none;
     border-radius: var(--button-radius);
     padding: var(--button-padding);
+    margin-bottom: 10px;
 }
 
 .settings-section-outer .stg-section:first-child {

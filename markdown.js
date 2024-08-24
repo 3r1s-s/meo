@@ -38,7 +38,9 @@ function escapeHTML(content) {
 
 function erimd(content) {
     const text = content
-        .replace(/(?:^|(?<=\s|<p>))@([\w-]+)(?![^<]*?<\/code>)/g, '<span id="username" class="attachment" onclick="openUsrModal(\'$1\')">@$1</span>')
+        .replace(/(?:^|\s|<p>)@([\w-]+)(?![^<]*?<\/code>)/g, function(match, p1) {
+            return match.replace(`@${p1}`, `<span id="username" class="attachment" onclick="openUsrModal('${p1}')">@${p1}</span>`);
+        })
         .replace(/&lt;:(\w+):(\d+)&gt;/g, '<img src="https://cdn.discordapp.com/emojis/$2.webp?size=96&quality=lossless" alt="$1" title="$1" class="emoji">')
         .replace(/&lt;a:(\w+):(\d+)&gt;/g, '<img src="https://cdn.discordapp.com/emojis/$2.gif?size=96&quality=lossless" alt="$1" title="$1" class="emoji">')
         .replace(/<a\s+href="https:\/\/eris\.pages\.dev\/meo\/profile\?u=([\w-]+)".*?>(.*?)<\/a>/g, '<span id="username" class="attachment" onclick="openUsrModal(\'$1\')">@$1</span>')
@@ -50,7 +52,8 @@ function erimd(content) {
 
 function meowerEmojis(content, emojis) {
     for (const emoji of emojis) {
-        content = content.replaceAll(`&lt;:${emoji._id}&gt;`, `<img src="https://uploads.meower.org/emojis/${emoji._id}" alt="${emoji.name}" title="${emoji.name}" class="emoji">`);
+        const regex = new RegExp(`&lt;:${emoji._id}&gt;`, 'g');
+        content = content.replace(regex, `<img src="https://uploads.meower.org/emojis/${emoji._id}" alt="${emoji.name}" title="${emoji.name}" class="emoji">`);
     }
     return content;
 }
@@ -521,9 +524,9 @@ function oldMarkdown(content) {
         .replace(/&lt;a:(\w+):(\d+)&gt;/g, '<img src="https://cdn.discordapp.com/emojis/$2.gif?size=96&quality=lossless" alt="$1" width="16px" class="emoji">')
         .replace(/\n/g, '<br>');
 
-    if (/^(?:(?!\d)(?:\p{Emoji}|[\u200d\ufe0f\u{E0061}-\u{E007A}\u{E007F}]))+$/u.test(content)) {
-        textContent = '<span class="big">' + textContent + '</span>';
-    }
+        if (/^(?:(?!\d)[\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{1F700}-\u{1F77F}\u{1F780}-\u{1F7FF}\u{1F800}-\u{1F8FF}\u{1F900}-\u{1F9FF}\u{1FA00}-\u{1FA6F}\u{1FA70}-\u{1FAFF}\u200d\ufe0f\u{E0061}-\u{E007A}\u{E007F}])+$/u.test(content)) {
+            textContent = '<span class="big">' + textContent + '</span>';
+        }
 
     return textContent;
 }
