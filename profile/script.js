@@ -39,12 +39,12 @@ function fetchprofile() {
             
             if (typeof md !== 'undefined') {
                 md.disable(['image']);
-                quote = erimd(md.render(data.quote).replace(/<a(.*?)>/g, '<a$1 target="_blank">'));
-                
                 const regex = /\[(.*?)\]/;
-                const match = quote.match(regex);
+                let match = data.quote.match(regex);
                 pronouns = match ? match[1] : "";
-                quote = quote.replace(regex, '');                                                      
+                
+                quote = data.quote.replace(regex, '');
+                quote = erimd(md.render(quote).replace(/<a(.*?)>/g, '<a$1 target="_blank">'));                                            
             } else {
                 quote = oldMarkdown(data.quote);
                 console.error("Parsed with old markdown, fix later :)");

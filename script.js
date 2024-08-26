@@ -2624,15 +2624,15 @@ function loadProfile() {
         let pronouns;
         
         if (typeof md !== 'undefined') {
-            md.disable(['image']);
-            quote = erimd(md.render(data.quote).replace(/<a(.*?)>/g, '<a$1 target="_blank">'));
-            
+            md.disable(['image']);            
             const regex = /\[(.*?)\]/;
             const newlineregex = /\n\n\[(.*?)\]/;
-            const match = quote.match(regex);
+            const match = data.quote.match(regex);
+            
             pronouns = match ? match[1] : "";
-            quote = quote.replace(regex, '');
-            editquote = data.quote.replace(newlineregex, '');                                                   
+            quote = data.quote.replace(regex, '');
+            editquote = data.quote.replace(newlineregex, '');
+            quote = erimd(md.render(quote).replace(/<a(.*?)>/g, '<a$1 target="_blank">'));
         } else {
             quote = oldMarkdown(data.quote);
             console.error("Parsed with old markdown, fix later :)");
