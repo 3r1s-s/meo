@@ -679,7 +679,7 @@ function loadpost(p) {
         mobileButtonContainer.classList.add("mobileContainer");
         mobileButtonContainer.innerHTML = `
         <div class='toolbarContainer'>
-            ${p.post_origin !== 'inbox' ? `<div class='toolButton mobileButton' onclick='reply("${p._id}");handleHaptics()' aria-label="reply" title="reply" tabindex="0">
+            ${p.post_origin !== 'inbox' ? `<div class='toolButton mobileButton' onclick='reply("${p._id}");handleHaptics();' aria-label="reply" title="reply" tabindex="0">
                 <svg width='24' height='24' viewBox='0 0 24 24'><path d='M10 8.26667V4L3 11.4667L10 18.9333V14.56C15 14.56 18.5 16.2667 21 20C20 14.6667 17 9.33333 10 8.26667Z' fill='currentColor'></path></svg>
             </div>` : ''}
             <div class='toolButton mobileButton' onclick='openModal("${p._id}");handleHaptics()'>
