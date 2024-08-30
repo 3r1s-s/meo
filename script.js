@@ -6357,10 +6357,16 @@ function copy(text, message) {
 
 function handleHaptics() {
     if (settingsstuff().haptics) {
-        if ('vibrate' in navigator) {
-            navigator.vibrate(50);
+        if ('hapticActuators' in navigator) {
+            const hapticActuators = navigator.hapticActuators;
+            const vibrationPattern = [
+                { duration: 10, strongMagnitude: 1, weakMagnitude: 1 }
+            ];
+            hapticActuators.start('vibration', vibrationPattern);
+        } else if ('vibrate' in navigator) {
+            navigator.vibrate(30);
         } else {
-            console.warn('Haptics not supported on this device.');
+        console.warn('Haptics not supported on this device.');
         }
     }
 }
