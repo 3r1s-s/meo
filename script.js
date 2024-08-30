@@ -14,9 +14,9 @@
 let end = false;
 let page = "load";
 const sidediv = document.querySelectorAll(".side");
-    sidediv.forEach(function(sidediv) {
-        sidediv.classList.add("hidden");
-    });
+sidediv.forEach(function (sidediv) {
+    sidediv.classList.add("hidden");
+});
 let lul = 0;
 let eul;
 let sul = "";
@@ -27,9 +27,8 @@ if (settingsstuff().homepage) {
     pre = "start"
 }
 
-let meourl = 'https://eris.pages.dev/meo';
-
-let bridges = ['Discord', 'SplashBridge', 'gc'];
+let meourl = 'https://leo.atticat.tech';
+let bridges = ['Discord', 'SplashBridge', 'gc', 'Revower'];
 
 let ipBlocked = false;
 let openprofile = false;
@@ -149,16 +148,16 @@ if (urlParams.has('openprofile')) {
 function main() {
     meowerConnection = new WebSocket(server);
 
-    meowerConnection.addEventListener('error', function(event) {
+    meowerConnection.addEventListener('error', function (event) {
         //launch screen
     });
-    
+
     meowerConnection.onclose = (event) => {
         logout(true);
     };
     page = "login";
     loadtheme();
-    
+
     if ('windowControlsOverlay' in navigator) {
     }
 
@@ -217,8 +216,8 @@ function main() {
                         loadstgs();
                     } else {
                         loadchat(pre);
-                    }                
-                } else  {
+                    }
+                } else {
                     loadstart();
                 }
                 if (openprofile) {
@@ -381,7 +380,7 @@ function main() {
             sul = iul.trim().split(";");
             eul = sul;
             lul = sul.length - 1;
-            
+
             if (sul.length > 1) {
                 sul = sul.slice(0, -2).join(", ") + (sul.length > 2 ? ", " : "") + sul.slice(-2).join(".");
             } else {
@@ -394,6 +393,43 @@ function main() {
                 } else {
                     document.getElementById("info-ulist").innerText = `${lul} ${lang().meo_userson}`;
                 }
+            }
+        } else if (sentdata.val.mode == "delete") {
+            console.log("Received delete command for ID:", sentdata.val.id);
+
+            if (chatCache[sentdata.val.id]) {
+                delete chatCache[sentdata.val.id];
+            }
+            if (postCache[sentdata.val.id]) {
+                delete postCache[sentdata.val.id];
+            }
+            for (const key in postCache) {
+                const index = postCache[key].findIndex(post => post._id === sentdata.val.id);
+                if (index !== -1) {
+                    postCache[key].splice(index, 1);
+                    break;
+                }
+            }
+
+            const replies = document.querySelectorAll(`#reply-${sentdata.val.id}`);
+            for (const reply of replies) {
+                reply.replaceWith(loadreplyv(null));
+            }
+
+            const divToDelete = document.getElementById(sentdata.val.id);
+            if (divToDelete) {
+                divToDelete.parentNode.removeChild(divToDelete);
+                if (page === sentdata.val.id) {
+                    openUpdate(lang().info.chatremoved);
+                    if (!settingsstuff().homepage) {
+                        loadstart();
+                    } else {
+                        loadhome();
+                    }
+                }
+                console.log(sentdata.val.id, "deleted successfully.");
+            } else {
+                console.warn(sentdata.val.id, "not found.");
             }
         }
     };
@@ -426,7 +462,7 @@ function main() {
             } else if (event.key === "Escape") {
                 closemodal();
                 closeImage();
-                if (opened===1) {
+                if (opened === 1) {
                     closepicker();
                 }
                 const editIndicator = document.getElementById("edit-indicator");
@@ -438,7 +474,7 @@ function main() {
                     replies.innerHTML = "";
                 }
                 textarea.blur();
-            } else if (event.keyCode >= 48 && event.keyCode <= 90 && textarea === document.activeElement && !settingsstuff().invtyping && lastTyped+3000 < Date.now()) {
+            } else if (event.keyCode >= 48 && event.keyCode <= 90 && textarea === document.activeElement && !settingsstuff().invtyping && lastTyped + 3000 < Date.now()) {
                 lastTyped = Date.now();
                 fetch(`https://api.meower.org/${page === "home" ? "" : "chats/"}${page}/typing`, {
                     method: "POST",
@@ -518,22 +554,19 @@ function main() {
 
 function loadLogin() {
     const pageContainer = document.getElementById("main");
-    pageContainer.innerHTML = 
-    `<div class='login'>
+    pageContainer.innerHTML =
+        `<div class='login'>
         <div class='login-inner'>
             <h2 id="login-header" class="login-header">${lang().meo_welcome}</h2>
             <input type='text' id='userinput' placeholder='${lang().meo_username}' class='login-text text' aria-label="username input" autocomplete="username">
             <input type='password' id='passinput' placeholder='${lang().meo_password}' class='login-text text' aria-label="password input" autocomplete="current-password">
             <input type='text' id='otpinput' placeholder='${lang().meo_totp}' class='login-text text' aria-label="one-time-code input" autocomplete="one-time-code" style="display:none;">
-            <input type='button' id='login' value='${lang().action.login}' class='login-button button' onclick='toggleLogin(true);login()' aria-label="Register">
-            <input type='button' id='signup' value='${lang().action.signup}' class='login-button button' onclick='agreementModal()' aria-label="log in">
-            <input type='button' id='back' value='${lang().action.back}' class='login-button button' onclick='loadLogin()' aria-label="back" style="display:none;">
+            <input type='button' id='login' value='${lang().action.login}' class='login-button button' onclick='toggleLogin(true);login();handleHaptics();' aria-label="Register">
+            <input type='button' id='signup' value='${lang().action.signup}' class='login-button button' onclick='agreementModal();handleHaptics();' aria-label="log in">
+            <input type='button' id='back' value='${lang().action.back}' class='login-button button' onclick='loadLogin();handleHaptics();' aria-label="back" style="display:none;">
             <small>${lang().login_sub.desc}</small>
         </div>
         <div class="login-top">
-            <svg width="80" height="44.25" viewBox="0 0 321 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path fill-rule="evenodd" clip-rule="evenodd" d="M124.695 17.2859L175.713 0.216682C184.63 -1.38586 192.437 6.14467 190.775 14.7463L177.15 68.2185C184.648 86.0893 187.163 104.122 187.163 115.032C187.163 143.057 174.929 178 95.4997 178C16.0716 178 3.83691 143.057 3.83691 115.032C3.83691 104.122 6.35199 86.0893 13.8498 68.2185L0.224791 14.7463C-1.43728 6.14467 6.3705 -1.38586 15.2876 0.216682L66.3051 17.2859C74.8856 14.6362 84.5688 13.2176 95.4997 13.429C106.431 13.2176 116.114 14.6362 124.695 17.2859ZM174.699 124.569H153.569V80.6255C153.569 75.6157 151.762 72.1804 146.896 72.1804C143.143 72.1804 139.529 74.6137 135.775 78.3353V124.569H114.785V80.6255C114.785 75.6157 112.977 72.1804 108.112 72.1804C104.22 72.1804 100.744 74.6137 96.9909 78.3353V124.569H76V54.4314H94.4887L96.0178 64.0216C102.134 57.5804 108.39 53 117.148 53C126.462 53 131.605 57.7235 134.107 64.0216C140.224 57.7235 146.896 53 155.376 53C168.026 53 174.699 61.1588 174.699 74.7569V124.569ZM247.618 89.3569C247.618 91.5039 247.479 93.7941 247.201 94.9392H206.331C207.443 105.961 213.838 110.255 223.012 110.255C230.519 110.255 237.887 107.392 245.393 102.955L247.479 118.127C240.111 122.994 231.075 126 220.371 126C199.936 126 185.34 114.835 185.34 89.7863C185.34 66.8843 198.963 53 217.452 53C238.304 53 247.618 69.0314 247.618 89.3569ZM227.6 83.0588C226.905 72.4667 223.29 67.0274 216.896 67.0274C211.057 67.0274 206.887 72.3235 206.192 83.0588H227.6ZM288.054 126C306.96 126 321 111.973 321 89.5C321 67.0274 307.099 53 288.193 53C269.426 53 255.525 67.1706 255.525 89.6431C255.525 112.116 269.287 126 288.054 126ZM288.193 70.749C296.256 70.749 300.704 78.3353 300.704 89.6431C300.704 100.951 296.256 108.537 288.193 108.537C280.269 108.537 275.821 100.808 275.821 89.5C275.821 78.049 280.13 70.749 288.193 70.749Z" fill="currentColor"></path>
-            </svg>
             <select id="login-language-sel" onchange="loginLang(this.value)">
             <option value="en" ${language === "en" ? "selected" : ""}>${en.language}</option>
             <option value="enuk" ${language === "enuk" ? "selected" : ""}>${enuk.language}</option>
@@ -572,14 +605,14 @@ function loadLogin() {
         </div>
         <div id='msgs'></div>
     </div>
-    `; 
+    `;
 }
 
 function loadpost(p) {
     let user;
     let content;
     let bridged = (p.u && bridges.includes(p.u));
-    
+
     if (bridged) {
         const rcon = p.p;
         const match = rcon.match(/^([a-zA-Z0-9_-]{1,20})?:([\s\S]+)?/m);
@@ -602,7 +635,7 @@ function loadpost(p) {
             user = p.u;
         }
     }
-    
+
     const postContainer = document.createElement("div");
     postContainer.classList.add("post");
     postContainer.setAttribute("tabindex", "0");
@@ -624,7 +657,7 @@ function loadpost(p) {
             }
         }
     }
-    
+
     if (blockedUsers.hasOwnProperty(user)) {
         if (settingsstuff().blockedmessages) {
             postContainer.setAttribute("style", "display:none;");
@@ -646,10 +679,10 @@ function loadpost(p) {
         mobileButtonContainer.classList.add("mobileContainer");
         mobileButtonContainer.innerHTML = `
         <div class='toolbarContainer'>
-            ${p.post_origin !== 'inbox' ? `<div class='toolButton mobileButton' onclick='reply("${p._id}")' aria-label="reply" title="reply" tabindex="0">
+            ${p.post_origin !== 'inbox' ? `<div class='toolButton mobileButton' onclick='reply("${p._id}");handleHaptics();' aria-label="reply" title="reply" tabindex="0">
                 <svg width='24' height='24' viewBox='0 0 24 24'><path d='M10 8.26667V4L3 11.4667L10 18.9333V14.56C15 14.56 18.5 16.2667 21 20C20 14.6667 17 9.33333 10 8.26667Z' fill='currentColor'></path></svg>
             </div>` : ''}
-            <div class='toolButton mobileButton' onclick='openModal("${p._id}");'>
+            <div class='toolButton mobileButton' onclick='openModal("${p._id}");handleHaptics();'>
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M4 14a2 2 0 1 0 0-4 2 2 0 0 0 0 4Zm10-2a2 2 0 1 1-4 0 2 2 0 0 1 4 0Zm8 0a2 2 0 1 1-4 0 2 2 0 0 1 4 0Z" clip-rule="evenodd" class=""></path></svg>
             </div>
         </div>
@@ -668,7 +701,7 @@ function loadpost(p) {
 
     const pstinf = document.createElement("span");
     pstinf.classList.add("user-header")
-    pstinf.innerHTML = `<span id='username' onclick='openUsrModal("${user}")'>${user}</span>`;
+    pstinf.innerHTML = `<span id='username' onclick='openUsrModal("${user}");handleHaptics();'>${user}</span>`;
 
     if (bridged || p.u == "Webhooks") {
         const bridged = document.createElement("bridge");
@@ -676,13 +709,12 @@ function loadpost(p) {
         bridged.setAttribute("title", lang().meo_bridged.title);
         pstinf.appendChild(bridged);
     }
-    
+
     pstinf.appendChild(pstdte);
     wrapperDiv.appendChild(pstinf);
 
     const roarer = /@([\w-]+)\s+"([^"]*)"\s+\(([^)]+)\)/g;
     const bettermeower = /@([\w-]+)\[([a-zA-Z0-9]+)\]/g;
-
 
     let matches1 = [...content.matchAll(roarer)];
     let matches2 = [...content.matchAll(bettermeower)];
@@ -734,7 +766,7 @@ function loadpost(p) {
     if (emojiRgx.test(content) || (meowerRgx.test(content) && p.emojis.length) || discordRgx.test(content)) {
         postContentText.classList.add('big');
     }
-    
+
     if (content) {
         wrapperDiv.appendChild(postContentText);
     }
@@ -754,10 +786,10 @@ function loadpost(p) {
             const g = attach(attachment);
             embedsDiv.appendChild(g);
         });
-    
+
         wrapperDiv.appendChild(embedsDiv);
     }
-    
+
 
     postContainer.appendChild(wrapperDiv);
 
@@ -1131,15 +1163,15 @@ function pingusr(event) {
 
 function loadtheme() {
     const theme = localStorage.getItem("theme");
-    
+
     if (theme) {
         document.documentElement.classList.remove("dark-theme");
         document.documentElement.classList.add(theme + "-theme");
     }
-    
+
     const rootStyles = window.getComputedStyle(document.documentElement);
     const rootBackgroundColor = rootStyles.getPropertyValue('--background');
-    
+
     const metaThemeColor = document.querySelector("meta[name=theme-color]");
     if (metaThemeColor) {
         metaThemeColor.setAttribute("content", rootBackgroundColor);
@@ -1390,7 +1422,7 @@ function sidebars() {
     pageContainer.innerHTML = `
     <div class='navigation'>
     <div class='nav-top'>
-    <button class='trans tooltip bottom' id='submit' value='Home' onclick='loadstart()' aria-label="Home" data-tooltip="${lang().page_start}">
+    <button class='trans tooltip bottom' id='submit' value='Home' onclick='loadstart();handleHaptics();' aria-label="Home" data-tooltip="${lang().page_start}">
         <svg width="32" height="32" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
             <g>
                 <path fill="currentColor" d="M468.42 20.5746L332.997 65.8367C310.218 58.8105 284.517 55.049 255.499 55.6094C226.484 55.049 200.78 58.8105 178.004 65.8367L42.5803 20.5746C18.9102 16.3251 -1.81518 36.2937 2.5967 59.1025L38.7636 200.894C18.861 248.282 12.1849 296.099 12.1849 325.027C12.1849 399.343 44.6613 492 255.499 492C466.339 492 498.815 399.343 498.815 325.027C498.815 296.099 492.139 248.282 472.237 200.894L508.404 59.1025C512.814 36.2937 492.09 16.3251 468.42 20.5746Z"/>
@@ -1400,47 +1432,47 @@ function sidebars() {
     </div>
     </div>
     `;
-    
+
     let navlist = `
-    <input type="button" class="navigation-button button" id="explore" value="${lang().page_explore}" onclick="loadexplore();" aria-label="explore" tabindex="0">
-    <input type="button" class="navigation-button button" id="inbox" value="${lang().page_inbox}" onclick="loadchat('inbox')" aria-label="inbox" tabindex="0">
-    <input type="button" class="navigation-button button" id="settings" value="${lang().page_settings}" onclick="loadstgs()" aria-label="settings" tabindex="0">
-    <button type='button' class='user-area button' id='profile' onclick='openUsrModal("${localStorage.getItem("username")}")' aria-label="profile" tabindex="0">
+    <input type="button" class="navigation-button button" id="explore" value="${lang().page_explore}" onclick="loadexplore();handleHaptics();" aria-label="explore" tabindex="0">
+    <input type="button" class="navigation-button button" id="inbox" value="${lang().page_inbox}" onclick="loadchat('inbox');handleHaptics();" aria-label="inbox" tabindex="0">
+    <input type="button" class="navigation-button button" id="settings" value="${lang().page_settings}" onclick="loadstgs();handleHaptics();" aria-label="settings" tabindex="0">
+    <button type='button' class='user-area button' id='profile' onclick='openUsrModal("${localStorage.getItem("username")}");handleHaptics();' aria-label="profile" tabindex="0">
         <div class="avatar-small" id="uav" alt="Avatar"></div>
         <span class="nav-button-label">${localStorage.getItem("username")}</span></div>
     </button>
     `;
 
     loadPfp(localStorage.getItem("username"))
-    .then(pfpElem => {
-        if (pfpElem) {
-            const userAvatar = document.getElementById("uav");
-            let bgImageUrl = pfpElem.style.backgroundImage;
-            if (bgImageUrl) {
-                bgImageUrl = bgImageUrl.slice(5, -2);
-            }
-            
-            userAvatar.style.backgroundImage = `url(${bgImageUrl})`;
-            userAvatar.style.border = pfpElem.style.border.replace("3px", "3px");
-            userAvatar.classList.add("pfp-inner");
+        .then(pfpElem => {
+            if (pfpElem) {
+                const userAvatar = document.getElementById("uav");
+                let bgImageUrl = pfpElem.style.backgroundImage;
+                if (bgImageUrl) {
+                    bgImageUrl = bgImageUrl.slice(5, -2);
+                }
 
-            if (pfpElem.classList.contains("svg-avatar")) {
-                userAvatar.classList.add("svg-avatar");
+                userAvatar.style.backgroundImage = `url(${bgImageUrl})`;
+                userAvatar.style.border = pfpElem.style.border.replace("3px", "3px");
+                userAvatar.classList.add("pfp-inner");
+
+                if (pfpElem.classList.contains("svg-avatar")) {
+                    userAvatar.classList.add("svg-avatar");
+                }
             }
-        }
-    });
+        });
 
 
     if (localStorage.getItem("permissions") === "1") {
-    navlist = `
-      <input type="button" class="navigation-button button" id="moderation" value="${lang().action.mod}" onclick="openModModal()" aria-label="moderate">` + navlist;
+        navlist = `
+      <input type="button" class="navigation-button button" id="moderation" value="${lang().action.mod}" onclick="openModModal();handleHaptics();" aria-label="moderate">` + navlist;
     }
 
     let mdmdl = document.getElementsByClassName('navigation')[0];
     mdmdl.innerHTML += navlist;
 
     const sidediv = document.querySelectorAll(".side");
-    sidediv.forEach(function(sidediv) {
+    sidediv.forEach(function (sidediv) {
         sidediv.classList.remove("hidden");
     });
 
@@ -1460,22 +1492,22 @@ function renderChats() {
     groupsdiv.innerHTML = `
     <div class="groupheader">
         <h1>${lang().title_chats}</h1>
-        <button class="addgc button tooltip bottom" onclick="createChatModal()" data-tooltip="${lang().action.creategc}">
+        <button class="addgc button tooltip bottom" onclick="createChatModal();handleHaptics();" data-tooltip="${lang().action.creategc}">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g clip-path="url(#clip0_318_2)"><path d="M13.6653 13.6777L21.4322 13.6777C22.3528 13.6782 23.099 12.932 23.0986 12.0113C23.0986 11.0902 22.3528 10.3444 21.4322 10.3449H13.6653L13.6653 2.57804C13.6658 1.65739 12.9191 0.910682 11.9989 0.911622C11.0782 0.911155 10.332 1.65739 10.3325 2.57804L10.3325 10.3449L2.54674 10.3449C1.62563 10.3449 0.879848 11.0907 0.880371 12.0113C0.880322 12.4714 1.06705 12.8881 1.36874 13.1898C1.67044 13.4915 2.08712 13.6782 2.54726 13.6782L10.3335 13.6777V21.4446C10.3334 21.9047 10.5201 22.3214 10.8218 22.623C11.1235 22.9248 11.5397 23.111 12.0003 23.1114C12.9214 23.1114 13.6672 22.3657 13.6667 21.4451L13.6653 13.6777Z" fill="currentColor"/></g></svg>
         </button>
     </div>
 
-    <button class="search-input button" id="search" aria-label="search" onclick="goAnywhere();"><span class="srchtx">${lang().action.search}</span></button
+    <button class="search-input button" id="search" aria-label="search" onclick="goAnywhere();handleHaptics();"><span class="srchtx">${lang().action.search}</span></button
     
     `;
     gcdiv.innerHTML += `
-    <button class="navigation-button button gcbtn" onclick="loadchat('home')">
+    <button class="navigation-button button gcbtn" onclick="loadchat('home');handleHaptics();">
     <div class="chat-home-button">
         <svg width="36" height="26" viewBox="0 0 36 26" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M14.8336 21.6667C15.3859 21.6667 15.8336 21.219 15.8336 20.6667V16.1667C15.8336 15.6144 16.2814 15.1667 16.8336 15.1667H19.1669C19.7192 15.1667 20.1669 15.6144 20.1669 16.1667V20.6667C20.1669 21.219 20.6147 21.6667 21.1669 21.6667H24.5836C25.1359 21.6667 25.5836 21.219 25.5836 20.6667V13H28.8336L18.0003 3.25L7.16699 13H10.417V20.6667C10.417 21.219 10.8647 21.6667 11.417 21.6667H14.8336Z" fill="currentColor"/></svg>
     </div>
     <span class="gcname">${lang().page_home}</span>
     </button>
-    <button class="navigation-button button gcbtn" onclick="loadchat('livechat')">
+    <button class="navigation-button button gcbtn" onclick="loadchat('livechat');handleHaptics();">
     <div class="chat-home-button">
         <svg width="36" height="26" viewBox="0 0 36 26" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M11.4 8C8.97012 8 7 9.94349 7 12.3405C7 14.7376 8.97012 16.6811 11.4 16.6811H24.6L27.7482 19.7867C28.2101 20.2424 29 19.9195 29 19.2752V12.7023C29 10.1053 26.8659 8 24.2333 8H11.4Z" fill="currentColor"/></svg>
     </div>    
@@ -1495,8 +1527,8 @@ function renderChats() {
         const r = document.createElement("button");
         r.id = chat._id;
         r.className = `navigation-button button gcbtn`;
-        r.onclick = function() {
-            loadchat(chat._id);
+        r.onclick = function () {
+            loadchat(chat._id);handleHaptics();
         };
 
         const chatIconElem = document.createElement("div");
@@ -1547,11 +1579,11 @@ function renderChats() {
         if (chat.nickname) {
             escnickname = escapeHTML(chat.nickname);
         }
-        
+
         const chatOps = document.createElement("div");
         chatOps.classList.add("chat-ops");
         chatOps.innerHTML = `
-        <div class="chat-op tooltip" onclick="favChat(event, '${escapeHTML(chat._id)}')" title="${lang().action.favorite}" data-tooltip="${lang().action.favorite}">
+        <div class="chat-op tooltip" onclick="favChat(event, '${escapeHTML(chat._id)}');handleHaptics();" title="${lang().action.favorite}" data-tooltip="${lang().action.favorite}">
             ${favoritedChats.includes(chat._id) ? `
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path fill="currentColor" d="M3.05649 9.24618L0.635792 6.89056C0.363174 6.62527 0.264902 6.22838 0.382279 5.8667C0.499657 5.50502 0.812337 5.24125 1.1889 5.18626L5.27593 4.58943L7.10348 0.890366C7.27196 0.549372 7.61957 0.333496 8.00019 0.333496C8.38081 0.333496 8.72843 0.549372 8.8969 0.890366L9.72865 2.57387L3.05649 9.24618Z"/>
@@ -1564,7 +1596,7 @@ function renderChats() {
             </svg>
             `}
         </div>
-        <div class="chat-op tooltip left" onclick="closeChatModal(event, '${escapeHTML(chat._id)}', '${escnickname || chat.members.find(v => v !== localStorage.getItem("username"))}')" title="${lang().action.close}" data-tooltip="${lang().action.close}">
+        <div class="chat-op tooltip left" onclick="closeChatModal(event, '${escapeHTML(chat._id)}', '${escnickname || chat.members.find(v => v !== localStorage.getItem('username'))}');handleHaptics();" title="${lang().action.close}" data-tooltip="${lang().action.close}">
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path fill="currentColor" d="M2.3352 13.6648C2.78215 14.1117 3.50678 14.1117 3.95372 13.6648L8 9.61851L12.0463 13.6648C12.4932 14.1117 13.2179 14.1117 13.6648 13.6648C14.1117 13.2179 14.1117 12.4932 13.6648 12.0463L9.61851 8L13.6648 3.95372C14.1117 3.50678 14.1117 2.78214 13.6648 2.3352C13.2179 1.88826 12.4932 1.88827 12.0463 2.33521L8 6.38149L3.95372 2.33521C3.50678 1.88827 2.78214 1.88827 2.3352 2.33521C1.88826 2.78215 1.88827 3.50678 2.33521 3.95372L6.38149 8L2.33521 12.0463C1.88827 12.4932 1.88827 13.2179 2.3352 13.6648Z"/>
             </svg>            
@@ -1631,43 +1663,56 @@ function loadstart() {
             <button class="ubtn button skeleton" aria-label="Skeleton"><div class="ubtnsa"><div class="start-pfp-outer"><div class="skeleton-avatar-small"></div></div></div></button>
             <button class="ubtn button skeleton" aria-label="Skeleton"><div class="ubtnsa"><div class="start-pfp-outer"><div class="skeleton-avatar-small"></div></div></div></button>
         </div>
+        <div class="trending">
+        <span class="user-header"><span>Trending</span></span>
+        <hr>
+        <div class="section trending-topics">
+        </div>
+        <div class="section trending-inner">
+        </div>
+        <hr>
+        <p style="font-size: 12px;">Powered by AtticusAI | Trending updates once every minute | AI can make things up, take everything with a grain of salt.</p>
+        </div>
         <div class="quick-btns">
-        <button class="qbtn button" aria-label="create chat" onclick="createChatModal()">${lang().action.creategc}</button>
-        <button class="qbtn button" aria-label="home" onclick="loadchat('home');">${lang().action.gohome}</button>
-        <button class="qbtn button" aria-label="explore" onclick="loadexplore();">${lang().page_explore}</button>
-        <button class="qbtn button" aria-label="dm me" onclick="opendm('Eris')">${lang().action.dmme}</button>
+        <button class="qbtn button" aria-label="create chat" onclick="createChatModal();handleHaptics();">${lang().action.creategc}</button>
+        <button class="qbtn button" aria-label="home" onclick="loadchat('home');handleHaptics();">${lang().action.gohome}</button>
+        <button class="qbtn button" aria-label="explore" onclick="loadexplore();handleHaptics();">${lang().page_explore}</button>
+        <button class="qbtn button" aria-label="dm me" onclick="opendm('JoshAtticus');handleHaptics();">${lang().action.dmme}</button>
     </div>
     `;
+
+    loadTrending();
+
     fetch('https://api.meower.org/ulist?autoget')
-    .then(response => response.json())
-    .then(data => {
-        let pl = ''
-        data.autoget.forEach(item => {
-            const gr = item._id.trim();
-            if (gr !== localStorage.getItem("username")) {
-                const profilecont = document.createElement('div');
-                profilecont.classList.add('start-pfp-outer');
-                if (item.avatar_color !== "!color" && data.avatar_color) {
-                    profilecont.classList.add('custom-bg');
-                }
-                if (item.avatar) {
-                    profilecont.innerHTML = `
+        .then(response => response.json())
+        .then(data => {
+            let pl = ''
+            data.autoget.forEach(item => {
+                const gr = item._id.trim();
+                if (gr !== localStorage.getItem("username")) {
+                    const profilecont = document.createElement('div');
+                    profilecont.classList.add('start-pfp-outer');
+                    if (item.avatar_color !== "!color" && data.avatar_color) {
+                        profilecont.classList.add('custom-bg');
+                    }
+                    if (item.avatar) {
+                        profilecont.innerHTML = `
                         <div class="avatar-small pfp-inner" style="border: 3px solid #${item.avatar_color}; background-color:#${item.avatar_color}; background-image: url(https://uploads.meower.org/icons/${item.avatar});" alt="Avatar" title="${item._id}"></div>
                     `;
-                } else if (item.pfp_data) {
-                    profilecont.innerHTML = `
+                    } else if (item.pfp_data) {
+                        profilecont.innerHTML = `
                         <div class="avatar-small svg-avatar pfp-inner" style="border: 3px solid #${item.avatar_color}; background-image: url(images/avatars/icon_${item.pfp_data - 1}.svg)" alt="Avatar" title="${item._id}"></div>
                     `;
-                } else {
-                    profilecont.innerHTML = `
+                    } else {
+                        profilecont.innerHTML = `
                         <div class="avatar-small svg-avatar pfp-inner" style="border: 3px solid #000; background-image: url(images/avatars/icon_-4.svg)" alt="Avatar" title="${item._id}"></div>
                     `;
+                    }
+                    pl += `<button class="ubtn button" aria-label="${gr}"><div class="ubtnsa" onclick="openUsrModal('${gr}');handleHaptics();">${profilecont.outerHTML}${gr}</div><div class="ubtnsb" onclick="opendm('${gr}');handleHaptics();" id="username"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24"><path fill="currentColor" d="M12 22a10 10 0 1 0-8.45-4.64c.13.19.11.44-.04.61l-2.06 2.37A1 1 0 0 0 2.2 22H12Z" class=""></path></svg></div></button>`;
                 }
-                pl += `<button class="ubtn button" aria-label="${gr}"><div class="ubtnsa" onclick="openUsrModal('${gr}')">${profilecont.outerHTML}${gr}</div><div class="ubtnsb" onclick="opendm('${gr}')" id="username"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24"><path fill="currentColor" d="M12 22a10 10 0 1 0-8.45-4.64c.13.19.11.44-.04.61l-2.06 2.37A1 1 0 0 0 2.2 22H12Z" class=""></path></svg></div></button>`;
-            }
+            });
+            document.querySelector(".start-users-online").innerHTML = pl;
         });
-        document.querySelector(".start-users-online").innerHTML = pl;
-    });
 
 }
 
@@ -1686,20 +1731,20 @@ function opendm(username) {
             'token': localStorage.getItem("token")
         }
     })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        return response.json();
-    })
-    .then(data => {
-        chatCache[data._id] = data;
-        parent.loadchat(data._id);
-        parent.closemodal();
-    })
-    .catch(error => {
-        console.error('There was a problem with the fetch operation:', error);
-    });
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            chatCache[data._id] = data;
+            parent.loadchat(data._id);
+            parent.closemodal();
+        })
+        .catch(error => {
+            console.error('There was a problem with the fetch operation:', error);
+        });
 }
 
 function loadchat(chatId) {
@@ -1707,7 +1752,7 @@ function loadchat(chatId) {
     pre = chatId;
     if (!["home", "inbox", "livechat"].includes(chatId) && !chatCache[chatId]) {
         fetch(`https://api.meower.org/chats/${chatId}`, {
-            headers: {token: localStorage.getItem("token")}
+            headers: { token: localStorage.getItem("token") }
         })
         .then(response => {
             if (!response.ok) {
@@ -1763,7 +1808,7 @@ function loadchat(chatId) {
         `;
     } else {
         if (data.nickname) { // update this one too
-            mainContainer.innerHTML = `<div class='info'><div class="gctitle"><h1 id='nickname' onclick="chatSettings('${chatId}')" class='header-top'>${escapeHTML(data.nickname)}</h1></div>
+            mainContainer.innerHTML = `<div class='info'><div class="gctitle"><h1 id='nickname' onclick="chatSettings('${chatId}');handleHaptics();" class='header-top'>${escapeHTML(data.nickname)}</h1></div>
             <p id='info'><span id="info-members">${data.members.length} ${lang().meo_members}</span><span id="info-typing"></span></p></div>` + loadinputs();
             
             let url
@@ -1782,7 +1827,7 @@ function loadchat(chatId) {
             }
             navc = document.querySelector(".nav-top");
             navc.innerHTML = `
-            <button class="trans" id="submit" value="Home" onclick="loadstart()" aria-label="Home">
+            <button class="trans" id="submit" value="Home" onclick="loadstart();handleHaptics();" aria-label="Home">
                 <svg width="32" height="32" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
                     <g>
                         <path fill="currentColor" d="M468.42 20.5746L332.997 65.8367C310.218 58.8105 284.517 55.049 255.499 55.6094C226.484 55.049 200.78 58.8105 178.004 65.8367L42.5803 20.5746C18.9102 16.3251 -1.81518 36.2937 2.5967 59.1025L38.7636 200.894C18.861 248.282 12.1849 296.099 12.1849 325.027C12.1849 399.343 44.6613 492 255.499 492C466.339 492 498.815 399.343 498.815 325.027C498.815 296.099 492.139 248.282 472.237 200.894L508.404 59.1025C512.814 36.2937 492.09 16.3251 468.42 20.5746Z"></path>
@@ -1790,32 +1835,35 @@ function loadchat(chatId) {
                 </svg>
             </button>
 
-            <button id="42d60d56-3fd6-4657-bf0b-bc1f9c8a3c67" class="navigation-button button gcbtn" onclick="loadchat('${chatId}')">
+            <button id="42d60d56-3fd6-4657-bf0b-bc1f9c8a3c67" class="navigation-button button gcbtn" onclick="loadchat('${chatId}');handleHaptics();">
             <div class="avatar-small pfp-inner" alt="Avatar" style="background-image: ${url}; border: 3px solid #${color};"></div><span class="gcname">${escapeHTML(data.nickname)}</span>
             </button>
 
-            <input type='button' class='settings-button button' id='submit' value='${lang().chats.settings}' onclick='chatSettings("${chatId}")'>
-            <input type='button' class='settings-button button' id='submit' value='${lang().chats.members}' onclick='chatMembers("${chatId}")'>
+            <input type='button' class='settings-button button' id='submit' value='${lang().chats.settings}' onclick='chatSettings("${chatId}");handleHaptics();'>
+            <input type='button' class='settings-button button' id='submit' value='${lang().chats.members}' onclick='chatMembers("${chatId}");handleHaptics();'>
             `;
         } else {
-            mainContainer.innerHTML = `<div class='info'><div class="gctitle"><h1 id='username' class='header-top' onclick="openUsrModal('${data.members.find(v => v !== localStorage.getItem("username"))}')">${data.members.find(v => v !== localStorage.getItem("username"))}</h1></div><p id='info'><span id="info-typing"></span></p></div>` + loadinputs();
+            mainContainer.innerHTML = `<div class='info'><div class="gctitle"><h1 id='username' class='header-top' onclick="openUsrModal('${data.members.find(v => v !== localStorage.getItem("username"))}');handleHaptics();">${data.members.find(v => v !== localStorage.getItem("username"))}</h1></div><p id='info'><span id="info-typing"></span></p></div>` + loadinputs();
         }
     }
 
     loadposts(1);
 
     const attachButton = document.getElementById('attach');
+    attachButton.setAttribute('onclick', "handleHaptics();selectFiles();");
     if (attachButton && chatId !== "livechat") {
         attachButton.addEventListener('dragover', function(e) {
             e.preventDefault();
             e.stopPropagation();
             attachButton.classList.add('dragover');
+            handleHaptics();
         });
 
         attachButton.addEventListener('dragleave', function(e) {
             e.preventDefault();
             e.stopPropagation();
             attachButton.classList.remove('dragover');
+            handleHaptics();
         });
 
         attachButton.addEventListener('drop', function(e) {
@@ -1825,6 +1873,7 @@ function loadchat(chatId) {
             for (const file of e.dataTransfer.files) {
                 addAttachment(file);
             }
+            handleHaptics();
         });
     } else {
         if (attachButton) attachButton.remove();
@@ -1832,6 +1881,8 @@ function loadchat(chatId) {
 
     const messageContainer = document.querySelector('.message-container');
     const jumpButton = document.querySelector('.jump');
+    messageContainer.setAttribute('onclick', "handleHaptics();");
+    jumpButton.setAttribute('onclick', "handleHaptics();jumpToTop();");
     const navbarOffset = messageContainer.offsetHeight;
     const main = document.getElementById("main");
     main.addEventListener('scroll', function() {
@@ -1925,7 +1976,7 @@ function logout(iskl) {
         document.getElementById("nav").innerHTML = "";
     if (document.getElementById("groups"))
         document.getElementById("groups").innerHTML = "";
-    document.querySelectorAll(".side").forEach(function(element) {
+    document.querySelectorAll(".side").forEach(function (element) {
         element.classList.add("hidden");
     });    
     document.querySelectorAll(".sidebar").forEach(function(element) {
@@ -1940,32 +1991,32 @@ function loadstgs() {
     pre = "settings";
 
     let navc
-        const pageContainer = document.getElementById("main");
-        const settingsContent = `
+    const pageContainer = document.getElementById("main");
+    const settingsContent = `
             <div class="settings-nav">
             </div>
             <div class="settings">
                 <div class="settings-inner"></div>
             </div>
             `
-        pageContainer.innerHTML = settingsContent;
+    pageContainer.innerHTML = settingsContent;
 
-        navc = document.querySelector(".nav-top");
-        navc.innerHTML = `
-        <button class="trans" id="submit" value="Home" onclick="loadstart()" aria-label="Home">
+    navc = document.querySelector(".nav-top");
+    navc.innerHTML = `
+        <button class="trans" id="submit" value="Home" onclick="loadstart();handleHaptics();" aria-label="Home">
             <svg width="32" height="32" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
                 <g>
                     <path fill="currentColor" d="M468.42 20.5746L332.997 65.8367C310.218 58.8105 284.517 55.049 255.499 55.6094C226.484 55.049 200.78 58.8105 178.004 65.8367L42.5803 20.5746C18.9102 16.3251 -1.81518 36.2937 2.5967 59.1025L38.7636 200.894C18.861 248.282 12.1849 296.099 12.1849 325.027C12.1849 399.343 44.6613 492 255.499 492C466.339 492 498.815 399.343 498.815 325.027C498.815 296.099 492.139 248.282 472.237 200.894L508.404 59.1025C512.814 36.2937 492.09 16.3251 468.42 20.5746Z"></path>
                 </g>
             </svg>
         </button>
-        <input type='button' class='settings-button button' id='submit' value='${lang().settings_general}' onclick='loadGeneral()' aria-label="general">
-        <input type='button' class='settings-button button' id='submit' value='${lang().settings_profile}' onclick='loadProfile()' aria-label="profile">
-        <input type='button' class='settings-button button' id='submit' value='${lang().settings_account}' onclick='loadAccount()' aria-label="account">
-        <input type='button' class='settings-button button' id='submit' value='${lang().settings_appearance}' onclick='loadAppearance()' aria-label="appearance">
-        <input type="button" class="settings-button button" id="submit" value='${lang().settings_languages}' onclick="loadLanguages()" aria-label="languages">
-        <input type="button" class="settings-button button" id="submit" value='${lang().settings_plugins}' onclick="loadPlugins()" aria-label="plugins">
-        <input type='button' class='settings-button button' id='logout' value='${lang().action.logout}' onclick='logout(false)' aria-label="logout">
+        <input type='button' class='settings-button button' id='submit' value='${lang().settings_general}' onclick='loadGeneral();handleHaptics();' aria-label="general">
+        <input type='button' class='settings-button button' id='submit' value='${lang().settings_profile}' onclick='loadProfile();handleHaptics();' aria-label="profile">
+        <input type='button' class='settings-button button' id='submit' value='${lang().settings_account}' onclick='loadAccount();handleHaptics();' aria-label="account">
+        <input type='button' class='settings-button button' id='submit' value='${lang().settings_appearance}' onclick='loadAppearance();handleHaptics();' aria-label="appearance">
+        <input type="button" class="settings-button button" id="submit" value='${lang().settings_languages}' onclick="loadLanguages();handleHaptics();" aria-label="languages">
+        <input type="button" class="settings-button button" id="submit" value='${lang().settings_plugins}' onclick="loadPlugins();handleHaptics();" aria-label="plugins">
+        <input type='button' class='settings-button button' id='logout' value='${lang().action.logout}' onclick='logout(false);handleHaptics();' aria-label="logout">
         `;
     loadGeneral();
 }
@@ -1988,6 +2039,7 @@ function loadGeneral() {
         ${createSettingSection("blockedmessages", lang().general_list.title.blockedmessages, lang().general_list.desc.blockedmessages)}
         ${createSettingSection("censorwords", lang().general_list.title.censorwords, lang().general_list.desc.censorwords)}
         ${createSettingSection("notifications", lang().general_list.title.notifications, lang().general_list.desc.notifications)}
+        ${createSettingSection("haptics", lang().general_list.title.haptics, lang().general_list.desc.haptics)}
         </div>
         <h3>${lang().general_sub.accessibility}</h3>
         <div class="settings-section-outer">
@@ -2008,15 +2060,15 @@ function loadGeneral() {
         </div>
         <h3>${lang().general_sub.blockedusers}</h3>
         <div class="blockedusers list">
-            <button class="blockeduser button" onclick="blockUserSel()">${lang().action.blockuser}</button>
+            <button class="blockeduser button" onclick="blockUserSel();handleHaptics();">${lang().action.blockuser}</button>
         </div>
         <h3>${lang().general_sub.blockedwords}</h3>
         <div class="blockedwords list">
-            <button class="blockedword button" onclick="blockWordSel()">${lang().action.blockword}</button>
-        </div>
-        <h3>${lang().general_sub.about}</h3>
-        <div class="stg-section">
-            <span>meo <span class="version"></span></span><br>
+            <button class="blockedword button" onclick="blockWordSel();handleHaptics();">${lang().action.blockword}</button>
+            </div>
+            <h3>${lang().general_sub.about}</h3>
+            <div class="stg-section">
+            <span>leo <span class="version"></span></span><br>
             <span class="yeah subsubheader"></span>
         </div>
         <h3>${lang().general_sub.credits}</h3>
@@ -2049,6 +2101,7 @@ function loadGeneral() {
         entersend: document.getElementById("entersend"),
         hideimages: document.getElementById("hideimages"),
         notifications: document.getElementById("notifications"),
+        haptics: document.getElementById("haptics"),
         widemode: document.getElementById("widemode"),
         compactmode: document.getElementById("compactmode"),
         ulist: document.getElementById("ulist")
@@ -2072,6 +2125,7 @@ function loadGeneral() {
                 entersend: settings.entersend.classList.contains("checked"),
                 hideimages: settings.hideimages.classList.contains("checked"),
                 notifications: settings.notifications.classList.contains("checked"),
+                haptics: settings.haptics.classList.contains("checked"),
                 widemode: settings.widemode.classList.contains("checked"),
                 compactmode: settings.compactmode.classList.contains("checked"),
                 ulist: settings.ulist.classList.contains("checked")
@@ -2124,14 +2178,14 @@ function loadAccount() {
 
         <h3>${lang().account_sub.password}</h3>
         <div class="settings-buttons-row">
-            <button onclick="changePasswordModal()" class="button blockeduser">${lang().action.changepw}</button>
-            <button onclick="deleteTokensModal()" class="button blockeduser">${lang().action.cleartokens}</button>
+            <button onclick="changePasswordModal();handleHaptics();" class="button blockeduser">${lang().action.changepw}</button>
+            <button onclick="deleteTokensModal();handleHaptics();" class="button blockeduser">${lang().action.cleartokens}</button>
         </div>
 
         <h3>${lang().account_sub.privacy}</h3>
         <div class="settings-buttons-row">
             <a href="https://meower.org/export/" target="_blank" class="button blockeduser">${lang().action.datarequest}</a>
-            <button onclick="DeleteAccountModal()" class="button blockeduser red">${lang().action.deleteacc}</button>
+            <button onclick="DeleteAccountModal();handleHaptics();" class="button blockeduser red">${lang().action.deleteacc}</button>
         </div>
         <a style="font-size: 12px" href="https://meower.org/legal" target="_blank">${lang().login_sub.agreement}</a>
 
@@ -2151,9 +2205,9 @@ async function loadAuthenticators() {
     authenticatorsList.classList.add("authenticator-list")
     document.querySelector(".authenticators").innerHTML = `
         <p class="mfa-info">${mfaAuthenticators.length ? `${lang().account_sub.mfainfoenabled}<br /><br />${lang().account_sub.mfainfoincompatible}` : lang().account_sub.mfainfodisabled}</p>
-        <button id="add-totp-btn" onclick="addTotpModal(null)" class="button blockeduser">${lang().action.addtotp}</button>
+        <button id="add-totp-btn" onclick="addTotpModal(null);handleHaptics();" class="button blockeduser">${lang().action.addtotp}</button>
         ${mfaAuthenticators.length ? `
-            <button onclick="resetRecoveryCodeModal()" class="button blockeduser">${lang().action.resetrecovery}</button>
+            <button onclick="resetRecoveryCodeModal();handleHaptics();" class="button blockeduser">${lang().action.resetrecovery}</button>
         ` : ''}
     `;
     if (mfaAuthenticators.length) {
@@ -2172,12 +2226,12 @@ async function loadAuthenticators() {
                 ${escapeHTML(authenticator.nickname || 'Authenticator App')}
                 </div>
                 <div class="mem-ops">
-                    <div class="mem-op tooltip left" onclick="editAuthenticatorModal('${authenticator._id}', '${escapeHTML(authenticator.nickname || 'Authenticator App')}')" title="${lang().action.edit}" data-tooltip="${lang().action.edit}">
+                    <div class="mem-op tooltip left" onclick="editAuthenticatorModal('${authenticator._id}', '${escapeHTML(authenticator.nickname || 'Authenticator App')}');handleHaptics();" title="${lang().action.edit}" data-tooltip="${lang().action.edit}">
                         <svg width="18" height="18" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path fill-rule="evenodd" clip-rule="evenodd" d="M12.8619 6.55339L13.2939 6.12198C14.2353 5.18055 14.2353 3.6481 13.2939 2.70607C12.3525 1.76464 10.8195 1.76464 9.878 2.70607L9.4466 3.13808L12.8619 6.55339ZM8.59747 3.98471L3.45646 9.12719L6.87233 12.5421L12.0134 7.39959L8.59747 3.98471ZM2.74567 13.9804L5.83937 13.2076L2.79128 10.1595L2.01785 13.2532C1.96685 13.4572 2.02685 13.6738 2.17566 13.8226C2.32446 13.9714 2.54107 14.0308 2.74567 13.9804Z" fill="currentColor"/>
                         </svg>
                     </div>
-                    <div class="mem-op tooltip left" onclick="removeAuthenticatorModal('${authenticator._id}', '${escapeHTML(authenticator.nickname || 'Authenticator App')}')" title="${lang().action.remove}" data-tooltip="${lang().action.remove}">
+                    <div class="mem-op tooltip left" onclick="removeAuthenticatorModal('${authenticator._id}', '${escapeHTML(authenticator.nickname || 'Authenticator App')}');handleHaptics();" title="${lang().action.remove}" data-tooltip="${lang().action.remove}">
                         <svg width="18" height="18" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path fill="currentColor" d="M2.3352 13.6648C2.78215 14.1117 3.50678 14.1117 3.95372 13.6648L8 9.61851L12.0463 13.6648C12.4932 14.1117 13.2179 14.1117 13.6648 13.6648C14.1117 13.2179 14.1117 12.4932 13.6648 12.0463L9.61851 8L13.6648 3.95372C14.1117 3.50678 14.1117 2.78214 13.6648 2.3352C13.2179 1.88826 12.4932 1.88827 12.0463 2.33521L8 6.38149L3.95372 2.33521C3.50678 1.88827 2.78214 1.88827 2.3352 2.33521C1.88826 2.78215 1.88827 3.50678 2.33521 3.95372L6.38149 8L2.33521 12.0463C1.88827 12.4932 1.88827 13.2179 2.3352 13.6648Z"></path>
                         </svg>
@@ -2232,7 +2286,7 @@ async function addTotpModal(totpSecret) {
             const mdbt = mdl.querySelector('.modal-bottom');
             if (mdbt) {
                 mdbt.innerHTML = `
-                <button class="modal-back-btn" onclick="addTotp('${totpSecret.secret}')">${lang().action.confirm}</button>
+                <button class="modal-back-btn" onclick="addTotp('${totpSecret.secret}');handleHaptics();">${lang().action.confirm}</button>
                 `;
             }
         }
@@ -2327,7 +2381,7 @@ async function editAuthenticatorModal(authenticatorId, authenticatorName) {
             const mdbt = mdl.querySelector('.modal-bottom');
             if (mdbt) {
                 mdbt.innerHTML = `
-                <button class="modal-back-btn" onclick="editAuthenticator('${authenticatorId}')">${lang().action.confirm}</button>
+                <button class="modal-back-btn" onclick="editAuthenticator('${authenticatorId}');handleHaptics();">${lang().action.confirm}</button>
                 `;
             }
         }
@@ -2384,7 +2438,7 @@ async function removeAuthenticatorModal(authenticatorId, authenticatorName) {
             const mdbt = mdl.querySelector('.modal-bottom');
             if (mdbt) {
                 mdbt.innerHTML = `
-                <button class="modal-back-btn" onclick="removeAuthenticator('${authenticatorId}')">${lang().action.confirm}</button>
+                <button class="modal-back-btn" onclick="removeAuthenticator('${authenticatorId}');handleHaptics();">${lang().action.confirm}</button>
                 `;
             }
         }
@@ -2449,7 +2503,7 @@ async function resetRecoveryCodeModal() {
             const mdbt = mdl.querySelector('.modal-bottom');
             if (mdbt) {
                 mdbt.innerHTML = `
-                <button class="modal-back-btn" onclick="resetRecoveryCode()">${lang().action.confirm}</button>
+                <button class="modal-back-btn" onclick="resetRecoveryCode();handleHaptics();">${lang().action.confirm}</button>
                 `;
             }
         }
@@ -2521,7 +2575,7 @@ function createSettingSection(id, title, desc) {
                     ${title}
                     <p class="subsubheader">${desc}</p>
                 </div>
-                <div class="settingstoggle">
+                <div class="settingstoggle" onclick="handleHaptics();">
                     <svg viewBox="0 0 24 24" height="20" width="20" aria-hidden="true" focusable="false" fill="currentColor" xmlns="http://www.w3.org/2000/svg" class="check">
                         <path d="m10 15.586-3.293-3.293-1.414 1.414L10 18.414l9.707-9.707-1.414-1.414z"></path>
                     </svg>
@@ -2532,8 +2586,14 @@ function createSettingSection(id, title, desc) {
 }
 
 async function gitstuff() {
+    // terrible fix
+    if (!document.querySelector('.version') || !document.querySelector('.yeah')) {
+        console.log('Required elements not found, skipping gitstuff execution.');
+        return;
+    }
+
     try {
-        const response = await fetch('https://api.github.com/repos/3r1s-s/meo/commits/main');
+        const response = await fetch('https://api.github.com/repos/JoshAtticus/leo/commits/main');
         const data = await response.json();
         console.log(data.sha);
         document.querySelector('.version').innerHTML = `
@@ -2564,8 +2624,6 @@ function loadProfile() {
                 </div>
             </div>
             <div>
-                <h3>${lang().profile.pronouns}</h3>
-                    <input type="text" class="setting-input" id="pronouns-edit" placeholder="they/them">
                 <h3>${lang().profile.quote}</h3>
                     <textarea class="quote-edit" id="quote-edit"></textarea>
                 <h3>${lang().profile.avatar}</h3>
@@ -2579,7 +2637,7 @@ function loadProfile() {
                 </div>
                 <h3>${lang().profile.update}</h3>
                 <div class="settings-buttons-row">
-                    <button onclick="saveProfile()" id="profile-update" class="settings-button-in green">${lang().profile.update}</button>
+                    <button onclick="saveProfile();handleHaptics();" id="profile-update" class="settings-button-in green">${lang().profile.update}</button>
                 </div>
             </div>
         </div>
@@ -2621,7 +2679,6 @@ function loadProfile() {
 
         let quote;
         let editquote;
-        let pronouns;
         
         if (typeof md !== 'undefined') {
             md.disable(['image']);            
@@ -2629,7 +2686,6 @@ function loadProfile() {
             const newlineregex = /\n\n\[(.*?)\]/;
             const match = data.quote.match(regex);
             
-            pronouns = match ? match[1] : "";
             quote = data.quote.replace(regex, '');
             editquote = data.quote.replace(newlineregex, '');
             quote = erimd(md.render(quote).replace(/<a(.*?)>/g, '<a$1 target="_blank">'));
@@ -2638,15 +2694,13 @@ function loadProfile() {
             console.error("Parsed with old markdown, fix later :)");
         }
 
-        document.getElementById("pronouns-edit").value = pronouns;
         document.getElementById("quote-edit").value = editquote;
         document.getElementById("profile-color").value = `#${data.avatar_color}`;
         
         let profileContent = `
         <div class="usr-header">
         <div class="usr-header-inner">
-            <h2 class="username" onclick="copy('${meourl}/profile?u=${data._id}', '${lang().modals.copyuser}')">${data._id}</h2>
-            ${pronouns !== '' ? `<span title="Pronouns" class="subsubheader pronouns">${escapeHTML(pronouns)}</span>` : ``}
+            <h2 class="username" onclick="copy('${meourl}/profile?u=${data._id}', '${lang().modals.copyuser}');handleHaptics();">${data._id}</h2>
         </div> 
         </div>
         <hr>
@@ -2734,7 +2788,7 @@ function chatSettings(chatId) {
             <h1>${lang().chats.settings}</h1>
             <div class="avatar-big pfp-inner" style="border: 6px solid #${color}; background-color: #${color}; background-image: ${url};"></div>
             <div class="gctitle">
-                <h2 id="nickname" class="gcn" onclick="copy('${meourl}?gc=${chatId}')">${escapeHTML(data.nickname)}</h2><i class="subtitle">${chatId}</i>
+                <h2 id="nickname" class="gcn" onclick="copy('${meourl}?gc=${chatId}');handleHaptics();">${escapeHTML(data.nickname)}</h2><i class="subtitle">${chatId}</i>
             </div>
             <hr class="mdl-hr">
             <h3>Chat Photo</h3>
@@ -2752,11 +2806,11 @@ function chatSettings(chatId) {
                 </div>
                 <h3>${lang().chats.emojis}</h3>
                 <div class="emoji-list">
-                <button class="member button" onclick="uploadEmojiModal('${chatId}')">${lang().chats.uploademoji}</button>
+                <button class="member button" onclick="uploadEmojiModal('${chatId}');handleHaptics();">${lang().chats.uploademoji}</button>
                 </div>
                 <hr>
             <div class="settings-buttons-row">
-                <button onclick="saveChat('${chatId}')" id="chat-update" class="settings-button-in green">${lang().chats.update}</button>
+                <button onclick="saveChat('${chatId}');handleHaptics();" id="chat-update" class="settings-button-in green">${lang().chats.update}</button>
             </div>
         </div>
     `;
@@ -2766,7 +2820,7 @@ function chatSettings(chatId) {
             <h1>${lang().chats.settings}</h1>
             <div class="avatar-big pfp-inner" style="border: 6px solid #${color}; background-color: #${color}; background-image: ${url};"></div>
             <div class="gctitle">
-                <h2 id="nickname" class="gcn" onclick="copy('${meourl}?gc=${chatId}')">${escapeHTML(data.nickname)}</h2><i class="subtitle">${chatId}</i>
+                <h2 id="nickname" class="gcn" onclick="copy('${meourl}?gc=${chatId}');handleHaptics();">${escapeHTML(data.nickname)}</h2><i class="subtitle">${chatId}</i>
             </div>
             <hr class="mdl-hr">
                 <h3>${lang().chats.emojis}</h3>
@@ -2789,12 +2843,12 @@ function chatSettings(chatId) {
                         </div>
                         ${data.owner === localStorage.getItem("username") ? `
                         <div class="mem-ops">
-                            <div class="mem-op tooltip left" onclick="editEmojiName('${chatId}', '${emoji._id}', '${emoji.name}')" title="${lang().action.edit}" data-tooltip="${lang().action.edit}">
+                            <div class="mem-op tooltip left" onclick="editEmojiName('${chatId}', '${emoji._id}', '${emoji.name}');handleHaptics();" title="${lang().action.edit}" data-tooltip="${lang().action.edit}">
                                 <svg width="18" height="18" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path fill-rule="evenodd" clip-rule="evenodd" d="M12.8619 6.55339L13.2939 6.12198C14.2353 5.18055 14.2353 3.6481 13.2939 2.70607C12.3525 1.76464 10.8195 1.76464 9.878 2.70607L9.4466 3.13808L12.8619 6.55339ZM8.59747 3.98471L3.45646 9.12719L6.87233 12.5421L12.0134 7.39959L8.59747 3.98471ZM2.74567 13.9804L5.83937 13.2076L2.79128 10.1595L2.01785 13.2532C1.96685 13.4572 2.02685 13.6738 2.17566 13.8226C2.32446 13.9714 2.54107 14.0308 2.74567 13.9804Z" fill="currentColor"/>
                                 </svg>
                             </div>    
-                            <div class="mem-op tooltip left" onclick="removeEmoji('${chatId}', '${emoji._id}', '${emoji.name}')" title="${lang().action.remove}" data-tooltip="${lang().action.remove}">
+                            <div class="mem-op tooltip left" onclick="removeEmoji('${chatId}', '${emoji._id}', '${emoji.name}');handleHaptics();" title="${lang().action.remove}" data-tooltip="${lang().action.remove}">
                                 <svg width="18" height="18" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path fill="currentColor" d="M2.3352 13.6648C2.78215 14.1117 3.50678 14.1117 3.95372 13.6648L8 9.61851L12.0463 13.6648C12.4932 14.1117 13.2179 14.1117 13.6648 13.6648C14.1117 13.2179 14.1117 12.4932 13.6648 12.0463L9.61851 8L13.6648 3.95372C14.1117 3.50678 14.1117 2.78214 13.6648 2.3352C13.2179 1.88826 12.4932 1.88827 12.0463 2.33521L8 6.38149L3.95372 2.33521C3.50678 1.88827 2.78214 1.88827 2.3352 2.33521C1.88826 2.78215 1.88827 3.50678 2.33521 3.95372L6.38149 8L2.33521 12.0463C1.88827 12.4932 1.88827 13.2179 2.3352 13.6648Z"></path>
                                 </svg>
@@ -2861,7 +2915,7 @@ function chatMembers(chatId) {
         <div class="owner">
         </div>
         <h3>${lang().chats.members} <span id="member-count"></span></h3>
-        <button class="member button" onclick="addMembertoGCModal('${chatId}')">Add Member</button>
+        <button class="member button" onclick="addMembertoGCModal('${chatId}');handleHaptics();">Add Member</button>
         <div class="member-list">
         </div>
         <hr>
@@ -2873,7 +2927,7 @@ function chatMembers(chatId) {
     if (data.owner === localStorage.getItem("username")) {
         const ownercont = mainContainer.querySelector('.owner');
         ownercont.innerHTML = `
-        <button onclick="transferOwnershipModal('${chatId}')" class="button ow-btn">Transfer Ownership</button>
+        <button onclick="transferOwnershipModal('${chatId}');handleHaptics();" class="button ow-btn">Transfer Ownership</button>
         `
     } else {
         const ownercont = mainContainer.querySelector('.owner');
@@ -2882,7 +2936,7 @@ function chatMembers(chatId) {
         `
         const leavecont = mainContainer.querySelector('#chat-members-manage');
         leavecont.innerHTML = `
-        <button onclick="closeChatModal(event, '${chatId}', '${escapeHTML(data.nickname)}')" id="chat-update" class="settings-button-in red">${lang().chats.leave}</button>
+        <button onclick="closeChatModal(event, '${chatId}', '${escapeHTML(data.nickname)}');handleHaptics();" id="chat-update" class="settings-button-in red">${lang().chats.leave}</button>
         `
     }
     if (memberList) {
@@ -2892,7 +2946,297 @@ function chatMembers(chatId) {
             memberItem.innerHTML = `
             <span>@${member}</span>
             ${data.owner === localStorage.getItem("username") ? `<div class="mem-ops">
-                <div class="mem-op tooltip left" onclick="removeMemberFromGC('${chatId}', '${member}')" title="${lang().action.remove}" data-tooltip="${lang().action.remove}">
+                <div class="mem-op tooltip left" onclick="removeMemberFromGC('${chatId}', '${member}');handleHaptics();" title="${lang().action.remove}" data-tooltip="${lang().action.remove}">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path fill="currentColor" d="M2.3352 13.6648C2.78215 14.1117 3.50678 14.1117 3.95372 13.6648L8 9.61851L12.0463 13.6648C12.4932 14.1117 13.2179 14.1117 13.6648 13.6648C14.1117 13.2179 14.1117 12.4932 13.6648 12.0463L9.61851 8L13.6648 3.95372C14.1117 3.50678 14.1117 2.78214 13.6648 2.3352C13.2179 1.88826 12.4932 1.88827 12.0463 2.33521L8 6.38149L3.95372 2.33521C3.50678 1.88827 2.78214 1.88827 2.3352 2.33521C1.88826 2.78215 1.88827 3.50678 2.33521 3.95372L6.38149 8L2.33521 12.0463C1.88827 12.4932 1.88827 13.2179 2.3352 13.6648Z"></path>
+                    </svg>
+                </div>
+            </div>` : ''}
+            `;
+            memberList.appendChild(memberItem);
+        });
+        document.getElementById("member-count").innerText = ` (${data.members.length})`;
+
+    }
+}
+
+function saveChat(chatId) {
+    const fileInput = document.getElementById("chat-photo");
+    const file = fileInput.files[0];
+    const token = localStorage.getItem("token");
+    const avtrclr = document.getElementById("chat-color").value.substring(1);
+    const nick = document.getElementById("chat-nick-input").value;
+
+    const update = document.getElementById("chat-update");
+    update.disabled = true;
+    update.textContent = "Uploading...";
+
+    const xhttp = new XMLHttpRequest();
+
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4) {
+            if (this.status == 200) {
+                console.log('GC updated successfully.');
+                closemodal("Chat Updated!");
+                const update = document.getElementById("chat-update");
+                update.disabled = false;
+                update.textContent = lang().chats.update;
+
+                loadchat(chatId);
+            } else {
+                closemodal(this.status.toString());
+                const update = document.getElementById("chat-update");
+                update.disabled = false;
+                update.textContent = lang().chats.update;
+                console.error('Failed to update chat. HTTP ' + this.status.toString());
+            }
+        }
+    };
+
+    xhttp.open("PATCH", `https://api.meower.org/chats/${chatId}`);
+
+    xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    xhttp.setRequestHeader("token", token);
+
+    const data = {
+        icon_color: avtrclr
+    };
+
+    if (file) {
+        const formData = new FormData();
+        formData.append("file", file);
+
+        fetch("https://uploads.meower.org/icons", {
+            method: "POST",
+            headers: {
+                "Authorization": token
+            },
+            body: formData
+        })
+        .then(uploadResponse => uploadResponse.json())
+        .then(uploadData => {
+            if (nick) {
+                data.nickname = nick;
+            }
+            const avatarId = uploadData.id;
+            data.icon = avatarId;
+            xhttp.send(JSON.stringify(data));
+        })
+        .catch(error => console.error('Error uploading file:', error));
+    } else {
+        if (nick) {
+            data.nickname = nick;
+        }
+        xhttp.send(JSON.stringify(data));
+    }
+}
+
+function chatSettings(chatId) {
+	setTop();
+
+	if (!chatCache[chatId]) {
+		fetch(`https://api.meower.org/chats/${chatId}`, {
+				headers: {
+					token: localStorage.getItem("token")
+				}
+			})
+			.then(response => {
+				if (!response.ok) {
+					if (response.status === 404) {
+						throw new Error("Chat not found");
+					} else {
+						throw new Error('Network response was not ok');
+					}
+				}
+				return response.json();
+			})
+			.then(data => {
+				chatCache[chatId] = data;
+				loadchat(chatId);
+			})
+			.catch(e => {
+				openUpdate(`Unable to open chat: ${e}`);
+			});
+		return;
+	}
+
+	const data = chatCache[chatId];
+	document.documentElement.style.overflow = "hidden";
+
+	const mainContainer = document.getElementById("main");
+
+	let url
+	if (data.icon) {
+		url = `url(https://uploads.meower.org/icons/${data.icon})`;
+	} else {
+		url = `url(images/GC.svg)`;
+	}
+	let color
+	if (!data.icon) {
+		color = '1f5831';
+	} else if (data.icon_color) {
+		color = data.icon_color;
+	} else {
+		color = '000';
+	}
+    if (data.owner === localStorage.getItem("username")) {
+        mainContainer.innerHTML = `
+        <div class="settings">
+            <h1>${lang().chats.settings}</h1>
+            <div class="avatar-big pfp-inner" style="border: 6px solid #${color}; background-color: #${color}; background-image: ${url};"></div>
+            <div class="gctitle">
+                <h2 id="nickname" class="gcn" onclick="copy('${meourl}?gc=${chatId}');handleHaptics();">${escapeHTML(data.nickname)}</h2><i class="subtitle">${chatId}</i>
+            </div>
+            <hr class="mdl-hr">
+            <h3>Chat Photo</h3>
+                <input type="file" id="chat-photo" accept="image/png,image/jpeg,image/webp,image/gif">
+            <h3>Chat Color</h3>
+            <div class="color-outer">
+            <div class="color-icon">
+                <svg class="swatch" aria-hidden="true" role="img" xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24"><path fill="currentColor" d="m13.96 5.46 4.58 4.58a1 1 0 0 0 1.42 0l1.38-1.38a2 2 0 0 0 0-2.82l-3.18-3.18a2 2 0 0 0-2.82 0l-1.38 1.38a1 1 0 0 0 0 1.42ZM2.11 20.16l.73-4.22a3 3 0 0 1 .83-1.61l7.87-7.87a1 1 0 0 1 1.42 0l4.58 4.58a1 1 0 0 1 0 1.42l-7.87 7.87a3 3 0 0 1-1.6.83l-4.23.73a1.5 1.5 0 0 1-1.73-1.73Z"></path></svg>
+            </div>
+                <input id="chat-color" type="color" value="#${data.icon_color}">
+            </div>
+                <h3>${lang().action.nick}</h3>
+                <div class="nick">
+                    <input id="chat-nick-input" class="setting-input" placeholder="${data.nickname}" minlength="1" maxlength="20">
+                </div>
+                <h3>${lang().chats.emojis}</h3>
+                <div class="emoji-list">
+                <button class="member button" onclick="uploadEmojiModal('${chatId}');handleHaptics();">${lang().chats.uploademoji}</button>
+                </div>
+                <hr>
+            <div class="settings-buttons-row">
+                <button onclick="saveChat('${chatId}');handleHaptics();" id="chat-update" class="settings-button-in green">${lang().chats.update}</button>
+            </div>
+        </div>
+    `;
+    } else {
+        mainContainer.innerHTML = `
+        <div class="settings">
+            <h1>${lang().chats.settings}</h1>
+            <div class="avatar-big pfp-inner" style="border: 6px solid #${color}; background-color: #${color}; background-image: ${url};"></div>
+            <div class="gctitle">
+                <h2 id="nickname" class="gcn" onclick="copy('${meourl}?gc=${chatId}');handleHaptics();">${escapeHTML(data.nickname)}</h2><i class="subtitle">${chatId}</i>
+            </div>
+            <hr class="mdl-hr">
+                <h3>${lang().chats.emojis}</h3>
+                <div class="emoji-list">
+                </div>
+                <hr>
+        </div>
+    `;
+    }
+
+	const emojiList = mainContainer.querySelector('.emoji-list');
+	if (emojiList) {
+		data.emojis.forEach(emoji => {
+			const emojiItem = document.createElement('div');
+			emojiItem.className = 'member-in';
+			emojiItem.innerHTML = `
+                        <div class="emoji-option-in">
+                        <img class="emoji-option-im" src="https://uploads.meower.org/emojis/${emoji._id}" alt="${emoji.name}" />
+                        <span>${emoji.name}</span>
+                        </div>
+                        ${data.owner === localStorage.getItem("username") ? `
+                        <div class="mem-ops">
+                            <div class="mem-op tooltip left" onclick="editEmojiName('${chatId}', '${emoji._id}', '${emoji.name}');handleHaptics();" title="${lang().action.edit}" data-tooltip="${lang().action.edit}">
+                                <svg width="18" height="18" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" clip-rule="evenodd" d="M12.8619 6.55339L13.2939 6.12198C14.2353 5.18055 14.2353 3.6481 13.2939 2.70607C12.3525 1.76464 10.8195 1.76464 9.878 2.70607L9.4466 3.13808L12.8619 6.55339ZM8.59747 3.98471L3.45646 9.12719L6.87233 12.5421L12.0134 7.39959L8.59747 3.98471ZM2.74567 13.9804L5.83937 13.2076L2.79128 10.1595L2.01785 13.2532C1.96685 13.4572 2.02685 13.6738 2.17566 13.8226C2.32446 13.9714 2.54107 14.0308 2.74567 13.9804Z" fill="currentColor"/>
+                                </svg>
+                            </div>    
+                            <div class="mem-op tooltip left" onclick="removeEmoji('${chatId}', '${emoji._id}', '${emoji.name}');handleHaptics();" title="${lang().action.remove}" data-tooltip="${lang().action.remove}">
+                                <svg width="18" height="18" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path fill="currentColor" d="M2.3352 13.6648C2.78215 14.1117 3.50678 14.1117 3.95372 13.6648L8 9.61851L12.0463 13.6648C12.4932 14.1117 13.2179 14.1117 13.6648 13.6648C14.1117 13.2179 14.1117 12.4932 13.6648 12.0463L9.61851 8L13.6648 3.95372C14.1117 3.50678 14.1117 2.78214 13.6648 2.3352C13.2179 1.88826 12.4932 1.88827 12.0463 2.33521L8 6.38149L3.95372 2.33521C3.50678 1.88827 2.78214 1.88827 2.3352 2.33521C1.88826 2.78215 1.88827 3.50678 2.33521 3.95372L6.38149 8L2.33521 12.0463C1.88827 12.4932 1.88827 13.2179 2.3352 13.6648Z"></path>
+                                </svg>
+                            </div>
+                        </div>` : ''}
+                        `;
+			emojiList.appendChild(emojiItem);
+		});
+	}
+}
+
+function chatMembers(chatId) {
+	setTop();
+
+	if (!chatCache[chatId]) {
+		fetch(`https://api.meower.org/chats/${chatId}`, {
+				headers: {
+					token: localStorage.getItem("token")
+				}
+			})
+			.then(response => {
+				if (!response.ok) {
+					if (response.status === 404) {
+						throw new Error("Chat not found");
+					} else {
+						throw new Error('Network response was not ok');
+					}
+				}
+				return response.json();
+			})
+			.then(data => {
+				chatCache[chatId] = data;
+				loadchat(chatId);
+			})
+			.catch(e => {
+				openUpdate(`Unable to open chat: ${e}`);
+			});
+		return;
+	}
+
+	const data = chatCache[chatId];
+	document.documentElement.style.overflow = "hidden";
+
+	const mainContainer = document.getElementById("main");
+
+	let url
+	if (data.icon) {
+		url = `url(https://uploads.meower.org/icons/${data.icon})`;
+	} else {
+		url = `url(images/GC.svg)`;
+	}
+	let color
+	if (!data.icon) {
+		color = '1f5831';
+	} else if (data.icon_color) {
+		color = data.icon_color;
+	} else {
+		color = '000';
+	}
+	mainContainer.innerHTML = `
+    <div class="settings">
+        <h1>${lang().chats.members}</h1>
+        <h3>${lang().chats.owner}</h3>
+        <div class="owner">
+        </div>
+        <h3>${lang().chats.members} <span id="member-count"></span></h3>
+        <button class="member button" onclick="addMembertoGCModal('${chatId}');handleHaptics();">Add Member</button>
+        <div class="member-list">
+        </div>
+    </div>
+`;
+    const memberList = mainContainer.querySelector('.member-list');
+    if (data.owner === localStorage.getItem("username")) {
+        const ownercont = mainContainer.querySelector('.owner');
+        ownercont.innerHTML = `
+        <button onclick="transferOwnershipModal('${chatId}');handleHaptics();" class="button ow-btn">Transfer Ownership</button>
+        `
+    } else {
+        const ownercont = mainContainer.querySelector('.owner');
+        ownercont.innerHTML = `
+        <p class="subsubheader">${data.owner} is the owner</p>
+        `
+    }
+    if (memberList) {
+        data.members.forEach(member => {
+            const memberItem = document.createElement('div');
+            memberItem.className = 'member-in';
+            memberItem.innerHTML = `
+            <span>@${member}</span>
+            ${data.owner === localStorage.getItem("username") || member === localStorage.getItem("username") ? `<div class="mem-ops">
+                <div class="mem-op tooltip left" onclick="removeMemberFromGC('${chatId}', '${member}');handleHaptics();" title="${lang().action.remove}" data-tooltip="${lang().action.remove}">
                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path fill="currentColor" d="M2.3352 13.6648C2.78215 14.1117 3.50678 14.1117 3.95372 13.6648L8 9.61851L12.0463 13.6648C12.4932 14.1117 13.2179 14.1117 13.6648 13.6648C14.1117 13.2179 14.1117 12.4932 13.6648 12.0463L9.61851 8L13.6648 3.95372C14.1117 3.50678 14.1117 2.78214 13.6648 2.3352C13.2179 1.88826 12.4932 1.88827 12.0463 2.33521L8 6.38149L3.95372 2.33521C3.50678 1.88827 2.78214 1.88827 2.3352 2.33521C1.88826 2.78215 1.88827 3.50678 2.33521 3.95372L6.38149 8L2.33521 12.0463C1.88827 12.4932 1.88827 13.2179 2.3352 13.6648Z"></path>
                     </svg>
@@ -2979,11 +3323,6 @@ function saveChat(chatId) {
 
 function saveProfile() {
     let quote = document.getElementById("quote-edit").value;
-    const pronouns = document.getElementById("pronouns-edit").value;
-
-    if (pronouns.trim() !== "") {
-        quote = `${quote}\n\n[${pronouns}]`;
-    }
 
     const profilecolor = document.getElementById("profile-color").value.substring(1);
     const fileInput = document.getElementById("profile-photo");
@@ -3050,7 +3389,7 @@ async function loadPlugins() {
             <h1>${lang().settings_plugins}</h1>
             <div class="msgs"></div>
             <h3>${lang().plugins_sub.manage}</h3>
-            <button onclick="resetPlugins()" class="button blockeduser">${lang().action.resetplugins}</button>
+            <button onclick="resetPlugins();handleHaptics();" class="button blockeduser">${lang().action.resetplugins}</button>
 
             <h3>${lang().settings_plugins}</h3>
             <div class='plugins'>
@@ -3258,32 +3597,32 @@ function loadAppearance() {
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M4 14a2 2 0 1 0 0-4 2 2 0 0 0 0 4Zm10-2a2 2 0 1 1-4 0 2 2 0 0 1 4 0Zm8 0a2 2 0 1 1-4 0 2 2 0 0 1 4 0Z" clip-rule="evenodd" class=""></path></svg>
                         </div>
                     </div>
-                    </div><span class="user-header"><span id="username">Eris</span><i class="date">04/04/24, 10:49 pm</i></span><p><a href="https://uploads.meower.org/attachments/oMZqXLbqOjb9fbkRN3VDYmI0/togif.gif" target="_blank" class="attachment"><svg class="icon_ecf39b icon__13ad2" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"><path fill="currentColor" d="M10.57 4.01a6.97 6.97 0 0 1 9.86 0l.54.55a6.99 6.99 0 0 1 0 9.88l-7.26 7.27a1 1 0 0 1-1.42-1.42l7.27-7.26a4.99 4.99 0 0 0 0-7.06L19 5.43a4.97 4.97 0 0 0-7.02 0l-8.02 8.02a3.24 3.24 0 1 0 4.58 4.58l6.24-6.24a1.12 1.12 0 0 0-1.58-1.58l-3.5 3.5a1 1 0 0 1-1.42-1.42l3.5-3.5a3.12 3.12 0 1 1 4.42 4.42l-6.24 6.24a5.24 5.24 0 0 1-7.42-7.42l8.02-8.02Z" class=""></path></svg><span> attachments</span></a></p><img src="https://uploads.meower.org/attachments/oMZqXLbqOjb9fbkRN3VDYmI0/togif.gif" onclick="openImage('https://uploads.meower.org/attachments/oMZqXLbqOjb9fbkRN3VDYmI0/togif.gif')" alt="togif.gif" class="embed"></div></div>
+                    </div><span class="user-header"><span id="username">Eris</span><i class="date">04/04/24, 10:49 pm</i></span><p><a href="https://uploads.meower.org/attachments/oMZqXLbqOjb9fbkRN3VDYmI0/togif.gif" target="_blank" class="attachment"><svg class="icon_ecf39b icon__13ad2" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"><path fill="currentColor" d="M10.57 4.01a6.97 6.97 0 0 1 9.86 0l.54.55a6.99 6.99 0 0 1 0 9.88l-7.26 7.27a1 1 0 0 1-1.42-1.42l7.27-7.26a4.99 4.99 0 0 0 0-7.06L19 5.43a4.97 4.97 0 0 0-7.02 0l-8.02 8.02a3.24 3.24 0 1 0 4.58 4.58l6.24-6.24a1.12 1.12 0 0 0-1.58-1.58l-3.5 3.5a1 1 0 0 1-1.42-1.42l3.5-3.5a3.12 3.12 0 1 1 4.42 4.42l-6.24 6.24a5.24 5.24 0 0 1-7.42-7.42l8.02-8.02Z" class=""></path></svg><span> attachments</span></a></p><img src="https://uploads.meower.org/attachments/oMZqXLbqOjb9fbkRN3VDYmI0/togif.gif" onclick="openImage('https://uploads.meower.org/attachments/oMZqXLbqOjb9fbkRN3VDYmI0/togif.gif');handleHaptics();" alt="togif.gif" class="embed"></div></div>
             </div>
         <div class="theme-buttons">
             <h3>${lang().appearance_sub.theme}</h3>
             <div class="theme-buttons-inner">
-                <button onclick='changeTheme(\"light\", this)' class='theme-button light-theme'>Light</button>
-                <button onclick='changeTheme(\"dark\", this)' class='theme-button dark-theme'>Dark</button>
-                <button onclick='changeTheme(\"oled\", this)' class='theme-button oled-theme'>Black</button>
+                <button onclick='changeTheme(\"light\", this);handleHaptics();' class='theme-button light-theme'>Light</button>
+                <button onclick='changeTheme(\"dark\", this);handleHaptics();' class='theme-button dark-theme'>Dark</button>
+                <button onclick='changeTheme(\"oled\", this);handleHaptics();' class='theme-button oled-theme'>Black</button>
             </div>
             <h3>${lang().appearance_sub.spthemes}</h3>
                 <div class="theme-buttons-inner">
-                    <button onclick='changeTheme(\"cosmic\", this)' class='theme-button cosmic-theme'>Cosmic Latte</button>
-                    <button onclick='changeTheme(\"lime\", this)' class='theme-button lime-theme'>Lime</button>
-                    <button onclick='changeTheme(\"evening\", this)' class='theme-button evening-theme'>Evening</button>
-                    <button onclick='changeTheme(\"midnight\", this)' class='theme-button midnight-theme'>Midnight</button>
-                    <button onclick='changeTheme(\"grain\", this)' class='theme-button grain-theme'>Grain</button>
-                    <button onclick='changeTheme(\"sage\", this)' class='theme-button sage-theme'>Sage</button>
-                    <button onclick='changeTheme(\"roarer\", this)' class='theme-button roarer-theme'>Roarer</button>
-                    <button onclick='changeTheme(\"grip\", this)' class='theme-button grip-theme'>9rip</button>
-                    <button onclick='changeTheme(\"darflen\", this)' class='theme-button darflen-theme'>Darflen</button>
-                    <div style="display:none;">
-                    <button onclick='changeTheme(\"meower\", this)' class='theme-button meower-theme'>Meower</button>
-                    <button onclick='changeTheme(\"flamingo\", this)' class='theme-button flamingo-theme'>Flamingo</button>
-                    <button onclick='changeTheme(\"teb\", this)' class='theme-button teb-theme'>Blue</button>
-                    <button onclick='changeTheme(\"fabloo\", this)' class='theme-button fabloo-theme'>Fabloo</button>
-                    <button onclick='changeTheme(\"midnight-blurple\", this)' class='theme-button midnight-blurple-theme'>Blurple</button>
+                    <button onclick='changeTheme(\"cosmic\", this);handleHaptics();' class='theme-button cosmic-theme'>Cosmic Latte</button>
+                    <button onclick='changeTheme(\"lime\", this);handleHaptics();' class='theme-button lime-theme'>Lime</button>
+                    <button onclick='changeTheme(\"evening\", this);handleHaptics();' class='theme-button evening-theme'>Evening</button>
+                    <button onclick='changeTheme(\"midnight\", this);handleHaptics();' class='theme-button midnight-theme'>Midnight</button>
+                    <button onclick='changeTheme(\"grain\", this);handleHaptics();' class='theme-button grain-theme'>Grain</button>
+                    <button onclick='changeTheme(\"sage\", this);handleHaptics();' class='theme-button sage-theme'>Sage</button>
+                    <button onclick='changeTheme(\"roarer\", this);handleHaptics();' class='theme-button roarer-theme'>Roarer</button>
+                    <button onclick='changeTheme(\"grip\", this);handleHaptics();' class='theme-button grip-theme'>9rip</button>
+                    <button onclick='changeTheme(\"darflen\", this);handleHaptics();' class='theme-button darflen-theme'>Darflen</button>
+                    <div class="theme-buttons-inner">
+                    <button onclick='changeTheme(\"meower\", this);handleHaptics();' class='theme-button meower-theme'>Meower</button>
+                    <button onclick='changeTheme(\"flamingo\", this);handleHaptics();' class='theme-button flamingo-theme'>Flamingo</button>
+                    <button onclick='changeTheme(\"teb\", this);handleHaptics();' class='theme-button teb-theme'>Blue</button>
+                    <button onclick='changeTheme(\"fabloo\", this);handleHaptics();' class='theme-button fabloo-theme'>Fabloo</button>
+                    <button onclick='changeTheme(\"midnight-blurple\", this);handleHaptics();' class='theme-button midnight-blurple-theme'>Blurple</button>
                     </div>
                 </div>
             <h3>${lang().appearance_sub.acthemes}</h3>
@@ -3388,9 +3727,9 @@ function loadAppearance() {
                     <input type="color" class="cstcolinpc" id="dark-accent" name="dark-accent" value="#232730">
                     </div>
                 </div>
-                <button onclick="applyCustomTheme()" class="cstpgbt button">${lang().action.apply}</button>
-                <button onclick="saveCustomTheme()" class="cstpgbt button">${lang().action.savetheme}</button>
-                <button onclick="loadCustomThemeFile()" class="cstpgbt button">${lang().action.loadtheme}</button>
+                <button onclick="applyCustomTheme();handleHaptics();" class="cstpgbt button">${lang().action.apply}</button>
+                <button onclick="saveCustomTheme();handleHaptics();" class="cstpgbt button">${lang().action.savetheme}</button>
+                <button onclick="loadCustomThemeFile();handleHaptics();" class="cstpgbt button">${lang().action.loadtheme}</button>
 
             </div>
         <h3>${lang().appearance_sub.cscss}</h3>
@@ -3423,16 +3762,16 @@ function loadAppearance() {
 
     cstmcsstxt.addEventListener('input', function () {
         const newCustomCSS = cstmcsstxt.value;
-        
+
         let customstyle = document.getElementById('customstyle');
         if (!customstyle) {
             customstyle = document.createElement('style');
             customstyle.id = 'customstyle';
             document.head.appendChild(customstyle);
         }
-        
+
         customstyle.textContent = newCustomCSS;
-        
+
         localStorage.setItem('customCSS', newCustomCSS);
     });
 
@@ -3483,7 +3822,7 @@ function saveCustomTheme() {
     if (themeCSS) {
         const blob = new Blob([themeCSS.innerText.replace(/^\.custom-theme\s*{\s*|\s*}$/g, '')], { type: 'text/css' });
         const url = URL.createObjectURL(blob);
-        
+
         const a = document.createElement('a');
         a.href = url;
         a.download = 'custom-theme.css';
@@ -3501,12 +3840,12 @@ function loadCustomThemeFile() {
     input.type = 'file';
     input.accept = '.css, .txt';
 
-    input.addEventListener('change', function() {
+    input.addEventListener('change', function () {
         const file = this.files[0];
 
         const reader = new FileReader();
 
-        reader.onload = function(event) {
+        reader.onload = function (event) {
             const themeCSS = event.target.result;
 
             applyCustomThemeFromFile(themeCSS);
@@ -3546,10 +3885,10 @@ function loadCustomCss() {
 
 function changeTheme(theme, button) {
     const selectedTheme = theme;
-  
+
     const previousTheme = localStorage.getItem("theme");
     if (previousTheme) {
-      document.documentElement.classList.remove(previousTheme + "-theme");
+        document.documentElement.classList.remove(previousTheme + "-theme");
     }
     document.documentElement.classList.add(selectedTheme + "-theme");
     localStorage.setItem("theme", selectedTheme);
@@ -3575,20 +3914,20 @@ function loadLanguages() {
         <h3>${lang().languages_sub.title}</h3>
         <div class="msgs"></div>
         <div class="languages">
-            <button class="language button" id="en" onclick="changeLanguage('en')"><span class="language-l">${en.language}</span><span class="language-r">English, US</span><div class="radio"></div></button>
-            <button class="language button" id="enuk" onclick="changeLanguage('enuk')"><span class="language-l">${enuk.language}</span><span class="language-r">English, UK</span><div class="radio"></div></button>
-            <button class="language button" id="es" onclick="changeLanguage('es')"><span class="language-l">${es.language}</span><span class="language-r">Spanish (Latin American)</span><div class="radio"></div></button>
-            <button class="language button" id="es_es" onclick="changeLanguage('es_es')"><span class="language-l">${es_es.language}</span><span class="language-r">Spanish (Spain)</span><div class="radio"></div></button>
-            <button class="language button" id="fr" onclick="changeLanguage('fr')"><span class="language-l">${fr.language}</span><span class="language-r">French</span><div class="radio"></div></button>
-            <button class="language button" id="de" onclick="changeLanguage('de')"><span class="language-l">${de.language}</span><span class="language-r">German</span><div class="radio"></div></button>
-            <button class="language button" id="ua" onclick="changeLanguage('ua')"><span class="language-l">${ua.language}</span><span class="language-r">Ukrainian</span><div class="radio"></div></button>
+            <button class="language button" id="en" onclick="changeLanguage('en');handleHaptics();"><span class="language-l">${en.language}</span><span class="language-r">English, US</span><div class="radio"></div></button>
+            <button class="language button" id="enuk" onclick="changeLanguage('enuk');handleHaptics();"><span class="language-l">${enuk.language}</span><span class="language-r">English, UK</span><div class="radio"></div></button>
+            <button class="language button" id="es" onclick="changeLanguage('es');handleHaptics();"><span class="language-l">${es.language}</span><span class="language-r">Spanish (Latin American)</span><div class="radio"></div></button>
+            <button class="language button" id="es_es" onclick="changeLanguage('es_es');handleHaptics();"><span class="language-l">${es_es.language}</span><span class="language-r">Spanish (Spain)</span><div class="radio"></div></button>
+            <button class="language button" id="fr" onclick="changeLanguage('fr');handleHaptics();"><span class="language-l">${fr.language}</span><span class="language-r">French</span><div class="radio"></div></button>
+            <button class="language button" id="de" onclick="changeLanguage('de');handleHaptics();"><span class="language-l">${de.language}</span><span class="language-r">German</span><div class="radio"></div></button>
+            <button class="language button" id="ua" onclick="changeLanguage('ua');handleHaptics();"><span class="language-l">${ua.language}</span><span class="language-r">Ukrainian</span><div class="radio"></div></button>
             <h3>${lang().languages_sub.other}</h3>
-            <button class="language button" id="sj" onclick="changeLanguage('sj')"><span class="language-l">${sj.language}</span><span class="language-r">Sujaliro</span><div class="radio"></div></button>
-            <button class="language button" id="eh" onclick="changeLanguage('eh')"><span class="language-l">${eh.language}</span><span class="language-r">Enchantment Table</span><div class="radio"></div></button>
-            <button class="language button" id="b" onclick="changeLanguage('b')"><span class="language-l">${b.language}</span><span class="language-r">Bottom</span><div class="radio"></div></button>
-            <button class="language button" id="owo" onclick="changeLanguage('owo')"><span class="language-l">${owo.language}</span><span class="language-r">owo</span><div class="radio"></div></button>
-            <button class="language button" id="eris" onclick="changeLanguage('eris')"><span class="language-l">${eris.language}</span><span class="language-r">Eris</span><div class="radio"></div></button>
-            <button class="language button" id="goobert" onclick="changeLanguage('goobert')"><span class="language-l">${goobert.language}</span><span class="language-r">goobert</span><div class="radio"></div></button>
+            <button class="language button" id="sj" onclick="changeLanguage('sj');handleHaptics();"><span class="language-l">${sj.language}</span><span class="language-r">Sujaliro</span><div class="radio"></div></button>
+            <button class="language button" id="eh" onclick="changeLanguage('eh');handleHaptics();"><span class="language-l">${eh.language}</span><span class="language-r">Enchantment Table</span><div class="radio"></div></button>
+            <button class="language button" id="b" onclick="changeLanguage('b');handleHaptics();"><span class="language-l">${b.language}</span><span class="language-r">Bottom</span><div class="radio"></div></button>
+            <button class="language button" id="owo" onclick="changeLanguage('owo');handleHaptics();"><span class="language-l">${owo.language}</span><span class="language-r">owo</span><div class="radio"></div></button>
+            <button class="language button" id="eris" onclick="changeLanguage('eris');handleHaptics();"><span class="language-l">${eris.language}</span><span class="language-r">Eris</span><div class="radio"></div></button>
+            <button class="language button" id="goobert" onclick="changeLanguage('goobert');handleHaptics();"><span class="language-l">${goobert.language}</span><span class="language-r">goobert</span><div class="radio"></div></button>
         </div>
         <hr>
         <span>${lang().languages_sub.desc} <a href='https://github.com/3r1s-s/meo' target="_blank" id='link'>${lang().languages_sub.link}</a></span>
@@ -3627,10 +3966,13 @@ function settingsstuff() {
             "reducemotion": false,
             "showpostbuttons": false,
             "underlinelinks": false,
+            "magnify": false,
             "entersend": false,
             "hideimages": false,
             "notifications": false,
-            "widemode": false
+            "haptics": false,
+            "widemode": false,
+            "discord": false
         };
         localStorage.setItem('settings', JSON.stringify(defaultSettings));
         return defaultSettings;
@@ -3684,11 +4026,11 @@ function launchscreen() {
     const orange = document.getElementById("main");
     orange.innerHTML = green;
     if (document.getElementById("msgs"))
-    document.getElementById("msgs").innerHTML = "";
+        document.getElementById("msgs").innerHTML = "";
     if (document.getElementById("nav"))
-    document.getElementById("nav").innerHTML = "";
+        document.getElementById("nav").innerHTML = "";
     if (document.getElementById("groups"))
-    document.getElementById("groups").innerHTML = "";
+        document.getElementById("groups").innerHTML = "";
 }
 
 function autoresize() {
@@ -3726,7 +4068,7 @@ function editPost(postOrigin, postid) {
     editIndicator.setAttribute("data-postid", postid);
     editIndicator.innerHTML = `
     <span class="edit-info">${lang().info.editingpost} ${postid}</span>
-    <span onclick="cancelEdit()">
+    <span onclick="cancelEdit();handleHaptics();">
     <svg width="14" height="14" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path fill-rule="evenodd" clip-rule="evenodd" d="M2.05026 11.9497C4.78394 14.6834 9.21607 14.6834 11.9497 11.9497C14.6834 9.21607 14.6834 4.78394 11.9497 2.05026C9.21607 -0.683419 4.78394 -0.683419 2.05026 2.05026C-0.683419 4.78394 -0.683419 9.21607 2.05026 11.9497ZM9.3065 10.2946L7.00262 7.99112L4.69914 10.295C4.42624 10.5683 3.98395 10.5683 3.71065 10.295C3.43754 10.0219 3.43754 9.5788 3.71065 9.3065L6.01432 7.00282L3.7048 4.69371C3.4317 4.4206 3.4317 3.97791 3.7048 3.7048C3.97751 3.4317 4.4202 3.4317 4.6933 3.7048L7.00262 6.01412L9.3065 3.71065C9.4791 3.53764 9.71978 3.4742 9.94253 3.52012C10.0718 3.5467 10.1949 3.61014 10.2952 3.71044C10.5683 3.98315 10.5683 4.42624 10.2952 4.69894L7.99132 7.00242L10.295 9.30609C10.5683 9.579 10.5683 10.0213 10.295 10.2946C10.0221 10.5679 9.5794 10.5679 9.3065 10.2946Z" fill="currentColor"/>
     </svg>
@@ -3752,24 +4094,24 @@ function cancelEdit() {
 function openImage(url) {
     const baseURL = url.split('?')[0];
     const fileName = baseURL.split('/').pop();
-    
+
     document.documentElement.style.overflow = "hidden";
     const mdlbck = document.querySelector('.image-back');
-    
+
     if (mdlbck) {
         mdlbck.style.display = 'flex';
-        
+
         const mdl = mdlbck.querySelector('.image-mdl');
         if (mdl) {
             mdl.innerHTML = `
             <img class='embed-large' src='${url}' alt="${fileName}" onclick='preventClose(event)'>
             <div class="img-links">
-            <span class="img-link-outer"><a onclick="closeImage()" class="img-link">${lang().action.close}</a></span>
+            <span class="img-link-outer"><a onclick="closeImage();handleHaptics();" class="img-link">${lang().action.close}</a></span>
             <span><a href="${url}?download" target="_blank" class="img-link">${lang().action.download}</a></span>
             </div>
             `;
         }
-    }  
+    }
 }
 
 function preventClose(event) {
@@ -3778,15 +4120,15 @@ function preventClose(event) {
 
 function closeImage() {
     document.documentElement.style.overflow = "";
-    
+
     const mdlbck = document.querySelector('.image-back');
-    
+
     if (mdlbck) {
         mdlbck.style.display = 'none';
     }
-    
+
     const mdl = document.querySelector('.image-mdl');
-    
+
     if (mdlbck) {
         mdl.style.background = '';
         mdl.classList.remove('custom-bg');
@@ -3811,18 +4153,18 @@ function createChat() {
         },
         body: JSON.stringify({ nickname })
     })
-    .then(response => {
-        if (!response.ok) throw new Error('Network response was not ok');
-        return response.json();
-    })
-    .then(data => {
-        chatCache[data._id] = data;
-        loadchat(data._id);
-        closemodal();
-    })
-    .catch(e => {
-        openUpdate(`Failed to create chat: ${e}`);
-    });
+        .then(response => {
+            if (!response.ok) throw new Error('Network response was not ok');
+            return response.json();
+        })
+        .then(data => {
+            chatCache[data._id] = data;
+            loadchat(data._id);
+            closemodal();
+        })
+        .catch(e => {
+            openUpdate(`Failed to create chat: ${e}`);
+        });
 }
 
 function favChat(e, chatId) {
@@ -3857,11 +4199,11 @@ function closeChatModal(e, chatId, chatName) {
     }
 
     document.documentElement.style.overflow = "hidden";
-    
+
     const mdlbck = document.querySelector('.modal-back');
     if (mdlbck) {
         mdlbck.style.display = 'flex';
-        
+
         const mdl = mdlbck.querySelector('.modal');
         mdl.id = 'mdl-uptd';
         if (mdl) {
@@ -3876,7 +4218,7 @@ function closeChatModal(e, chatId, chatName) {
             const mdbt = mdl.querySelector('.modal-bottom');
             if (mdbt) {
                 mdbt.innerHTML = `
-                <button class="modal-back-btn" onclick="closeChat('${chatId}')">${lang().action.yes}</button>
+                <button class="modal-back-btn" onclick="closeChat('${chatId}');handleHaptics();">${lang().action.yes}</button>
                 `;
             }
         }
@@ -3899,24 +4241,24 @@ function openModal(postId) {
 
     if (mdlbck) {
         mdlbck.style.display = 'flex';
-        
+
         const mdl = mdlbck.querySelector('.modal');
         if (mdl) {
             mdl.id = postId;
             let mdbt = mdl.querySelector('.modal-bottom');
             if (mdbt) {
                 mdbt.innerHTML = `
-                <button class="modal-back-btn" onclick="openModModal();">${lang().action.back}</button>
+                <button class="modal-back-btn" onclick="openModModal();handleHaptics();">${lang().action.back}</button>
                 `;
             }
             const mdlt = mdl.querySelector('.modal-top');
             if (mdlt) {
                 mdlt.innerHTML = `${post.post_origin !== 'inbox' ? `
-                <button class="modal-button" onclick="mdlreply(event)"><div>${lang().action.reply}</div><div class="modal-icon"><svg class="icon_d1ac81" width="24" height="24" viewBox="0 0 24 24"><path d="M10 8.26667V4L3 11.4667L10 18.9333V14.56C15 14.56 18.5 16.2667 21 20C20 14.6667 17 9.33333 10 8.26667Z" fill="currentColor"></path></svg></div></button>
-                <button class="modal-button" onclick="mdlpingusr(event)"><div>${lang().action.mention}</div><div class="modal-icon"><svg class="icon" height="24" width="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.486 2 2 6.486 2 12C2 17.515 6.486 22 12 22C14.039 22 15.993 21.398 17.652 20.259L16.521 18.611C15.195 19.519 13.633 20 12 20C7.589 20 4 16.411 4 12C4 7.589 7.589 4 12 4C16.411 4 20 7.589 20 12V12.782C20 14.17 19.402 15 18.4 15L18.398 15.018C18.338 15.005 18.273 15 18.209 15H18C17.437 15 16.6 14.182 16.6 13.631V12C16.6 9.464 14.537 7.4 12 7.4C9.463 7.4 7.4 9.463 7.4 12C7.4 14.537 9.463 16.6 12 16.6C13.234 16.6 14.35 16.106 15.177 15.313C15.826 16.269 16.93 17 18 17L18.002 16.981C18.064 16.994 18.129 17 18.195 17H18.4C20.552 17 22 15.306 22 12.782V12C22 6.486 17.514 2 12 2ZM12 14.599C10.566 14.599 9.4 13.433 9.4 11.999C9.4 10.565 10.566 9.399 12 9.399C13.434 9.399 14.6 10.565 14.6 11.999C14.6 13.433 13.434 14.599 12 14.599Z"></path></svg></div></button>
-                <button class="modal-button" onclick="reportModal(event)"><div>${lang().action.report}</div><div class="modal-icon"><svg height="20" width="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M20 6.00201H14V3.00201C14 2.45001 13.553 2.00201 13 2.00201H4C3.447 2.00201 3 2.45001 3 3.00201V22.002H5V14.002H10.586L8.293 16.295C8.007 16.581 7.922 17.011 8.076 17.385C8.23 17.759 8.596 18.002 9 18.002H20C20.553 18.002 21 17.554 21 17.002V7.00201C21 6.45001 20.553 6.00201 20 6.00201Z"></path></svg></div></button>      
+                <button class="modal-button" onclick="mdlreply(event);handleHaptics();"><div>${lang().action.reply}</div><div class="modal-icon"><svg class="icon_d1ac81" width="24" height="24" viewBox="0 0 24 24"><path d="M10 8.26667V4L3 11.4667L10 18.9333V14.56C15 14.56 18.5 16.2667 21 20C20 14.6667 17 9.33333 10 8.26667Z" fill="currentColor"></path></svg></div></button>
+                <button class="modal-button" onclick="mdlpingusr(event);handleHaptics();"><div>${lang().action.mention}</div><div class="modal-icon"><svg class="icon" height="24" width="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.486 2 2 6.486 2 12C2 17.515 6.486 22 12 22C14.039 22 15.993 21.398 17.652 20.259L16.521 18.611C15.195 19.519 13.633 20 12 20C7.589 20 4 16.411 4 12C4 7.589 7.589 4 12 4C16.411 4 20 7.589 20 12V12.782C20 14.17 19.402 15 18.4 15L18.398 15.018C18.338 15.005 18.273 15 18.209 15H18C17.437 15 16.6 14.182 16.6 13.631V12C16.6 9.464 14.537 7.4 12 7.4C9.463 7.4 7.4 9.463 7.4 12C7.4 14.537 9.463 16.6 12 16.6C13.234 16.6 14.35 16.106 15.177 15.313C15.826 16.269 16.93 17 18 17L18.002 16.981C18.064 16.994 18.129 17 18.195 17H18.4C20.552 17 22 15.306 22 12.782V12C22 6.486 17.514 2 12 2ZM12 14.599C10.566 14.599 9.4 13.433 9.4 11.999C9.4 10.565 10.566 9.399 12 9.399C13.434 9.399 14.6 10.565 14.6 11.999C14.6 13.433 13.434 14.599 12 14.599Z"></path></svg></div></button>
+                <button class="modal-button" onclick="reportModal(event);handleHaptics();"><div>${lang().action.report}</div><div class="modal-icon"><svg height="20" width="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M20 6.00201H14V3.00201C14 2.45001 13.553 2.00201 13 2.00201H4C3.447 2.00201 3 2.45001 3 3.00201V22.002H5V14.002H10.586L8.293 16.295C8.007 16.581 7.922 17.011 8.076 17.385C8.23 17.759 8.596 18.002 9 18.002H20C20.553 18.002 21 17.554 21 17.002V7.00201C21 6.45001 20.553 6.00201 20 6.00201Z"></path></svg></div></button>      
                 ` : ''}
-                <button class="modal-button" onclick="mdlshare(event)"><div>${lang().action.share}</div><div class="modal-icon"><svg viewBox="0 0 20 20" fill="currentColor" width="18" height="18"><path d="M12.9297 3.25007C12.7343 3.05261 12.4154 3.05226 12.2196 3.24928L11.5746 3.89824C11.3811 4.09297 11.3808 4.40733 11.5739 4.60245L16.5685 9.64824C16.7614 9.84309 16.7614 10.1569 16.5685 10.3517L11.5739 15.3975C11.3808 15.5927 11.3811 15.907 11.5746 16.1017L12.2196 16.7507C12.4154 16.9477 12.7343 16.9474 12.9297 16.7499L19.2604 10.3517C19.4532 10.1568 19.4532 9.84314 19.2604 9.64832L12.9297 3.25007Z"></path><path d="M8.42616 4.60245C8.6193 4.40733 8.61898 4.09297 8.42545 3.89824L7.78047 3.24928C7.58466 3.05226 7.26578 3.05261 7.07041 3.25007L0.739669 9.64832C0.5469 9.84314 0.546901 10.1568 0.739669 10.3517L7.07041 16.7499C7.26578 16.9474 7.58465 16.9477 7.78047 16.7507L8.42545 16.1017C8.61898 15.907 8.6193 15.5927 8.42616 15.3975L3.43155 10.3517C3.23869 10.1569 3.23869 9.84309 3.43155 9.64824L8.42616 4.60245Z"></path></svg></div></button>      
+                <button class="modal-button" onclick="mdlshare(event);handleHaptics();"><div>${lang().action.share}</div><div class="modal-icon"><svg viewBox="0 0 20 20" fill="currentColor" width="18" height="18"><path d="M12.9297 3.25007C12.7343 3.05261 12.4154 3.05226 12.2196 3.24928L11.5746 3.89824C11.3811 4.09297 11.3808 4.40733 11.5739 4.60245L16.5685 9.64824C16.7614 9.84309 16.7614 10.1569 16.5685 10.3517L11.5739 15.3975C11.3808 15.5927 11.3811 15.907 11.5746 16.1017L12.2196 16.7507C12.4154 16.9477 12.7343 16.9474 12.9297 16.7499L19.2604 10.3517C19.4532 10.1568 19.4532 9.84314 19.2604 9.64832L12.9297 3.25007Z"></path><path d="M8.42616 4.60245C8.6193 4.40733 8.61898 4.09297 8.42545 3.89824L7.78047 3.24928C7.58466 3.05226 7.26578 3.05261 7.07041 3.25007L0.739669 9.64832C0.5469 9.84314 0.546901 10.1568 0.739669 10.3517L7.07041 16.7499C7.26578 16.9474 7.58465 16.9477 7.78047 16.7507L8.42545 16.1017C8.61898 15.907 8.6193 15.5927 8.42616 15.3975L3.43155 10.3517C3.23869 10.1569 3.23869 9.84309 3.43155 9.64824L8.42616 4.60245Z"></path></svg></div></button>      
                 `;
 
                 const postDiv = document.getElementById(postId);
@@ -3924,15 +4266,15 @@ function openModal(postId) {
 
                 if (usernameElement === localStorage.getItem("username") && post.post_origin !== 'inbox') {
                     mdlt.innerHTML += `
-                    <button class="modal-button" onclick="deletePost('${postId}')"><div>${lang().action.delete}</div><div class="modal-icon"><svg width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M15 3.999V2H9V3.999H3V5.999H21V3.999H15Z"></path><path fill="currentColor" d="M5 6.99902V18.999C5 20.101 5.897 20.999 7 20.999H17C18.103 20.999 19 20.101 19 18.999V6.99902H5ZM11 17H9V11H11V17ZM15 17H13V11H15V17Z"></path></svg></div></button>      
-                    <button class="modal-button" onclick="editPost('${page}', '${postId}')"><div>${lang().action.edit}</div><div class="modal-icon"><svg width="20" height="20" viewBox="0 0 24 24"><path fill-rule="evenodd" clip-rule="evenodd" d="M19.2929 9.8299L19.9409 9.18278C21.353 7.77064 21.353 5.47197 19.9409 4.05892C18.5287 2.64678 16.2292 2.64678 14.817 4.05892L14.1699 4.70694L19.2929 9.8299ZM12.8962 5.97688L5.18469 13.6906L10.3085 18.813L18.0201 11.0992L12.8962 5.97688ZM4.11851 20.9704L8.75906 19.8112L4.18692 15.239L3.02678 19.8796C2.95028 20.1856 3.04028 20.5105 3.26349 20.7337C3.48669 20.9569 3.8116 21.046 4.11851 20.9704Z" fill="currentColor"></path></svg></div></button>      
-                    `; 
+                    <button class="modal-button" onclick="deletePost('${postId}');handleHaptics();"><div>${lang().action.delete}</div><div class="modal-icon"><svg width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M15 3.999V2H9V3.999H3V5.999H21V3.999H15Z"></path><path fill="currentColor" d="M5 6.99902V18.999C5 20.101 5.897 20.999 7 20.999H17C18.103 20.999 19 20.101 19 18.999V6.99902H5ZM11 17H9V11H11V17ZM15 17H13V11H15V17Z"></path></svg></div></button>      
+                    <button class="modal-button" onclick="editPost('${page}', '${postId}');handleHaptics();"><div>${lang().action.edit}</div><div class="modal-icon"><svg width="20" height="20" viewBox="0 0 24 24"><path fill-rule="evenodd" clip-rule="evenodd" d="M19.2929 9.8299L19.9409 9.18278C21.353 7.77064 21.353 5.47197 19.9409 4.05892C18.5287 2.64678 16.2292 2.64678 14.817 4.05892L14.1699 4.70694L19.2929 9.8299ZM12.8962 5.97688L5.18469 13.6906L10.3085 18.813L18.0201 11.0992L12.8962 5.97688ZM4.11851 20.9704L8.75906 19.8112L4.18692 15.239L3.02678 19.8796C2.95028 20.1856 3.04028 20.5105 3.26349 20.7337C3.48669 20.9569 3.8116 21.046 4.11851 20.9704Z" fill="currentColor"></path></svg></div></button>      
+                    `;
                 }
 
                 if (localStorage.getItem("permissions") === "1") {
                     mdlt.innerHTML += `
-                    <button class="modal-button" onclick="modPostModal('${postId}')"><div>${lang().action.mod}</div><div class="modal-icon"><svg width="20" height="20" viewBox="0 0 24 24"><path fill="currentColor" d="M19 6.00001C15.56 6.00001 12.826 2.43501 12.799 2.39801C12.421 1.89801 11.579 1.89801 11.201 2.39801C11.174 2.43501 8.44 6.00001 5 6.00001C4.447 6.00001 4 6.44801 4 7.00001V14C4 17.807 10.764 21.478 11.534 21.884C11.68 21.961 11.84 21.998 12 21.998C12.16 21.998 12.32 21.96 12.466 21.884C13.236 21.478 20 17.807 20 14V7.00001C20 6.44801 19.553 6.00001 19 6.00001ZM15 16L12 14L9 16L10 13L8 11H11L12 8.00001L13 11H16L14 13L15 16Z"></path></svg></div></button>      
-                    `; 
+                    <button class="modal-button" onclick="modPostModal('${postId}');handleHaptics();"><div>${lang().action.mod}</div><div class="modal-icon"><svg width="20" height="20" viewBox="0 0 24 24"><path fill="currentColor" d="M19 6.00001C15.56 6.00001 12.826 2.43501 12.799 2.39801C12.421 1.89801 11.579 1.89801 11.201 2.39801C11.174 2.43501 8.44 6.00001 5 6.00001C4.447 6.00001 4 6.44801 4 7.00001V14C4 17.807 10.764 21.478 11.534 21.884C11.68 21.961 11.84 21.998 12 21.998C12.16 21.998 12.32 21.96 12.466 21.884C13.236 21.478 20 17.807 20 14V7.00001C20 6.44801 19.553 6.00001 19 6.00001ZM15 16L12 14L9 16L10 13L8 11H11L12 8.00001L13 11H16L14 13L15 16Z"></path></svg></div></button>      
+                    `;
                 }
             }
             mdbt = mdl.querySelector('.modal-bottom');
@@ -3940,12 +4282,12 @@ function openModal(postId) {
                 mdbt.innerHTML = ``;
             }
         }
-    }  
+    }
 }
 
 function openUsrModal(uId) {
     document.documentElement.style.overflow = "hidden";
-    
+
     const mdlbck = document.querySelector('.modal-back');
 
     if (mdlbck) {
@@ -3957,7 +4299,7 @@ function openUsrModal(uId) {
                 mdlt.innerHTML = `
                 <iframe class="profile" src="profile/index.html?u=${uId}"></iframe>
                 `;
-                
+
                 fetch(`https://api.meower.org/users/${uId}`)
                 .then(response => response.json())
                 .then(data => {
@@ -3987,7 +4329,7 @@ function openUsrModal(uId) {
 
 function reportModal(id) {
     document.documentElement.style.overflow = "hidden";
-    
+
     const mdlbck = document.querySelector('.modal-back');
 
     if (mdlbck) {
@@ -4015,7 +4357,7 @@ function reportModal(id) {
                 </select>
                 <span class="subheader">${lang().action.comment}</span>
                 <textarea class="mdl-txt" id="report-comment"></textarea>
-                <button class="modal-button" onclick="sendReport('${id}')">${lang().action.sendreport}</button>
+                <button class="modal-button" onclick="sendReport('${id}');handleHaptics();">${lang().action.sendreport}</button>
                 `;
             }
             const mdbt = mdl.querySelector('.modal-bottom');
@@ -4043,21 +4385,21 @@ function sendReport(id) {
 
 async function closemodal(message) {
     document.documentElement.style.overflow = "";
-    
+
     const mdlbck = document.querySelector('.modal-back');
-    
+
     if (mdlbck) {
         mdlbck.style.display = 'none';
     }
-    
+
     const mdl = document.querySelector('.modal');
-    
+
     if (mdlbck) {
         mdl.id = '';
         mdl.style.background = '';
         mdl.classList.remove('custom-bg');
     }
-    
+
     if (message) {
         const delay = ms => new Promise(res => setTimeout(res, ms));
         await delay(100);
@@ -4067,7 +4409,7 @@ async function closemodal(message) {
 
 function openModModal() {
     document.documentElement.style.overflow = "hidden";
-    
+
     const mdlbck = document.querySelector('.modal-back');
 
     if (mdlbck) {
@@ -4116,16 +4458,16 @@ async function loadreports() {
             "token": localStorage.getItem("token")
         }
     })
-    .then(response => response.json())
-    .then(data => {
-        const reports = data.autoget;
-        const modreports = document.querySelector('.modal-top');
-        
-        reports.forEach(report => {
-            if (report.type === 'post') {
-                const rprtbx = document.createElement('div');
-                rprtbx.classList.add('report-box');
-                rprtbx.innerHTML = `
+        .then(response => response.json())
+        .then(data => {
+            const reports = data.autoget;
+            const modreports = document.querySelector('.modal-top');
+
+            reports.forEach(report => {
+                if (report.type === 'post') {
+                    const rprtbx = document.createElement('div');
+                    rprtbx.classList.add('report-box');
+                    rprtbx.innerHTML = `
                     <div class="buttonContainer">
                         <div class='toolbarContainer'>
                             <div class='toolButton' onclick='closeReport("${report._id}", "false")'>
@@ -4142,7 +4484,7 @@ async function loadreports() {
                     <p>Origin: ${report.content.post_origin}</p>
                     <ul class="reports-list"></ul>
                     
-                    <div class="report-post" id="username" onclick="modPostModal('${report.content._id}')">
+                    <div class="report-post" id="username" onclick="modPostModal('${report.content._id}');handleHaptics();">
                         <div class="pfp">
                             <img src="" alt="Avatar" class="avatar" style="border: 3px solid rgb(15, 15, 15);">
                         </div>
@@ -4152,13 +4494,13 @@ async function loadreports() {
                         </div>
                     </div>
                 `;
-                
-                modreports.appendChild(rprtbx);
-                
-                const reportsList = rprtbx.querySelector('.reports-list');
-                
-                report.reports.forEach(item => {
-                    reportsList.innerHTML += `
+
+                    modreports.appendChild(rprtbx);
+
+                    const reportsList = rprtbx.querySelector('.reports-list');
+
+                    report.reports.forEach(item => {
+                        reportsList.innerHTML += `
                     <li>
                         <p>User: ${item.user}</p>
                         <p>Reason: ${item.reason}</p>
@@ -4175,10 +4517,10 @@ async function loadreports() {
                     });
                 });
 
-            } else if (report.type === 'user') {                
-                const rprtbx = document.createElement('div');
-                rprtbx.classList.add('report-box');
-                rprtbx.innerHTML = `
+                } else if (report.type === 'user') {
+                    const rprtbx = document.createElement('div');
+                    rprtbx.classList.add('report-box');
+                    rprtbx.innerHTML = `
                     <div class="buttonContainer">
                         <div class='toolbarContainer'>
                             <div class='toolButton' onclick='closeReport("${report._id}", "false")'>
@@ -4194,7 +4536,7 @@ async function loadreports() {
                     <p>Status: ${report.status}</p>
                     <ul class="reports-list"></ul>
                     
-                    <div class="report-user" id="username" onclick="modUserModal('${report.content._id}')">
+                    <div class="report-user" id="username" onclick="modUserModal('${report.content._id}');handleHaptics();">
                     <div class="pfp">
                         <img src="" alt="Avatar" class="avatar" style="border: 3px solid rgb(15, 15, 15);">
                     </div>    
@@ -4204,13 +4546,13 @@ async function loadreports() {
                     </div>
                     </div>
                 `;
-                
-                modreports.appendChild(rprtbx);
-                
-                const reportsList = rprtbx.querySelector('.reports-list');
-                
-                report.reports.forEach(item => {
-                    reportsList.innerHTML += `
+
+                    modreports.appendChild(rprtbx);
+
+                    const reportsList = rprtbx.querySelector('.reports-list');
+
+                    report.reports.forEach(item => {
+                        reportsList.innerHTML += `
                     <li>
                         <p>User: ${item.user}</p>
                         <p>Reason: ${item.reason}</p>
@@ -4218,27 +4560,27 @@ async function loadreports() {
                     </li>
                     `;
 
-                    const rpfp = rprtbx.querySelector('.avatar');
-                    if (report.content.avatar) {
-                        rpfp.src = `https://uploads.meower.org/icons/${report.content.avatar}`
-                        rpfp.style = `border: 3px solid #${report.content.avatar_color};background-color:#${report.content.avatar_color};`
-                    } else {
-                        rpfp.src = `images/avatars/icon_${report.content.pfp_data - 1}.svg`
-                        rpfp.style = `border: 3px solid #${report.content.avatar_color};background-color:#fff;`
-                    }
-                });
-            }
+                        const rpfp = rprtbx.querySelector('.avatar');
+                        if (report.content.avatar) {
+                            rpfp.src = `https://uploads.meower.org/icons/${report.content.avatar}`
+                            rpfp.style = `border: 3px solid #${report.content.avatar_color};background-color:#${report.content.avatar_color};`
+                        } else {
+                            rpfp.src = `images/avatars/icon_${report.content.pfp_data - 1}.svg`
+                            rpfp.style = `border: 3px solid #${report.content.avatar_color};background-color:#fff;`
+                        }
+                    });
+                }
+            });
+        })
+        .catch(error => {
+            console.error("Error loading reports:", error);
         });
-    })
-    .catch(error => {
-        console.error("Error loading reports:", error);
-    });
 
 }
 
 function modUserModal(user) {
     document.documentElement.style.overflow = "hidden";
-    
+
     const mdlbck = document.querySelector('.modal-back');
 
     if (mdlbck) {
@@ -4261,7 +4603,7 @@ function modUserModal(user) {
             const mdbt = mdl.querySelector('.modal-bottom');
             if (mdbt) {
                 mdbt.innerHTML = `
-                <button class="modal-back-btn" onclick="openModModal();">back</button>
+                <button class="modal-back-btn" onclick="openModModal();handleHaptics();">back</button>
                 `;
             }
         }
@@ -4275,10 +4617,10 @@ async function loadmoduser(user) {
             "token": localStorage.getItem("token")
         }
     })
-    .then(response => response.json())
-    .then(data => {
-        const modusr = document.querySelector('.mod-user');
-        modusr.innerHTML = `
+        .then(response => response.json())
+        .then(data => {
+            const modusr = document.querySelector('.mod-user');
+            modusr.innerHTML = `
         <span class="subheader">User Info</span>
         <div class="mod-post">
         <div class="pfp">
@@ -4309,79 +4651,79 @@ async function loadmoduser(user) {
             </div>
             <span class="subheader">Note</span>
             <textarea id="mod-post-note" class="mdl-txt"></textarea>
-            <button class="modal-button" onclick="updateNote('${data.uuid}')">Update Note</button>
+            <button class="modal-button" onclick="updateNote('${data.uuid}');handleHaptics();">Update Note</button>
             <span class="subheader">Alert</span>
             <textarea id="mod-user-alert" class="mdl-txt"></textarea>
-            <button class="modal-button" onclick="sendAlert('${data._id}')">Send Alert</button>
+            <button class="modal-button" onclick="sendAlert('${data._id}');handleHaptics();">Send Alert</button>
         `;
 
-        const rpfp = document.querySelector('.mod-post .avatar');
-        if (data.avatar) {
-            rpfp.src = `https://uploads.meower.org/icons/${data.avatar}`;
-            rpfp.style.border = `3px solid #${data.avatar_color}`;
-            rpfp.style.backgroundColor = `#${data.avatar_color}`;
-        } else if (data.pfp_data) {
-            // legacy avatars
-            rpfp.src = `images/avatars/icon_${data.pfp_data - 1}.svg`;
-            rpfp.classList.add('svg-avatar');
-            rpfp.style.border = `3px solid #${data.avatar_color}`;
-            rpfp.style.backgroundColor = `#fff`;
-        } else {
-            rpfp.src = `images/avatars/icon_-4.svg`;
-            rpfp.classList.add('svg-avatar');
-            rpfp.style.border = `3px solid #fff`;
-            rpfp.style.backgroundColor = `#fff`;
-        }
+            const rpfp = document.querySelector('.mod-post .avatar');
+            if (data.avatar) {
+                rpfp.src = `https://uploads.meower.org/icons/${data.avatar}`;
+                rpfp.style.border = `3px solid #${data.avatar_color}`;
+                rpfp.style.backgroundColor = `#${data.avatar_color}`;
+            } else if (data.pfp_data) {
+                // legacy avatars
+                rpfp.src = `images/avatars/icon_${data.pfp_data - 1}.svg`;
+                rpfp.classList.add('svg-avatar');
+                rpfp.style.border = `3px solid #${data.avatar_color}`;
+                rpfp.style.backgroundColor = `#fff`;
+            } else {
+                rpfp.src = `images/avatars/icon_-4.svg`;
+                rpfp.classList.add('svg-avatar');
+                rpfp.style.border = `3px solid #fff`;
+                rpfp.style.backgroundColor = `#fff`;
+            }
 
-        const altlist = modusr.querySelector('#alts');
-        const iplist = modusr.querySelector('#ips');
+            const altlist = modusr.querySelector('#alts');
+            const iplist = modusr.querySelector('#ips');
 
-        data.alts.forEach(item => {
-            altlist.innerHTML += `
+            data.alts.forEach(item => {
+                altlist.innerHTML += `
             <li>
-                <span id="username" onclick="modUserModal('${item}')">${item}</span>
+                <span id="username" onclick="modUserModal('${item}');handleHaptics();">${item}</span>
             </li>
             `;
-        });
+            });
 
-        data.recent_ips.forEach(item => {
-            iplist.innerHTML += `
+            data.recent_ips.forEach(item => {
+                iplist.innerHTML += `
             <div class="table-section">
-                <div class="mod-td" onclick="openUpdate('${item.netinfo._id}')">${item.ip}</div>
+                <div class="mod-td" onclick="openUpdate('${item.netinfo._id}');handleHaptics();">${item.ip}</div>
                 <div class="mod-td">${createDate(item.last_used)}</div>
                 <div class="mod-td">${item.netinfo.vpn}</div>
             </div>
             `;
-        });
-    
-        fetch(`https://api.meower.org/admin/notes/${data.uuid}`, {
-            method: "GET",
-            headers: {
-                "token": localStorage.getItem("token")
-            }
-        })
-        .then(response => response.json())
-        .then(noteData => {
-            if (noteData && noteData.notes) {
-                const mdpsnt = document.getElementById('mod-post-note');
-                mdpsnt.value = noteData.notes;
-            } else {
-                console.log("No data received from server, the note is probably blank");
-            }
+            });
+
+            fetch(`https://api.meower.org/admin/notes/${data.uuid}`, {
+                method: "GET",
+                headers: {
+                    "token": localStorage.getItem("token")
+                }
+            })
+                .then(response => response.json())
+                .then(noteData => {
+                    if (noteData && noteData.notes) {
+                        const mdpsnt = document.getElementById('mod-post-note');
+                        mdpsnt.value = noteData.notes;
+                    } else {
+                        console.log("No data received from server, the note is probably blank");
+                    }
+                })
+                .catch(error => {
+                    console.error("Error loading note data:", error);
+                });
+
         })
         .catch(error => {
-            console.error("Error loading note data:", error);
+            console.error("Error loading post:", error);
         });
-    
-    })
-    .catch(error => {
-        console.error("Error loading post:", error);
-    });
 }
 
 function modPostModal(postid) {
     document.documentElement.style.overflow = "hidden";
-    
+
     const mdlbck = document.querySelector('.modal-back');
 
     if (mdlbck) {
@@ -4400,14 +4742,14 @@ function modPostModal(postid) {
                 <span class="subheader">Note</span>
 
                 <textarea id="mod-post-note" class="mdl-txt"></textarea>
-                <button class="modal-button" onclick="updateNote('${postid}')">Update Note</button>
+                <button class="modal-button" onclick="updateNote('${postid}');handleHaptics();">Update Note</button>
                 `;
                 loadmodpost(postid);
             }
             const mdbt = mdl.querySelector('.modal-bottom');
             if (mdbt) {
                 mdbt.innerHTML = `
-                <button class="modal-back-btn" onclick="openModModal();">back</button>
+                <button class="modal-back-btn" onclick="openModModal();handleHaptics();">back</button>
                 `;
             }
         }
@@ -4421,19 +4763,19 @@ async function loadmodpost(postid) {
             "token": localStorage.getItem("token")
         }
     })
-    .then(response => response.json())
-    .then(data => {
-        if (data) {
-            fetch(`https://api.meower.org/users/${data.u}`)
-                .then(response => response.json())
-                .then(userData => {
-                    if (userData) {
-                        if (data.unfiltered_p) {
-                            const modpst = document.querySelector('.mod-posts');
-                            modpst.innerHTML = `
+        .then(response => response.json())
+        .then(data => {
+            if (data) {
+                fetch(`https://api.meower.org/users/${data.u}`)
+                    .then(response => response.json())
+                    .then(userData => {
+                        if (userData) {
+                            if (data.unfiltered_p) {
+                                const modpst = document.querySelector('.mod-posts');
+                                modpst.innerHTML = `
                                 <div class="mod-post">
                                     <div class="pfp">
-                                        <img src="" alt="Avatar" class="avatar" style="" onclick="modUserModal('${data.u}')">
+                                        <img src="" alt="Avatar" class="avatar" style="" onclick="modUserModal('${data.u}');handleHaptics();">
                                     </div>
                                     <div class="wrapper">
                                     <div class="mdbtcntner">
@@ -4441,17 +4783,17 @@ async function loadmodpost(postid) {
                                             <svg width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M15 3.999V2H9V3.999H3V5.999H21V3.999H15Z"></path><path fill="currentColor" d="M5 6.99902V18.999C5 20.101 5.897 20.999 7 20.999H17C18.103 20.999 19 20.101 19 18.999V6.99902H5ZM11 17H9V11H11V17ZM15 17H13V11H15V17Z"></path></svg>
                                         </div>
                                     </div>    
-                                    <h3><span id="username" onclick="modUserModal('${data.u}')">${data.u}</span></h3>
+                                    <h3><span id="username" onclick="modUserModal('${data.u}');handleHaptics();">${data.u}</span></h3>
                                         <p>${data.unfiltered_p}</p>
                                     </div>
                                 </div>
                             `;
-                        } else {
-                            const modpst = document.querySelector('.mod-posts');
-                            modpst.innerHTML = `
+                            } else {
+                                const modpst = document.querySelector('.mod-posts');
+                                modpst.innerHTML = `
                                 <div class="mod-post">
                                     <div class="pfp">
-                                        <img src="" alt="Avatar" class="avatar" style="" onclick="modUserModal('${data.u}')">
+                                        <img src="" alt="Avatar" class="avatar" style="" onclick="modUserModal('${data.u}');handleHaptics();">
                                     </div>
                                     <div class="wrapper">
                                     <div class="mdbtcntner">
@@ -4459,56 +4801,56 @@ async function loadmodpost(postid) {
                                             <svg width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M15 3.999V2H9V3.999H3V5.999H21V3.999H15Z"></path><path fill="currentColor" d="M5 6.99902V18.999C5 20.101 5.897 20.999 7 20.999H17C18.103 20.999 19 20.101 19 18.999V6.99902H5ZM11 17H9V11H11V17ZM15 17H13V11H15V17Z"></path></svg>
                                         </div>
                                     </div>    
-                                    <h3><span id="username" onclick="modUserModal('${data.u}')">${data.u}</span></h3>
+                                    <h3><span id="username" onclick="modUserModal('${data.u}');handleHaptics();">${data.u}</span></h3>
                                         <p>${data.p}</p>
                                     </div>
                                 </div>
                             `;
-                        }
-                        const rpfp = document.querySelector('.mod-posts .avatar');
-                        if (userData.avatar) {
-                            rpfp.src = `https://uploads.meower.org/icons/${userData.avatar}`;
-                            rpfp.style.border = `3px solid #${userData.avatar_color}`;
-                            rpfp.style.backgroundColor = `#${userData.avatar_color}`;
-                        } else {
-                            // legacy avatars
-                            rpfp.src = `images/avatars/icon_${userData.pfp_data - 1}.svg`;
-                            rpfp.classList.add('svg-avatar');
-                        }
-
-                        fetch(`https://api.meower.org/admin/notes/${postid}`, {
-                            method: "GET",
-                            headers: {
-                                "token": localStorage.getItem("token")
                             }
-                        })
-                        .then(response => response.json())
-                        .then(noteData => {
-                            if (noteData && noteData.notes) {
-                                const mdpsnt = document.getElementById('mod-post-note');
-                                mdpsnt.value = noteData.notes;
+                            const rpfp = document.querySelector('.mod-posts .avatar');
+                            if (userData.avatar) {
+                                rpfp.src = `https://uploads.meower.org/icons/${userData.avatar}`;
+                                rpfp.style.border = `3px solid #${userData.avatar_color}`;
+                                rpfp.style.backgroundColor = `#${userData.avatar_color}`;
                             } else {
-                                console.log("No data received from server, the note is probably blank");
+                                // legacy avatars
+                                rpfp.src = `images/avatars/icon_${userData.pfp_data - 1}.svg`;
+                                rpfp.classList.add('svg-avatar');
                             }
-                        })
-                        .catch(error => {
-                            console.error("Error loading note data:", error);
-                        });
-                        
-                    } else {
-                        console.error("Error: No user data received from server.");
-                    }
-                })
-                .catch(error => {
-                    console.error("Error loading user data:", error);
-                });
-        } else {
-            console.error("Error: No data received from server.");
-        }
-    })
-    .catch(error => {
-        console.error("Error loading post:", error);
-    });
+
+                            fetch(`https://api.meower.org/admin/notes/${postid}`, {
+                                method: "GET",
+                                headers: {
+                                    "token": localStorage.getItem("token")
+                                }
+                            })
+                                .then(response => response.json())
+                                .then(noteData => {
+                                    if (noteData && noteData.notes) {
+                                        const mdpsnt = document.getElementById('mod-post-note');
+                                        mdpsnt.value = noteData.notes;
+                                    } else {
+                                        console.log("No data received from server, the note is probably blank");
+                                    }
+                                })
+                                .catch(error => {
+                                    console.error("Error loading note data:", error);
+                                });
+
+                        } else {
+                            console.error("Error: No user data received from server.");
+                        }
+                    })
+                    .catch(error => {
+                        console.error("Error loading user data:", error);
+                    });
+            } else {
+                console.error("Error: No data received from server.");
+            }
+        })
+        .catch(error => {
+            console.error("Error loading post:", error);
+        });
 }
 
 async function modDeletePost(postid) {
@@ -4532,7 +4874,7 @@ async function modDeletePost(postid) {
 
 function updateNote(postid) {
     const note = document.getElementById('mod-post-note').value;
-    
+
     fetch(`https://api.meower.org/admin/notes/${postid}`, {
         method: "PUT",
         headers: {
@@ -4543,17 +4885,17 @@ function updateNote(postid) {
             notes: note
         })
     })
-    .then(response => response.json())
-    .then(data => {
-    })
-    .catch(error => {
-        console.error("Error updating note:", error);
-    });
+        .then(response => response.json())
+        .then(data => {
+        })
+        .catch(error => {
+            console.error("Error updating note:", error);
+        });
 }
 
 function sendAlert(userid) {
     const note = document.getElementById('mod-user-alert').value;
-    
+
     fetch(`https://api.meower.org/admin/users/${userid}/alert`, {
         method: "POST",
         headers: {
@@ -4564,12 +4906,12 @@ function sendAlert(userid) {
             content: note
         })
     })
-    .then(response => response.json())
-    .then(data => {
-    })
-    .catch(error => {
-        console.error("Error sending alert:", error);
-    });
+        .then(response => response.json())
+        .then(data => {
+        })
+        .catch(error => {
+            console.error("Error sending alert:", error);
+        });
 }
 
 function closeReport(postid, action) {
@@ -4584,12 +4926,12 @@ function closeReport(postid, action) {
                 status: "action.taken"
             })
         })
-        .then(response => response.json())
-        .then(data => {
-        })
-        .catch(error => {
-            console.error("Error updating report:", error);
-        });
+            .then(response => response.json())
+            .then(data => {
+            })
+            .catch(error => {
+                console.error("Error updating report:", error);
+            });
     } else {
         fetch(`https://api.meower.org/admin/reports/${postid}`, {
             method: "PATCH",
@@ -4601,22 +4943,22 @@ function closeReport(postid, action) {
                 status: "no_action_taken"
             })
         })
-        .then(response => response.json())
-        .then(data => {
-        })
-        .catch(error => {
-            console.error("Error updating report:", error);
-        });
+            .then(response => response.json())
+            .then(data => {
+            })
+            .catch(error => {
+                console.error("Error updating report:", error);
+            });
     }
 }
 
 function openUpdate(message) {
     document.documentElement.style.overflow = "hidden";
-    
+
     const mdlbck = document.querySelector('.modal-back');
     if (mdlbck) {
         mdlbck.style.display = 'flex';
-        
+
         const mdl = mdlbck.querySelector('.modal');
         mdl.id = 'mdl-uptd';
         if (mdl) {
@@ -4636,11 +4978,11 @@ function openUpdate(message) {
 
 function createChatModal() {
     document.documentElement.style.overflow = "hidden";
-    
+
     const mdlbck = document.querySelector('.modal-back');
     if (mdlbck) {
         mdlbck.style.display = 'flex';
-        
+
         const mdl = mdlbck.querySelector('.modal');
         mdl.id = 'mdl-uptd';
         if (mdl) {
@@ -4654,7 +4996,7 @@ function createChatModal() {
             const mdbt = mdl.querySelector('.modal-bottom');
             if (mdbt) {
                 mdbt.innerHTML = `
-                <button class="modal-back-btn" onclick="createChat()">${lang().action.create}</button>
+                <button class="modal-back-btn" onclick="createChat();handleHaptics();">${lang().action.create}</button>
                 `;
             }
         }
@@ -4663,17 +5005,17 @@ function createChatModal() {
 
 function blockWordSel() {
     document.documentElement.style.overflow = "hidden";
-    
+
     const mdlbck = document.querySelector('.modal-back');
     if (mdlbck) {
         mdlbck.style.display = 'flex';
-        
+
         const mdl = mdlbck.querySelector('.modal');
         mdl.id = 'mdl-uptd';
         if (mdl) {
             const mdlt = mdl.querySelector('.modal-top');
             if (mdlt) {
-                    mdlt.innerHTML = `
+                mdlt.innerHTML = `
                     <h3>${lang().modals.blockword}</h3>
                     <input id="block-word-input" class="mdl-inp" placeholder="Word">
                     `;
@@ -4681,7 +5023,7 @@ function blockWordSel() {
             const mdbt = mdl.querySelector('.modal-bottom');
             if (mdbt) {
                 mdbt.innerHTML = `
-                <button class="modal-back-btn" onclick="blockWord(document.getElementById('block-word-input').value)">${lang().action.block}</button>
+                <button class="modal-back-btn" onclick="blockWord(document.getElementById('block-word-input').value);handleHaptics();">${lang().action.block}</button>
                 `;
             }
         }
@@ -4690,17 +5032,17 @@ function blockWordSel() {
 
 function blockUserSel() {
     document.documentElement.style.overflow = "hidden";
-    
+
     const mdlbck = document.querySelector('.modal-back');
     if (mdlbck) {
         mdlbck.style.display = 'flex';
-        
+
         const mdl = mdlbck.querySelector('.modal');
         mdl.id = 'mdl-uptd';
         if (mdl) {
             const mdlt = mdl.querySelector('.modal-top');
             if (mdlt) {
-                    mdlt.innerHTML = `
+                mdlt.innerHTML = `
                     <h3>${lang().modals.blockauser}</h3>
                     <input id="block-user-input" class="mdl-inp" placeholder="JoshAtticus">
                     `;
@@ -4708,7 +5050,7 @@ function blockUserSel() {
             const mdbt = mdl.querySelector('.modal-bottom');
             if (mdbt) {
                 mdbt.innerHTML = `
-                <button class="modal-back-btn" onclick="blockUserModal(document.getElementById('block-user-input').value)">${lang().action.block}</button>
+                <button class="modal-back-btn" onclick="blockUserModal(document.getElementById('block-user-input').value);handleHaptics();">${lang().action.block}</button>
                 `;
             }
         }
@@ -4717,11 +5059,11 @@ function blockUserSel() {
 
 function blockUserModal(user) {
     document.documentElement.style.overflow = "hidden";
-    
+
     const mdlbck = document.querySelector('.modal-back');
     if (mdlbck) {
         mdlbck.style.display = 'flex';
-        
+
         const mdl = mdlbck.querySelector('.modal');
         mdl.id = 'mdl-uptd';
         if (mdl) {
@@ -4740,7 +5082,7 @@ function blockUserModal(user) {
             const mdbt = mdl.querySelector('.modal-bottom');
             if (mdbt) {
                 mdbt.innerHTML = `
-                <button class="modal-back-btn" onclick="blockUser('${user}')">${lang().action.yes}</button>
+                <button class="modal-back-btn" onclick="blockUser('${user}');handleHaptics();">${lang().action.yes}</button>
                 `;
             }
         }
@@ -4749,11 +5091,11 @@ function blockUserModal(user) {
 
 function imagemodal() {
     document.documentElement.style.overflow = "hidden";
-    
+
     const mdlbck = document.querySelector('.modal-back');
     if (mdlbck) {
         mdlbck.style.display = 'flex';
-        
+
         const mdl = mdlbck.querySelector('.modal');
         mdl.id = 'mdl-uptd';
         if (mdl) {
@@ -4767,7 +5109,7 @@ function imagemodal() {
             const mdbt = mdl.querySelector('.modal-bottom');
             if (mdbt) {
                 mdbt.innerHTML = `
-                <button class="modal-back-btn" onclick="updateBG()">${lang().action.update}</button>
+                <button class="modal-back-btn" onclick="updateBG();handleHaptics();">${lang().action.update}</button>
                 `;
             }
         }
@@ -4855,22 +5197,22 @@ function mdlreply(event) {
         const username = postContainer.querySelector('#username').innerText;
         if (postContainer.querySelector('p')) {
             postcont = postContainer.querySelector('p').innerText
-            .replace(/\n/g, ' ')
-            .replace(/@\w+/g, '')
-            .split(' ')
-            .slice(0, 6)
-            .join(' ');
+                .replace(/\n/g, ' ')
+                .replace(/@\w+/g, '')
+                .split(' ')
+                .slice(0, 6)
+                .join(' ');
         } else {
             postcont = "";
         }
         const ogmsg = document.getElementById('msg').value
-        
+
         const postId = postContainer.id;
         document.getElementById('msg').value = `@${username} "${postcont}..." (${postId})\n${ogmsg}`;
         document.getElementById('msg').focus();
         autoresize();
     }
-    
+
     closemodal();
 }
 
@@ -4902,28 +5244,77 @@ function loadexplore() {
     <h3>Open User</h3>
     <form class="section-form" onsubmit="gotousr();">
         <input type="text" class="section-input" id="usrinp" placeholder="MikeDEV">
-        <button class="section-send button">Go!</button>
+        <button class="section-send button" onclick='handleHaptics();'>Go!</button>
     </form>
     <h3>Statistics</h3>
     <div class="section stats">
     </div>
+    <div class="trending">
+        <span class="user-header"><span>Trending</span><bridge>Beta</bridge></span>
+        <hr>
+        <div class="section trending-topics">
+        </div>
+        <div class="section trending-inner">
+        </div>
+        <hr>
+        <p style="font-size: 12px;">Powered by AtticusAI | Trending updates once every minute | AI can make things up, take everything with a grain of salt.</p>
     </div>
+    </div>
+    <br>
     `;
-    
+
     sidebars();
 
     loadstats();
 
+    loadTrending();
+}
+
+function loadTrending() {
+    const currentLanguage = currentlang();
+    if (currentLanguage !== 'en' && currentLanguage !== 'enuk') {
+        document.querySelector('.trending-inner').innerHTML = lang().explore_sub.trendingunavailable;
+        document.querySelector('.trending-topics').remove();
+        return;
+    }
+
+    // Show loading text
+    document.querySelector('.trending-inner').innerHTML = 'Loading...';
+
+    fetch('https://leoextended.atticat.tech/ai/trending')
+        .then(response => response.json())
+        .then(data => {
+            // Split the data into an array, then map each item to a list item
+            const topics = data.trends;
+            const listData = data.list.split('\n').map(item => {
+                // Replace @username with the desired HTML structure
+                const replacedItem = item.replace(/@([-\w]+)/g, (match, username) => {
+                    return `<span id="username" class="attachment" onclick="openUsrModal('${username}');handleHaptics();">@${username}</span>`;
+                });
+                return `<p class="trending-item">${replacedItem.replace(/^- /, '')}</p>`;
+            }).join('');
+            document.querySelector('.trending-inner').innerHTML = `
+        <div>${listData}</div>
+        `;
+            document.querySelector('.trending-topics').innerHTML = `
+        <div><span style="font-weight: bold;">${topics}</span></div>
+        `;
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+            document.querySelector('.trending-inner').innerHTML = "Ruh roh! Something went wrong and Trending (Beta) couldn't load :(";
+            document.querySelector('.trending-topics').remove();
+        });
 }
 
 function gotousr() {
-    event.preventDefault(); 
+    event.preventDefault();
     openUsrModal(document.getElementById("usrinp").value);
     document.getElementById("usrinp").blur();
 }
 
 function modgotousr() {
-    event.preventDefault(); 
+    event.preventDefault();
     modUserModal(document.getElementById("usrinpmd").value);
 }
 
@@ -5113,11 +5504,11 @@ function selectFiles() {
 
 function goAnywhere() {
     document.documentElement.style.overflow = "hidden";
-    
+
     const mdlbck = document.querySelector('.modal-back');
     if (mdlbck) {
         mdlbck.style.display = 'flex';
-        
+
         const mdl = mdlbck.querySelector('.modal');
         mdl.id = 'mdl-qkshr';
         if (mdl) {
@@ -5138,7 +5529,7 @@ function goAnywhere() {
             const mdbt = mdl.querySelector('.modal-bottom');
             if (mdbt) {
                 mdbt.innerHTML = `
-                <button class="modal-back-btn" onclick="goTo()">${lang().action.go}</button>
+                <button class="modal-back-btn" onclick="goTo();handleHaptics();">${lang().action.go}</button>
                 `;
             }
         }
@@ -5194,18 +5585,18 @@ function goTo() {
 
 function searchChats(nickname) {
     for (const chatId in chatCache) {
-      if (chatCache.hasOwnProperty(chatId)) {
-        const chat = chatCache[chatId];
-        if (chat.nickname) {
-          if (chat.nickname.toLowerCase() === nickname.toLowerCase()) {
-            return chat._id;
-          }
+        if (chatCache.hasOwnProperty(chatId)) {
+            const chat = chatCache[chatId];
+            if (chat.nickname) {
+                if (chat.nickname.toLowerCase() === nickname.toLowerCase()) {
+                    return chat._id;
+                }
+            }
         }
-      }
     }
     return null;
-  }
-  
+}
+
 
 function populateSearch() {
     const query = document.getElementById("goanywhere").value.toLowerCase();
@@ -5214,26 +5605,26 @@ function populateSearch() {
         searchPopulation.innerHTML = '';
         const usernames = Object.keys(pfpCache).filter(username => username.toLowerCase().includes(query));
         const groupChats = Object.values(chatCache).filter(chat => chat.nickname && chat.nickname.toLowerCase().includes(query));
-        usernames.forEach(username => {        
+        usernames.forEach(username => {
             const item = document.createElement('button');
             item.innerText = '@' + username
             item.classList.add('searchitem');
             item.id = 'srchuser';
             item.setAttribute("tabindex", "0");
-            item.onclick = function() {
+            item.onclick = function () {
                 opendm(username);
                 closemodal();
             };
             searchPopulation.appendChild(item);
         });
-        
-        groupChats.forEach(chat => {        
+
+        groupChats.forEach(chat => {
             const item = document.createElement('button');
             item.innerText = chat.nickname
             item.classList.add('searchitem');
             item.id = 'srchchat';
             item.setAttribute("tabindex", "0");
-            item.onclick = function() {
+            item.onclick = function () {
                 loadchat(chat._id);
                 closemodal();
             };
@@ -5274,7 +5665,7 @@ function blockUser(user) {
         toggle = 2;
         blockedUsers[user] = true;
     }
-    
+
     fetch(`https://api.meower.org/users/${user}/relationship`, {
         method: "PATCH",
         headers: {
@@ -5285,12 +5676,12 @@ function blockUser(user) {
             state: toggle
         })
     })
-    .then(response => response.json())
-    .then(data => {
-    })
-    .catch(error => {
-        console.error("error:", error);
-    });
+        .then(response => response.json())
+        .then(data => {
+        })
+        .catch(error => {
+            console.error("error:", error);
+        });
     if (page = 'settings') {
         loadstgs();
     }
@@ -5299,12 +5690,12 @@ function blockUser(user) {
 
 function deleteTokensModal() {
     document.documentElement.style.overflow = "hidden";
-    
+
     const mdlbck = document.querySelector('.modal-back');
 
     if (mdlbck) {
         mdlbck.style.display = 'flex';
-        
+
         const mdl = mdlbck.querySelector('.modal');
         mdl.id = 'mdl-uptd';
         if (mdl) {
@@ -5319,7 +5710,7 @@ function deleteTokensModal() {
             const mdbt = mdl.querySelector('.modal-bottom');
             if (mdbt) {
                 mdbt.innerHTML = `
-                <button class="modal-back-btn" onclick="deleteTokens()">${lang().action.confirm}</button>
+                <button class="modal-back-btn" onclick="deleteTokens();handleHaptics();">${lang().action.confirm}</button>
                 `;
             }
         }
@@ -5328,12 +5719,12 @@ function deleteTokensModal() {
 
 function changePasswordModal() {
     document.documentElement.style.overflow = "hidden";
-    
+
     const mdlbck = document.querySelector('.modal-back');
 
     if (mdlbck) {
         mdlbck.style.display = 'flex';
-        
+
         const mdl = mdlbck.querySelector('.modal');
         mdl.id = 'mdl-uptd';
         if (mdl) {
@@ -5352,7 +5743,7 @@ function changePasswordModal() {
             const mdbt = mdl.querySelector('.modal-bottom');
             if (mdbt) {
                 mdbt.innerHTML = `
-                <button class="modal-back-btn" onclick="changePassword()" id="changepw">${lang().action.confirm}</button>
+                <button class="modal-back-btn" onclick="changePassword();handleHaptics();" id="changepw">${lang().action.confirm}</button>
                 `;
             }
         }
@@ -5361,12 +5752,12 @@ function changePasswordModal() {
 
 function clearLocalstorageModal() {
     document.documentElement.style.overflow = "hidden";
-    
+
     const mdlbck = document.querySelector('.modal-back');
 
     if (mdlbck) {
         mdlbck.style.display = 'flex';
-        
+
         const mdl = mdlbck.querySelector('.modal');
         mdl.id = 'mdl-uptd';
         if (mdl) {
@@ -5381,7 +5772,7 @@ function clearLocalstorageModal() {
             const mdbt = mdl.querySelector('.modal-bottom');
             if (mdbt) {
                 mdbt.innerHTML = `
-                <button class="modal-back-btn" onclick="clearLocalstorage()" id="clearls">${lang().action.confirm}</button>
+                <button class="modal-back-btn" onclick="clearLocalstorage();handleHaptics();" id="clearls">${lang().action.confirm}</button>
                 `;
             }
         }
@@ -5390,7 +5781,7 @@ function clearLocalstorageModal() {
 
 function shareModal() {
     document.documentElement.style.overflow = "hidden";
-    
+
     const mdlbck = document.querySelector('.modal-back');
 
     if (mdlbck) {
@@ -5402,7 +5793,8 @@ function shareModal() {
             if (mdlt) {
                 mdlt.innerHTML = `
                 <h3>${lang().modals.share}</h3>
-                <input id="share" class="mdl-inp" type="text" value="https://eris.pages.dev/meo/" readonly>
+
+                <input id="share" class="mdl-inp" type="text" value="https://leo.atticat.tech/" readonly>
                 `;
             }
             const mdbt = mdl.querySelector('.modal-bottom');
@@ -5416,7 +5808,7 @@ function shareModal() {
 
 function agreementModal() {
     document.documentElement.style.overflow = "hidden";
-    
+
     const mdlbck = document.querySelector('.modal-back');
 
     if (mdlbck) {
@@ -5443,13 +5835,13 @@ function agreementModal() {
                             theme: getComputedStyle(document.body).getPropertyValue('--color-scheme'),
                             callback: (token) => {
                                 mdbt.innerHTML = `
-                                <button class="modal-back-btn" onclick="toggleLogin(true);signup(document.getElementById('userinput').value, document.getElementById('passinput').value, '${token}')" aria-label="log in">${lang().action.signup}</button>
+                                <button class="modal-back-btn" onclick="toggleLogin(true);signup(document.getElementById('userinput').value, document.getElementById('passinput').value, '${token}');handleHaptics();" aria-label="log in">${lang().action.signup}</button>
                                 `;
                             },
                         });
                     } else {
                         mdbt.innerHTML = `
-                        <button class="modal-back-btn" onclick="toggleLogin(true);signup(document.getElementById('userinput').value, document.getElementById('passinput').value, '')" aria-label="log in">${lang().action.signup}</button>
+                        <button class="modal-back-btn" onclick="toggleLogin(true);signup(document.getElementById('userinput').value, document.getElementById('passinput').value, '');handleHaptics();" aria-label="log in">${lang().action.signup}</button>
                         `;
                     }
                 }));
@@ -5460,7 +5852,7 @@ function agreementModal() {
 
 function errorModal(header, text) {
     document.documentElement.style.overflow = "hidden";
-    
+
     const mdlbck = document.querySelector('.modal-back');
     const mdl = mdlbck.querySelector('.modal');
     const mdlt = mdl.querySelector('.modal-top');
@@ -5525,7 +5917,7 @@ function deleteAccount(password) {
 
 function DeleteAccountModal() {
     document.documentElement.style.overflow = "hidden";
-    
+
     const mdlbck = document.querySelector('.modal-back');
 
     if (mdlbck) {
@@ -5548,7 +5940,7 @@ function DeleteAccountModal() {
             const mdbt = mdl.querySelector('.modal-bottom');
             if (mdbt) {
                 mdbt.innerHTML = `
-                <button class="modal-back-btn" onclick="confirmDelete()" aria-label="delete account">${lang().action.confirm}</button>
+                <button class="modal-back-btn" onclick="confirmDelete();handleHaptics();" aria-label="delete account">${lang().action.confirm}</button>
                 `;
             }
         }
@@ -5571,7 +5963,7 @@ function confirmDelete() {
 
 function modalPluginup() {
     document.documentElement.style.overflow = "hidden";
-    
+
     const mdlbck = document.querySelector('.modal-back');
 
     if (mdlbck) {
@@ -5590,7 +5982,7 @@ function modalPluginup() {
             const mdbt = mdl.querySelector('.modal-bottom');
             if (mdbt) {
                 mdbt.innerHTML = `
-                <button class="modal-back-btn" onclick="window.location.reload();" aria-label="refresh">${lang().action.confirm}</button>
+                <button class="modal-back-btn" onclick="window.location.reload();handleHaptics();" aria-label="refresh">${lang().action.confirm}</button>
                 `;
             }
         }
@@ -5658,7 +6050,7 @@ function addMembertoGCModal(chatId) {
             const mdbt = mdl.querySelector('.modal-bottom');
             if (mdbt) {
                 mdbt.innerHTML = `
-                <button class="modal-back-btn" onclick="addMembertoGC('${chatId}')">${lang().action.add}</button>
+                <button class="modal-back-btn" onclick="addMembertoGC('${chatId}');handleHaptics();">${lang().action.add}</button>
                 `;
             }
         }
@@ -5685,7 +6077,7 @@ function transferOwnershipModal(chatId) {
             const mdbt = mdl.querySelector('.modal-bottom');
             if (mdbt) {
                 mdbt.innerHTML = `
-                <button class="modal-back-btn" onclick="transferOwnership('${chatId}')">${lang().action.confirm}</button>
+                <button class="modal-back-btn" onclick="transferOwnership('${chatId}');handleHaptics();">${lang().action.confirm}</button>
                 `;
             }
         }
@@ -5966,6 +6358,16 @@ function copy(text, message) {
         parent.closemodal(`${message}`);
     } else {
         parent.closemodal(`${lang().modals.copygc}`);
+    }
+}
+
+function handleHaptics() {
+    if (settingsstuff().haptics) {
+        if ('vibrate' in navigator) {
+            navigator.vibrate(10);
+        } else {
+            console.warn('Haptics not supported on this device.');
+        }
     }
 }
 
