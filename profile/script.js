@@ -294,3 +294,9 @@ function copy(text) {
     document.body.removeChild(t);
     parent.closemodal(`${lang().modals.copyuser}`);
 }
+
+function handleHaptics() {
+    if (settingsstuff().haptics) {
+        navigator.vibrate(50);
+    }
+}
