@@ -6364,7 +6364,7 @@ function copy(text, message) {
 function handleHaptics() {
     if (settingsstuff().haptics) {
         if ('vibrate' in navigator) {
-            navigator.vibrate(20);
+            navigator.vibrate(10);
         } else {
             console.warn('Haptics not supported on this device.');
         }
