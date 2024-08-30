@@ -1,6 +1,9 @@
 # leo
 An awesome fork of meo with more features
 
+## about this branch
+This branch contains haptic feedback for mobile devices when pressing buttons. It is based on commit 0f6822e763ca95750160ed0f8470365f2d3e93f2
+
 > [!TIP]
 > Using an older browser? Try [leo with legacy firefox patches](https://github.com/JoshAtticus/leo/tree/old-firefox-fix). It was originally designed for Firefox Android 55 but should work on most browsers from around that time (August 2017)
 
