@@ -1880,8 +1880,9 @@ function loadchat(chatId) {
     }
 
     const messageContainer = document.querySelector('.message-container');
-    messageContainer.setAttribute('onclick', "handleHaptics()");
     const jumpButton = document.querySelector('.jump');
+    messageContainer.setAttribute('onclick', "handleHaptics()");
+    jumpButton.setAttribute('onclick', "handleHaptics();jumpToTop();");
     const navbarOffset = messageContainer.offsetHeight;
     const main = document.getElementById("main");
     main.addEventListener('scroll', function() {
