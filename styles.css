@@ -2683,11 +2683,13 @@ possible future styling
     border-radius: var(--border-radius);
     max-width: 300px;
     position: relative;
+    overflow: hidden;
 }
 
 .download a {
-    width: -moz-fit-content;
-    width: fit-content;
+    text-wrap: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .download-button {
