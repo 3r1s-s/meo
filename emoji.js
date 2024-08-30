@@ -42,6 +42,7 @@ function addemoji(emoji) {
 function addemojim(emoji) {
     const ogmsg = document.getElementById('msg').value
     document.getElementById('msg').value = `${ogmsg}${emoji} `;
+    handleHaptics()
     autoresize();
     event.preventDefault();
     if (event) {

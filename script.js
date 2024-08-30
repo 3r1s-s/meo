@@ -1850,17 +1850,20 @@ function loadchat(chatId) {
     loadposts(1);
 
     const attachButton = document.getElementById('attach');
+    attachButton.setAttribute('onclick', "handleHaptics();selectFiles();");
     if (attachButton && chatId !== "livechat") {
         attachButton.addEventListener('dragover', function(e) {
             e.preventDefault();
             e.stopPropagation();
             attachButton.classList.add('dragover');
+            handleHaptics();
         });
 
         attachButton.addEventListener('dragleave', function(e) {
             e.preventDefault();
             e.stopPropagation();
             attachButton.classList.remove('dragover');
+            handleHaptics();
         });
 
         attachButton.addEventListener('drop', function(e) {
@@ -1870,12 +1873,14 @@ function loadchat(chatId) {
             for (const file of e.dataTransfer.files) {
                 addAttachment(file);
             }
+            handleHaptics();
         });
     } else {
         if (attachButton) attachButton.remove();
     }
 
     const messageContainer = document.querySelector('.message-container');
+    messageContainer.setAttribute('onclick', "handleHaptics()");
     const jumpButton = document.querySelector('.jump');
     const navbarOffset = messageContainer.offsetHeight;
     const main = document.getElementById("main");
@@ -5238,7 +5243,7 @@ function loadexplore() {
     <h3>Open User</h3>
     <form class="section-form" onsubmit="gotousr();">
         <input type="text" class="section-input" id="usrinp" placeholder="MikeDEV">
-        <button class="section-send button">Go!</button>
+        <button class="section-send button" onclick='handleHaptics()'>Go!</button>
     </form>
     <h3>Statistics</h3>
     <div class="section stats">
