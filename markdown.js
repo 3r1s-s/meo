@@ -218,7 +218,7 @@ function attach(attachment) {
                 element.appendChild(imgElement);
                 embeddedElement = element;
             }
-        } else if (attachment.mime.includes("video/")) {
+        } else if (attachment.mime.includes("video/") && attachment.size < (10 << 20)) {
             const element = document.createElement("div");
             element.classList.add("media-outer");
 
@@ -233,7 +233,7 @@ function attach(attachment) {
             
             element.appendChild(mediaElement);
             embeddedElement = element;
-        } else if (attachment.mime.includes("audio/")) {
+        } else if (attachment.mime.includes("audio/") && attachment.size < (10 << 20)) {
 
             const element = document.createElement("div");
             element.classList.add("media-outer");
