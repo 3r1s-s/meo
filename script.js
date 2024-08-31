@@ -226,6 +226,7 @@ function main() {
                 console.log("Logged in!");
             } else if (sentdata.cmd == "statuscode" && sentdata.val != "I:100 | OK") {
                 if (sentdata.val === "E:018 | Account Banned")
+                    handleHaptics('error');
                     openUpdate(lang().info.accbanned);
                 console.error(`Failed logging in to Cloudlink: ${sentdata.val}`);
                 logout(false);
@@ -347,6 +348,7 @@ function main() {
                 renderChats();
             }
             if (page === sentdata.val.chat_id) {
+                handleHaptics('error');
                 openUpdate(lang().info.chatremoved);
                 if (!settingsstuff().homepage) {
                     loadstart();
@@ -420,6 +422,7 @@ function main() {
             if (divToDelete) {
                 divToDelete.parentNode.removeChild(divToDelete);
                 if (page === sentdata.val.id) {
+                    handleHaptics('error');
                     openUpdate(lang().info.chatremoved);
                     if (!settingsstuff().homepage) {
                         loadstart();
@@ -1115,6 +1118,7 @@ function loadreplyv(item) {
 function reply(postId) {
     const replies = document.getElementById("replies");
     if (replies.childNodes.length >= 10) {
+        handleHaptics('error');
         openUpdate(lang().info.replieslimit);
         return;
     }
@@ -1209,6 +1213,7 @@ function login() {
             recoveryCode = otpInput.value;
         } else {
             toggleLogin(false);
+            handleHaptics('error');
             openUpdate(lang().info.invalidotp);
             return;
         }
@@ -1237,17 +1242,22 @@ function login() {
                     otpInput.style.display = "block";
                     backBtn.style.display = "block";
                 } else {
+                    handleHaptics('error');
                     openUpdate(lang().info.unknownmfa);
                 }
             } else if (resp.type === "Unauthorized") {
                 if (totpCode || recoveryCode) {
+                    handleHaptics('error');
                     openUpdate(lang().info.invalidotp);
                 } else {
+                    handleHaptics('error');
                     openUpdate(lang().info.invalidcreds);
                 }
             } else if (resp.type === "accountDeleted") {
+                handleHaptics('error');
                 openUpdate(lang().info.accdeleted);
             } else {
+                handleHaptics('error');
                 openUpdate(`${lang().info.unknown} ${resp.type}`);
             }
         } else {
@@ -1278,8 +1288,10 @@ function signup(username, password, captcha) {
         if (resp.error) {
             toggleLogin(false);
             if (resp.type === "usernameExists") {
+                handleHaptics('error');
                 openUpdate(lang().info.accexists);
             } else {
+                handleHaptics('error');
                 openUpdate(`${lang().info.unknown} ${resp.type}`);
             }
         } else {
@@ -1769,6 +1781,7 @@ function loadchat(chatId) {
             loadchat(chatId);
         })
         .catch(e => {
+            handleHaptics('error');
             openUpdate(`Unable to open chat: ${e}`);
             if (!settingsstuff().homepage) {
                 loadstart();
@@ -2782,6 +2795,7 @@ function chatSettings(chatId) {
 				loadchat(chatId);
 			})
 			.catch(e => {
+                handleHaptics('error');
 				openUpdate(`Unable to open chat: ${e}`);
 			});
 		return;
@@ -2908,6 +2922,7 @@ function chatMembers(chatId) {
 				loadchat(chatId);
 			})
 			.catch(e => {
+                handleHaptics('error');
 				openUpdate(`Unable to open chat: ${e}`);
 			});
 		return;
@@ -3079,6 +3094,7 @@ function chatSettings(chatId) {
 				loadchat(chatId);
 			})
 			.catch(e => {
+                handleHaptics('error');
 				openUpdate(`Unable to open chat: ${e}`);
 			});
 		return;
@@ -3205,6 +3221,7 @@ function chatMembers(chatId) {
 				loadchat(chatId);
 			})
 			.catch(e => {
+                handleHaptics('error');
 				openUpdate(`Unable to open chat: ${e}`);
 			});
 		return;
@@ -4163,9 +4180,11 @@ function closeImage() {
 function createChat() {
     const nickname = document.getElementById("chat-nick-input").value.trim();
     if (nickname.length < 1) {
+        handleHaptics('error');
         openUpdate("Chat nickname too short!");
         return;
     } else if (nickname.length > 20) {
+        handleHaptics('error');
         openUpdate("Chat nickname too long!");
         return;
     }
@@ -4187,6 +4206,7 @@ function createChat() {
             closemodal();
         })
         .catch(e => {
+            handleHaptics('error');
             openUpdate(`Failed to create chat: ${e}`);
         });
 }
@@ -6126,6 +6146,7 @@ function transferOwnership(chatId) {
         closemodal();
     })
     .catch(e => {
+        handleHaptics('error');
         openUpdate(`Failed to add member: ${e}`);
     });
 }
@@ -6149,6 +6170,7 @@ function addMembertoGC(chatId) {
         closemodal();
     })
     .catch(e => {
+        handleHaptics('error');
         openUpdate(`Failed to add member: ${e}`);
     });
 }
@@ -6168,9 +6190,11 @@ function removeMemberFromGC(chatId, user) {
     .then(data => {
         chatCache[data._id] = data;
         chatMembers(chatId);
+        handleHaptics('success');
         openUpdate(`Removed ${user}`);
     })
     .catch(e => {
+        handleHaptics('error');
         openUpdate(`Failed to remove member: ${e}`);
     });
 }
