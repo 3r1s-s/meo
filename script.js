@@ -6420,28 +6420,11 @@ const hapticPatterns = {
     receive: [5, 10, 15, 20, 25, 30, 35],
 };
 
-const hapticPatternsSamsung = {
-    short: [10],
-    long: [500],
-    double: [10, 100, 10],
-    triple: [10, 100, 10, 100, 10],
-    error: [30, 100, 30],
-    send: [35, 100, 25, 100, 15],
-    receive: [15, 100, 25, 100, 35],
-};
-
-function isSamsungDevice() {
-    return /Samsung/i.test(navigator.userAgent);
-}
-
 async function handleHaptics(patternName) {
     if (settingsstuff().haptics) {
         if ('vibrate' in navigator) {
-            const pattern = isSamsungDevice() 
-                ? hapticPatternsSamsung[patternName] 
-                : hapticPatterns[patternName];
-
-            navigator.vibrate(pattern || [10]);
+            const pattern = hapticPatterns[patternName] || [10];
+            navigator.vibrate(pattern);
             // console.log(`Haptics: ${patternName}`);
         } else {
             console.warn('Haptics not supported on this device.');
