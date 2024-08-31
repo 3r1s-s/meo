@@ -233,6 +233,17 @@ video {
     animation: infinite 1s ease-in-out spin;
 }
 
+.launch-reset {
+    position: fixed;
+    bottom: 12px;
+    opacity: 0.5;
+    font-size: 12px;
+}
+
+.launch-reset:hover {
+    cursor: pointer;
+}
+
 .embed {
     border-radius: var(--border-radius);
     cursor: pointer;

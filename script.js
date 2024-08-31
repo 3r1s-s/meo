@@ -26,7 +26,6 @@ if (settingsstuff().homepage) {
 } else {
     pre = "start"
 }
-
 let meourl = 'https://eris.pages.dev/meo';
 
 let bridges = ['Discord', 'SplashBridge', 'gc'];
@@ -3674,12 +3673,14 @@ function ping() {
 
 function launchscreen() {
     page = "load";
-    const green = `<div class="launch">
+    const green = `
+    <div class="launch">
         <svg class="launch-logo" width="128" height="128" viewBox="0 0 512 512" fill="var(--color)" xmlns="http://www.w3.org/2000/svg">
         <g>
             <path d="M468.42 20.5746L332.997 65.8367C310.218 58.8105 284.517 55.049 255.499 55.6094C226.484 55.049 200.78 58.8105 178.004 65.8367L42.5803 20.5746C18.9102 16.3251 -1.81518 36.2937 2.5967 59.1025L38.7636 200.894C18.861 248.282 12.1849 296.099 12.1849 325.027C12.1849 399.343 44.6613 492 255.499 492C466.339 492 498.815 399.343 498.815 325.027C498.815 296.099 492.139 248.282 472.237 200.894L508.404 59.1025C512.814 36.2937 492.09 16.3251 468.42 20.5746Z"/>
         </g>
         </svg>
+        <span onclick="clearLocalstorage();" class="launch-reset">Having problems? Click here to try a force reset</span>
     </div>`
     const orange = document.getElementById("main");
     orange.innerHTML = green;
