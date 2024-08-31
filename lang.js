@@ -97,6 +97,7 @@ const en = {
     "title_chats": "Chats",
     "title_live": "Livechat",
     "settings_general": "General",
+    "settings_hapticplayground": "Haptic Playground",
     "settings_account": "Account", // update
     "settings_appearance": "Appearance",
     "settings_plugins": "Plugins",
@@ -170,6 +171,12 @@ const en = {
         "devices": "Devices",
         "added": "Successfully added authenticator app!",
         "recoverycode": "Here is your recovery code, please save it somewhere safe:",
+    },
+    "hapticplayground_sub": {
+        "about": "Requires Haptic Feedback to be enabled in settings along with a compatible device, browser and OS.",
+        "taps": "Haptic Taps",
+        "single": "Single Tap",
+        "double": "Double Tap",
     },
     "appearance_sub": {
         "theme": "Theme",

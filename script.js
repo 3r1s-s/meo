@@ -2567,6 +2567,31 @@ async function resetRecoveryCode() {
     }
 }
 
+function loadHapticPlayground() {
+    setTop();
+    let pageContainer = document.querySelector(".settings");
+    pageContainer.innerHTML = `
+        <h1>${lang().settings_hapticplayground}</h1>
+        <p>${lang().hapticplayground_sub.about}</p>
+
+        <h3>${lang().hapticplayground_sub.taps}</h3>
+        <div class="settings-buttons-row">
+            <button onclick="handleHaptics('single');" class="button blockeduser">${lang().hapticplayground_sub.single}</button>
+            <button onclick="handleHaptics('double');" class="button blockeduser">${lang().hapticplayground_sub.double}</button>
+        </div>
+
+        <h3>${lang().account_sub.privacy}</h3>
+        <div class="settings-buttons-row">
+            <a href="https://meower.org/export/" target="_blank" class="button blockeduser">${lang().action.datarequest}</a>
+            <button onclick="DeleteAccountModal();handleHaptics();" class="button blockeduser red">${lang().action.deleteacc}</button>
+        </div>
+        <a style="font-size: 12px" href="https://meower.org/legal" target="_blank">${lang().login_sub.agreement}</a>
+
+        <h3>${lang().account_sub.mfa}</h3>
+        <div class='authenticators'>-----------</div>
+    `;
+}
+
 function createSettingSection(id, title, desc) {
     return `
         <div class="stg-section" id="${id}">
@@ -6361,10 +6386,19 @@ function copy(text, message) {
     }
 }
 
-function handleHaptics() {
+const hapticPatterns = {
+    short: [10],
+    long: [500],
+    double: [100, 50, 100],
+    triple: [100, 50, 100, 50, 100]
+};
+
+function handleHaptics(patternName) {
     if (settingsstuff().haptics) {
         if ('vibrate' in navigator) {
-            navigator.vibrate(10);
+            const pattern = hapticPatterns[patternName] || [10];
+            navigator.vibrate(pattern);
+            console.log("Tapping", patternName);
         } else {
             console.warn('Haptics not supported on this device.');
         }
