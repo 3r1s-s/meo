@@ -6200,6 +6200,7 @@ function removeMemberFromGC(chatId, user) {
 }
 
 function notify(u, p, location, val) {
+    handleHaptics('receive');
     let loc
     if (location === "home" || location === "livechat" || location == "inbox") {
         loc = location
@@ -6284,7 +6285,6 @@ function notify(u, p, location, val) {
                             icon: pfp,
                         });
 
-                        handleHaptics('receive');
                         new Audio('audio/purr.wav').play();
         
                         notification.addEventListener('click', () => {
