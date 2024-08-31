@@ -175,8 +175,14 @@ const en = {
     "hapticplayground_sub": {
         "about": "Requires Haptic Feedback to be enabled in settings along with a compatible device, browser and OS.",
         "taps": "Haptic Taps",
+        "actions": "Simulate Actions",
         "single": "Single Tap",
         "double": "Double Tap",
+        "triple": "Triple Tap",
+        "long": "Long Tap",
+        "error": "Error",
+        "send": "Send Message",
+        "receive": "Receive Message",
     },
     "appearance_sub": {
         "theme": "Theme",

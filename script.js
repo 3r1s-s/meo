@@ -1881,7 +1881,6 @@ function loadchat(chatId) {
 
     const messageContainer = document.querySelector('.message-container');
     const jumpButton = document.querySelector('.jump');
-    messageContainer.setAttribute('onclick', "handleHaptics();");
     jumpButton.setAttribute('onclick', "handleHaptics();jumpToTop();");
     const navbarOffset = messageContainer.offsetHeight;
     const main = document.getElementById("main");
@@ -2040,6 +2039,7 @@ function loadGeneral() {
         ${createSettingSection("censorwords", lang().general_list.title.censorwords, lang().general_list.desc.censorwords)}
         ${createSettingSection("notifications", lang().general_list.title.notifications, lang().general_list.desc.notifications)}
         ${createSettingSection("haptics", lang().general_list.title.haptics, lang().general_list.desc.haptics)}
+        <a onclick='loadHapticPlayground()'>Open Haptic Playground</a>
         </div>
         <h3>${lang().general_sub.accessibility}</h3>
         <div class="settings-section-outer">
@@ -2578,17 +2578,16 @@ function loadHapticPlayground() {
         <div class="settings-buttons-row">
             <button onclick="handleHaptics('single');" class="button blockeduser">${lang().hapticplayground_sub.single}</button>
             <button onclick="handleHaptics('double');" class="button blockeduser">${lang().hapticplayground_sub.double}</button>
+            <button onclick="handleHaptics('triple');" class="button blockeduser">${lang().hapticplayground_sub.triple}</button>
+            <button onclick="handleHaptics('long');" class="button blockeduser">${lang().hapticplayground_sub.long}</button>
         </div>
 
-        <h3>${lang().account_sub.privacy}</h3>
+        <h3>${lang().hapticplayground_sub.actions}</h3>
         <div class="settings-buttons-row">
-            <a href="https://meower.org/export/" target="_blank" class="button blockeduser">${lang().action.datarequest}</a>
-            <button onclick="DeleteAccountModal();handleHaptics();" class="button blockeduser red">${lang().action.deleteacc}</button>
+            <button onclick="handleHaptics('error');" class="button blockeduser">${lang().hapticplayground_sub.error}</button>
+            <button onclick="handleHaptics('send');" class="button blockeduser">${lang().hapticplayground_sub.send}</button>
+            <button onclick="handleHaptics('receive');" class="button blockeduser">${lang().hapticplayground_sub.receive}</button>
         </div>
-        <a style="font-size: 12px" href="https://meower.org/legal" target="_blank">${lang().login_sub.agreement}</a>
-
-        <h3>${lang().account_sub.mfa}</h3>
-        <div class='authenticators'>-----------</div>
     `;
 }
 
@@ -6261,6 +6260,7 @@ function notify(u, p, location, val) {
                             icon: pfp,
                         });
 
+                        handleHaptics('receive');
                         new Audio('audio/purr.wav').play();
         
                         notification.addEventListener('click', () => {
@@ -6389,16 +6389,19 @@ function copy(text, message) {
 const hapticPatterns = {
     short: [10],
     long: [500],
-    double: [100, 50, 100],
-    triple: [100, 50, 100, 50, 100]
+    double: [10, 5, 10],
+    triple: [10, 5, 10, 5, 10],
+    error: [30, 10, 30],
+    send: [35, 30, 25, 20, 15, 10, 5],
+    receive: [5, 10, 15, 20, 25, 30, 35],
 };
 
-function handleHaptics(patternName) {
+async function handleHaptics(patternName) {
     if (settingsstuff().haptics) {
         if ('vibrate' in navigator) {
             const pattern = hapticPatterns[patternName] || [10];
             navigator.vibrate(pattern);
-            console.log("Tapping", patternName);
+            // console.log(`Haptics: ${patternName}`);
         } else {
             console.warn('Haptics not supported on this device.');
         }
