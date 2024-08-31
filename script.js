@@ -2052,7 +2052,6 @@ function loadGeneral() {
         ${createSettingSection("censorwords", lang().general_list.title.censorwords, lang().general_list.desc.censorwords)}
         ${createSettingSection("notifications", lang().general_list.title.notifications, lang().general_list.desc.notifications)}
         ${createSettingSection("haptics", lang().general_list.title.haptics, lang().general_list.desc.haptics)}
-        <a onclick='loadHapticPlayground()'>Open Haptic Playground</a>
         </div>
         <h3>${lang().general_sub.accessibility}</h3>
         <div class="settings-section-outer">
