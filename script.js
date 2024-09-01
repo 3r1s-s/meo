@@ -514,20 +514,21 @@ function main() {
         }
     });
 }
-
 function loadLogin() {
     const pageContainer = document.getElementById("main");
     pageContainer.innerHTML = 
     `<div class='login'>
         <div class='login-inner'>
-            <h2 id="login-header" class="login-header">${lang().meo_welcome}</h2>
-            <input type='text' id='userinput' placeholder='${lang().meo_username}' class='login-text text' aria-label="username input" autocomplete="username">
-            <input type='password' id='passinput' placeholder='${lang().meo_password}' class='login-text text' aria-label="password input" autocomplete="current-password">
-            <input type='text' id='otpinput' placeholder='${lang().meo_totp}' class='login-text text' aria-label="one-time-code input" autocomplete="one-time-code" style="display:none;">
-            <input type='button' id='login' value='${lang().action.login}' class='login-button button' onclick='toggleLogin(true);login()' aria-label="Register">
-            <input type='button' id='signup' value='${lang().action.signup}' class='login-button button' onclick='agreementModal()' aria-label="log in">
-            <input type='button' id='back' value='${lang().action.back}' class='login-button button' onclick='loadLogin()' aria-label="back" style="display:none;">
-            <small>${lang().login_sub.desc}</small>
+                <h2 id="login-header" class="login-header">${lang().meo_welcome}</h2>
+                <input type="text" id="userinput" placeholder="${lang().meo_username}" class="login-text text" aria-label="username input" autocomplete="username">
+                <input type="password" id="passinput" placeholder="${lang().meo_password}" class="login-text text" aria-label="password input" autocomplete="current-password">
+                <input type="text" id="otpinput" placeholder="${lang().meo_totp}" class="login-text text" aria-label="one-time-code input" autocomplete="one-time-code" style="display:none;">
+                <input type="button" id="login" value="${lang().action.login}" class="login-button button" onclick="toggleLogin(true);login()" aria-label="Register">
+                <input type="button" id="back" value="${lang().action.back}" class="login-button button" onclick="loadLogin()" aria-label="back" style="display:none;">
+                <div class="login-sub">
+                <a onclick="toggleSignUp(false)">${lang().action.signup}</a>
+                <small>${lang().login_sub.desc}</small>
+                </div>
         </div>
         <div class="login-top">
             <svg width="80" height="44.25" viewBox="0 0 321 200" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -572,6 +573,35 @@ function loadLogin() {
         <div id='msgs'></div>
     </div>
     `; 
+}
+
+function toggleSignUp(to) {
+    if (to) {        
+        document.querySelector(".login-inner").innerHTML = `
+                <h2 id="login-header" class="login-header">${lang().meo_welcome}</h2>
+                <input type="text" id="userinput" placeholder="${lang().meo_username}" class="login-text text" aria-label="username input" autocomplete="username">
+                <input type="password" id="passinput" placeholder="${lang().meo_password}" class="login-text text" aria-label="password input" autocomplete="current-password">
+                <input type="text" id="otpinput" placeholder="${lang().meo_totp}" class="login-text text" aria-label="one-time-code input" autocomplete="one-time-code" style="display:none;">
+                <input type="button" id="login" value="${lang().action.login}" class="login-button button" onclick="toggleLogin(true);login()" aria-label="Register">
+                <input type="button" id="back" value="${lang().action.back}" class="login-button button" onclick="loadLogin()" aria-label="back" style="display:none;">
+                <div class="login-sub">
+                <a onclick="toggleSignUp(false)">${lang().action.signup}</a>
+                <small>${lang().login_sub.desc}</small>
+                </div>
+        `;
+    } else {
+        document.querySelector(".login-inner").innerHTML = `
+            <h2 id="login-header" class="login-header">${lang().meo_hello}</h2>
+            <input type="text" id="userinput" placeholder="${lang().meo_username}" class="login-text text" aria-label="username input" autocomplete="username">
+            <input type="password" id="passinput" placeholder="${lang().meo_password}" class="login-text text" aria-label="password input" autocomplete="current-password">
+            <input type="button" id="login" value="${lang().action.login}" class="login-button button" onclick="toggleLogin(true);login()" aria-label="Register" style="display:none;">
+            <input type="button" id="signup" value="${lang().action.signup}" class="login-button button" onclick="agreementModal()" aria-label="log in">
+            <div class="login-sub">
+            <a onclick="toggleSignUp(true)">${lang().action.login}</a>
+            <small>${lang().login_sub.desc}</small>
+            </div>
+`;
+    }
 }
 
 function loadpost(p) {

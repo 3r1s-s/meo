@@ -550,6 +550,21 @@ img.embed {
     box-sizing: border-box;
 }
 
+.login-sub {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.login-sub > a {
+    font-size: 14px;
+    user-select: none;
+}
+
+.login-sub > a:hover {
+    cursor: pointer;
+}
+
 .info-button {
     color: var(--color);
     transition: opacity .1s ease-in-out;

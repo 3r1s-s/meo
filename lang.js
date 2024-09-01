@@ -77,7 +77,7 @@ const en = {
     "meo_messagebox": Math.random() < 1/25 ? "Whar's on your mind?" : "What's on your mind?",
     "meo_goanywhere": "Where would you like to go?",
     "meo_welcome": "Welcome!",
-    "meo_welcomeback": "Welcome back!", // update
+    "meo_hello": "Hello!", // update
     "meo_userson": "users online",
     "meo_members": "members",
     "meo_bridged": {
@@ -830,7 +830,7 @@ const fr = {
     "meo_messagebox": "What's on your mind?",
     "meo_goanywhere": "Où dèsires-tu aller ?",
     "meo_welcome": "Bienvenue !",
-    "meo_welcomeback": "Bienvenue !",
+    "meo_hello": "Bonjour !",
     "meo_userson": "utilisateurs en ligne",
     "meo_members": "membres",
     "meo_bridged": {
