@@ -226,6 +226,7 @@ function main() {
                 console.log("Logged in!");
             } else if (sentdata.cmd == "statuscode" && sentdata.val != "I:100 | OK") {
                 if (sentdata.val === "E:018 | Account Banned")
+                    handleHaptics('error');
                     openUpdate(lang().info.accbanned);
                 console.error(`Failed logging in to Cloudlink: ${sentdata.val}`);
                 logout(false);
@@ -347,6 +348,7 @@ function main() {
                 renderChats();
             }
             if (page === sentdata.val.chat_id) {
+                handleHaptics('error');
                 openUpdate(lang().info.chatremoved);
                 if (!settingsstuff().homepage) {
                     loadstart();
@@ -420,6 +422,7 @@ function main() {
             if (divToDelete) {
                 divToDelete.parentNode.removeChild(divToDelete);
                 if (page === sentdata.val.id) {
+                    handleHaptics('error');
                     openUpdate(lang().info.chatremoved);
                     if (!settingsstuff().homepage) {
                         loadstart();
@@ -1115,6 +1118,7 @@ function loadreplyv(item) {
 function reply(postId) {
     const replies = document.getElementById("replies");
     if (replies.childNodes.length >= 10) {
+        handleHaptics('error');
         openUpdate(lang().info.replieslimit);
         return;
     }
@@ -1209,6 +1213,7 @@ function login() {
             recoveryCode = otpInput.value;
         } else {
             toggleLogin(false);
+            handleHaptics('error');
             openUpdate(lang().info.invalidotp);
             return;
         }
@@ -1237,17 +1242,22 @@ function login() {
                     otpInput.style.display = "block";
                     backBtn.style.display = "block";
                 } else {
+                    handleHaptics('error');
                     openUpdate(lang().info.unknownmfa);
                 }
             } else if (resp.type === "Unauthorized") {
                 if (totpCode || recoveryCode) {
+                    handleHaptics('error');
                     openUpdate(lang().info.invalidotp);
                 } else {
+                    handleHaptics('error');
                     openUpdate(lang().info.invalidcreds);
                 }
             } else if (resp.type === "accountDeleted") {
+                handleHaptics('error');
                 openUpdate(lang().info.accdeleted);
             } else {
+                handleHaptics('error');
                 openUpdate(`${lang().info.unknown} ${resp.type}`);
             }
         } else {
@@ -1278,8 +1288,10 @@ function signup(username, password, captcha) {
         if (resp.error) {
             toggleLogin(false);
             if (resp.type === "usernameExists") {
+                handleHaptics('error');
                 openUpdate(lang().info.accexists);
             } else {
+                handleHaptics('error');
                 openUpdate(`${lang().info.unknown} ${resp.type}`);
             }
         } else {
@@ -1769,6 +1781,7 @@ function loadchat(chatId) {
             loadchat(chatId);
         })
         .catch(e => {
+            handleHaptics('error');
             openUpdate(`Unable to open chat: ${e}`);
             if (!settingsstuff().homepage) {
                 loadstart();
@@ -1881,7 +1894,6 @@ function loadchat(chatId) {
 
     const messageContainer = document.querySelector('.message-container');
     const jumpButton = document.querySelector('.jump');
-    messageContainer.setAttribute('onclick', "handleHaptics();");
     jumpButton.setAttribute('onclick', "handleHaptics();jumpToTop();");
     const navbarOffset = messageContainer.offsetHeight;
     const main = document.getElementById("main");
@@ -2567,6 +2579,30 @@ async function resetRecoveryCode() {
     }
 }
 
+function loadHapticPlayground() {
+    setTop();
+    let pageContainer = document.querySelector(".settings");
+    pageContainer.innerHTML = `
+        <h1>${lang().settings_hapticplayground}</h1>
+        <p>${lang().hapticplayground_sub.about}</p>
+
+        <h3>${lang().hapticplayground_sub.taps}</h3>
+        <div class="settings-buttons-row">
+            <button onclick="handleHaptics('single');" class="button blockeduser">${lang().hapticplayground_sub.single}</button>
+            <button onclick="handleHaptics('double');" class="button blockeduser">${lang().hapticplayground_sub.double}</button>
+            <button onclick="handleHaptics('triple');" class="button blockeduser">${lang().hapticplayground_sub.triple}</button>
+            <button onclick="handleHaptics('long');" class="button blockeduser">${lang().hapticplayground_sub.long}</button>
+        </div>
+
+        <h3>${lang().hapticplayground_sub.actions}</h3>
+        <div class="settings-buttons-row">
+            <button onclick="handleHaptics('error');" class="button blockeduser">${lang().hapticplayground_sub.error}</button>
+            <button onclick="handleHaptics('send');" class="button blockeduser">${lang().hapticplayground_sub.send}</button>
+            <button onclick="handleHaptics('receive');" class="button blockeduser">${lang().hapticplayground_sub.receive}</button>
+        </div>
+    `;
+}
+
 function createSettingSection(id, title, desc) {
     return `
         <div class="stg-section" id="${id}">
@@ -2758,6 +2794,7 @@ function chatSettings(chatId) {
 				loadchat(chatId);
 			})
 			.catch(e => {
+                handleHaptics('error');
 				openUpdate(`Unable to open chat: ${e}`);
 			});
 		return;
@@ -2884,6 +2921,7 @@ function chatMembers(chatId) {
 				loadchat(chatId);
 			})
 			.catch(e => {
+                handleHaptics('error');
 				openUpdate(`Unable to open chat: ${e}`);
 			});
 		return;
@@ -3055,6 +3093,7 @@ function chatSettings(chatId) {
 				loadchat(chatId);
 			})
 			.catch(e => {
+                handleHaptics('error');
 				openUpdate(`Unable to open chat: ${e}`);
 			});
 		return;
@@ -3181,6 +3220,7 @@ function chatMembers(chatId) {
 				loadchat(chatId);
 			})
 			.catch(e => {
+                handleHaptics('error');
 				openUpdate(`Unable to open chat: ${e}`);
 			});
 		return;
@@ -4139,9 +4179,11 @@ function closeImage() {
 function createChat() {
     const nickname = document.getElementById("chat-nick-input").value.trim();
     if (nickname.length < 1) {
+        handleHaptics('error');
         openUpdate("Chat nickname too short!");
         return;
     } else if (nickname.length > 20) {
+        handleHaptics('error');
         openUpdate("Chat nickname too long!");
         return;
     }
@@ -4163,6 +4205,7 @@ function createChat() {
             closemodal();
         })
         .catch(e => {
+            handleHaptics('error');
             openUpdate(`Failed to create chat: ${e}`);
         });
 }
@@ -6102,6 +6145,7 @@ function transferOwnership(chatId) {
         closemodal();
     })
     .catch(e => {
+        handleHaptics('error');
         openUpdate(`Failed to add member: ${e}`);
     });
 }
@@ -6125,6 +6169,7 @@ function addMembertoGC(chatId) {
         closemodal();
     })
     .catch(e => {
+        handleHaptics('error');
         openUpdate(`Failed to add member: ${e}`);
     });
 }
@@ -6144,14 +6189,17 @@ function removeMemberFromGC(chatId, user) {
     .then(data => {
         chatCache[data._id] = data;
         chatMembers(chatId);
+        handleHaptics('success');
         openUpdate(`Removed ${user}`);
     })
     .catch(e => {
+        handleHaptics('error');
         openUpdate(`Failed to remove member: ${e}`);
     });
 }
 
 function notify(u, p, location, val) {
+    handleHaptics('receive');
     let loc
     if (location === "home" || location === "livechat" || location == "inbox") {
         loc = location
@@ -6361,10 +6409,22 @@ function copy(text, message) {
     }
 }
 
-function handleHaptics() {
+const hapticPatterns = {
+    short: [10],
+    long: [500],
+    double: [10, 5, 10],
+    triple: [10, 5, 10, 5, 10],
+    error: [30, 10, 30],
+    send: [35, 30, 25, 20, 15, 10, 5],
+    receive: [5, 10, 15, 20, 25, 30, 35],
+};
+
+async function handleHaptics(patternName) {
     if (settingsstuff().haptics) {
         if ('vibrate' in navigator) {
-            navigator.vibrate(10);
+            const pattern = hapticPatterns[patternName] || [10];
+            navigator.vibrate(pattern);
+            // console.log(`Haptics: ${patternName}`);
         } else {
             console.warn('Haptics not supported on this device.');
         }
