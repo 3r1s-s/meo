@@ -697,7 +697,7 @@ function loadpost(p) {
 
     const pstinf = document.createElement("span");
     pstinf.classList.add("user-header")
-    pstinf.innerHTML = `<span id='username' onclick='openUsrModal("${user}")' data-username='${user}'>${user}</span>`;
+    pstinf.innerHTML = `<span id='username' onclick='openUsrModal("${user}")' data-user-title='${user}'>${user}</span>`;
 
     if (bridged || p.u == "Webhooks") {
         const bridged = document.createElement("bridge");
@@ -786,7 +786,6 @@ function loadpost(p) {
     
         wrapperDiv.appendChild(embedsDiv);
     }
-    
 
     postContainer.appendChild(wrapperDiv);
 
