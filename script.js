@@ -697,7 +697,7 @@ function loadpost(p) {
 
     const pstinf = document.createElement("span");
     pstinf.classList.add("user-header")
-    pstinf.innerHTML = `<span id='username' onclick='openUsrModal("${user}")'>${user}</span>`;
+    pstinf.innerHTML = `<span id='username' onclick='openUsrModal("${user}")' data-username='${user}'>${user}</span>`;
 
     if (bridged || p.u == "Webhooks") {
         const bridged = document.createElement("bridge");
@@ -5997,6 +5997,32 @@ function copy(text, message) {
         parent.closemodal(`${message}`);
     } else {
         parent.closemodal(`${lang().modals.copygc}`);
+    }
+}
+
+function createModal(data) {
+    document.documentElement.style.overflow = "hidden";
+    
+    const mdlbck = document.querySelector('.modal-back');
+    if (mdlbck) {
+        mdlbck.style.display = 'flex';
+        
+        const mdl = mdlbck.querySelector('.modal');
+        mdl.id = 'mdl-uptd';
+        if (mdl) {
+            const mdlt = mdl.querySelector('.modal-top');
+            if (mdlt) {
+                mdlt.innerHTML = `
+                <h3 class="mdl-title-stick">${data.title}</h3>
+                <span>${data.description}</span>
+                `;
+            }
+            const mdbt = mdl.querySelector('.modal-bottom');
+            if (mdbt) {
+                mdbt.innerHTML = `
+                `;
+            }
+        }
     }
 }
 
