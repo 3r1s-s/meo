@@ -524,9 +524,10 @@ function loadLogin() {
                 <input type="password" id="passinput" placeholder="${lang().meo_password}" class="login-text text" aria-label="password input" autocomplete="current-password">
                 <input type="text" id="otpinput" placeholder="${lang().meo_totp}" class="login-text text" aria-label="one-time-code input" autocomplete="one-time-code" style="display:none;">
                 <input type="button" id="login" value="${lang().action.login}" class="login-button button" onclick="toggleLogin(true);login()" aria-label="Register">
+                <input type="button" id="signup" value="${lang().action.signup}" class="login-button button" onclick="agreementModal()" aria-label="log in" style="display:none;">
                 <input type="button" id="back" value="${lang().action.back}" class="login-button button" onclick="loadLogin()" aria-label="back" style="display:none;">
                 <div class="login-sub">
-                <a onclick="toggleSignUp(false)">${lang().action.signup}</a>
+                <a onclick="toggleSignUp(false)" id="togglesignup">${lang().action.signup}</a>
                 <small>${lang().login_sub.desc}</small>
                 </div>
         </div>
@@ -583,9 +584,10 @@ function toggleSignUp(to) {
                 <input type="password" id="passinput" placeholder="${lang().meo_password}" class="login-text text" aria-label="password input" autocomplete="current-password">
                 <input type="text" id="otpinput" placeholder="${lang().meo_totp}" class="login-text text" aria-label="one-time-code input" autocomplete="one-time-code" style="display:none;">
                 <input type="button" id="login" value="${lang().action.login}" class="login-button button" onclick="toggleLogin(true);login()" aria-label="Register">
+                <input type="button" id="signup" value="${lang().action.signup}" class="login-button button" onclick="agreementModal()" aria-label="log in" style="display:none;">
                 <input type="button" id="back" value="${lang().action.back}" class="login-button button" onclick="loadLogin()" aria-label="back" style="display:none;">
                 <div class="login-sub">
-                <a onclick="toggleSignUp(false)">${lang().action.signup}</a>
+                <a onclick="toggleSignUp(false)" id="togglesignup">${lang().action.signup}</a>
                 <small>${lang().login_sub.desc}</small>
                 </div>
         `;
@@ -597,7 +599,7 @@ function toggleSignUp(to) {
             <input type="button" id="login" value="${lang().action.login}" class="login-button button" onclick="toggleLogin(true);login()" aria-label="Register" style="display:none;">
             <input type="button" id="signup" value="${lang().action.signup}" class="login-button button" onclick="agreementModal()" aria-label="log in">
             <div class="login-sub">
-            <a onclick="toggleSignUp(true)">${lang().action.login}</a>
+            <a onclick="toggleSignUp(true)" id="togglesignup">${lang().action.login}</a>
             <small>${lang().login_sub.desc}</small>
             </div>
 `;
@@ -1224,8 +1226,8 @@ function login() {
             toggleLogin(false);
             if (resp.type === "mfaRequired") {
                 if (resp.mfa_methods.includes("totp")) {
-                    loginHeader.innerText = lang().meo_welcomeback;
 
+                    userInput.style.display = "none";
                     userInput.style.display = "none";
                     passInput.style.display = "none";
                     signupBtn.style.display = "none";
