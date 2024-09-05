@@ -160,6 +160,11 @@ p {
     max-width: 480px;
 }
 
+.openin {
+    width: 100%;
+    height: 100%;
+}
+
 .openin:hover {
     text-decoration: none;
 }

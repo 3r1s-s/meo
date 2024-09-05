@@ -137,19 +137,18 @@ function fetchprofile() {
 }
 
 let embedded
+let urlParams = new URLSearchParams(window.location.search);
 
 if (window.self == window.top) {
-    const urlParams = new URLSearchParams(window.location.search);
+    const username = urlParams.get('u');
+    window.location.href = `../?openprofile=${username}`;
+    embedded = false;
+} else {
     const embed = urlParams.get('embed');
-
     if (embed === 'true') {
         document.body.classList.add("embedded");
         embedded = true;
-    } else {
-        const username = urlParams.get('u');
-        window.location.href = `../?openprofile=${username}`;
-        embedded = false;
-    }
+    } 
 }
 
 fetchprofile();
