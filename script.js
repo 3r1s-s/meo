@@ -2610,6 +2610,7 @@ function loadProfile() {
                 <h3>${lang().profile.update}</h3>
                 <div class="settings-buttons-row">
                     <button onclick="saveProfile()" id="profile-update" class="settings-button-in green">${lang().profile.update}</button>
+                    <button id="profile-embed" class="settings-button-in button">Copy Embed Code</button>
                 </div>
             </div>
         </div>
@@ -2685,6 +2686,8 @@ function loadProfile() {
             <span class="profile-qt">${quote}</span>
         </div>
         `;
+
+        document.getElementById("profile-embed").setAttribute("onclick", `copy('<iframe src="${meourl}profile/index.html?u=${data._id}&embed=true" frameborder="0" width="400px" height="400px" style="width: 400px; height: 400px; border-radius: 6px; box-shadow: 0 5px 10px #00000050;"></iframe>', 'Profile Embed Code Copied')`);
         
         profilecont.innerHTML += profileContent;
 
