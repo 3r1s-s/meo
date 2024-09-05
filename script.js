@@ -2687,7 +2687,7 @@ function loadProfile() {
         </div>
         `;
 
-        document.getElementById("profile-embed").setAttribute("onclick", `copy('<iframe src="${meourl}/profile/index.html?u=${data._id}&embed=true" frameborder="0" width="400px" height="400px" style="width: 400px; height: 400px; border-radius: 6px; box-shadow: 0 5px 10px #00000050;"></iframe>', 'Profile Embed Code Copied')`);
+        document.getElementById("profile-embed").setAttribute("onclick", `copy('<iframe src="${meourl}/profile/index.html?u=${data._id}&embed=true" frameborder="0" width="340px" height="340px" style="width: 340px; height: 340px; border-radius: 6px; box-shadow: 0 5px 10px #00000050;"></iframe>', 'Profile Embed Code Copied')`);
         
         profilecont.innerHTML += profileContent;
 
