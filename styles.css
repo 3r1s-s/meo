@@ -3082,6 +3082,81 @@ possible future styling
     margin: 0;
 }
 
+.scratch-embed {
+    border-radius: 8px;
+    padding: 12px;
+    max-width: 240px;
+    height: 215px;
+    background-color: #282828;
+    border: 1px solid #606060;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    gap: 10px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.turbowarp-embed {
+    border-radius: 5px;
+    padding: 12px;
+    max-width: 240px;
+    height: 215px;
+    background-color: #222;
+    border-top: 6px solid rgb(255, 76, 76);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    gap: 10px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.scratch-thumbnail {
+    border-radius: 4px;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 3;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.scratch-title {
+    font-size: 16px;
+    font-weight: 600;
+    width: 100%;
+    overflow: hidden;
+}
+
+.scratch-link {
+    color: #ccb3ff;
+    text-decoration: none;
+    width: 100%;
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.scratch-link:hover {
+    color: #b8a1e6;
+    text-decoration: none;
+}
+
+.turbowarp-link {
+    color: #eee;
+    text-decoration: none;
+    width: 100%;
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.turbowarp-link:hover {
+    color: #dadada;
+    text-decoration: none;
+}
+
 @media screen and (max-width: 720px) {
     html {
         scrollbar-gutter: none;
