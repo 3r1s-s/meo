@@ -2633,7 +2633,7 @@ function loadHapticPlayground() {
     `;
 }
 
-function createSettingSection(id, title, desc) {
+function createSettingSection(id, title, desc, exp) {
     return `
         <div class="stg-section" id="${id}">
             <label class="general-label">
