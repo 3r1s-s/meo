@@ -6030,6 +6030,28 @@ function createModal(data) {
     }
 }
 
+load()
+
+function load() {
+    const loading = document.querySelector('#loading');
+    if (loading) {
+        let loadpre = 0;
+        const interval = setInterval(() => {
+            loadpre += Math.random() * 5;
+            loading.style.setProperty('--load', `${loadpre}%`);
+            
+
+            if (loadpre >= 100) {
+                clearInterval(interval);
+                meoStart();
+            }
+        }, 25);
+    }
+}
+
+
 // work on this
-main();
-setInterval(ping, 25000);
+function meoStart() {
+    main();
+    setInterval(ping, 25000);
+}

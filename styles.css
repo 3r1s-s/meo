@@ -227,6 +227,7 @@ video {
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
 }
 
 .launch-logo {
@@ -3155,6 +3156,32 @@ possible future styling
 .turbowarp-link:hover {
     color: #dadada;
     text-decoration: none;
+}
+
+.loading-bar::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 16px;
+    background: #494460;
+    width: var(--load);
+    box-sizing: border-box;
+    border-top-right-radius: 100px;
+    border-bottom-right-radius: 100px;
+/*    box-shadow: inset 0px -4px 15px #07060880; */
+}
+
+.loading-bar {
+    height: 16px;
+    width: 200px;
+    background: var(--dark-accent);
+    transform: translateY(75px);
+    border-radius: 100px;
+    overflow: hidden;
+    position: relative;
+    box-sizing: border-box;
+/*    box-shadow: inset 0px 1px 8px #00000047; */
 }
 
 @media screen and (max-width: 720px) {
