@@ -26,7 +26,6 @@ if (settingsstuff().homepage) {
 } else {
     pre = "start"
 }
-
 let meourl = 'https://leo.atticat.tech';
 let bridges = ['Discord', 'SplashBridge', 'gc', 'Revower'];
 
@@ -554,20 +553,22 @@ function main() {
         }
     });
 }
-
 function loadLogin() {
     const pageContainer = document.getElementById("main");
     pageContainer.innerHTML =
         `<div class='login'>
         <div class='login-inner'>
-            <h2 id="login-header" class="login-header">${lang().meo_welcome}</h2>
-            <input type='text' id='userinput' placeholder='${lang().meo_username}' class='login-text text' aria-label="username input" autocomplete="username">
-            <input type='password' id='passinput' placeholder='${lang().meo_password}' class='login-text text' aria-label="password input" autocomplete="current-password">
-            <input type='text' id='otpinput' placeholder='${lang().meo_totp}' class='login-text text' aria-label="one-time-code input" autocomplete="one-time-code" style="display:none;">
-            <input type='button' id='login' value='${lang().action.login}' class='login-button button' onclick='toggleLogin(true);login();handleHaptics();' aria-label="Register">
-            <input type='button' id='signup' value='${lang().action.signup}' class='login-button button' onclick='agreementModal();handleHaptics();' aria-label="log in">
-            <input type='button' id='back' value='${lang().action.back}' class='login-button button' onclick='loadLogin();handleHaptics();' aria-label="back" style="display:none;">
-            <small>${lang().login_sub.desc}</small>
+                <h2 id="login-header" class="login-header">${lang().meo_welcome}</h2>
+                <input type="text" id="userinput" placeholder="${lang().meo_username}" class="login-text text" aria-label="username input" autocomplete="username">
+                <input type="password" id="passinput" placeholder="${lang().meo_password}" class="login-text text" aria-label="password input" autocomplete="current-password">
+                <input type="text" id="otpinput" placeholder="${lang().meo_totp}" class="login-text text" aria-label="one-time-code input" autocomplete="one-time-code" style="display:none;">
+                <input type="button" id="login" value="${lang().action.login}" class="login-button button" onclick="toggleLogin(true);login();handleHaptics();" aria-label="Register">
+                <input type="button" id="signup" value="${lang().action.signup}" class="login-button button" onclick="agreementModal();handleHaptics();" aria-label="log in" style="display:none;">
+                <input type="button" id="back" value="${lang().action.back}" class="login-button button" onclick="loadLogin();handleHaptics();" aria-label="back" style="display:none;">
+                <div class="login-sub">
+                <a onclick="toggleSignUp(false)" id="togglesignup">${lang().action.signup}</a>
+                <small>${lang().login_sub.desc}</small>
+                </div>
         </div>
         <div class="login-top">
             <select id="login-language-sel" onchange="loginLang(this.value)">
@@ -609,6 +610,36 @@ function loadLogin() {
         <div id='msgs'></div>
     </div>
     `;
+}
+
+function toggleSignUp(to) {
+    if (to) {        
+        document.querySelector(".login-inner").innerHTML = `
+                <h2 id="login-header" class="login-header">${lang().meo_welcome}</h2>
+                <input type="text" id="userinput" placeholder="${lang().meo_username}" class="login-text text" aria-label="username input" autocomplete="username">
+                <input type="password" id="passinput" placeholder="${lang().meo_password}" class="login-text text" aria-label="password input" autocomplete="current-password">
+                <input type="text" id="otpinput" placeholder="${lang().meo_totp}" class="login-text text" aria-label="one-time-code input" autocomplete="one-time-code" style="display:none;">
+                <input type="button" id="login" value="${lang().action.login}" class="login-button button" onclick="toggleLogin(true);login()" aria-label="Register">
+                <input type="button" id="signup" value="${lang().action.signup}" class="login-button button" onclick="agreementModal()" aria-label="log in" style="display:none;">
+                <input type="button" id="back" value="${lang().action.back}" class="login-button button" onclick="loadLogin()" aria-label="back" style="display:none;">
+                <div class="login-sub">
+                <a onclick="toggleSignUp(false)" id="togglesignup">${lang().action.signup}</a>
+                <small>${lang().login_sub.desc}</small>
+                </div>
+        `;
+    } else {
+        document.querySelector(".login-inner").innerHTML = `
+            <h2 id="login-header" class="login-header">${lang().meo_hello}</h2>
+            <input type="text" id="userinput" placeholder="${lang().meo_username}" class="login-text text" aria-label="username input" autocomplete="username">
+            <input type="password" id="passinput" placeholder="${lang().meo_password}" class="login-text text" aria-label="password input" autocomplete="current-password">
+            <input type="button" id="login" value="${lang().action.login}" class="login-button button" onclick="toggleLogin(true);login()" aria-label="Register" style="display:none;">
+            <input type="button" id="signup" value="${lang().action.signup}" class="login-button button" onclick="agreementModal()" aria-label="log in">
+            <div class="login-sub">
+            <a onclick="toggleSignUp(true)" id="togglesignup">${lang().action.login}</a>
+            <small>${lang().login_sub.desc}</small>
+            </div>
+`;
+    }
 }
 
 function loadpost(p) {
@@ -704,7 +735,7 @@ function loadpost(p) {
 
     const pstinf = document.createElement("span");
     pstinf.classList.add("user-header")
-    pstinf.innerHTML = `<span id='username' onclick='openUsrModal("${user}");handleHaptics();'>${user}</span>`;
+    pstinf.innerHTML = `<span id='username' onclick='openUsrModal("${user}");handleHaptics();' data-user-title='${user}'>${user}</span>`;
 
     if (bridged || p.u == "Webhooks") {
         const bridged = document.createElement("bridge");
@@ -792,7 +823,6 @@ function loadpost(p) {
 
         wrapperDiv.appendChild(embedsDiv);
     }
-
 
     postContainer.appendChild(wrapperDiv);
 
@@ -1233,8 +1263,8 @@ function login() {
             toggleLogin(false);
             if (resp.type === "mfaRequired") {
                 if (resp.mfa_methods.includes("totp")) {
-                    loginHeader.innerText = lang().meo_welcomeback;
 
+                    userInput.style.display = "none";
                     userInput.style.display = "none";
                     passInput.style.display = "none";
                     signupBtn.style.display = "none";
@@ -2050,8 +2080,8 @@ function loadGeneral() {
         ${createSettingSection("ulist", lang().general_list.title.ulist, lang().general_list.desc.ulist)}
         ${createSettingSection("blockedmessages", lang().general_list.title.blockedmessages, lang().general_list.desc.blockedmessages)}
         ${createSettingSection("censorwords", lang().general_list.title.censorwords, lang().general_list.desc.censorwords)}
-        ${createSettingSection("notifications", lang().general_list.title.notifications, lang().general_list.desc.notifications)}
-        ${createSettingSection("haptics", lang().general_list.title.haptics, lang().general_list.desc.haptics)}
+        ${createSettingSection("notifications", lang().general_list.title.notifications, lang().general_list.desc.notifications, 1)}
+        ${createSettingSection("haptics", lang().general_list.title.haptics, lang().general_list.desc.haptics, 1)}
         </div>
         <h3>${lang().general_sub.accessibility}</h3>
         <div class="settings-section-outer">
@@ -2063,8 +2093,8 @@ function loadGeneral() {
         <h3>${lang().general_sub.misc}</h3>
         <div class="settings-section-outer">
         ${createSettingSection("consolewarnings", lang().general_list.title.consolewarnings, lang().general_list.desc.consolewarnings)}
-        ${createSettingSection("widemode", lang().general_list.title.widemode, lang().general_list.desc.widemode)}
-        ${createSettingSection("compactmode", lang().general_list.title.compactmode, lang().general_list.desc.compactmode)}
+        ${createSettingSection("widemode", lang().general_list.title.widemode, lang().general_list.desc.widemode, 1)}
+        ${createSettingSection("compactmode", lang().general_list.title.compactmode, lang().general_list.desc.compactmode, 1)}
         </div>
         <h3>${lang().general_sub.privacy}</h3>
         <div class="fun-buttons">
@@ -2603,12 +2633,12 @@ function loadHapticPlayground() {
     `;
 }
 
-function createSettingSection(id, title, desc) {
+function createSettingSection(id, title, desc, exp) {
     return `
         <div class="stg-section" id="${id}">
             <label class="general-label">
                 <div class="general-desc">
-                    ${title}
+                    ${title}${exp ? ` <bridge>Experimental</bridge>` : ``}
                     <p class="subsubheader">${desc}</p>
                 </div>
                 <div class="settingstoggle" onclick="handleHaptics();">
@@ -2674,6 +2704,7 @@ function loadProfile() {
                 <h3>${lang().profile.update}</h3>
                 <div class="settings-buttons-row">
                     <button onclick="saveProfile();handleHaptics();" id="profile-update" class="settings-button-in green">${lang().profile.update}</button>
+                    <button id="profile-embed" class="settings-button-in button">Copy Embed Code</button>
                 </div>
             </div>
         </div>
@@ -2745,6 +2776,8 @@ function loadProfile() {
             <span class="profile-qt">${quote}</span>
         </div>
         `;
+
+        document.getElementById("profile-embed").setAttribute("onclick", `copy('<iframe src="${meourl}/profile/index.html?u=${data._id}&embed=true" frameborder="0" width="340px" height="340px" style="width: 340px; height: 340px; border-radius: 6px; box-shadow: 0 5px 10px #00000050;"></iframe>', 'Profile Embed Code Copied')`);
         
         profilecont.innerHTML += profileContent;
 
@@ -4056,12 +4089,14 @@ function ping() {
 
 function launchscreen() {
     page = "load";
-    const green = `<div class="launch">
+    const green = `
+    <div class="launch">
         <svg class="launch-logo" width="128" height="128" viewBox="0 0 512 512" fill="var(--color)" xmlns="http://www.w3.org/2000/svg">
         <g>
             <path d="M468.42 20.5746L332.997 65.8367C310.218 58.8105 284.517 55.049 255.499 55.6094C226.484 55.049 200.78 58.8105 178.004 65.8367L42.5803 20.5746C18.9102 16.3251 -1.81518 36.2937 2.5967 59.1025L38.7636 200.894C18.861 248.282 12.1849 296.099 12.1849 325.027C12.1849 399.343 44.6613 492 255.499 492C466.339 492 498.815 399.343 498.815 325.027C498.815 296.099 492.139 248.282 472.237 200.894L508.404 59.1025C512.814 36.2937 492.09 16.3251 468.42 20.5746Z"/>
         </g>
         </svg>
+        <span onclick="clearLocalstorage();" class="launch-reset">Having problems? Click here to try a force reset</span>
     </div>`
     const orange = document.getElementById("main");
     orange.innerHTML = green;
@@ -6431,6 +6466,53 @@ async function handleHaptics(patternName) {
     }
 }
 
+function createModal(data) {
+    document.documentElement.style.overflow = "hidden";
+    
+    const mdlbck = document.querySelector('.modal-back');
+    if (mdlbck) {
+        mdlbck.style.display = 'flex';
+        
+        const mdl = mdlbck.querySelector('.modal');
+        mdl.id = 'mdl-uptd';
+        if (mdl) {
+            const mdlt = mdl.querySelector('.modal-top');
+            if (mdlt) {
+                mdlt.innerHTML = `
+                <h3 class="mdl-title-stick">${data.title}</h3>
+                <span>${data.description}</span>
+                `;
+            }
+            const mdbt = mdl.querySelector('.modal-bottom');
+            if (mdbt) {
+                mdbt.innerHTML = `
+                `;
+            }
+        }
+    }
+}
+
+load()
+
+function load() {
+    const loading = document.querySelector('#loading');
+    if (loading) {
+        let loadpre = 0;
+        const interval = setInterval(() => {
+            loadpre += Math.random() * 5;
+            loading.style.setProperty('--load', `${loadpre}%`);
+            
+
+            if (loadpre >= 100) {
+                clearInterval(interval);
+                meoStart();
+            }
+        }, 25);
+    }
+}
+
 // work on this
-main();
-setInterval(ping, 25000);
+function meoStart() {
+    main();
+    setInterval(ping, 25000);
+}

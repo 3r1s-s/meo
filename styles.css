@@ -227,10 +227,22 @@ video {
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
 }
 
 .launch-logo {
     animation: infinite 1s ease-in-out spin;
+}
+
+.launch-reset {
+    position: fixed;
+    bottom: 12px;
+    opacity: 0.5;
+    font-size: 12px;
+}
+
+.launch-reset:hover {
+    cursor: pointer;
 }
 
 .embed {
@@ -537,6 +549,21 @@ img.embed {
     align-items: center;
     gap: 10px;
     box-sizing: border-box;
+}
+
+.login-sub {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.login-sub > a {
+    font-size: 14px;
+    user-select: none;
+}
+
+.login-sub > a:hover {
+    cursor: pointer;
 }
 
 .info-button {
@@ -3054,6 +3081,107 @@ possible future styling
 
 .profile-qt > p {
     margin: 0;
+}
+
+.scratch-embed {
+    border-radius: 8px;
+    padding: 12px;
+    max-width: 240px;
+    height: 215px;
+    background-color: #282828;
+    border: 1px solid #606060;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    gap: 10px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.turbowarp-embed {
+    border-radius: 5px;
+    padding: 12px;
+    max-width: 240px;
+    height: 215px;
+    background-color: #222;
+    border-top: 6px solid rgb(255, 76, 76);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    gap: 10px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.scratch-thumbnail {
+    border-radius: 4px;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 3;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.scratch-title {
+    font-size: 16px;
+    font-weight: 600;
+    width: 100%;
+    overflow: hidden;
+}
+
+.scratch-link {
+    color: #ccb3ff;
+    text-decoration: none;
+    width: 100%;
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.scratch-link:hover {
+    color: #b8a1e6;
+    text-decoration: none;
+}
+
+.turbowarp-link {
+    color: #eee;
+    text-decoration: none;
+    width: 100%;
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.turbowarp-link:hover {
+    color: #dadada;
+    text-decoration: none;
+}
+
+.loading-bar::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 16px;
+    background: #494460;
+    width: var(--load);
+    box-sizing: border-box;
+    border-top-right-radius: 100px;
+    border-bottom-right-radius: 100px;
+/*    box-shadow: inset 0px -4px 15px #07060880; */
+}
+
+.loading-bar {
+    height: 16px;
+    width: 200px;
+    background: var(--dark-accent);
+    transform: translateY(75px);
+    border-radius: 100px;
+    overflow: hidden;
+    position: relative;
+    box-sizing: border-box;
+/*    box-shadow: inset 0px 1px 8px #00000047; */
 }
 
 @media screen and (max-width: 720px) {

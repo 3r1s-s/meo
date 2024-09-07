@@ -81,7 +81,7 @@ const en = {
     "meo_messagebox": Math.random() < 1/25 ? "Whar's on your mind?" : "What's on your mind?",
     "meo_goanywhere": "Where would you like to go?",
     "meo_welcome": "Welcome!",
-    "meo_welcomeback": "Welcome back!", // update
+    "meo_hello": "Hello!", // update
     "meo_userson": "users online",
     "meo_members": "members",
     "meo_bridged": {
@@ -131,11 +131,11 @@ const en = {
             "magnify": "Magnify text",
             "entersend": "Don't send on Enter",
             "hideimages": "Hide images",
-            "notifications": "Allow Notifications <bridge>Experimental</bridge>",
-            "haptics": "Haptic Feedback <bridge>Experimental</bridge>",
-            "widemode": "New Desktop Experience <bridge>Experimental</bridge>",
-            "discord": "Discord Post Layout <bridge>Experimental</bridge>",
-            "compactmode": "Compact Mode <bridge>Experimental</bridge>",
+            "notifications": "Allow Notifications",
+            "haptics": "Haptic Feedback",
+            "widemode": "New Desktop Experience",
+            "discord": "Discord Post Layout",
+            "compactmode": "Compact Mode",
             "ulist": "Online Userlist",
         },
         "desc": {
@@ -863,7 +863,7 @@ const fr = {
     "meo_messagebox": "What's on your mind?",
     "meo_goanywhere": "Où dèsires-tu aller ?",
     "meo_welcome": "Bienvenue !",
-    "meo_welcomeback": "Bienvenue !",
+    "meo_hello": "Bonjour !",
     "meo_userson": "utilisateurs en ligne",
     "meo_members": "membres",
     "meo_bridged": {
@@ -931,10 +931,10 @@ const fr = {
             "magnify": "Enlargens and bolds text to be easier to read with poor eyesight (Requires refresh)",
             "entersend": "Enter key creates newlines instead of sending the post",
             "hideimages": "Blurs images before opening them",
-            "notifications": "This will ask for notification permissions (Experimental)",
-            "widemode": "Enables new desktop experience (Experiemental, Requires refresh)",
-            "discord": "Reverses the post order to be more like Discord (Experiemental, Requires refresh)",
-            "compactmode": "Makes posts take up less space, for viewing more posts at a time (Experiemental, Requires refresh)",
+            "notifications": "This will ask for notification permissions",
+            "widemode": "Enables new desktop experience (Requires refresh)",
+            "discord": "Reverses the post order to be more like Discord (Requires refresh)",
+            "compactmode": "Makes posts take up less space, for viewing more posts at a time (Requires refresh)",
             "ulist": "Shows the list of users online on the home page",
         }
     },
@@ -1624,9 +1624,9 @@ const sj = {
             "magnify": "Enlargens and bolds text to be easier to read with poor eyesight (Requires refresh)",
             "entersend": "Enter key creates newlines instead of sending the post",
             "hideimages": "Blurs images before opening them",
-            "notifications": "This will ask for notification permissions (Experimental)",
-            "widemode": "Enables new desktop experience (Experiemental, Requires refresh)",
-            "discord": "Reverses the post order to be more like Discord (Experiemental, Requires refresh)",
+            "notifications": "This will ask for notification permissions",
+            "widemode": "Enables new desktop experience (Requires refresh)",
+            "discord": "Reverses the post order to be more like Discord (Requires refresh)",
         }
     },
     "appearance_sub": {

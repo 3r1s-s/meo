@@ -349,6 +349,52 @@ function embed(links) {
                     embeddedElement.setAttribute("allow", "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share");
                     embeddedElement.setAttribute("allowfullscreen", "");
                 }
+            } else if (link.includes('scratch.mit.edu/projects/')) {
+                console.warn(link);
+                const regex = /projects\/(\d+)/;
+                const match = link.match(regex);
+                if (match) {
+                    const trackId = match[1];
+
+                    embeddedElement = document.createElement("div");
+                    embeddedElement.classList.add("scratch-embed");
+
+                    const request = new XMLHttpRequest();
+                    request.open('GET', `https://trampoline.turbowarp.org/api/projects/${trackId}`);
+                    request.onload = () => {
+                        const data = JSON.parse(request.responseText);
+                        embeddedElement.innerHTML = `
+                        <a href="https://scratch.mit.edu/projects/${trackId}/" target="_blank"><div class="scratch-thumbnail" style="background-image: url(https://cdn.scratch.mit.edu/get_image/project/${trackId}_1080x1080.png);"></div></a>
+                        <div class="scratch-title"><a href="https://scratch.mit.edu/projects/${trackId}/" target="_blank" class="scratch-link">${data.title}</a></div>
+                        `
+                    }
+                    request.send();
+                    
+                    embeddedElement.classList.add("media");
+                }
+            } else if (link.includes('turbowarp.org/')) {
+                console.warn(link);
+                const regex = /\/(\d+)/;
+                const match = link.match(regex);
+                if (match) {
+                    const trackId = match[1];
+
+                    embeddedElement = document.createElement("div");
+                    embeddedElement.classList.add("turbowarp-embed");
+
+                    const request = new XMLHttpRequest();
+                    request.open('GET', `https://trampoline.turbowarp.org/api/projects/${trackId}`);
+                    request.onload = () => {
+                        const data = JSON.parse(request.responseText);
+                        embeddedElement.innerHTML = `
+                        <a href="https://turbowarp.org/${trackId}/" target="_blank"><div class="scratch-thumbnail" style="background-image: url(https://cdn.scratch.mit.edu/get_image/project/${trackId}_1080x1080.png);"></div></a>
+                        <div class="scratch-title"><a href="https://turbowarp.org/${trackId}/" target="_blank" class="turbowarp-link">${data.title}</a></div>
+                        `
+                    }
+                    request.send();
+                    
+                    embeddedElement.classList.add("media");
+                }
             } else if (link.includes('open.spotify.com/track')) {
                 const spotifyRegex = /track\/([a-zA-Z0-9]+)/;
                 const match = link.match(spotifyRegex);
