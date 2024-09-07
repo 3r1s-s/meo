@@ -2017,7 +2017,7 @@ function loadGeneral() {
         ${createSettingSection("ulist", lang().general_list.title.ulist, lang().general_list.desc.ulist)}
         ${createSettingSection("blockedmessages", lang().general_list.title.blockedmessages, lang().general_list.desc.blockedmessages)}
         ${createSettingSection("censorwords", lang().general_list.title.censorwords, lang().general_list.desc.censorwords)}
-        ${createSettingSection("notifications", lang().general_list.title.notifications, lang().general_list.desc.notifications)}
+        ${createSettingSection("notifications", lang().general_list.title.notifications, lang().general_list.desc.notifications, 1)}
         </div>
         <h3>${lang().general_sub.accessibility}</h3>
         <div class="settings-section-outer">
@@ -2029,8 +2029,8 @@ function loadGeneral() {
         <h3>${lang().general_sub.misc}</h3>
         <div class="settings-section-outer">
         ${createSettingSection("consolewarnings", lang().general_list.title.consolewarnings, lang().general_list.desc.consolewarnings)}
-        ${createSettingSection("widemode", lang().general_list.title.widemode, lang().general_list.desc.widemode)}
-        ${createSettingSection("compactmode", lang().general_list.title.compactmode, lang().general_list.desc.compactmode)}
+        ${createSettingSection("widemode", lang().general_list.title.widemode, lang().general_list.desc.widemode, 1)}
+        ${createSettingSection("compactmode", lang().general_list.title.compactmode, lang().general_list.desc.compactmode, 1)}
         </div>
         <h3>${lang().general_sub.privacy}</h3>
         <div class="fun-buttons">
@@ -2543,12 +2543,12 @@ async function resetRecoveryCode() {
     }
 }
 
-function createSettingSection(id, title, desc) {
+function createSettingSection(id, title, desc, exp) {
     return `
         <div class="stg-section" id="${id}">
             <label class="general-label">
                 <div class="general-desc">
-                    ${title}
+                    ${title}${exp ? ` <bridge>Experimental</bridge>` : ``}
                     <p class="subsubheader">${desc}</p>
                 </div>
                 <div class="settingstoggle">
@@ -6048,7 +6048,6 @@ function load() {
         }, 25);
     }
 }
-
 
 // work on this
 function meoStart() {
