@@ -3625,6 +3625,13 @@ possible future styling
     #chat-photo::file-selector-button:hover, #profile-photo::file-selector-button:hover {
         background-color: var(--accent-color);
     }
+
+    .launch-reset {
+        bottom: 40px;
+        width: 100%;
+        left: 0;
+        text-align: center;
+    }
 }
 
 .reduced-ani.modal, .reduced-ani.image-mdl > .embed-large {
