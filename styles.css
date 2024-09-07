@@ -17,6 +17,7 @@ body {
     background-size: cover;
     background-repeat: no-repeat;
     background-attachment: fixed;
+    display: block !important;
 }
 
 input {
@@ -1124,6 +1125,7 @@ possible future styling
 
 .ext-icon {
     border-radius: 15px;
+    user-select: none;
 }
 
 .icon {
@@ -3169,6 +3171,7 @@ possible future styling
     box-sizing: border-box;
     border-top-right-radius: 100px;
     border-bottom-right-radius: 100px;
+    transition: width 0.05s ease-in-out;
 /*    box-shadow: inset 0px -4px 15px #07060880; */
 }
 

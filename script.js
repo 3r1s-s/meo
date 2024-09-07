@@ -26,6 +26,7 @@ if (settingsstuff().homepage) {
 } else {
     pre = "start"
 }
+let loadpre = 0;
 let meourl = 'https://eris.pages.dev/meo';
 
 let bridges = ['Discord', 'SplashBridge', 'gc'];
@@ -168,6 +169,7 @@ function main() {
     }
 
     meowerConnection.onopen = () => {
+        document.querySelector('#loading').style.setProperty('--load', `100%`);
         if (localStorage.getItem("token") != undefined && localStorage.getItem("username") != undefined) {
             meowerConnection.send(JSON.stringify({
                 cmd: "authpswd",
@@ -6030,27 +6032,6 @@ function createModal(data) {
     }
 }
 
-load()
-
-function load() {
-    const loading = document.querySelector('#loading');
-    if (loading) {
-        let loadpre = 0;
-        const interval = setInterval(() => {
-            loadpre += Math.random() * 5;
-            loading.style.setProperty('--load', `${loadpre}%`);
-            
-
-            if (loadpre >= 100) {
-                clearInterval(interval);
-                meoStart();
-            }
-        }, 25);
-    }
-}
-
 // work on this
-function meoStart() {
-    main();
-    setInterval(ping, 25000);
-}
+main();
+setInterval(ping, 25000);
