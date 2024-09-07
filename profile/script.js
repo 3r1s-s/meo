@@ -18,6 +18,13 @@ function fetchprofile() {
                 profilecont.classList.add('custom-bg');
                 profilecont.style.setProperty('--accent', lightenColour(data.avatar_color, 2));
                 profilecont.style.setProperty('--color', lightenColour(data.avatar_color, 1.25));
+                if (embedded) {
+                    const clr1 = darkenColour(data.avatar_color, 3);
+                    const clr2 = darkenColour(data.avatar_color, 5);
+                    document.body.style.background = `linear-gradient(180deg, ${clr1} 0%, ${clr2} 100%`;
+                    document.body.style.setProperty('--accent', clr1);
+                    document.body.classList.add('custom-bg');
+                }
             }
 
             if (data.avatar) {
@@ -39,12 +46,12 @@ function fetchprofile() {
             
             if (typeof md !== 'undefined') {
                 md.disable(['image']);
-                quote = erimd(md.render(data.quote).replace(/<a(.*?)>/g, '<a$1 target="_blank">'));
-                
                 const regex = /\[(.*?)\]/;
-                const match = quote.match(regex);
+                let match = data.quote.match(regex);
                 pronouns = match ? match[1] : "";
-                quote = quote.replace(regex, '');                                                      
+                
+                quote = data.quote.replace(regex, '');
+                quote = erimd(md.render(quote).replace(/<a(.*?)>/g, '<a$1 target="_blank">'));                                            
             } else {
                 quote = oldMarkdown(data.quote);
                 console.error("Parsed with old markdown, fix later :)");
@@ -82,10 +89,18 @@ function fetchprofile() {
             if (data._id === localStorage.getItem('username')) {
                 profilecont.innerHTML += `
                 `;
-            }                    
+            }
             
-            document.getElementById('page').appendChild(profilecont);
-
+            if (embedded) {
+                const href = document.createElement('a');
+                href.href = `../?openprofile=${data._id}`;
+                href.classList.add('openin');
+                href.appendChild(profilecont);
+                document.getElementById('page').appendChild(href);
+            } else {
+                document.getElementById('page').appendChild(profilecont);
+            }
+            
             const check = document.querySelector(".avatar-big");
             const pfpUrl = `../images/avatars/icon_${data.pfp_data - 1}.svg`;
             fetch(pfpUrl)
@@ -120,10 +135,19 @@ function fetchprofile() {
     }
 }
 
+let embedded
+let urlParams = new URLSearchParams(window.location.search);
+
 if (window.self == window.top) {
-    const urlParams = new URLSearchParams(window.location.search);
     const username = urlParams.get('u');
     window.location.href = `../?openprofile=${username}`;
+    embedded = false;
+} else {
+    const embed = urlParams.get('embed');
+    if (embed === 'true') {
+        document.body.classList.add("embedded");
+        embedded = true;
+    } 
 }
 
 fetchprofile();
@@ -293,4 +317,10 @@ function copy(text) {
     document.execCommand('copy');
     document.body.removeChild(t);
     parent.closemodal(`${lang().modals.copyuser}`);
+}
+
+function handleHaptics() {
+    if (settingsstuff().haptics) {
+        navigator.vibrate(50);
+    }
 }

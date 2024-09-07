@@ -145,3 +145,26 @@ p {
     right: 0;
     text-align: center;
 }
+
+.embedded {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 15px;
+    box-sizing: border-box;
+}
+
+.embedded #page {
+    width: 100%;
+    max-width: 480px;
+}
+
+.openin {
+    width: 100%;
+    height: 100%;
+}
+
+.openin:hover {
+    text-decoration: none;
+}
