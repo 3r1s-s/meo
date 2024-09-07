@@ -131,19 +131,17 @@ function buttonbadges(content) {
         if (settingsstuff().underlinelinks) {
             link.classList.add("underline");
         }
-        const url = link.getAttribute('href');
-        const fileExtension = url.split('.').pop().toLowerCase().split('?')[0];
-        const fileDomain = url.includes('tenor.com/view');
-        
+
+        const url = new URL(link.getAttribute('href'));
+        const fileExtension = url.pathname.split('.').pop().toLowerCase().split('?')[0];
+        const fileDomain = url.href.includes('tenor.com/view');
+
         if ((['png', 'jpg', 'jpeg', 'webp', 'gif', 'mp4', 'webm', 'mov', 'm4v', 'svg'].includes(fileExtension)) || fileDomain) {
-            link.classList.add('attachment');
-            link.classList.add('tooltip');
-            link.classList.add('bottom');
-            link.classList.add('right');
-            link.classList.add('long');
-            link.setAttribute('data-tooltip', url);
-            link.innerHTML = '<svg class="icon_ecf39b icon__13ad2" xmlns="http://www.w3.org/2000/svg" width="0.8em" height="0.8em" viewBox="0 0 24 24"><path fill="currentColor" d="M10.57 4.01a6.97 6.97 0 0 1 9.86 0l.54.55a6.99 6.99 0 0 1 0 9.88l-7.26 7.27a1 1 0 0 1-1.42-1.42l7.27-7.26a4.99 4.99 0 0 0 0-7.06L19 5.43a4.97 4.97 0 0 0-7.02 0l-8.02 8.02a3.24 3.24 0 1 0 4.58 4.58l6.24-6.24a1.12 1.12 0 0 0-1.58-1.58l-3.5 3.5a1 1 0 0 1-1.42-1.42l3.5-3.5a3.12 3.12 0 1 1 4.42 4.42l-6.24 6.24a5.24 5.24 0 0 1-7.42-7.42l8.02-8.02Z" class=""></path></svg><span> attachments</span>';
-        } else if (url === "https://eris.pages.dev/meo/" || url === "https://eris.pages.dev/meo/") {
+            link.classList.add('attachment', 'tooltip', 'bottom', 'right', 'long');
+            link.setAttribute('data-tooltip', url.href);
+            link.innerHTML = `<svg class="icon_ecf39b icon__13ad2" xmlns="http://www.w3.org/2000/svg" width="0.8em" height="0.8em" viewBox="0 0 24 24">
+                <path fill="currentColor" d="M10.57 4.01a6.97 6.97 0 0 1 9.86 0l.54.55a6.99 6.99 0 0 1 0 9.88l-7.26 7.27a1 1 0 0 1-1.42-1.42l7.27-7.26a4.99 4.99 0 0 0 0-7.06L19 5.43a4.97 4.97 0 0 0-7.02 0l-8.02 8.02a3.24 3.24 0 1 0 4.58 4.58l6.24-6.24a1.12 1.12 0 0 0-1.58-1.58l-3.5 3.5a1 1 0 0 1-1.42-1.42l3.5-3.5a3.12 3.12 0 1 1 4.42 4.42l-6.24 6.24a5.24 5.24 0 0 1-7.42-7.42l8.02-8.02Z"></path></svg><span> attachments</span>`;
+        } else if (url.href === "https://eris.pages.dev/meo/") {
             link.classList.add('attachment');
             link.innerHTML = `<span class="ext-link-wrapper"><span class="link-icon-wrapper">
             <svg width="12" height="12" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
@@ -153,33 +151,23 @@ function buttonbadges(content) {
             </svg>
             </span>meo</span>`;
         } else {
-            // find a better method to do this
-            const socregex = {
-                'twitter': /twitter\.com\/@(\w+)/,
-                'youtube': /youtube\.com\/@(\w+)/,
-                'instagram': /instagram\.com\/(\w+)/,
-                'facebook': /facebook\.com\/(\w+)/,
-                'scratch': /scratch\.mit.edu\/users\/(\w+)/,
-                'meower_share': /eris\.pages\.dev\/meo\/share\?id=([\w-]+)/
+            const socials = {
+                'twitter.com': 'twitter_1x.png',
+                'youtube.com': 'youtube_1x.png',
+                'instagram.com': 'instagram_1x.png',
+                'facebook.com': 'facebook_1x.png',
+                'scratch.mit.edu': 'scratch_1x.png',
+                'eris.pages.dev': 'meo_1x.png'
             };
-            
-            const socialmedicns = {
-                'twitter': 'twitter_1x.png',
-                'youtube': 'youtube_1x.png',
-                'instagram': 'instagram_1x.png',
-                'facebook': 'facebook_1x.png',
-                'scratch': 'scratch_1x.png',
-                'meower_share': 'meo_1x.png'
-            };
-    
-            for (const [platform, regex] of Object.entries(socregex)) {
-                const match = url.match(regex);
-                if (match) {
-                    const username = match[1];
-                    link.classList.add('ext-link');
-                    const icon = socialmedicns[platform];
-                    link.innerHTML = `<span class="ext-link-wrapper"><span class="link-icon-wrapper"><img width="14px" class="ext-icon" src="images/links/${icon}"></span>${username}</span>`;
-                }
+
+            const domain = url.hostname;
+            if (socials[domain]) {
+                const pathSegments = url.pathname.split('/');
+                const username = pathSegments[pathSegments.length - 1] || pathSegments[pathSegments.length - 2];
+                link.classList.add('ext-link');
+                const icon = socials[domain];
+                link.innerHTML = `<span class="ext-link-wrapper"><span class="link-icon-wrapper">
+                <img width="14px" class="ext-icon" src="images/links/${icon}"></span>${username}</span>`;
             }
         }
     });
