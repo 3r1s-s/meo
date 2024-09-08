@@ -169,7 +169,11 @@ function main() {
     }
 
     meowerConnection.onopen = () => {
-        document.querySelector('#loading').style.setProperty('--load', `100%`);
+        if (document.querySelector('#loading')) {
+            document.querySelector('#loading').style.setProperty('--load', `100%`);
+        } else {
+            console.log("Reconnecting...");
+        }
         if (localStorage.getItem("token") != undefined && localStorage.getItem("username") != undefined) {
             meowerConnection.send(JSON.stringify({
                 cmd: "authpswd",
