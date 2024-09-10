@@ -57,6 +57,14 @@ if (localStorage.getItem("blockedWords")) {
 
 let lastTyped = 0;
 
+let birthday = 1;
+
+if (birthday === 1) {
+    const script = document.createElement("script");
+    script.src = "https://cdn.jsdelivr.net/npm/party-js@latest/bundle/party.min.js";
+    document.head.appendChild(script);
+}
+
 setAccessibilitySettings()
 loadSavedPlugins();
 loadCustomCss();
@@ -173,6 +181,11 @@ function main() {
             document.querySelector('#loading').style.setProperty('--load', `100%`);
         } else {
             console.log("Reconnecting...");
+        }
+        if (birthday === 1) {   
+            party.confetti(document.body, {
+                count: party.variation.range(20, 40)
+            });
         }
         if (localStorage.getItem("token") != undefined && localStorage.getItem("username") != undefined) {
             meowerConnection.send(JSON.stringify({
