@@ -3163,6 +3163,7 @@ possible future styling
 .darflen-embed {
     border-radius: 5px;
     background-color: #25242e;
+    overflow: hidden;
 }
 
 .darflen-jump {
@@ -3174,6 +3175,7 @@ possible future styling
     color: #fbfbfb;
     text-decoration: none;
     font-family: 'Darflen';
+    box-sizing: border-box;
 }
 
 .darflen-jump:hover {
