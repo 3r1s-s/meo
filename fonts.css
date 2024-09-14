@@ -123,3 +123,8 @@
 	font-weight: 600;
 	src: url(fonts/determination-mono/determination-mono.ttf);
 }
+
+@font-face {
+	font-family: 'Darflen';
+	src: url(fonts/darf/darf.ttf);
+}

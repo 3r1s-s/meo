@@ -368,7 +368,7 @@ function embed(links) {
                     const trackId = match[1];
 
                     embeddedElement = document.createElement("div");
-                    embeddedElement.classList.add("turbowarp-embed");
+                    embeddedElement.classList.add("scratch-embed");
 
                     const request = new XMLHttpRequest();
                     request.open('GET', `https://trampoline.turbowarp.org/api/projects/${trackId}`);
@@ -377,6 +377,59 @@ function embed(links) {
                         embeddedElement.innerHTML = `
                         <a href="https://turbowarp.org/${trackId}/" target="_blank"><div class="scratch-thumbnail" style="background-image: url(https://cdn.scratch.mit.edu/get_image/project/${trackId}_1080x1080.png);"></div></a>
                         <div class="scratch-title"><a href="https://turbowarp.org/${trackId}/" target="_blank" class="turbowarp-link">${data.title}</a></div>
+                        `
+                    }
+                    request.send();
+                    
+                    embeddedElement.classList.add("media");
+                }
+            } else if (link.includes('darflen.com/posts/')) {
+                console.warn(link);
+                const regex = /posts\/([a-zA-Z0-9]+)/;
+                const match = link.match(regex);
+                if (match) {
+                    const trackId = match[1];
+
+                    embeddedElement = document.createElement("div");
+                    embeddedElement.classList.add("darflen-embed");
+
+                    const request = new XMLHttpRequest();
+                    request.open('GET', `https://api.darflen.com/posts/${trackId}`);
+                    request.onload = () => {
+                        const data = JSON.parse(request.responseText);
+                        let post;
+                        if (data.post.content) {
+                            post = data.post.content;
+                        } else if (data.post.files) {
+                            post = `<font style='background:#1c1a23;border-radius:5px;'>User submitted image</font>`;
+                        }
+                        embeddedElement.innerHTML = `
+                        <a class="darflen-jump" href="https://darflen.com/posts/${trackId}/" target="_blank">
+                            <div class="darflen-top-left">
+                                <img class="darflen-pfp" src="${data.post.author.profile.images.icon.thumbnail}">
+                                <div class="darflen-user-info">
+                                    <span class="darflen-username">${data.post.author.profile.username}</span>
+                                    <span class="darflen-stats">${timeago(data.post.miscellaneous.creation_time*1000)} ago • ${data.post.stats.views} Views</span>
+                                </div>
+                            </div>
+                            <div class="darflen-content">
+                                <span>${post}</span>
+                            </div>
+                            <div class="darflen-stats">
+                                <div class="darflen-stat">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 4.528a6 6 0 0 0-8.243 8.715l6.829 6.828a2 2 0 0 0 2.828 0l6.829-6.828A6 6 0 0 0 12 4.528zm-1.172 1.644l.465.464a1 1 0 0 0 1.414 0l.465-.464a4 4 0 1 1 5.656 5.656L12 18.657l-6.828-6.829a4 4 0 0 1 5.656-5.656z" fill="currentColor"/></svg>
+                                    <span>${data.post.stats.loves}</span>
+                                </div>
+                                <div class="darflen-stat">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20.924 5.617a.997.997 0 0 0-.217-.324l-3-3a1 1 0 1 0-1.414 1.414L17.586 5H8a5 5 0 0 0-5 5v2a1 1 0 1 0 2 0v-2a3 3 0 0 1 3-3h9.586l-1.293 1.293a1 1 0 0 0 1.414 1.414l3-3A.997.997 0 0 0 21 6m-.076-.383a.996.996 0 0 1 .076.38zm-17.848 12a.997.997 0 0 0 .217 1.09l3 3a1 1 0 0 0 1.414-1.414L6.414 19H16a5 5 0 0 0 5-5v-2a1 1 0 1 0-2 0v2a3 3 0 0 1-3 3H6.414l1.293-1.293a1 1 0 1 0-1.414-1.414l-3 3m-.217.324a.997.997 0 0 1 .215-.322z" fill="currentColor"/></svg>
+                                    <span>${data.post.stats.reposts}</span>
+                                </div>
+                                <div class="darflen-stat">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 6a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2h-4.586l-2.707 2.707a1 1 0 0 1-1.414 0L8.586 19H4a2 2 0 0 1-2-2V6zm18 0H4v11h5a1 1 0 0 1 .707.293L12 19.586l2.293-2.293A1 1 0 0 1 15 17h5V6zM6 9.5a1 1 0 0 1 1-1h10a1 1 0 1 1 0 2H7a1 1 0 0 1-1-1zm0 4a1 1 0 0 1 1-1h6a1 1 0 1 1 0 2H7a1 1 0 0 1-1-1z" fill="currentColor"/></svg>
+                                    <span>${data.post.stats.comments}</span>
+                                </div>
+                            </div>
+                        </a>
                         `
                     }
                     request.send();
@@ -568,4 +621,31 @@ function formatSize(bytes) {
     const i = Math.floor(Math.log(bytes) / Math.log(1024));
     const size = (bytes / Math.pow(1024, i)).toFixed(2);
     return `${size} ${sizes[i]}`;
+}
+
+function timeago(date) {
+    var seconds = Math.floor((new Date() - date) / 1000);
+  
+    var interval = seconds / 31536000;
+  
+    if (interval > 1) {
+      return Math.floor(interval) + " years";
+    }
+    interval = seconds / 2592000;
+    if (interval > 1) {
+      return Math.floor(interval) + " months";
+    }
+    interval = seconds / 86400;
+    if (interval > 1) {
+      return Math.floor(interval) + " days";
+    }
+    interval = seconds / 3600;
+    if (interval > 1) {
+      return Math.floor(interval) + " hours";
+    }
+    interval = seconds / 60;
+    if (interval > 1) {
+      return Math.floor(interval) + " minutes";
+    }
+    return Math.floor(seconds) + " seconds";
 }

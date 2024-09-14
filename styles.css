@@ -3160,6 +3160,70 @@ possible future styling
     text-decoration: none;
 }
 
+.darflen-embed {
+    border-radius: 5px;
+    background-color: #25242e;
+}
+
+.darflen-jump {
+    width: 100%;
+    height: 100%;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    color: #fbfbfb;
+    text-decoration: none;
+    font-family: 'Darflen';
+}
+
+.darflen-jump:hover {
+    color: #fbfbfb;
+    text-decoration: none;
+}
+
+.darflen-top-left {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+}
+
+.darflen-pfp {
+    width: 48px;
+    height: 48px;
+    border-radius: 5px;
+}
+
+.darflen-user-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.darflen-username {
+    font-size: 21px;
+    font-weight: 700;
+}
+
+.darflen-content {
+    margin: 16px 0;
+}
+
+.darflen-stats {
+    font-size: 16px;
+    font-weight: 400;
+    display: flex;
+    align-items: center;
+}
+
+.darflen-stat {
+    display: flex;
+    align-items: center;
+    margin-right: 16px;
+}
+
+.darflen-stat > span {
+    margin-left: 4px;
+}
+
 .loading-bar::after {
     content: '';
     position: absolute;
