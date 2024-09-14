@@ -3230,7 +3230,7 @@ possible future styling
     left: 0;
     top: 0;
     height: 16px;
-    background: #494460;
+    background: var(--hov-accent-color);
     width: var(--load);
     box-sizing: border-box;
     border-top-right-radius: 100px;
