@@ -1,6 +1,6 @@
 html {
     transition: none;
-    background-color: transparent;
+    background-color: transparent !important;
     scrollbar-width: none;
     scrollbar-gutter: auto;
 }
