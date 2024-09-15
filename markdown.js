@@ -131,8 +131,16 @@ function buttonbadges(content) {
         if (settingsstuff().underlinelinks) {
             link.classList.add("underline");
         }
-
-        const url = new URL(link.getAttribute('href'));
+        let url
+        try {
+            url = new URL(link.getAttribute('href'));
+            if (!url.href.startsWith('https://')) {
+                return;
+            }
+        } catch {
+            console.error(`Failed to parse URL: ${link.getAttribute('href')}`);
+            return;
+        }
         const fileExtension = url.pathname.split('.').pop().toLowerCase().split('?')[0];
         const fileDomain = url.href.includes('tenor.com/view');
 
