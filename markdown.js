@@ -44,8 +44,8 @@ function erimd(content) {
         .replace(/<a\s+href="https:\/\/eris\.pages\.dev\/meo\/profile\?u=([\w-]+)".*?>(.*?)<\/a>/g, '<span id="username" class="attachment" onclick="openUsrModal(\'$1\')">@$1</span>')
         .replace(/<a\s+href="https:\/\/eris\.pages\.dev\/meo\?gc=([\w-]+)".*?>(.*?)<\/a>/g, '<span id="username" class="attachment" onclick="loadchat(\'$1\')">#$1</span>')
         .replace(/(?:^|\n|<p>)-# (.*)$/gm, '<span class="subsubheader">$1</span>')
-        .replace(/<pre><code>\s*\*([\s\S]*?)<\/code><\/pre>/gm, '<pre class="undertale"><code>*$1</code></pre>');
-        return text;
+        .replace(/<pre><code>\s*\*([\s\S]*?)<\/code><\/pre>/gm, '<pre class="undertale"><code>*$1</code></pre>')
+    return text;
 }
 
 function meowerEmojis(content, emojis) {
@@ -131,16 +131,8 @@ function buttonbadges(content) {
         if (settingsstuff().underlinelinks) {
             link.classList.add("underline");
         }
-        let url
-        try {
-            url = new URL(link.getAttribute('href'));
-            if (!url.href.startsWith('https://')) {
-                return;
-            }
-        } catch {
-            console.error(`Failed to parse URL: ${link.getAttribute('href')}`);
-            return;
-        }
+
+        const url = new URL(link.getAttribute('href'));
         const fileExtension = url.pathname.split('.').pop().toLowerCase().split('?')[0];
         const fileDomain = url.href.includes('tenor.com/view');
 

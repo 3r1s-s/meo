@@ -768,7 +768,7 @@ function loadpost(p) {
     postContentText.className = "post-content";
     // tysm tni <3
     if (typeof md !== 'undefined') {
-        md.disable(['image']);
+        md.disable(['image', 'link']);
         postContentText.innerHTML = erimd(md.render(content.replace(/&/g, '&amp;')));
         postContentText.innerHTML = meowerEmojis(postContentText.innerHTML, p.emojis || []);
         postContentText.innerHTML = buttonbadges(postContentText);
