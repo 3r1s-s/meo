@@ -151,23 +151,31 @@ function buttonbadges(content) {
             </svg>
             </span>meo</span>`;
         } else {
-            const socials = {
-                'twitter.com': 'twitter_1x.png',
-                'youtube.com': 'youtube_1x.png',
-                'instagram.com': 'instagram_1x.png',
-                'facebook.com': 'facebook_1x.png',
-                'scratch.mit.edu': 'scratch_1x.png',
-                'eris.pages.dev': 'meo_1x.png'
-            };
+            const socials = [
+                { pattern: /^https:\/\/scratch\.mit\.edu\/users\/([^\/?#]+)\/?$/, icon: 'scratch_1x.png' },
+                { pattern: /^https:\/\/www\.youtube\.com\/@([^\/?#]+)\/?$/, icon: 'youtube_1x.png' },
+                { pattern: /^https:\/\/twitter\.com\/([^\/?#]+)\/?$/, icon: 'twitter_1x.png' },
+                { pattern: /^https:\/\/www\.facebook\.com\/([^\/?#]+)\/?$/, icon: 'facebook_1x.png' },
+                { pattern: /^https:\/\/x\.com\/([^\/?#]+)\/?$/, icon: 'twitter_1x.png' },
+                { pattern: /^https:\/\/www\.instagram\.com\/([^\/?#]+)\/?$/, icon: 'instagram_1x.png' },
+                { pattern: /^https:\/\/darflen\.com\/users\/([^\/?#]+)\/?$/, icon: 'darf.png' },
+                { pattern: /^https:\/\/wasteof\.money\/users\/([^\/?#]+)\/?$/, icon: 'wasteof.png' },
+                { pattern: /^https:\/\/eris\.pages\.dev\/meo\/profile\?u=([^\/?#]+)\/?$/, icon: 'meo_1x.png' },
+                { pattern: /^https:\/\/www\.tiktok\.com\/@([^\/?#]+)\/?$/, icon: 'tiktok_1x.png' },
+                { pattern: /^https:\/\/discord\.gg\/([^\/?#]+)\/?$/, icon: 'discord_1x.png' },
+                { pattern: /^https:\/\/github\.com\/([^\/?#]+)\/?$/, icon: 'github.png' }
 
-            const domain = url.hostname;
-            if (socials[domain]) {
-                const pathSegments = url.pathname.split('/');
-                const username = pathSegments[pathSegments.length - 1] || pathSegments[pathSegments.length - 2];
-                link.classList.add('ext-link');
-                const icon = socials[domain];
-                link.innerHTML = `<span class="ext-link-wrapper"><span class="link-icon-wrapper">
-                <img width="14px" class="ext-icon" src="images/links/${icon}"></span>${username}</span>`;
+            ];
+
+            for (let { pattern, icon } of socials) {
+                const match = url.href.match(pattern);
+                if (match) {
+                    const username = match[1];
+                    link.classList.add('ext-link');
+                    link.innerHTML = `<span class="ext-link-wrapper"><span class="link-icon-wrapper">
+                    <img width="14px" class="ext-icon" src="images/links/${icon}"></span>${username}</span>`;
+                    break;
+                }
             }
         }
     });
