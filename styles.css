@@ -3085,147 +3085,6 @@ possible future styling
     margin: 0;
 }
 
-.scratch-embed {
-    border-radius: 8px;
-    padding: 12px;
-    max-width: 240px;
-    height: 215px;
-    background-color: #282828;
-    border: 1px solid #606060;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    gap: 10px;
-    font-family: Arial, Helvetica, sans-serif;
-}
-
-.turbowarp-embed {
-    border-radius: 5px;
-    padding: 12px;
-    max-width: 240px;
-    height: 215px;
-    background-color: #222;
-    border-top: 6px solid rgb(255, 76, 76);
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    gap: 10px;
-    font-family: Arial, Helvetica, sans-serif;
-}
-
-.scratch-thumbnail {
-    border-radius: 4px;
-    width: 100%;
-    height: auto;
-    aspect-ratio: 4 / 3;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-}
-
-.scratch-title {
-    font-size: 16px;
-    font-weight: 600;
-    width: 100%;
-    overflow: hidden;
-}
-
-.scratch-link {
-    color: #ccb3ff;
-    text-decoration: none;
-    width: 100%;
-    display: block;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-.scratch-link:hover {
-    color: #b8a1e6;
-    text-decoration: none;
-}
-
-.turbowarp-link {
-    color: #eee;
-    text-decoration: none;
-    width: 100%;
-    display: block;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-.turbowarp-link:hover {
-    color: #dadada;
-    text-decoration: none;
-}
-
-.darflen-embed {
-    border-radius: 5px;
-    background-color: #25242e;
-    overflow: hidden;
-}
-
-.darflen-jump {
-    width: 100%;
-    height: 100%;
-    padding: 16px;
-    display: flex;
-    flex-direction: column;
-    color: #fbfbfb;
-    text-decoration: none;
-    font-family: 'Darflen';
-    box-sizing: border-box;
-}
-
-.darflen-jump:hover {
-    color: #fbfbfb;
-    text-decoration: none;
-}
-
-.darflen-top-left {
-    display: flex;
-    gap: 16px;
-    align-items: center;
-}
-
-.darflen-pfp {
-    width: 48px;
-    height: 48px;
-    border-radius: 5px;
-}
-
-.darflen-user-info {
-    display: flex;
-    flex-direction: column;
-}
-
-.darflen-username {
-    font-size: 21px;
-    font-weight: 700;
-}
-
-.darflen-content {
-    margin: 16px 0;
-}
-
-.darflen-stats {
-    font-size: 16px;
-    font-weight: 400;
-    display: flex;
-    align-items: center;
-}
-
-.darflen-stat {
-    display: flex;
-    align-items: center;
-    margin-right: 16px;
-}
-
-.darflen-stat > span {
-    margin-left: 4px;
-}
-
 .loading-bar::after {
     content: '';
     position: absolute;
@@ -3893,4 +3752,266 @@ input[type="button"]:focus-visible {
 .undertale > code {
     font-size: 18px;
     font-family: 'Determination Mono';
+}
+
+/* Embeds */
+
+.scratch-embed {
+    border-radius: 8px;
+    padding: 12px;
+    max-width: 240px;
+    height: 215px;
+    background-color: #282828;
+    border: 1px solid #606060;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    gap: 10px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.turbowarp-embed {
+    border-radius: 5px;
+    padding: 12px;
+    max-width: 240px;
+    height: 215px;
+    background-color: #222;
+    border-top: 6px solid rgb(255, 76, 76);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    gap: 10px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.scratch-thumbnail {
+    border-radius: 4px;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 3;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.scratch-title {
+    font-size: 16px;
+    font-weight: 600;
+    width: 100%;
+    overflow: hidden;
+}
+
+.scratch-link {
+    color: #ccb3ff;
+    text-decoration: none;
+    width: 100%;
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.scratch-link:hover {
+    color: #b8a1e6;
+    text-decoration: none;
+}
+
+.turbowarp-link {
+    color: #eee;
+    text-decoration: none;
+    width: 100%;
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.turbowarp-link:hover {
+    color: #dadada;
+    text-decoration: none;
+}
+
+.darflen-embed {
+    border-radius: 5px;
+    background-color: #25242e;
+    overflow: hidden;
+}
+
+.darflen-jump {
+    width: 100%;
+    height: 100%;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    color: #fbfbfb;
+    text-decoration: none;
+    font-family: 'Darflen';
+    box-sizing: border-box;
+}
+
+.darflen-jump:hover {
+    color: #fbfbfb;
+    text-decoration: none;
+}
+
+.darflen-top-left {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+}
+
+.darflen-pfp {
+    width: 48px;
+    height: 48px;
+    border-radius: 5px;
+}
+
+.darflen-user-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.darflen-username {
+    font-size: 21px;
+    font-weight: 700;
+}
+
+.darflen-content {
+    margin: 16px 0;
+}
+
+.darflen-stats {
+    font-size: 16px;
+    font-weight: 400;
+    display: flex;
+    align-items: center;
+}
+
+.darflen-stat {
+    display: flex;
+    align-items: center;
+    margin-right: 16px;
+}
+
+.darflen-stat > span {
+    margin-left: 4px;
+}
+
+.wasteof-embed {
+    border-radius: 12px;
+    border: 3px solid #374151;
+    background-color: #1f2937;
+    overflow: hidden;
+}
+
+.wasteof-jump {
+    width: 100%;
+    height: 100%;
+    padding: 16px 32px;
+    display: flex;
+    flex-direction: column;
+    color: #e5e7eb;
+    text-decoration: none;
+    font-family: ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif,BlinkMacSystemFont,"Segoe UI","Helvetica Neue",Arial,"Noto Sans","Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+    box-sizing: border-box;
+}
+
+.wasteof-jump:hover {
+    color: #e5e7eb;
+    text-decoration: none;
+}
+
+.wasteof-top-left {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    padding-bottom: 4px;
+    border-bottom: 3px solid #374151;
+}
+
+.wasteof-pfp {
+    width: 32px;
+    height: 32px;
+    border: 3px solid #374151;
+    border-radius: 100px;
+}
+
+.wasteof-user-info {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.wasteof-username {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.wasteof-content {
+    margin: 0;
+    font-size: 16px;
+}
+
+.wasteof-stats {
+    font-size: 16px;
+    font-weight: 400;
+    display: flex;
+    align-items: center;
+}
+
+.wasteof-stat {
+    display: flex;
+    align-items: center;
+    margin-right: 16px;
+}
+
+.wasteof-stat > span {
+    margin-left: 4px;
+}
+
+.wasteof-color {
+    width: 8px;
+    height: 8px;
+    border-radius: 100px;
+    margin-top: 5px;
+}
+
+.wasteof-blue {
+    background-color: #3b82f6;
+}
+
+.wasteof-indigo {
+    background-color: #6366f1;
+}
+
+.wasteof-violet {
+    background-color: #8b5cf6;
+}
+
+.wasteof-pink {
+    background-color: #ec4899;
+}
+
+.wasteof-fuchsia {
+    background-color: #d946ef;
+}
+
+.wasteof-orange {
+    background-color: #f97316;
+}
+
+.wasteof-yellow {
+    background-color: #eab308;
+}
+
+.wasteof-green {
+    background-color: #22c55e;
+}
+
+.wasteof-teal {
+    background-color: #14b8a6;
+}
+
+.wasteof-gray {
+    background-color: #6b7280;
 }
