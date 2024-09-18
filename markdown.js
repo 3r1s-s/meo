@@ -445,7 +445,6 @@ function embed(links) {
                     embeddedElement.classList.add("media");
                 }
             } else if (link.includes('wasteof.money/posts/')) {
-                return
                 console.warn(link);
                 const regex = /posts\/([a-zA-Z0-9]+)/;
                 const match = link.match(regex);
