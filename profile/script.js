@@ -84,7 +84,7 @@ function fetchprofile() {
             profilecont.innerHTML += profileContent;                                   
 
             profilecont.innerHTML += `
-            <i>Created: ${new Date(data.created * 1000).toLocaleDateString()} | Last Seen: ${timeago(data.last_seen)}</i>
+            <i>Created: ${new Date(data.created * 1000).toLocaleDateString()} | Last Seen: ${timeAgo(data.last_seen)}</i>
             `;
             
             if (data._id === localStorage.getItem('username')) {
@@ -153,7 +153,7 @@ if (window.self == window.top) {
 
 fetchprofile();
 
-function timeago(tstamp) {
+function timeAgo(tstamp) {
     const currentTime = Date.now();
     const lastSeenTime = tstamp * 1000;
     const timeDifference = currentTime - lastSeenTime;
