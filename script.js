@@ -158,7 +158,7 @@ function main() {
     meowerConnection = new WebSocket(server);
 
     meowerConnection.addEventListener('error', function(event) {
-        //launch screen
+        openUpdate('Connection error, please try again later!');
     });
     
     meowerConnection.onclose = (event) => {
