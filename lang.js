@@ -74,7 +74,7 @@ const en = {
     "meo_username": "Username",
     "meo_password": "Password",
     "meo_totp": "Authenticator app or recovery code", // update
-    "meo_messagebox": Math.random() < 1/25 ? "Whar's on your mind?" : "What's on your mind?",
+    "meo_messagebox": Math.random() < 1/25 ? "Qhar's on your mind?" : "Whar's on your mind?",
     "meo_goanywhere": "Where would you like to go?",
     "meo_welcome": "Welcome!",
     "meo_hello": "Hello!", // update
