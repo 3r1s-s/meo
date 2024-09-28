@@ -26,30 +26,16 @@ function closepicker() {
 }
 
 function addemoji(emoji) {
-    const ogmsg = document.getElementById('msg').value
-    document.getElementById('msg').value = `${ogmsg}${emoji} `;
+    msg.setRangeText(emoji, msg.selectionStart, msg.selectionEnd, "end");
     autoresize();
     event.preventDefault();
     if (event) {
         if (!event.shiftKey) {
             closepicker();
-            document.getElementById('msg').focus();
+            msg.focus();
         }
     }
     closemodal();
-}
-
-function addemojim(emoji) {
-    const ogmsg = document.getElementById('msg').value
-    document.getElementById('msg').value = `${ogmsg}${emoji} `;
-    autoresize();
-    event.preventDefault();
-    if (event) {
-        if (!event.shiftKey) {
-            closemodal();
-            document.getElementById('msg').focus();
-        }
-    }
 }
 
 function loadpicker() {
