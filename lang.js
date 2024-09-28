@@ -2796,7 +2796,7 @@ const engineer = {
             "imagewhitelist": "losers can ip grab you lol (just use meower uploads)",
             "censorwords": "censor instead of remove",
             "embeds": "embeds tenor, yt, etc and you get free cookies 🍪",
-            "reducemotion": "Reduce the intensity of animations and other moving effects",
+            "reducemotion": "be not motion sick",
             "showpostbuttons": "post buttons always remain visible",
             "underlinelinks": "underline links for readability",
             "magnify": "embiggens your text(tm)",
