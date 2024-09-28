@@ -2810,9 +2810,9 @@ const dlsn = {
         }
     },
     "account_sub": {
-        "password": "Password",
-        "privacy": "Privacy & Safety",
-        "mfa": "Multi-factor Authentication",
+        "password": "pswd",
+        "privacy": "privacy + safety",
+        "mfa": "mfa",
         "mfainfoenabled": "mfa is on. you will be prompted to auth with one of the devices below when logging into this account.",
         "mfainfodisabled": "mfa is off. add a device using a button below to add more security to your account.",
         "mfainfoincompatible": "put your auth/recovery code right after your password on clients that don't support mfa.",
