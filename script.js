@@ -562,6 +562,7 @@ function loadLogin() {
             <option value="fr" ${language === "fr" ? "selected" : ""}>${fr.language}</option>
             <option value="de" ${language === "de" ? "selected" : ""}>${de.language}</option>
             <option value="ua" ${language === "ua" ? "selected" : ""}>${ua.language}</option>
+	    <option value="engineer" ${language === "engineer" ? "selected" : ""}>${engineer.language}</option>
         </select>
         </div>
         <div class="login-back">
@@ -3641,6 +3642,7 @@ function loadLanguages() {
             <button class="language button" id="owo" onclick="changeLanguage('owo')"><span class="language-l">${owo.language}</span><span class="language-r">owo</span><div class="radio"></div></button>
             <button class="language button" id="eris" onclick="changeLanguage('eris')"><span class="language-l">${eris.language}</span><span class="language-r">Eris</span><div class="radio"></div></button>
             <button class="language button" id="goobert" onclick="changeLanguage('goobert')"><span class="language-l">${goobert.language}</span><span class="language-r">goobert</span><div class="radio"></div></button>
+	    <button class="language button" id="engineer" onclick="changeLanguage('engineer')"><span class="language-l">${engineer.language}</span><span class="language-r">engineerrunner</span><div class="radio"></div></button>
         </div>
         <hr>
         <span>${lang().languages_sub.desc} <a href='https://github.com/3r1s-s/meo' target="_blank" id='link'>${lang().languages_sub.link}</a></span>
