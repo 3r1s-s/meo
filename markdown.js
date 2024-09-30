@@ -196,7 +196,7 @@ function attach(attachment) {
 
         let embeddedElement;
 
-        if (attachment.mime.includes("image/") && attachment.size < (10 << 20)) {
+        if (attachment.mime.includes("image/") && attachment.size < (12 << 20)) {
             if (whitelist.some(source => link.includes(source))) {
                 const element = document.createElement("div");
                 element.classList.add("image-outer");
@@ -214,7 +214,7 @@ function attach(attachment) {
                 element.appendChild(imgElement);
                 embeddedElement = element;
             }
-        } else if (attachment.mime.includes("video/") && attachment.size < (10 << 20)) {
+        } else if (attachment.mime.includes("video/") && attachment.size < (12 << 20)) {
             const element = document.createElement("div");
             element.classList.add("media-outer");
 
@@ -229,7 +229,7 @@ function attach(attachment) {
             
             element.appendChild(mediaElement);
             embeddedElement = element;
-        } else if (attachment.mime.includes("audio/") && attachment.size < (10 << 20)) {
+        } else if (attachment.mime.includes("audio/") && attachment.size < (12 << 20)) {
 
             const element = document.createElement("div");
             element.classList.add("media-outer");
