@@ -1903,6 +1903,7 @@ function loadchat(chatId) {
     }
 
     renderTyping();
+    // hell9o kris
 }
 
 async function loadposts(pageNo) {
