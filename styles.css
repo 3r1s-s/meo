@@ -3754,6 +3754,10 @@ input[type="button"]:focus-visible {
     font-family: 'Determination Mono';
 }
 
+.plugin-search.search-input {
+    font-style: normal;
+}
+
 /* Embeds */
 
 .scratch-embed {

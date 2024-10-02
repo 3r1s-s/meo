@@ -3103,17 +3103,23 @@ async function loadPlugins() {
             <h1>${lang().settings_plugins}</h1>
             <div class="msgs"></div>
             <h3>${lang().plugins_sub.manage}</h3>
-            <button onclick="resetPlugins()" class="button blockeduser">${lang().action.resetplugins}</button>
+            <button onclick="resetPlugins();handleHaptics();" class="button blockeduser">${lang().action.resetplugins}</button>
 
             <h3>${lang().settings_plugins}</h3>
-            <div class='plugins'>
-            <div class="section plugin"><label>----<input type="checkbox" id="placeholder" class="settingstoggle" disabled><p class="pluginsub">--------------</p><p class="subsubheader">-----------</p></label></div>
-            <div class="section plugin"><label>----<input type="checkbox" id="placeholder" class="settingstoggle" disabled><p class="pluginsub">--------------</p><p class="subsubheader">-----------</p></label></div>
-            <div class="section plugin"><label>----<input type="checkbox" id="placeholder" class="settingstoggle" disabled><p class="pluginsub">--------------</p><p class="subsubheader">-----------</p></label></div>
-            <div class="section plugin"><label>----<input type="checkbox" id="placeholder" class="settingstoggle" disabled><p class="pluginsub">--------------</p><p class="subsubheader">-----------</p></label></div>
-            <div class="section plugin"><label>----<input type="checkbox" id="placeholder" class="settingstoggle" disabled><p class="pluginsub">--------------</p><p class="subsubheader">-----------</p></label></div>
-            <div class="section plugin"><label>----<input type="checkbox" id="placeholder" class="settingstoggle" disabled><p class="pluginsub">--------------</p><p class="subsubheader">-----------</p></label></div>
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+                <input type="text" id="pluginSearch" placeholder="Search plugins..." class="plugin-search search-input" style="margin-left: 0px; max-width: 50%;">
+                <div style="display: flex; align-items: center;">
+                    <div class="plugintoggle" id="hideCautionPluginsToggle">
+                        <svg viewBox="0 0 24 24" height="20" width="20" aria-hidden="true" focusable="false" fill="currentColor" xmlns="http://www.w3.org/2000/svg" class="check">
+                            <path d="m10 15.586-3.293-3.293-1.414 1.414L10 18.414l9.707-9.707-1.414-1.414z"></path>
+                        </svg>
+                    </div>
+                    <label style="margin-left: 10px;">Hide Flag Plugins</label>
+                </div>
             </div>
+            <div class='plugins'>
+            </div>
+            <button id="loadMoreButton" class="button blockeduser" style="width: 100%; text-align: center; margin-top: 9px;">Load More</button>
             <hr>
             <span>${lang().plugins_sub.desc} <a href='https://github.com/3r1s-s/meo-plugins' target="_blank" id='link'>${lang().plugins_sub.link}</a></span>
     `;
@@ -3123,9 +3129,93 @@ async function loadPlugins() {
     const enabledPlugins = JSON.parse(localStorage.getItem('enabledPlugins')) || {};
     let pluginsList = document.querySelector(".plugins");
     pluginsList.innerHTML = '';
-    pluginsData.forEach(plugin => {
-        const isEnabled = enabledPlugins[plugin.name] || false;
-        addPlugin(plugin, isEnabled);
+
+    let currentPage = 0;
+    const pluginsPerPage = 12;
+
+    function displayPlugins() {
+        const start = currentPage * pluginsPerPage;
+        const end = start + pluginsPerPage;
+        const pluginsToShow = pluginsData.slice(start, end);
+
+        pluginsToShow.forEach(plugin => {
+            const isEnabled = enabledPlugins[plugin.name] || false;
+            addPlugin(plugin, isEnabled);
+        });
+
+        if (end >= pluginsData.length) {
+            document.getElementById('loadMoreButton').style.display = 'none';
+        } else {
+            document.getElementById('loadMoreButton').style.display = 'block';
+        }
+    }
+
+    displayPlugins();
+
+    document.getElementById('loadMoreButton').addEventListener('click', () => {
+        currentPage++;
+        displayPlugins();
+    });
+
+    // Add search functionality
+    const searchInput = document.getElementById('pluginSearch');
+    const hideCautionToggle = document.getElementById('hideCautionPluginsToggle');
+
+    searchInput.addEventListener('input', () => filterPlugins(pluginsData));
+    hideCautionToggle.addEventListener('click', () => {
+        hideCautionToggle.classList.toggle('checked');
+        filterPlugins(pluginsData);
+    });
+}
+
+let currentPage = 0; // Global page tracker
+const pluginsPerPage = 12; // Global page size
+
+function filterPlugins(pluginsData) {
+    const searchInput = document.getElementById('pluginSearch').value.toLowerCase();
+    const hideCaution = document.getElementById('hideCautionPluginsToggle').classList.contains('checked');
+
+    let pluginsList = document.querySelector(".plugins");
+    pluginsList.innerHTML = '';
+
+    // Filter plugins based on the search and caution flag
+    const filteredPlugins = pluginsData.filter(plugin => {
+        const matchesSearch = plugin.name.toLowerCase().includes(searchInput) || plugin.description.toLowerCase().includes(searchInput);
+        const showCaution = !(hideCaution && plugin.flags === '1');
+        return matchesSearch && showCaution;
+    });
+
+    // Reset currentPage only if search input is not empty
+    if (!searchInput) {
+        currentPage = Math.floor(pluginsList.children.length / pluginsPerPage);
+    } else {
+        currentPage = 0;
+    }
+
+    function displayFilteredPlugins() {
+        const start = currentPage * pluginsPerPage;
+        const end = start + pluginsPerPage;
+        const pluginsToShow = filteredPlugins.slice(start, end);
+
+        pluginsToShow.forEach(plugin => {
+            const isEnabled = JSON.parse(localStorage.getItem('enabledPlugins'))?.[plugin.name] || false;
+            addPlugin(plugin, isEnabled);
+        });
+
+        // Adjust Load More button visibility
+        if (end >= filteredPlugins.length) {
+            document.getElementById('loadMoreButton').style.display = 'none';
+        } else {
+            document.getElementById('loadMoreButton').style.display = 'block';
+        }
+    }
+
+    displayFilteredPlugins();
+
+    // Update the load more button for filtered results
+    document.getElementById('loadMoreButton').addEventListener('click', () => {
+        currentPage++;
+        displayFilteredPlugins();
     });
 }
 
@@ -3170,9 +3260,7 @@ function addPlugin(plugin, isEnabled) {
     
         modalPluginup();
     });
-    
 
-    // Set initial state
     if (isEnabled) {
         pluginToggle.classList.add('checked');
     }
@@ -3220,6 +3308,7 @@ function resetPlugins() {
     localStorage.removeItem("enabledPlugins");
     modalPluginup();
 }
+
 
 function loadAppearance() {
     setTop();
