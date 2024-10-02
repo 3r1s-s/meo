@@ -43,6 +43,7 @@ function fetchprofile() {
 
             let quote;
             let pronouns;
+            let lastfmuser;
             
             if (typeof md !== 'undefined') {
                 md.disable(['image']);
@@ -51,7 +52,9 @@ function fetchprofile() {
                 pronouns = match ? match[1] : "";
                 
                 quote = data.quote.replace(regex, '');
-                quote = erimd(md.render(quote).replace(/<a(.*?)>/g, '<a$1 target="_blank">'));                                            
+                const lastfm = data.quote.match(/\|lastfm:([^|]+)\|/);
+                lastfmuser = lastfm ? lastfm[1] : undefined;
+                quote = erimd(md.render(quote.replace(/\|lastfm:[^|]+\|/, '').trim()).replace(/<a(.*?)>/g, '<a$1 target="_blank">'));                                            
             } else {
                 quote = oldMarkdown(data.quote);
                 console.error("Parsed with old markdown, fix later :)");
@@ -80,13 +83,48 @@ function fetchprofile() {
                 <span class="profile-qt">${quote}</span>
             </div>
             `;
-            
-            profilecont.innerHTML += profileContent;                                   
 
-            profilecont.innerHTML += `
+            const dateInfo = `
             <i>Created: ${new Date(data.created * 1000).toLocaleDateString()} | Last Seen: ${timeAgo(data.last_seen)}</i>
             `;
             
+            if (lastfmuser) {
+                let url = 'https://lastfm-last-played.biancarosa.com.br/' + lastfmuser + '/latest-song';
+                fetch(url).then(response => response.text()).then(data => {
+                    data = JSON.parse(data);
+                    const musicEmbed = `
+                    <span class="subheader">Last.FM</span>
+                    <div class="sec">
+                        <div class="spotify">
+                            <div class="spotify-art" style="background-image: url('${data.track.image[2]['#text']}')"></div>
+                            <div class="spotify-info">
+                                <div class="sp-in-list">
+                                    <span style="font-weight: 800;">
+                                    ${data.track.name}
+                                    </span>
+                                    <span style="font-weight: 400;">
+                                        by ${data.track.artist['#text']}
+                                    </span>
+                                    <span style="font-weight: 400;">
+                                        on ${data.track.album['#text']}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    `;
+
+                    profilecont.innerHTML += musicEmbed;
+                    profilecont.innerHTML += dateInfo;
+                })   
+            } else {
+                profilecont.innerHTML += dateInfo;
+            }
+
+            profilecont.innerHTML += profileContent;
+
+            
+
             if (data._id === localStorage.getItem('username')) {
                 profilecont.innerHTML += `
                 `;
