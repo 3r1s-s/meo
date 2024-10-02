@@ -60,7 +60,7 @@ function fetchprofile() {
                 console.error("Parsed with old markdown, fix later :)");
             }
             
-            let profileContent = `
+            const profileContent = `
             <div class="usr-header">
             <div class="usr-header-inner">
                 <h2 class="username" onclick="copy('${data._id}')">${data._id}</h2>
@@ -87,6 +87,8 @@ function fetchprofile() {
             const dateInfo = `
             <i>Created: ${new Date(data.created * 1000).toLocaleDateString()} | Last Seen: ${timeAgo(data.last_seen)}</i>
             `;
+
+            profilecont.innerHTML += profileContent;
             
             if (lastfmuser) {
                 let url = 'https://lastfm-last-played.biancarosa.com.br/' + lastfmuser + '/latest-song';
@@ -119,11 +121,7 @@ function fetchprofile() {
                 })   
             } else {
                 profilecont.innerHTML += dateInfo;
-            }
-
-            profilecont.innerHTML += profileContent;
-
-            
+            }            
 
             if (data._id === localStorage.getItem('username')) {
                 profilecont.innerHTML += `
