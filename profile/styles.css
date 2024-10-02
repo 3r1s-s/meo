@@ -199,6 +199,7 @@ p {
 .spotify-info {
     overflow: hidden;
     z-index: 2;
+    flex: 1;
 }
 
 .sp-in-list > span {
