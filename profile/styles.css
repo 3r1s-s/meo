@@ -183,6 +183,7 @@ p {
     background-size: cover;
     border-radius: 3px;
     overflow: hidden;
+    box-shadow: rgba(255, 255, 255, 0.2) 0px 0px 0px 1px inset, rgba(0, 0, 0, 0.55) 0px 8px 40px 0px;
 }
 
 .sp-in-list {
@@ -197,6 +198,7 @@ p {
 
 .spotify-info {
     overflow: hidden;
+    z-index: 2;
 }
 
 .sp-in-list > span {
