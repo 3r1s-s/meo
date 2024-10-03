@@ -94,31 +94,35 @@ function fetchprofile() {
                 let url = 'https://lastfm-last-played.biancarosa.com.br/' + lastfmuser + '/latest-song';
                 fetch(url).then(response => response.text()).then(data => {
                     data = JSON.parse(data);
-                    const musicEmbed = `
-                    <span class="subheader">Last.FM</span>
-                    <div class="sec">
-                        <div class="spotify">
-                            <div class="spotify-art" style="background-image: url('${data.track.image[2]['#text']}')"></div>
-                            <div class="spotify-info">
-                                <div class="sp-in-list">
-                                    <span style="font-weight: 800;">
-                                    ${data.track.name}
-                                    </span>
-                                    <span style="font-weight: 400;">
-                                        by ${data.track.artist['#text']}
-                                    </span>
-                                    <span style="font-weight: 400;">
-                                        on ${data.track.album['#text']}
-                                    </span>
+                    if (data.track["@attr"].nowplaying) {
+                        const musicEmbed = `
+                        <span class="subheader">Last.FM</span>
+                        <div class="sec">
+                            <div class="spotify">
+                                <div class="spotify-art" style="background-image: url('${data.track.image[2]['#text']}')"></div>
+                                <div class="spotify-info">
+                                    <div class="sp-in-list">
+                                        <span style="font-weight: 800;">
+                                        ${data.track.name}
+                                        </span>
+                                        <span style="font-weight: 400;">
+                                            by ${data.track.artist['#text']}
+                                        </span>
+                                        <span style="font-weight: 400;">
+                                            on ${data.track.album['#text']}
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    `;
-
-                    profilecont.innerHTML += musicEmbed;
-                    profilecont.innerHTML += dateInfo;
-                })   
+                        `;
+    
+                        profilecont.innerHTML += musicEmbed;
+                        profilecont.innerHTML += dateInfo;
+                    } else {
+                        profilecont.innerHTML += dateInfo;
+                    }
+                })
             } else {
                 profilecont.innerHTML += dateInfo;
             }            
