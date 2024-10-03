@@ -94,7 +94,7 @@ function fetchprofile() {
                 let url = 'https://lastfm-last-played.biancarosa.com.br/' + lastfmuser + '/latest-song';
                 fetch(url).then(response => response.text()).then(data => {
                     data = JSON.parse(data);
-                    if (data.track["@attr"].nowplaying) {
+                    if (data.track["@attr"] && data.track["@attr"].nowplaying) {
                         const musicEmbed = `
                         <span class="subheader">Last.FM</span>
                         <div class="sec">
