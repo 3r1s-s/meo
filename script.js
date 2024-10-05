@@ -5184,41 +5184,22 @@ function addAttachment(file) {
         </div>
         `;
         element.querySelector(".attachment-wrapper").querySelector(".delete-attach").onclick = () => { attachment.cancel(""); };
-
         if (file.type.includes("image/") && file.size < (10 << 20)) {
             const reader = new FileReader();
             reader.onloadend = () => {
-                const img = new Image();
+                const img = document.createElement("img");
+                img.classList.add("image-pre");
                 img.src = reader.result;
-                img.onload = () => {
-                    const canvas = document.createElement("canvas");
-                    const ctx = canvas.getContext("2d");
-
-                    canvas.width = img.width;
-                    canvas.height = img.height;
-
-                    ctx.drawImage(img, 0, 0);
-
-                    canvas.toBlob((blob) => {
-                        file = new File([blob], file.name, { type: file.type });
-
-                        const imgPreview = document.createElement("img");
-                        imgPreview.classList.add("image-pre");
-                        imgPreview.src = URL.createObjectURL(file);
-                        imgPreview.onclick = () => {
-                            openImage(imgPreview.src);
-                        };
-
-                        const attachmentMedia = document.createElement("div");
-                        attachmentMedia.classList.add("attachment-media");
-                        attachmentMedia.appendChild(imgPreview);
-
-                        const attachmentWrapper = element.querySelector(".attachment-wrapper");
-                        attachmentWrapper.insertBefore(attachmentMedia, attachmentWrapper.querySelector(".attachment-name"));
-
-                        uploadFile(file);
-                    }, file.type);
+                img.onclick = () => {
+                    openImage(reader.result);
                 };
+    
+                const attachmentMedia = document.createElement("div");
+                attachmentMedia.classList.add("attachment-media");
+                attachmentMedia.appendChild(img);
+
+                const attachmentWrapper = element.querySelector(".attachment-wrapper")
+                attachmentWrapper.insertBefore(attachmentMedia, attachmentWrapper.querySelector(".attachment-name"));
             };
             reader.readAsDataURL(file);
         } else {
@@ -5234,35 +5215,31 @@ function addAttachment(file) {
             attachmentOther.classList.add("attachment-other");
             attachmentOther.appendChild(otherPre);
 
-            const attachmentWrapper = element.querySelector(".attachment-wrapper");
+            const attachmentWrapper = element.querySelector(".attachment-wrapper")
             attachmentWrapper.insertBefore(attachmentOther, attachmentWrapper.querySelector(".attachment-name"));
-
-            uploadFile(file);
         }
-
+        
         document.getElementById('images-container').appendChild(element);
 
-        function uploadFile(fileToSend) {
-            xhr.open("POST", "https://uploads.meower.org/attachments");
-            xhr.setRequestHeader("Authorization", localStorage.getItem("token"));
-            xhr.upload.onprogress = (ev) => {
-                const percentage = `${Number((ev.loaded / ev.total) * 100).toFixed(2)}%`;
-                element.querySelector(".attachment-progress").style.setProperty('--pre', `${percentage}`);
-                element.querySelector(".attachment-progress span").innerText = `${percentage}`;
-            };
-            xhr.onload = () => {
-                element.querySelector(".attachment-progress").style.setProperty('--pre', `0`);
-                const attachmentProgress = element.querySelector(".attachment-progress").querySelector("span");
-                attachmentProgress.remove();
+        xhr.open("POST", "https://uploads.meower.org/attachments");
+        xhr.setRequestHeader("Authorization", localStorage.getItem("token"));
+        xhr.upload.onprogress = (ev) => {
+            const percentage = `${Number((ev.loaded / ev.total) * 100).toFixed(2)}%`;
+            element.querySelector(".attachment-progress").style.setProperty('--pre', `${percentage}`);
+            element.querySelector(".attachment-progress span").innerText = `${percentage}`;
+        };
+        xhr.onload = () => {
+            element.querySelector(".attachment-progress").style.setProperty('--pre', `0`);
+            const attachmentProgress = element.querySelector(".attachment-progress").querySelector("span");
+            attachmentProgress.remove();
 
-                resolve(JSON.parse(xhr.response));
-            };
-            xhr.onerror = (error) => {
-                attachment.cancel(error);
-            };
-            formData.append("file", fileToSend);
-            xhr.send(formData);
-        }
+            resolve(JSON.parse(xhr.response));
+        };
+        xhr.onerror = (error) => {
+            attachment.cancel(error);
+        };
+        formData.append("file", file);
+        xhr.send(formData);
     });
 }
 
