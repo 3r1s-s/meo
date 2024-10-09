@@ -132,7 +132,12 @@ function buttonbadges(content) {
             link.classList.add("underline");
         }
 
-        const url = new URL(link.getAttribute('href'));
+        let url;
+        try {
+            url = new URL(link.getAttribute('href'));
+        } catch (e) {
+            return;
+        }
         const fileExtension = url.pathname.split('.').pop().toLowerCase().split('?')[0];
         const fileDomain = url.href.includes('tenor.com/view');
 
