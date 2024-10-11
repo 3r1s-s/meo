@@ -6138,7 +6138,3 @@ function createModal(data) {
         }
     }
 }
-
-// work on this
-main();
-setInterval(ping, 25000);
