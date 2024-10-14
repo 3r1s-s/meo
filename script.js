@@ -57,7 +57,8 @@ if (localStorage.getItem("blockedWords")) {
 
 let lastTyped = 0;
 
-let birthday = 1;
+let today = new Date();
+let birthday = (today.getMonth() === 8 && today.getDate() >= 10 && today.getDate() <= 30);
 
 if (birthday === 1) {
     const script = document.createElement("script");
