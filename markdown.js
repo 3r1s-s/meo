@@ -361,12 +361,12 @@ function embed(links) {
                     embeddedElement.classList.add("scratch-embed");
 
                     const request = new XMLHttpRequest();
-                    request.open('GET', `https://trampoline.turbowarp.org/api/projects/${trackId}`);
+                    request.open('GET', `https://trampoline.turbowarp.org/api/projects/${escapeHtml(trackId)}`);
                     request.onload = () => {
                         const data = JSON.parse(request.responseText);
                         embeddedElement.innerHTML = `
-                        <a href="https://scratch.mit.edu/projects/${trackId}/" target="_blank"><div class="scratch-thumbnail" style="background-image: url(https://cdn.scratch.mit.edu/get_image/project/${trackId}_1080x1080.png);"></div></a>
-                        <div class="scratch-title"><a href="https://scratch.mit.edu/projects/${trackId}/" target="_blank" class="scratch-link">${data.title}</a></div>
+                        <a href="https://scratch.mit.edu/projects/${escapeHtml(trackId)}/" target="_blank"><div class="scratch-thumbnail" style="background-image: url(https://cdn.scratch.mit.edu/get_image/project/${escapeHtml(trackId)}_1080x1080.png);"></div></a>
+                        <div class="scratch-title"><a href="https://scratch.mit.edu/projects/${escapeHtml(trackId)}/" target="_blank" class="scratch-link">${escapeHtml(data.title)}</a></div>
                         `
                     }
                     request.send();
@@ -384,12 +384,12 @@ function embed(links) {
                     embeddedElement.classList.add("scratch-embed");
 
                     const request = new XMLHttpRequest();
-                    request.open('GET', `https://trampoline.turbowarp.org/api/projects/${trackId}`);
+                    request.open('GET', `https://trampoline.turbowarp.org/api/projects/${escapeHtml(trackId)}`);
                     request.onload = () => {
                         const data = JSON.parse(request.responseText);
                         embeddedElement.innerHTML = `
-                        <a href="https://turbowarp.org/${trackId}/" target="_blank"><div class="scratch-thumbnail" style="background-image: url(https://cdn.scratch.mit.edu/get_image/project/${trackId}_1080x1080.png);"></div></a>
-                        <div class="scratch-title"><a href="https://turbowarp.org/${trackId}/" target="_blank" class="turbowarp-link">${data.title}</a></div>
+                        <a href="https://turbowarp.org/${escapeHtml(trackId)}/" target="_blank"><div class="scratch-thumbnail" style="background-image: url(https://cdn.scratch.mit.edu/get_image/project/${escapeHtml(trackId)}_1080x1080.png);"></div></a>
+                        <div class="scratch-title"><a href="https://turbowarp.org/${escapeHtml(trackId)}/" target="_blank" class="turbowarp-link">${escapeHtml(data.title)}</a></div>
                         `
                     }
                     request.send();
@@ -417,12 +417,12 @@ function embed(links) {
                             post = `<font style='background:#1c1a23;border-radius:5px;'>User submitted image</font>`;
                         }
                         embeddedElement.innerHTML = `
-                        <a class="darflen-jump" href="https://darflen.com/posts/${trackId}/" target="_blank">
+                        <a class="darflen-jump" href="https://darflen.com/posts/${escapeHtml(trackId)}/" target="_blank">
                             <div class="darflen-top-left">
-                                <img class="darflen-pfp" src="${data.post.author.profile.images.icon.thumbnail}">
+                                <img class="darflen-pfp" src="${escapeHtml(data.post.author.profile.images.icon.thumbnail)}">
                                 <div class="darflen-user-info">
-                                    <span class="darflen-username">${data.post.author.profile.username}</span>
-                                    <span class="darflen-stats">${timeago(data.post.miscellaneous.creation_time*1000)} ago • ${data.post.stats.views} Views</span>
+                                    <span class="darflen-username">${escapeHtml(data.post.author.profile.username)}</span>
+                                    <span class="darflen-stats">${timeago(data.post.miscellaneous.creation_time*1000)} ago • ${escapeHtml(data.post.stats.views)} Views</span>
                                 </div>
                             </div>
                             <div class="darflen-content">
@@ -431,15 +431,15 @@ function embed(links) {
                             <div class="darflen-stats">
                                 <div class="darflen-stat">
                                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 4.528a6 6 0 0 0-8.243 8.715l6.829 6.828a2 2 0 0 0 2.828 0l6.829-6.828A6 6 0 0 0 12 4.528zm-1.172 1.644l.465.464a1 1 0 0 0 1.414 0l.465-.464a4 4 0 1 1 5.656 5.656L12 18.657l-6.828-6.829a4 4 0 0 1 5.656-5.656z" fill="currentColor"/></svg>
-                                    <span>${data.post.stats.loves}</span>
+                                    <span>${escapeHtml(data.post.stats.loves)}</span>
                                 </div>
                                 <div class="darflen-stat">
                                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20.924 5.617a.997.997 0 0 0-.217-.324l-3-3a1 1 0 1 0-1.414 1.414L17.586 5H8a5 5 0 0 0-5 5v2a1 1 0 1 0 2 0v-2a3 3 0 0 1 3-3h9.586l-1.293 1.293a1 1 0 0 0 1.414 1.414l3-3A.997.997 0 0 0 21 6m-.076-.383a.996.996 0 0 1 .076.38zm-17.848 12a.997.997 0 0 0 .217 1.09l3 3a1 1 0 0 0 1.414-1.414L6.414 19H16a5 5 0 0 0 5-5v-2a1 1 0 1 0-2 0v2a3 3 0 0 1-3 3H6.414l1.293-1.293a1 1 0 1 0-1.414-1.414l-3 3m-.217.324a.997.997 0 0 1 .215-.322z" fill="currentColor"/></svg>
-                                    <span>${data.post.stats.reposts}</span>
+                                    <span>${escapeHtml(data.post.stats.reposts)}</span>
                                 </div>
                                 <div class="darflen-stat">
                                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 6a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2h-4.586l-2.707 2.707a1 1 0 0 1-1.414 0L8.586 19H4a2 2 0 0 1-2-2V6zm18 0H4v11h5a1 1 0 0 1 .707.293L12 19.586l2.293-2.293A1 1 0 0 1 15 17h5V6zM6 9.5a1 1 0 0 1 1-1h10a1 1 0 1 1 0 2H7a1 1 0 0 1-1-1zm0 4a1 1 0 0 1 1-1h6a1 1 0 1 1 0 2H7a1 1 0 0 1-1-1z" fill="currentColor"/></svg>
-                                    <span>${data.post.stats.comments}</span>
+                                    <span>${escapeHtml(data.post.stats.comments)}</span>
                                 </div>
                             </div>
                         </a>
@@ -460,33 +460,33 @@ function embed(links) {
                     embeddedElement.classList.add("wasteof-embed");
 
                     const request = new XMLHttpRequest();
-                    request.open('GET', `https://corsproxy.io/?https://api.wasteof.money/posts/${trackId}`);
+                    request.open('GET', `https://corsproxy.io/?https://api.wasteof.money/posts/${escapeHtml(trackId)}`);
                     request.onload = () => {
                         const data = JSON.parse(request.responseText);
                         embeddedElement.innerHTML = `
-                        <a class="wasteof-jump" href="https://wasteof.money/posts/${trackId}/" target="_blank">
+                        <a class="wasteof-jump" href="https://wasteof.money/posts/${escapeHtml(trackId)}/" target="_blank">
                             <div class="wasteof-top-left">
-                                <img class="wasteof-pfp" src="https://api.wasteof.money/users/${data.poster.name}/picture">
+                                <img class="wasteof-pfp" src="https://api.wasteof.money/users/${escapeHtml(data.poster.name)}/picture">
                                 <div class="wasteof-user-info">
-                                    <span class="wasteof-username">@${data.poster.name}</span>
-                                    <span class="wasteof-color wasteof-${data.poster.color}"></span>
+                                    <span class="wasteof-username">@${escapeHtml(data.poster.name)}</span>
+                                    <span class="wasteof-color wasteof-${escapeHtml(data.poster.color)}"></span>
                                 </div>
                             </div>
                             <div class="wasteof-content">
-                                <span>${data.content}</span>
+                                <span>${escapeHtml(data.content)}</span>
                             </div>
                             <div class="wasteof-stats">
                                 <div class="wasteof-stat">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"></path></svg>
-                                    <span>${data.loves}</span>
+                                    <span>${escapeHtml(data.loves)}</span>
                                 </div>
                                 <div class="wasteof-stat">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" class=""><path d="M11.6 3.4l-.8-.8c-.5-.6-.4-1.5.3-1.8.4-.3 1-.2 1.4.2a509.8 509.8 0 012.7 2.7c.5.4.5 1.2.1 1.6l-2.8 2.9c-.5.5-1.3.5-1.8-.1-.3-.5-.2-1 .2-1.5l.8-1H7a4.3 4.3 0 00-4.1 4.7 2036.2 2036.2 0 01.2 8h2.4c.5 0 .8.2 1 .6.2.4.2.9 0 1.2-.2.4-.6.6-1 .6H1.8c-.7 0-1.2-.5-1.2-1.1v-.2V10c0-1.3.3-2.5 1-3.6 1.3-2 3.2-3 5.6-3h4.4zM12.3 18.3h4.6c2.3 0 4.2-2 4.2-4.3V5.9c0-.2 0-.2-.2-.2h-2.3c-.6 0-1-.3-1.2-.8a1.2 1.2 0 011.1-1.6h3.6c.8 0 1.3.5 1.3 1.3v9c0 1.1-.1 2.2-.6 3.2a6.4 6.4 0 01-5.6 3.7l-4.6.1h-.2l.7.8c.4.4.5.9.3 1.3-.3.8-1.3 1-1.9.4L9 20.6l-.4-.5c-.3-.4-.3-1 0-1.4l2.9-3c.6-.6 1.7-.3 2 .6 0 .4 0 .7-.3 1l-.9 1z" fill="currentColor"></path></svg>
-                                    <span>${data.reposts}</span>
+                                    <span>${escapeHtml(data.reposts)}</span>
                                 </div>
                                 <div class="wasteof-stat">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="currentColor" class=""><path fill-rule="evenodd" d="M18 13V5a2 2 0 00-2-2H4a2 2 0 00-2 2v8a2 2 0 002 2h3l3 3 3-3h3a2 2 0 002-2zM5 7a1 1 0 011-1h8a1 1 0 110 2H6a1 1 0 01-1-1zm1 3a1 1 0 100 2h3a1 1 0 100-2H6z" clip-rule="evenodd"></path></svg>
-                                    <span>${data.comments}</span>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="currentColor" class=""><path fill-rule="evenodd" d="M18 13V5a2 2 0 00-2-2H4a2 2 0 00-2 2v8a2 2 0 002 2h3l3 3 3-3h3a2 2 0 002-2zM5 7a1 1 0 011-1h8a1 1 0 110 2H6a1 1 0 01-1-1zm1 3a1 1 0 100 2h3a1 1 0 100-2H6a1 1 0 01-1-1zm1 3a1 1 0 100 2h3a1 1 0 100-2H6a1 1 0 01-1-1z" clip-rule="evenodd"></path></svg>
+                                    <span>${escapeHtml(data.comments)}</span>
                                 </div>
                             </div>
                         </a>
