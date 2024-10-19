@@ -423,7 +423,7 @@ function embed(links) {
                                 <img class="darflen-pfp" src="${escapeHTML(data.post.author.profile.images.icon.thumbnail)}">
                                 <div class="darflen-user-info">
                                     <span class="darflen-username">${escapeHTML(data.post.author.profile.username)}</span>
-                                    <span class="darflen-stats">${timeago(data.post.miscellaneous.creation_time*1000)} ago • ${escapeHTML(data.post.stats.views)} Views</span>
+                                    <span class="darflen-stats">${timeago(data.post.miscellaneous.creation_time*1000)} ago • ${data.post.stats.views} Views</span>
                                 </div>
                             </div>
                             <div class="darflen-content">
