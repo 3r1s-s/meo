@@ -99,17 +99,17 @@ function fetchprofile() {
                         <span class="subheader">Last.FM</span>
                         <div class="sec">
                             <div class="spotify">
-                                <div class="spotify-art" style="background-image: url('${data.track.image[2]['#text']}')"></div>
+                                <div class="spotify-art" style="background-image: url('${escapeHTML(data.track.image[2]['#text'])}')"></div>
                                 <div class="spotify-info">
                                     <div class="sp-in-list">
                                         <span style="font-weight: 800;">
-                                        ${data.track.name}
+                                        ${escapeHTML(data.track.name)}
                                         </span>
                                         <span style="font-weight: 400;">
-                                            by ${data.track.artist['#text']}
+                                            by ${escapeHTML(data.track.artist['#text'])}
                                         </span>
                                         <span style="font-weight: 400;">
-                                            on ${data.track.album['#text']}
+                                            on ${escapeHTML(data.track.album['#text'])}
                                         </span>
                                     </div>
                                 </div>
