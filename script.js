@@ -2838,17 +2838,17 @@ function chatSettings(chatId) {
 			emojiItem.className = 'member-in';
 			emojiItem.innerHTML = `
                         <div class="emoji-option-in">
-                        <img class="emoji-option-im" src="https://uploads.meower.org/emojis/${emoji._id}" alt="${emoji.name}" />
-                        <span>${emoji.name}</span>
+                        <img class="emoji-option-im" src="https://uploads.meower.org/emojis/${emoji._id}" alt="${escapeHTML(emoji.name)}" />
+                        <span>${escapeHTML(emoji.name)}</span>
                         </div>
                         ${data.owner === localStorage.getItem("username") ? `
                         <div class="mem-ops">
-                            <div class="mem-op tooltip left" onclick="editEmojiName('${chatId}', '${emoji._id}', '${emoji.name}')" title="${lang().action.edit}" data-tooltip="${lang().action.edit}">
+                            <div class="mem-op tooltip left" onclick="editEmojiName('${chatId}', '${emoji._id}', '${escapeHTML(emoji.name)}')" title="${lang().action.edit}" data-tooltip="${lang().action.edit}">
                                 <svg width="18" height="18" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path fill-rule="evenodd" clip-rule="evenodd" d="M12.8619 6.55339L13.2939 6.12198C14.2353 5.18055 14.2353 3.6481 13.2939 2.70607C12.3525 1.76464 10.8195 1.76464 9.878 2.70607L9.4466 3.13808L12.8619 6.55339ZM8.59747 3.98471L3.45646 9.12719L6.87233 12.5421L12.0134 7.39959L8.59747 3.98471ZM2.74567 13.9804L5.83937 13.2076L2.79128 10.1595L2.01785 13.2532C1.96685 13.4572 2.02685 13.6738 2.17566 13.8226C2.32446 13.9714 2.54107 14.0308 2.74567 13.9804Z" fill="currentColor"/>
                                 </svg>
                             </div>    
-                            <div class="mem-op tooltip left" onclick="removeEmoji('${chatId}', '${emoji._id}', '${emoji.name}')" title="${lang().action.remove}" data-tooltip="${lang().action.remove}">
+                            <div class="mem-op tooltip left" onclick="removeEmoji('${chatId}', '${emoji._id}', '${escapeHTML(emoji.name)}')" title="${lang().action.remove}" data-tooltip="${lang().action.remove}">
                                 <svg width="18" height="18" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path fill="currentColor" d="M2.3352 13.6648C2.78215 14.1117 3.50678 14.1117 3.95372 13.6648L8 9.61851L12.0463 13.6648C12.4932 14.1117 13.2179 14.1117 13.6648 13.6648C14.1117 13.2179 14.1117 12.4932 13.6648 12.0463L9.61851 8L13.6648 3.95372C14.1117 3.50678 14.1117 2.78214 13.6648 2.3352C13.2179 1.88826 12.4932 1.88827 12.0463 2.33521L8 6.38149L3.95372 2.33521C3.50678 1.88827 2.78214 1.88827 2.3352 2.33521C1.88826 2.78215 1.88827 3.50678 2.33521 3.95372L6.38149 8L2.33521 12.0463C1.88827 12.4932 1.88827 13.2179 2.3352 13.6648Z"></path>
                                 </svg>
