@@ -181,7 +181,7 @@ function editEmojiName(chatid, emojiid, name) {
                 mdlt.innerHTML = `
                 <h3>${lang().action.editemoji}</h3>
                 <div>
-                <input id="emoji-nick-input" class="mdl-inp" placeholder="${name}" minlength="1" maxlength="32">
+                <input id="emoji-nick-input" class="mdl-inp" placeholder="${escapeHTML(name)}" minlength="1" maxlength="32">
                 </div>
                 `;
             }
