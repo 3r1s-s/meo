@@ -3896,7 +3896,7 @@ function cancelEdit() {
 
 function openImage(url) {
     const baseURL = url.split('?')[0];
-    const fileName = baseURL.split('/').pop();
+    const fileName = escapeHTML(baseURL.split('/').pop());
     
     document.documentElement.style.overflow = "hidden";
     const mdlbck = document.querySelector('.image-back');
@@ -3907,15 +3907,17 @@ function openImage(url) {
         const mdl = mdlbck.querySelector('.image-mdl');
         if (mdl) {
             mdl.innerHTML = `
-            <img class='embed-large' src='${url}' alt="${fileName}" onclick='preventClose(event)'>
+            <img class='embed-large' src='${escapeHTML(url)}' alt="${fileName}" onclick='preventClose(event)'>
             <div class="img-links">
-            <span class="img-link-outer"><a onclick="closeImage()" class="img-link">${lang().action.close}</a></span>
-            <span><a href="${url}?download" target="_blank" class="img-link">${lang().action.download}</a></span>
+            <span class="img-link-outer"><a onclick="closeImage()" class="img-link">${escapeHTML(lang().action.close)}</a></span>
+            <span><a href="${escapeHTML(url)}?download" target="_blank" class="img-link">${escapeHTML(lang().action.download)}</a></span>
             </div>
             `;
         }
     }  
 }
+
+// making ai do this i literally cant be bothered
 
 function preventClose(event) {
     event.stopPropagation();
