@@ -3895,7 +3895,8 @@ function cancelEdit() {
 }
 
 function openImage(url) {
-    const baseURL = url.split('?')[0];
+    const urlObject = new URL(url);
+    const baseURL = urlObject.origin + urlObject.pathname;
     const fileName = escapeHTML(baseURL.split('/').pop());
     
     document.documentElement.style.overflow = "hidden";
@@ -3907,10 +3908,10 @@ function openImage(url) {
         const mdl = mdlbck.querySelector('.image-mdl');
         if (mdl) {
             mdl.innerHTML = `
-            <img class='embed-large' src='${escapeHTML(url)}' alt="${fileName}" onclick='preventClose(event)'>
+            <img class='embed-large' src='${escapeHTML(urlObject.href)}' alt="${fileName}" onclick='preventClose(event)'>
             <div class="img-links">
             <span class="img-link-outer"><a onclick="closeImage()" class="img-link">${escapeHTML(lang().action.close)}</a></span>
-            <span><a href="${escapeHTML(url)}?download" target="_blank" class="img-link">${escapeHTML(lang().action.download)}</a></span>
+            <span><a href="${escapeHTML(urlObject.href + '?download')}" target="_blank" class="img-link">${escapeHTML(lang().action.download)}</a></span>
             </div>
             `;
         }

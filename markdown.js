@@ -281,8 +281,9 @@ function embed(links) {
                     element.classList.add("image-outer");
 
                     let imgElement = document.createElement("img");
-                    imgElement.setAttribute("src", link);
-                    imgElement.setAttribute("onclick", `openImage('${link}')`);
+                    const url = new URL(link);
+                    imgElement.setAttribute("src", url.href);
+                    imgElement.setAttribute("onclick", `openImage('${url.href}')`);
                     imgElement.setAttribute("alt", fileName);
                     imgElement.setAttribute("title", fileName);
                     imgElement.classList.add("embed");
