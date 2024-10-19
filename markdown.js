@@ -427,7 +427,7 @@ function embed(links) {
                                 </div>
                             </div>
                             <div class="darflen-content">
-                                <span>${post}</span>
+                                <span>${escapeHTML(post)}</span>
                             </div>
                             <div class="darflen-stats">
                                 <div class="darflen-stat">
