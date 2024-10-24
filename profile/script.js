@@ -54,7 +54,7 @@ function fetchprofile() {
                 quote = data.quote.replace(regex, '');
                 const lastfm = data.quote.match(/\|lastfm:([^|]+)\|/);
                 lastfmuser = lastfm ? lastfm[1] : undefined;
-                quote = erimd(md.render(quote.replace(/\|lastfm:[^|]+\|/, '').trim()).replace(/<a(.*?)>/g, '<a$1 target="_blank">'));                                            
+                quote = erimd(md.render(quote.replace(/\|lastfm:[^|]+\|/, '').trim()).replace(/<a(.*?)>/g, '<a$1 target="_blank">'), true);                                            
             } else {
                 quote = oldMarkdown(data.quote);
                 console.error("Parsed with old markdown, fix later :)");

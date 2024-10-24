@@ -36,13 +36,14 @@ function escapeHTML(content) {
     return escapedinput;
 }
 
-function erimd(content) {
+function erimd(content,isProfile) {
+    const fixProfile = isProfile ? "parent." : "";
     const text = content
-        .replace(/(?:^|(?<=\s|<p>))@([\w-]+)(?![^<]*?<\/code>)/g, '<span id="username" class="attachment" onclick="openUsrModal(\'$1\')">@$1</span>')
+        .replace(/(?:^|(?<=\s|<p>))@([\w-]+)(?![^<]*?<\/code>)/g, `<span id="username" class="attachment" onclick="${fixProfile}openUsrModal(\'$1\')">@$1</span>`)
         .replace(/&lt;:(\w+):(\d+)&gt;/g, '<img src="https://cdn.discordapp.com/emojis/$2.webp?size=96&quality=lossless" alt="$1" title="$1" class="emoji">')
         .replace(/&lt;a:(\w+):(\d+)&gt;/g, '<img src="https://cdn.discordapp.com/emojis/$2.gif?size=96&quality=lossless" alt="$1" title="$1" class="emoji">')
-        .replace(/<a\s+href="https:\/\/eris\.pages\.dev\/meo\/profile\?u=([\w-]+)".*?>(.*?)<\/a>/g, '<span id="username" class="attachment" onclick="openUsrModal(\'$1\')">@$1</span>')
-        .replace(/<a\s+href="https:\/\/eris\.pages\.dev\/meo\?gc=([\w-]+)".*?>(.*?)<\/a>/g, '<span id="username" class="attachment" onclick="loadchat(\'$1\')">#$1</span>')
+        .replace(/<a\s+href="https:\/\/eris\.pages\.dev\/meo\/profile\?u=([\w-]+)".*?>(.*?)<\/a>/g, `<span id="username" class="attachment" onclick="${fixProfile}openUsrModal(\'$1\')">@$1</span>`)
+        .replace(/<a\s+href="https:\/\/eris\.pages\.dev\/meo\?gc=([\w-]+)".*?>(.*?)<\/a>/g, `<span id="username" class="attachment" onclick="${fixProfile}loadchat(\'$1\')">#$1</span>`)
         .replace(/(?:^|\n|<p>)-# (.*)$/gm, '<span class="subsubheader">$1</span>')
         .replace(/<pre><code>\s*\*([\s\S]*?)<\/code><\/pre>/gm, '<pre class="undertale"><code>*$1</code></pre>')
     return text;
