@@ -91,6 +91,7 @@ function fetchprofile() {
             profilecont.innerHTML += profileContent;
             
             if (lastfmuser) {
+                profilecont.innerHTML += '<div id="lastfm" class="custom-bg"></div>';  
                 let url = 'https://lastfm-last-played.biancarosa.com.br/' + lastfmuser + '/latest-song';
                 fetch(url).then(response => response.text()).then(data => {
                     data = JSON.parse(data);
@@ -117,15 +118,11 @@ function fetchprofile() {
                         </div>
                         `;
     
-                        profilecont.innerHTML += musicEmbed;
-                        profilecont.innerHTML += dateInfo;
-                    } else {
-                        profilecont.innerHTML += dateInfo;
+                        profilecont.querySelector("#lastfm").innerHTML = musicEmbed;
                     }
                 })
-            } else {
-                profilecont.innerHTML += dateInfo;
-            }            
+            }
+            profilecont.innerHTML += dateInfo;         
 
             if (data._id === localStorage.getItem('username')) {
                 profilecont.innerHTML += `
