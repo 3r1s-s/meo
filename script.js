@@ -5439,7 +5439,7 @@ function blockUser(user) {
     .catch(error => {
         console.error("error:", error);
     });
-    if (page = 'settings') {
+    if (page == 'settings') {
         loadstgs();
     }
     closemodal();
