@@ -353,7 +353,7 @@ img.embed {
     align-items: center;
     min-height: 1lh;
     font-size: 12px;
-    opacity: 0.8;
+    color: color-mix(in srgb, var(--color) 80%, transparent);
     user-select: none;
     gap: 6px;
 }
@@ -4018,4 +4018,9 @@ input[type="button"]:focus-visible {
 
 .wasteof-gray {
     background-color: #6b7280;
+}
+
+.ulistentry:hover {
+    cursor: pointer;
+    color: var(--color);
 }

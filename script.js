@@ -399,17 +399,18 @@ function main() {
             const iul = sentdata.val;
             sul = iul.trim().split(";");
             eul = sul;
+            ful = sul.map((i) => `<span class="ulistentry" onclick="openUsrModal('${i}')">${i}</span>`)
             lul = sul.length - 1;
             
-            if (sul.length > 1) {
-                sul = sul.slice(0, -2).join(", ") + (sul.length > 2 ? ", " : "") + sul.slice(-2).join(".");
+            if (ful.length > 1) {
+                ful = ful.slice(0, -2).join(", ") + (ful.length > 2 ? ", " : "") + ful.slice(-2).join(".");
             } else {
-                sul = sul[0];
+                ful = ful[0];
             }
 
             if (page == "home") {
                 if (settingsstuff().ulist) {
-                    document.getElementById("info-ulist").innerText = `${lul} ${lang().meo_userson} (${sul})`;   
+                    document.getElementById("info-ulist").innerHTML = `${lul} ${lang().meo_userson} (${ful})`;   
                 } else {
                     document.getElementById("info-ulist").innerText = `${lul} ${lang().meo_userson}`;
                 }
@@ -1794,7 +1795,7 @@ function loadchat(chatId) {
         <div class='info'><h1 class='header-top'>${lang().page_home}</h1><p id='info'><span id="info-ulist"></span><span id="info-typing"></span></p>
         </div>` + loadinputs();
         if (settingsstuff().ulist) {
-            document.getElementById("info-ulist").innerText = `${lul} ${lang().meo_userson} (${sul})`;   
+            document.getElementById("info-ulist").innerHTML = `${lul} ${lang().meo_userson} (${ful})`;   
         } else {
             document.getElementById("info-ulist").innerText = `${lul} ${lang().meo_userson}`;
         }
