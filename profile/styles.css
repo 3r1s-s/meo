@@ -29,7 +29,7 @@ hr {
     cursor: pointer;
 }
 
-.dm-btn {
+.dm-btn, .blck-btn {
     width: 40px;
     background-color: transparent;
     display: flex;
