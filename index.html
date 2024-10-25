@@ -117,7 +117,7 @@
     </div>
     </div>
     <div class="emoji-back" onclick="closepicker()"></div>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/default.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.10.0/build/styles/github-dark.min.css">
     <script src="lang.js" type="text/javascript"></script>
     <script src="https://cdn.jsdelivr.net/npm/markdown-it@14.1.0/dist/markdown-it.min.js" type="text/javascript"></script>
     <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js" type="text/javascript"></script>
@@ -127,6 +127,13 @@
         breaks: true,
         linkify: true,
         typographer: true,
+        highlight: (str, lang) => {
+          if (lang && hljs.getLanguage(lang)) {
+            try {
+              return hljs.highlight(str, {language:lang}).value
+            } catch(_) {}
+          }
+        }
       });
     </script>
     <script src="https://cdn.jsdelivr.net/gh/JoshAtticus/leo@main/plugins.js" type="text/javascript"></script>
