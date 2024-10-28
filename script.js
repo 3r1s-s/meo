@@ -43,6 +43,9 @@ const chatCache = {}; // {chatId: chat}
 const blockedUsers = {}; // {user, user}
 const usersTyping = {}; // {chatId: {username1: timeoutId, username2: timeoutId}}
 
+let recentuser = "";
+const recentCache = {};
+
 let favoritedChats = [];  // [chatId, ...]
 
 let pendingAttachments = [];
@@ -253,6 +256,7 @@ function main() {
         } else if (sentdata.cmd === "post" || sentdata.cmd === "inbox_message") {
             let post = sentdata.val;
             let postOrigin = post.post_origin;
+            let postAuthor = post.author._id
 
             if (usersTyping[postOrigin] && post.author._id in usersTyping[postOrigin]) {
                 clearTimeout(usersTyping[postOrigin][post.author._id]);
@@ -267,6 +271,13 @@ function main() {
                 loadpost(Object.assign(structuredClone(post), { _top: true }));
             } else {
                 if (postCache[postOrigin].length > 25) postCache[postOrigin].length = 25;
+            }
+            if (!(postAuthor in recentCache)) recentCache[postAuthor] = [];
+            recentCache[postAuthor].unshift(post);
+            if (page === "recent" && recentuser === postAuthor) {
+                loadpost(Object.assign(structuredClone(post), { _top: true }));
+            } else {
+                if (recentCache[postAuthor].length > 25) recentCache[postAuthor].length = 25;
             }
             if (settingsstuff().notifications) {
                 if (page !== postOrigin || document.hidden) {
@@ -317,11 +328,21 @@ function main() {
             }
         } else if (sentdata.cmd == "update_post") {
             let postOrigin = sentdata.val.post_origin;
+            let postAuthor = sentdata.val.author._id
             if (postCache[postOrigin]) {
                 index = postCache[postOrigin].findIndex(post => post._id === sentdata.val._id);
                 if (index !== -1) {
                     postCache[postOrigin][index] = Object.assign(
                         postCache[postOrigin][index],
+                        sentdata.val
+                    );
+                }
+            }
+            if (recentCache[postAuthor]) {
+                index = recentCache[postAuthor].findIndex(post => post._id === sentdata.val._id);
+                if (index !== -1) {
+                    recentCache[postAuthor][index] = Object.assign(
+                        recentCache[postAuthor][index],
                         sentdata.val
                     );
                 }
@@ -336,6 +357,13 @@ function main() {
                     postCache[sentdata.val.chat_id].splice(index, 1);
                 }
             }
+            /* the delete post command doesnt give author which is a problem :p
+            if (sentdata.val.author._id in recentCache) {
+                const index = recentCache[sentdata.val.author._id].findIndex(post => post._id === sentdata.val.post_id);
+                if (index !== -1) {
+                    recentCache[sentdata.val.author._id].splice(index, 1);
+                }
+            }*/
 
             const divToDelete = document.getElementById(sentdata.val.post_id);
             if (divToDelete) {
@@ -477,13 +505,17 @@ function main() {
 
         const mainEl = document.getElementById("main");
         mainEl.addEventListener("scroll", async (event) => {
-            if (!(page in postCache)) return;
+            if (!(page in postCache || page == "recent" )) return;
             const skeletonHeight = document.getElementById("skeleton-msgs").scrollHeight;
             if (mainEl.scrollHeight - mainEl.scrollTop - skeletonHeight - mainEl.clientHeight < 1) {
                 const msgs = document.getElementById("msgs");
                 if (msgs.hasAttribute("data-loading-more")) return;
                 msgs.setAttribute("data-loading-more", "");
-                await loadposts(Math.floor(msgs.childElementCount / 25) + 1);
+                if (page != "recent") {
+                    await loadposts(Math.floor(msgs.childElementCount / 25) + 1);
+                } else {
+                    await loadrecentposts(Math.floor(msgs.childElementCount / 25) + 1);
+                }
                 msgs.removeAttribute("data-loading-more");
             }
         });
@@ -698,7 +730,7 @@ function loadpost(p) {
         mobileButtonContainer.classList.add("mobileContainer");
         mobileButtonContainer.innerHTML = `
         <div class='toolbarContainer'>
-            ${p.post_origin !== 'inbox' ? `<div class='toolButton mobileButton' onclick='reply("${p._id}")' aria-label="reply" title="reply" tabindex="0">
+            ${p.post_origin !== 'inbox' && page !== "recent" ? `<div class='toolButton mobileButton' onclick='reply("${p._id}")' aria-label="reply" title="reply" tabindex="0">
                 <svg width='24' height='24' viewBox='0 0 24 24'><path d='M10 8.26667V4L3 11.4667L10 18.9333V14.56C15 14.56 18.5 16.2667 21 20C20 14.6667 17 9.33333 10 8.26667Z' fill='currentColor'></path></svg>
             </div>` : ''}
             <div class='toolButton mobileButton' onclick='openModal("${p._id}");'>
@@ -1097,8 +1129,8 @@ function loadreplyv(item) {
 
     full.addEventListener('click', async (e) => {
         e.preventDefault();
-
-        const index = postCache[page].findIndex(post => post._id === item._id);
+        const locat = page != "recent" ? postCache[page] : recentCache[recentuser];
+        const index = locat.findIndex(post => post._id === item._id);
         if (index === -1) return;
         const desiredPage = Math.floor(index / 25) + 1;
         const currentPages = Math.floor(document.getElementById("msgs").childElementCount / 25) + 1;
@@ -1908,6 +1940,8 @@ function loadchat(chatId) {
     // hell9o kris
 }
 
+
+
 async function loadposts(pageNo) {
     // Set up cache
     const chatId = page.valueOf();
@@ -1960,6 +1994,118 @@ async function loadposts(pageNo) {
     });
     mainEl.scrollTop = scrollTop;
 }
+function loadrecent(user) {
+    page = "recent";
+    pre = "recent";
+    recentuser = user;
+    if (!recentCache[recentuser]) {
+        fetch(`https://api.meower.org/users/${recentuser}/posts`, {
+            headers: {token: localStorage.getItem("token")}
+        })
+        .then(response => {
+            if (!response.ok) {
+                if (response.status === 404) {
+                    throw new Error("User not found");
+                } else {
+                    throw new Error('Network response was not ok');
+                }
+            }
+            return response.json();
+        })
+        .then(data => {
+            recentCache[recentuser] = data.autoget;
+            loadrecent(recentuser);
+        })
+        .catch(e => {
+            openUpdate(`Unable to open recent posts: ${e}`);
+            if (!settingsstuff().homepage) {
+                loadstart();
+            } else {
+                loadchat('home');
+            }
+        });
+        return;
+    }
+
+    sidebars();
+
+    const mainContainer = document.getElementById("main");
+
+        mainContainer.innerHTML = `<div class='info'>
+            <h1 class='header-top'>${recentuser}'s posts</h1>
+            <p id='info'>Here are ${recentuser}'s recent posts.</p>
+        </div>` + loadinputs();
+   
+    
+
+    loadrecentposts(1);
+
+    const messageContainer = document.querySelector('.message-container');
+    const jumpButton = document.querySelector('.jump');
+    const navbarOffset = messageContainer.offsetHeight;
+    const main = document.getElementById("main");
+    main.addEventListener('scroll', function() {
+        if (main.scrollTop > navbarOffset) {
+            jumpButton.classList.add('visible');
+        } else {
+            jumpButton.classList.remove('visible');
+        }
+    });
+
+        messageContainer.innerHTML = "";
+
+    
+
+
+    // hell9o kris
+}
+async function loadrecentposts(pageNo) {
+    if (!(recentuser in recentCache)) recentCache[recentuser] = [];
+
+    // Fetch from cache
+    const cacheSkip = (pageNo-1) * 25;
+    const cachedPosts = recentCache[recentuser].slice(cacheSkip, (cacheSkip+25)+1);
+    for (const post of cachedPosts) {
+        loadpost(post);
+    }
+    if (cachedPosts.length >= 25) {
+        return;
+    }
+
+    // Get path
+    var path = `/users/${recentuser}/posts`;
+
+    // Get posts from API
+    const response = await fetch(`https://api.meower.org${path}?page=${pageNo}`, {
+        headers: {
+            token: localStorage.getItem("token")
+        }
+    });
+    const postsData = await response.json();
+
+    // Block loading more if we've hit the end
+    if (postsData["page#"] === postsData.pages && postsData.autoget.length < 25) {
+        document.getElementById("skeleton-msgs").style.display = "none";
+        document.getElementById("msgs").setAttribute("data-loading-more", "");
+    }
+
+    // Cache and load posts
+    const mainEl = document.getElementById("main");
+    const scrollTop = mainEl.scrollTop;
+    const postsarray = postsData.autoget || [];
+    postsarray.forEach(post => {
+        if (page !== "recent") {
+            return;
+        }
+        if (recentCache[recentuser].findIndex(_post => _post._id === post._id) !== -1) {
+            return
+        }
+        recentCache[recentuser].push(post);
+        loadpost(post);
+    });
+    mainEl.scrollTop = scrollTop;
+}
+
 
 function logout(iskl) {
     if (!iskl) {
@@ -4061,8 +4207,9 @@ function openModal(postId) {
             const mdlt = mdl.querySelector('.modal-top');
             if (mdlt) {
                 mdlt.innerHTML = `${post.post_origin !== 'inbox' ? `
-                <button class="modal-button" onclick="reply('${postId}')"><div>${lang().action.reply}</div><div class="modal-icon"><svg class="icon_d1ac81" width="24" height="24" viewBox="0 0 24 24"><path d="M10 8.26667V4L3 11.4667L10 18.9333V14.56C15 14.56 18.5 16.2667 21 20C20 14.6667 17 9.33333 10 8.26667Z" fill="currentColor"></path></svg></div></button>
+                ${page != "recent" ? `<button class="modal-button" onclick="reply('${postId}')"><div>${lang().action.reply}</div><div class="modal-icon"><svg class="icon_d1ac81" width="24" height="24" viewBox="0 0 24 24"><path d="M10 8.26667V4L3 11.4667L10 18.9333V14.56C15 14.56 18.5 16.2667 21 20C20 14.6667 17 9.33333 10 8.26667Z" fill="currentColor"></path></svg></div></button>
                 <button class="modal-button" onclick="mdlpingusr(event)"><div>${lang().action.mention}</div><div class="modal-icon"><svg class="icon" height="24" width="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.486 2 2 6.486 2 12C2 17.515 6.486 22 12 22C14.039 22 15.993 21.398 17.652 20.259L16.521 18.611C15.195 19.519 13.633 20 12 20C7.589 20 4 16.411 4 12C4 7.589 7.589 4 12 4C16.411 4 20 7.589 20 12V12.782C20 14.17 19.402 15 18.4 15L18.398 15.018C18.338 15.005 18.273 15 18.209 15H18C17.437 15 16.6 14.182 16.6 13.631V12C16.6 9.464 14.537 7.4 12 7.4C9.463 7.4 7.4 9.463 7.4 12C7.4 14.537 9.463 16.6 12 16.6C13.234 16.6 14.35 16.106 15.177 15.313C15.826 16.269 16.93 17 18 17L18.002 16.981C18.064 16.994 18.129 17 18.195 17H18.4C20.552 17 22 15.306 22 12.782V12C22 6.486 17.514 2 12 2ZM12 14.599C10.566 14.599 9.4 13.433 9.4 11.999C9.4 10.565 10.566 9.399 12 9.399C13.434 9.399 14.6 10.565 14.6 11.999C14.6 13.433 13.434 14.599 12 14.599Z"></path></svg></div></button>
+                ` : ''}
                 <button class="modal-button" onclick="reportModal(event)"><div>${lang().action.report}</div><div class="modal-icon"><svg height="20" width="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M20 6.00201H14V3.00201C14 2.45001 13.553 2.00201 13 2.00201H4C3.447 2.00201 3 2.45001 3 3.00201V22.002H5V14.002H10.586L8.293 16.295C8.007 16.581 7.922 17.011 8.076 17.385C8.23 17.759 8.596 18.002 9 18.002H20C20.553 18.002 21 17.554 21 17.002V7.00201C21 6.45001 20.553 6.00201 20 6.00201Z"></path></svg></div></button>      
                 ` : ''}
                 <button class="modal-button" onclick="mdlshare(event)"><div>${lang().action.share}</div><div class="modal-icon"><svg viewBox="0 0 20 20" fill="currentColor" width="18" height="18"><path d="M12.9297 3.25007C12.7343 3.05261 12.4154 3.05226 12.2196 3.24928L11.5746 3.89824C11.3811 4.09297 11.3808 4.40733 11.5739 4.60245L16.5685 9.64824C16.7614 9.84309 16.7614 10.1569 16.5685 10.3517L11.5739 15.3975C11.3808 15.5927 11.3811 15.907 11.5746 16.1017L12.2196 16.7507C12.4154 16.9477 12.7343 16.9474 12.9297 16.7499L19.2604 10.3517C19.4532 10.1568 19.4532 9.84314 19.2604 9.64832L12.9297 3.25007Z"></path><path d="M8.42616 4.60245C8.6193 4.40733 8.61898 4.09297 8.42545 3.89824L7.78047 3.24928C7.58466 3.05226 7.26578 3.05261 7.07041 3.25007L0.739669 9.64832C0.5469 9.84314 0.546901 10.1568 0.739669 10.3517L7.07041 16.7499C7.26578 16.9474 7.58465 16.9477 7.78047 16.7507L8.42545 16.1017C8.61898 15.907 8.6193 15.5927 8.42616 15.3975L3.43155 10.3517C3.23869 10.1569 3.23869 9.84309 3.43155 9.64824L8.42616 4.60245Z"></path></svg></div></button>      
@@ -4074,7 +4221,7 @@ function openModal(postId) {
                 if (usernameElement === localStorage.getItem("username") && post.post_origin !== 'inbox') {
                     mdlt.innerHTML += `
                     <button class="modal-button" onclick="deletePost('${postId}')"><div>${lang().action.delete}</div><div class="modal-icon"><svg width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M15 3.999V2H9V3.999H3V5.999H21V3.999H15Z"></path><path fill="currentColor" d="M5 6.99902V18.999C5 20.101 5.897 20.999 7 20.999H17C18.103 20.999 19 20.101 19 18.999V6.99902H5ZM11 17H9V11H11V17ZM15 17H13V11H15V17Z"></path></svg></div></button>      
-                    <button class="modal-button" onclick="editPost('${page}', '${postId}')"><div>${lang().action.edit}</div><div class="modal-icon"><svg width="20" height="20" viewBox="0 0 24 24"><path fill-rule="evenodd" clip-rule="evenodd" d="M19.2929 9.8299L19.9409 9.18278C21.353 7.77064 21.353 5.47197 19.9409 4.05892C18.5287 2.64678 16.2292 2.64678 14.817 4.05892L14.1699 4.70694L19.2929 9.8299ZM12.8962 5.97688L5.18469 13.6906L10.3085 18.813L18.0201 11.0992L12.8962 5.97688ZM4.11851 20.9704L8.75906 19.8112L4.18692 15.239L3.02678 19.8796C2.95028 20.1856 3.04028 20.5105 3.26349 20.7337C3.48669 20.9569 3.8116 21.046 4.11851 20.9704Z" fill="currentColor"></path></svg></div></button>      
+                    ${page != "recent" ? `<button class="modal-button" onclick="editPost('${page}', '${postId}')"><div>${lang().action.edit}</div><div class="modal-icon"><svg width="20" height="20" viewBox="0 0 24 24"><path fill-rule="evenodd" clip-rule="evenodd" d="M19.2929 9.8299L19.9409 9.18278C21.353 7.77064 21.353 5.47197 19.9409 4.05892C18.5287 2.64678 16.2292 2.64678 14.817 4.05892L14.1699 4.70694L19.2929 9.8299ZM12.8962 5.97688L5.18469 13.6906L10.3085 18.813L18.0201 11.0992L12.8962 5.97688ZM4.11851 20.9704L8.75906 19.8112L4.18692 15.239L3.02678 19.8796C2.95028 20.1856 3.04028 20.5105 3.26349 20.7337C3.48669 20.9569 3.8116 21.046 4.11851 20.9704Z" fill="currentColor"></path></svg></div></button>` : ''}      
                     `; 
                 }
 
