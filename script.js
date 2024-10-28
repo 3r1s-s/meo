@@ -2042,7 +2042,7 @@ function loadrecent(user) {
             <h1 class='header-top'>${recentuser}'s posts</h1>
             <p id='info'>Here are ${recentuser}'s recent posts.</p>
         </div>` + loadinputs();
-   
+    try {parent.closemodal()} catch(_) {} // close profile modal
     
 
     loadrecentposts(1);
