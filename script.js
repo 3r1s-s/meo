@@ -357,6 +357,13 @@ function main() {
                     postCache[sentdata.val.chat_id].splice(index, 1);
                 }
             }
+            for (const recentId in recentCache) {
+                const index = recentCache[recentId].findIndex(post => post._id === sentdata.val.post_id);
+                if (index !== -1) {
+                    recentCache[recentId].splice(index, 1);
+                    break;
+                }
+            }
             /* the delete post command doesnt give author which is a problem :p
             if (sentdata.val.author._id in recentCache) {
                 const index = recentCache[sentdata.val.author._id].findIndex(post => post._id === sentdata.val.post_id);
