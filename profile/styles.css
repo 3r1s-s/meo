@@ -29,13 +29,13 @@ hr {
     cursor: pointer;
 }
 
-.dm-btn, .blck-btn {
-    width: 40px;
+.dm-btn {
+    width: 35px;
     background-color: transparent;
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 5px 10px;
+    padding: 0;
 }
 
 .mdl-sec {
