@@ -25,6 +25,17 @@ function fetchprofile() {
                     document.body.style.setProperty('--accent', clr1);
                     document.body.classList.add('custom-bg');
                 }
+            } else if (data.avatar_color == "!color") {
+                profilecont.classList.add('custom-bg');
+                profilecont.style.setProperty('--accent', lightenColour('000', 2));
+                profilecont.style.setProperty('--color', lightenColour('000', 1.25));
+                if (embedded) {
+                    const clr1 = darkenColour('000', 3);
+                    const clr2 = darkenColour('000', 5);
+                    document.body.style.background = `linear-gradient(180deg, ${clr1} 0%, ${clr2} 100%`;
+                    document.body.style.setProperty('--accent', clr1);
+                    document.body.classList.add('custom-bg');
+                }
             }
 
             if (data.avatar) {

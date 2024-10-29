@@ -2655,6 +2655,14 @@ function loadProfile() {
             profilecont.style.background = `linear-gradient(180deg, ${clr1} 0%, ${clr2} 100%`;
             profilecont.style.setProperty('--accent', lightenColour(data.avatar_color, 2));
             profilecont.style.setProperty('color', lightenColour(data.avatar_color, 1.25));
+        } else if (data.avatar_color == "!color") {
+            profilecont.classList.add('custom-bg');
+            const clr1 = darkenColour('000', 3);
+            const clr2 = darkenColour('000', 5);
+
+            profilecont.style.background = `linear-gradient(180deg, ${clr1} 0%, ${clr2} 100%`;
+            profilecont.style.setProperty('--accent', lightenColour('000', 2));
+            profilecont.style.setProperty('color', lightenColour('000', 1.25));
         }
 
         if (data.avatar) {
@@ -4112,6 +4120,18 @@ function openUsrModal(uId) {
                     if (data.avatar_color !== "!color") {
                         const clr1 = darkenColour(data.avatar_color, 3);
                         const clr2 = darkenColour(data.avatar_color, 5);
+                        if (settingsstuff().widemode) {
+                            mdl.style.background = `${clr1}`;
+                            mdl.style.setProperty('--accent', clr1);
+                            mdl.classList.add('custom-bg');
+                        } else {
+                            mdl.style.background = `linear-gradient(180deg, ${clr1} 0%, ${clr2} 100%`;
+                            mdl.style.setProperty('--accent', clr1);
+                            mdl.classList.add('custom-bg');
+                        }
+                    } else if (data.avatar_color == "!color") {
+                        const clr1 = darkenColour('000', 3);
+                        const clr2 = darkenColour('000', 5);
                         if (settingsstuff().widemode) {
                             mdl.style.background = `${clr1}`;
                             mdl.style.setProperty('--accent', clr1);
