@@ -99,13 +99,13 @@
     --button-margin: 10px;
     --color-scheme: dark;
 } */
-/* 
+
 .dark-theme {
     --primary: #765dee;
-    --background: #1f1d29;
+    --background: #000000;
     --color: #e5e1ff;
-    --accent-color: #2f2c3d;
-} */
+    --accent-color: #151519;
+}
 
 .light-theme {
     --dark-accent: #ece5ff;
