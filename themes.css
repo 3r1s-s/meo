@@ -3,6 +3,57 @@
     --primary: #765dee;
     --secondary: #503f98;
     --tertiary: #372b63;
+    --background: #000000;
+    --color: #e5e1ff;
+    --accent-color: #151519;
+    --accent-down: #100f16;
+    --accent-tint: #141318;
+    --hov-accent-color: #232128;
+    --hov-color: #211f2b;
+    --link-color: #9a86ff;
+    --attachment-background-color: #4d3d94;
+    --attachment-color: #c5b9ff;
+    --attachment-background-color-hover: #765dee;
+    --attachment-color-hover: #e9dff0;
+    --button-color: #a39cc8;
+    --hov-button-color: #e0d6ea;
+    --modal-color: #1f1d29;
+    --modal-button-color: #15141b;
+    --hov-modal-button-color: #25222f;
+    --hov-tint-color: #252330;
+
+    --animation: none;
+
+    --blue: #00abd2;
+    --hov-blue: #19cbf3;
+    --green: #248046;
+    --hov-green: #35a95f;
+    --orange: #f9a636;
+    --hov-orange: #fdae47;
+    --red: #cc2936;
+    --hov-red: #f23040;
+    --magenta: #ee3c8c;
+    --hov-magenta: #f74796;
+
+    --color-on: #fefefe;
+
+    --transition: all 0.05s ease;
+    --border: none;
+    --border-radius: 6px;
+    --button-radius: 6px;
+    --margin: 10px;
+    --text-margin: 10px;
+    --padding: 10px;
+    --button-padding: 12px;
+    --button-margin: 10px;
+    --color-scheme: dark;
+}
+
+/* :root {
+    --dark-accent: #15141f;
+    --primary: #765dee;
+    --secondary: #503f98;
+    --tertiary: #372b63;
     --background: #1f1d29;
     --color: #e5e1ff;
     --accent-color: #2f2c3d;
@@ -47,14 +98,14 @@
     --button-padding: 12px;
     --button-margin: 10px;
     --color-scheme: dark;
-}
-
+} */
+/* 
 .dark-theme {
     --primary: #765dee;
     --background: #1f1d29;
     --color: #e5e1ff;
     --accent-color: #2f2c3d;
-}
+} */
 
 .light-theme {
     --dark-accent: #ece5ff;
